@@ -1,0 +1,35 @@
+name: follow_read
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sqlite3_flutter_libs: ^0.5.18
+  path_provider: ^2.1.2
+  path: ^1.8.3
+  http: ^1.2.0
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  json_annotation: ^4.9.0
+  logger: ^2.0.2+1
+  drift: ^2.14.1
+  drift_flutter: ^0.2.2
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.6
+  drift_dev: ^2.14.1
+  json_serializable: ^6.7.0
+
+flutter:
+  uses-material-design: true
+
