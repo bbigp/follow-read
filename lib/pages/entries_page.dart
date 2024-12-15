@@ -3,6 +3,7 @@ import 'package:follow_read/models/entry.dart';
 import 'package:follow_read/services/api.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../models/feed.dart';
 import '../utils/logger.dart';
@@ -124,11 +125,14 @@ class _EntryListPageState extends State<EntryListPage> {
                               width: 80,
                               height: 80,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => Container(
-                                width: 80,
-                                height: 80,
-                                color: Colors.grey[200], // 占位颜色
-                                child: Center(child: CircularProgressIndicator()), // 占位动画
+                              placeholder: (context, url) => Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  width: 24,
+                                  height: 24,
+                                  color: Colors.white,
+                                ),
                               ),
                               errorWidget: (context, url, error) => Container(
                                 width: 80,
