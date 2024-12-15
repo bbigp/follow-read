@@ -1,85 +1,89 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:drift/drift.dart';
+import 'package:json_annotation/json_annotation.dart' as json;
 
+import '../services/database.dart';
 import 'category.dart';
 import 'icon.dart';
 
 part 'feed.g.dart';
 
-@JsonSerializable()
+
+
+@json.JsonSerializable()
 class Feed {
   final int id;
-  @JsonKey(name: 'user_id')
+  @json.JsonKey(name: 'user_id')
   final int userId;
-  @JsonKey(name: 'feed_url')
+  @json.JsonKey(name: 'feed_url')
   final String feedUrl;
-  @JsonKey(name: 'site_url')
+  @json.JsonKey(name: 'site_url')
   final String siteUrl;
   final String title;
   final String description;
-  @JsonKey(name: 'checked_at')
+  @json.JsonKey(name: 'checked_at')
   final DateTime checkedAt;
-  @JsonKey(name: 'next_check_at')
+  @json.JsonKey(name: 'next_check_at')
   final DateTime nextCheckAt;
-  @JsonKey(name: 'etag_header')
+  @json.JsonKey(name: 'etag_header')
   final String etagHeader;
-  @JsonKey(name: 'last_modified_header')
+  @json.JsonKey(name: 'last_modified_header')
   final String lastModifiedHeader;
-  @JsonKey(name: 'parsing_error_message')
+  @json.JsonKey(name: 'parsing_error_message')
   final String parsingErrorMsg;
-  @JsonKey(name: 'parsing_error_count')
+  @json.JsonKey(name: 'parsing_error_count')
   final int parsingErrorCount;
-  @JsonKey(name: 'scraper_rules')
+  @json.JsonKey(name: 'scraper_rules')
   final String scraperRules;
-  @JsonKey(name: 'rewrite_rules')
+  @json.JsonKey(name: 'rewrite_rules')
   final String rewriteRules;
   final bool crawler;
-  @JsonKey(name: 'blocklist_rules')
+  @json.JsonKey(name: 'blocklist_rules')
   final String blocklistRules;
-  @JsonKey(name: 'keeplist_rules')
+  @json.JsonKey(name: 'keeplist_rules')
   final String keeplistRules;
-  @JsonKey(name: 'urlrewrite_rules')
+  @json.JsonKey(name: 'urlrewrite_rules')
   final String urlRewriteRules;
-  @JsonKey(name: 'user_agent')
+  @json.JsonKey(name: 'user_agent')
   final String userAgent;
   final String cookie;
   final String username;
   final String password;
   final bool disabled;
-  @JsonKey(name: 'no_media_player')
+  @json.JsonKey(name: 'no_media_player')
   final bool noMediaPlayer;
-  @JsonKey(name: 'ignore_http_cache')
+  @json.JsonKey(name: 'ignore_http_cache')
   final bool ignoreHttpCache;
-  @JsonKey(name: 'allow_self_signed_certificates')
+  @json.JsonKey(name: 'allow_self_signed_certificates')
   final bool allowSelfSignedCertificates;
-  @JsonKey(name: 'fetch_via_proxy')
+  @json.JsonKey(name: 'fetch_via_proxy')
   final bool fetchViaProxy;
-  @JsonKey(name: 'hide_globally')
+  @json.JsonKey(name: 'hide_globally')
   final bool hideGlobally;
-  @JsonKey(name: 'disable_http2')
+  @json.JsonKey(name: 'disable_http2')
   final bool disableHttp2;
-  @JsonKey(name: 'apprise_service_urls')
+  @json.JsonKey(name: 'apprise_service_urls')
   final String appriseServiceUrls;
-  @JsonKey(name: 'ntfy_enabled')
+  @json.JsonKey(name: 'ntfy_enabled')
   final bool ntfyEnabled;
-  @JsonKey(name: 'ntfy_priority')
+  @json.JsonKey(name: 'ntfy_priority')
   final int ntfyPriority;
 
   // Internal attributes (not exposed in API)
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @json.JsonKey(includeFromJson: false, includeToJson: false)
   final int ttl;
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @json.JsonKey(includeFromJson: false, includeToJson: false)
   final String iconUrl;
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @json.JsonKey(includeFromJson: false, includeToJson: false)
   final int unreadCount;
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @json.JsonKey(includeFromJson: false, includeToJson: false)
   final int readCount;
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @json.JsonKey(includeFromJson: false, includeToJson: false)
   final int numberOfVisibleEntries;
 
-  @JsonKey(name: 'icon')
+  @json.JsonKey(name: 'icon')
   final FeedIcon? icon;
 
-  @JsonKey(name: 'category')
+  @json.JsonKey(name: 'category')
   final Category? category;
 
   Feed({
@@ -127,6 +131,38 @@ class Feed {
   factory Feed.fromJson(Map<String, dynamic> json) => _$FeedFromJson(json);
 
   Map<String, dynamic> toJson() => _$FeedToJson(this);
+
+  FeedsDataCompanion toFeedsData() {
+    return FeedsDataCompanion.insert(
+      id: id,
+      userId: userId,
+      feedUrl: feedUrl,
+      siteUrl: siteUrl,
+      title: title,
+      description: description,
+      checkedAt: checkedAt.toIso8601String(),  // DateTime 转换为字符串
+      nextCheckAt: nextCheckAt.toIso8601String(),
+      parsingErrorMsg: Value(parsingErrorMsg),
+      parsingErrorCount: Value(parsingErrorCount),
+      icon: icon != null ? Value(icon?.iconId) : const Value.absent(),
+    );
+  }
+
+  factory Feed.fromEntry(FeedsDataData entry) {
+    return Feed(
+      id: entry.id,
+      userId: entry.userId,
+      feedUrl: entry.feedUrl,
+      siteUrl: entry.siteUrl,
+      title: entry.title,
+      description: entry.description,
+      checkedAt: DateTime.parse(entry.checkedAt),    // 字符串转 DateTime
+      nextCheckAt: DateTime.parse(entry.nextCheckAt), // 字符串转 DateTime
+      parsingErrorMsg: entry.parsingErrorMsg ?? '',
+      parsingErrorCount: entry.parsingErrorCount,
+      icon: entry.icon != null ? FeedIcon(iconId: entry.icon!, feedId: entry.id) : null,
+    );
+  }
 
   Feed copyWith({
     int? id,

@@ -246,14 +246,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.22.1"
-  drift_flutter:
-    dependency: "direct main"
-    description:
-      name: drift_flutter
-      sha256: "69091c499a1550a84f153bafa3423f4297d26bfef3710323b141336ffe155dff"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.2"
   fake_async:
     dependency: transitive
     description:
@@ -292,7 +284,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_cache_manager:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_cache_manager
       sha256: "400b6592f16a4409a7f2bb929a9a7e38c72cceb8ffb99ee57bbf2cb2cecf8386"
@@ -480,6 +472,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   octo_image:
     dependency: transitive
     description:
@@ -576,6 +576,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.1"
+  provider:
+    dependency: "direct main"
+    description:
+      name: provider
+      sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "6.1.2"
   pub_semver:
     dependency: transitive
     description:

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 
 import '../services/api.dart';
+import '../services/image_cache_service.dart';
 
 class FeedIconView extends StatefulWidget {
   final int iconId;
@@ -33,18 +34,41 @@ class _FeedIconViewState extends State<FeedIconView> {
 
   Future<void> _loadImage() async {
     if (!mounted) return;
+    final iconKey = 'feed_icon_${widget.iconId}';
+    if (await ImageCacheService.isFailedIcon(iconKey)) {
+      setState(() {
+        isLoading = false;
+        error = 'Known failed icon';  // 使用默认图标
+      });
+      return;
+    }
+    final cachedImage = await ImageCacheService.getCachedImage(iconKey);
+    if (cachedImage != null) {
+      setState(() {
+        imageData = cachedImage;
+        isLoading = false;
+      });
+      return;
+    }
     Api.getFeedIcon(
         iconId: widget.iconId,
-        onSuccess: (icon){
+        onSuccess: (icon) async {
           if (!mounted) return;
+          final cleanBase64 = icon.data.split(',').last;
+          final newImageData = base64Decode(cleanBase64);
+
+          await ImageCacheService.cacheBase64Image(
+            icon.data,
+            'feed_icon_${widget.iconId}',
+          );
           setState(() {
-            final cleanBase64 = icon.data.split(',').last;
-            imageData = base64Decode(cleanBase64);
+            imageData = newImageData;
             isLoading = false;
           });
         },
-        onError: (error){
+        onError: (error) async {
           if (!mounted) return;
+          await ImageCacheService.markAsFailed('feed_icon_${widget.iconId}');
           setState(() {
             this.error = error;
             isLoading = false;

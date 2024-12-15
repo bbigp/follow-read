@@ -28,9 +28,11 @@ class RssListSection extends StatelessWidget {
               )),
         ),
         if (isLoading)
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('加载中'),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('加载中'),
+            ),
           )
         else
           ListView.builder(
@@ -39,27 +41,25 @@ class RssListSection extends StatelessWidget {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              return Container(
-                child: ListTile(
-                  dense: true, // 使ListTile更紧凑
-                  horizontalTitleGap: 8, // 减小图标和文字之间的距离
-                  minLeadingWidth: 20, // 减小leading区域的最小宽度
-                  leading: item.icon != null
-                      ? FeedIconView(iconId: item.icon!.iconId)
-                      : const Icon(Icons.rss_feed),
-                  // leading: const Icon(Icons.rss_feed),
-                  title: Text(item.title),
-                  trailing: Text(
-                    '${index + 5}', // 这里可以是你想显示的任何数字
-                    style: const TextStyle(
-                      color: Color(0xFF8B0000),
-                      fontSize: 14,
-                    ),
+              return ListTile(
+                dense: true, // 使ListTile更紧凑
+                horizontalTitleGap: 8, // 减小图标和文字之间的距离
+                minLeadingWidth: 20, // 减小leading区域的最小宽度
+                leading: item.icon != null
+                    ? FeedIconView(iconId: item.icon!.iconId)
+                    : const Icon(Icons.rss_feed),
+                // leading: const Icon(Icons.rss_feed),
+                title: Text(item.title),
+                trailing: Text(
+                  '${index + 5}', // 这里可以是你想显示的任何数字
+                  style: const TextStyle(
+                    color: Color(0xFF8B0000),
+                    fontSize: 14,
                   ),
-                  onTap: () {
-                    // 处理点击事件
-                  },
                 ),
+                onTap: () {
+                  // 处理点击事件
+                },
               );
             },
           ),

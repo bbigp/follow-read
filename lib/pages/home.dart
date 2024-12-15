@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/models/feed.dart';
 import 'package:follow_read/widgets/feed_list_view.dart';
 import 'package:follow_read/widgets/smart_view.dart';
+import 'package:provider/provider.dart';
 
 import '../services/api.dart';
+import '../services/database.dart';
+import '../utils/logger.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -12,9 +15,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class FeedViewModel extends ChangeNotifier {
   List<Feed> items = [];
-
   Map<String, int> smartViewCounts = {
     'star': 0,
     'recent': 0,
@@ -22,85 +24,126 @@ class _MyHomePageState extends State<MyHomePage> {
     'today': 0
   };
 
+  final AppDatabase _database = AppDatabase();
+
   bool isLoadingRss = false;
+  bool isRefresh = false;
+
+  Future<void> loadInitialData() async {
+    logger.i("fetch feeds from sqlite");
+    isLoadingRss = true;
+    notifyListeners();
+    // await Future.delayed(const Duration(seconds: 3));
+    final cachedFeeds = await _database.getAllFeeds();
+    if (cachedFeeds.isEmpty) {
+      items = [];
+      isLoadingRss = false;
+      isRefresh = false;
+      notifyListeners();
+      return;
+    }
+    items = cachedFeeds;
+    isLoadingRss = false;
+    isRefresh = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchFeeds() async {
+    isRefresh = true;
+    logger.i("refesh feeds");
+    notifyListeners();
+    Api.getFeeds(
+        onSuccess: (feeds) async => {
+              await _database.deleteAllFeeds(),
+              await _database.insertFeeds(feeds),
+              await loadInitialData(),
+            },
+        onError: (error) => {isRefresh = false, notifyListeners()});
+  }
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+  final _viewModel = FeedViewModel();
 
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
-  }
-
-  Future<void> _loadInitialData() async {
-    _refreshSmartViewData();
-    _refreshRssData();
-  }
-
-  Future<void> _refreshData() async {
-    _refreshSmartViewData();
-    await Future.wait([
-      _refreshRssData(),
-    ]);
-  }
-
-  Future<void> _refreshSmartViewData() async {
-    try {
-      await Future.delayed(const Duration(seconds: 1)); // 模拟网络请求
-
-      setState(() {
-        smartViewCounts = {
-          'star': 10 + (DateTime.now().second % 5),
-          'recent': 8 + (DateTime.now().second % 3),
-          'unread': 15 + (DateTime.now().second % 4),
-          'today': 5 + (DateTime.now().second % 2),
-        };
-      });
-    } finally{
-
-    }
-  }
-
-  Future<void> _refreshRssData() async {
-    if (isLoadingRss) return;
-    setState(() {
-      isLoadingRss = true;
+    Future.delayed(Duration.zero, () {
+      _refreshIndicatorKey.currentState?.show(); // 手动显示刷新指示器
+      _viewModel.loadInitialData();
     });
-    Api.getFeeds(
-      onSuccess: (feeds) => setState(() => items = feeds),
-      onError: (error) => {
-      },
-      onComplete: () => setState(() => isLoadingRss = false),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: const Icon(Icons.person, color: Colors.black), // 添加"我的"图标
-        // title: const Text('RSS阅读器', style: TextStyle(color: Colors.black)),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.search, color: Colors.black), // 添加加号图标
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.refresh, color: Colors.black), // 添加加号图标
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.add, color: Colors.black), // 添加加号图标
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: ListView(children: [
-          SmartViewSection(counts: smartViewCounts, isLoading: true),
-          RssListSection(items: items, isLoading: isLoadingRss),
-        ]),
+    return ChangeNotifierProvider.value(
+      value: _viewModel,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: Icon(Icons.person, color: Colors.black), // 添加"我的"图标
+          // title: const Text('RSS阅读器', style: TextStyle(color: Colors.black)),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Consumer<FeedViewModel>(
+                builder: (context, viewModel, child) {
+                  return SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: viewModel.isRefresh
+                        ? const Center(
+                            // 居中放置 CircularProgressIndicator
+                            child: SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.black),
+                              ),
+                            ),
+                          )
+                        : IconButton(
+                            padding: EdgeInsets.zero,
+                            icon:
+                                const Icon(Icons.refresh, color: Colors.black),
+                            onPressed: () async {
+                              await _viewModel.fetchFeeds();
+                            },
+                            iconSize: 24,
+                          ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: Icon(Icons.add, color: Colors.black), // 添加加号图标
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: Icon(Icons.search, color: Colors.black), // 添加加号图标
+            ),
+          ],
+        ),
+        body: Consumer<FeedViewModel>(
+          builder: (context, viewModel, child) {
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: viewModel.loadInitialData,
+              child: ListView(children: [
+                SmartViewSection(
+                    counts: viewModel.smartViewCounts, isLoading: true),
+                RssListSection(
+                    items: viewModel.items, isLoading: viewModel.isLoadingRss),
+              ]),
+            );
+          },
+        ),
       ),
     );
   }

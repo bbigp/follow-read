@@ -38,7 +38,7 @@ class Api {
     VoidCallback? onComplete,
   }) async {
     try {
-      final response = await HttpService.get('icons/${iconId}', headers: {
+      final response = await HttpService.get('icons/$iconId', headers: {
         'Content-Type': 'application/json',
         'X-Auth-Token': 'lOEQiLk-6QtDmiIz9_AsoBmZrdeKBarjZyjTLyo4600='
       });
