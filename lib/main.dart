@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:follow_read/pages/home.dart';
+import 'package:follow_read/routes.dart';
+import 'package:follow_read/services/database.dart';
+import 'package:follow_read/utils/logger.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDatabase();
   runApp(const MyApp());
+}
+
+Future<void> initializeDatabase() async {
+  AppDatabase();
+  logger.i("数据库初始化完成");
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +25,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const MyHomePage(),
+      // routes: AppRoutes.routes,
+      onGenerateRoute: (settings) {
+        return AppRoutes.generateRoute(settings);
+      },
+      initialRoute: AppRoutes.feedList,
     );
   }
 }

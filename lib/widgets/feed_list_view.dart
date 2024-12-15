@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/models/feed.dart';
 import 'package:follow_read/widgets/feed_icon_view.dart';
 
+import '../routes.dart';
+
 
 class RssListSection extends StatelessWidget {
   final List<Feed> items;
@@ -48,17 +50,17 @@ class RssListSection extends StatelessWidget {
                 leading: item.icon != null
                     ? FeedIconView(iconId: item.icon!.iconId)
                     : const Icon(Icons.rss_feed),
-                // leading: const Icon(Icons.rss_feed),
                 title: Text(item.title),
                 trailing: Text(
-                  '${index + 5}', // 这里可以是你想显示的任何数字
+                  '${item.unread > 0 ? item.unread : ''}', // 这里可以是你想显示的任何数字
                   style: const TextStyle(
                     color: Color(0xFF8B0000),
                     fontSize: 14,
                   ),
                 ),
-                onTap: () {
-                  // 处理点击事件
+                onTap: () async {
+                  // Navigator.pushNamed(context, AppRoutes.entryList);
+                  AppRoutes.navigateTo(context, AppRoutes.entryList, arguments: item);
                 },
               );
             },

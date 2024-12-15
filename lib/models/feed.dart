@@ -86,6 +86,11 @@ class Feed {
   @json.JsonKey(name: 'category')
   final Category? category;
 
+  @json.JsonKey(includeFromJson: false, includeToJson: false)
+  final int read;
+  @json.JsonKey(includeFromJson: false, includeToJson: false)
+  final int unread;
+
   Feed({
     required this.id,
     required this.userId,
@@ -95,6 +100,8 @@ class Feed {
     required this.description,
     required this.checkedAt,
     required this.nextCheckAt,
+    this.read = 0,
+    this.unread = 0,
     this.etagHeader = '',
     this.lastModifiedHeader = '',
     this.parsingErrorMsg = '',
@@ -145,6 +152,8 @@ class Feed {
       parsingErrorMsg: Value(parsingErrorMsg),
       parsingErrorCount: Value(parsingErrorCount),
       icon: icon != null ? Value(icon?.iconId) : const Value.absent(),
+      read: Value(read),
+      unread: Value(unread),
     );
   }
 
@@ -161,10 +170,14 @@ class Feed {
       parsingErrorMsg: entry.parsingErrorMsg ?? '',
       parsingErrorCount: entry.parsingErrorCount,
       icon: entry.icon != null ? FeedIcon(iconId: entry.icon!, feedId: entry.id) : null,
+      read: entry.read,
+      unread: entry.unread,
     );
   }
 
   Feed copyWith({
+    int? read,
+    int? unread,
     int? id,
     int? userId,
     String? feedUrl,
@@ -201,6 +214,8 @@ class Feed {
     Category? category,
   }) {
     return Feed(
+      read: read ?? 0,
+      unread: unread ?? 0,
       id: id ?? this.id,
       userId: userId ?? this.userId,
       feedUrl: feedUrl ?? this.feedUrl,

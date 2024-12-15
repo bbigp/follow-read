@@ -21,6 +21,8 @@ class FeedsData extends Table {
   IntColumn get icon => integer().nullable()();
   TextColumn get parsingErrorMsg => text().nullable()();
   IntColumn get parsingErrorCount => integer().withDefault(const Constant(0))();
+  IntColumn get read => integer().withDefault(const Constant(0))();
+  IntColumn get unread => integer().withDefault(const Constant(0))();
 }
 
 
@@ -29,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(connect());
 
   @override
-  int get schemaVersion => 2;  // 增加版本号
+  int get schemaVersion => 1;  // 增加版本号
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -37,10 +39,10 @@ class AppDatabase extends _$AppDatabase {
       await m.createAll();
     },
     onUpgrade: (Migrator m, int from, int to) async {
-      if (from < 2) {
-        // 添加新列
-        await m.addColumn(feedsData, feedsData.icon);
-      }
+      // if (from < 3) {
+      //   await m.addColumn(feedsData, feedsData.read);
+      //   await m.addColumn(feedsData, feedsData.unread);
+      // }
     },
   );
 
@@ -53,6 +55,7 @@ class AppDatabase extends _$AppDatabase {
       final results = await (select(feedsData)).get();
       return results.map((entry) => Feed.fromEntry(entry)).toList();
     } catch (e) {
+      logger.e("select feeds失败$e");
       return [];
     }
   }
@@ -86,7 +89,6 @@ class AppDatabase extends _$AppDatabase {
 DatabaseConnection connect() {
   final db = LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    logger.i("sqlite:$dbFolder");
     final file = File(p.join(dbFolder.path, 'feeds.db'));
     return NativeDatabase.createInBackground(file);
   });

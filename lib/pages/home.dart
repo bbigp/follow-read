@@ -52,13 +52,24 @@ class FeedViewModel extends ChangeNotifier {
     isRefresh = true;
     logger.i("refesh feeds");
     notifyListeners();
-    Api.getFeeds(
-        onSuccess: (feeds) async => {
-              await _database.deleteAllFeeds(),
-              await _database.insertFeeds(feeds),
-              await loadInitialData(),
-            },
-        onError: (error) => {isRefresh = false, notifyListeners()});
+    Api.getFeedsAndCounters(onSuccess: (feeds) async => {
+      await _database.deleteAllFeeds(),
+      await _database.insertFeeds(feeds),
+      await loadInitialData(),
+    }, onError: (error) => {
+      isRefresh = false, notifyListeners()
+    });
+    // Api.getFeeds(
+    //     onSuccess: (feeds) async => {
+    //           await _database.deleteAllFeeds(),
+    //           await _database.insertFeeds(feeds),
+    //           await loadInitialData(),
+    //         },
+    //     onError: (error) => {isRefresh = false, notifyListeners()}
+    // );
+    // Api.getFeedsCounters(onSuccess: (counter) => {
+    //
+    // }, onError: (error) => {});
   }
 }
 
@@ -146,5 +157,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _viewModel.dispose();
   }
 }
