@@ -4,6 +4,7 @@ import 'package:follow_read/widgets/feed_list_view.dart';
 import 'package:follow_read/widgets/smart_view.dart';
 import 'package:provider/provider.dart';
 
+import '../routes.dart';
 import '../services/api.dart';
 import '../services/database.dart';
 import '../utils/logger.dart';
@@ -95,7 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
-          leading: Icon(Icons.person, color: Colors.black), // 添加"我的"图标
+          leading: GestureDetector(
+              onTap: (){
+                AppRoutes.navigateTo(context, AppRoutes.me);
+              },
+              child: Icon(Icons.person, color: Colors.black)), // 添加"我的"图标
           // title: const Text('RSS阅读器', style: TextStyle(color: Colors.black)),
           actions: [
             Padding(

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/pages/entries_page.dart';
 import 'package:follow_read/pages/home.dart';
+import 'package:follow_read/pages/me_page.dart';
 
 import 'models/feed.dart';
 
 class AppRoutes {
   static const String feedList = '/feeds';
   static const String entryList = "/entries";
+  static const String me = "/me";
 
   static Map<String, WidgetBuilder> routes = {
     feedList: (context) => const MyHomePage(),
@@ -25,6 +27,8 @@ class AppRoutes {
       case AppRoutes.entryList:
         final feed = settings.arguments as Feed;
         return MaterialPageRoute(builder: (context) => EntryListPage(feed: feed));
+      case AppRoutes.me:
+        return MaterialPageRoute(builder: (context) => MePage());
       default:
         return MaterialPageRoute(
           builder: (context) => const MyHomePage(),
