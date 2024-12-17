@@ -51,6 +51,7 @@ class Api {
 
   static Future<void> getEntries({
     required int feedId,
+    required int page,
     required int limit,
     required ValueSetter<List<Entry>> onSuccess,
     required ValueSetter<String> onError,
@@ -58,7 +59,7 @@ class Api {
   }) async {
     try {
       //status order  direction   limit  offset  category_id  feed_id  tags globally_visible
-      final response = await HttpService.get('feeds/$feedId/entries?limit=$limit');
+      final response = await HttpService.get('feeds/$feedId/entries?limit=$limit&offset=${(page - 1) * limit}');
       if (response.success) {
         onSuccess(EntryResponse.fromJson(response.data as Map<String, dynamic>).entries);
       } else {

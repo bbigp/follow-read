@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/models/entry.dart';
 import 'package:follow_read/services/api.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../models/feed.dart';
 import '../utils/logger.dart';
+import '../widgets/entry_item_view.dart';
 
 class EntryListPage extends StatefulWidget {
   final Feed feed;
@@ -19,13 +18,39 @@ class EntryListPage extends StatefulWidget {
 
 class EntryListViewModel extends ChangeNotifier {
   List<Entry> items = [];
+  final size = 20;
+  int currentPage = 1;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
 
-  Future<void> loadNetworkData(int feedId) async {
+  Future<void> loadNetworkData(int feedId, {bool reset = false}) async {
+    if (_isLoadingMore) return;
+    if (reset) {
+      currentPage = 1;
+      items.clear();
+      notifyListeners();
+    } else {
+      _isLoadingMore = true;
+      notifyListeners();
+    }
+
     await Api.getEntries(
         feedId: feedId,
-        limit: 20,
-        onSuccess: (entries) => {items = entries, notifyListeners()},
-        onError: (error) => {logger.e(error), notifyListeners()});
+        page: currentPage,
+        limit: size,
+        onSuccess: (entries) => {
+          items.addAll(entries),
+          _hasMore = entries.length >= size ? true : false,
+          logger.i("hasMore $_hasMore"),
+          currentPage++,
+          _isLoadingMore = false,
+          notifyListeners()
+        },
+        onError: (error) => {
+          logger.e(error),
+          _isLoadingMore = false,
+          notifyListeners()
+        });
   }
 }
 
@@ -33,13 +58,21 @@ class _EntryListPageState extends State<EntryListPage> {
   final _viewModel = EntryListViewModel();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       _refreshIndicatorKey.currentState?.show(); // 手动显示刷新指示器
-      _viewModel.loadNetworkData(widget.feed.id);
+      _viewModel.loadNetworkData(widget.feed.id, reset: true);
+    });
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 100 &&
+          !_viewModel._isLoadingMore && _viewModel._hasMore) {
+        _viewModel.loadNetworkData(widget.feed.id);
+      }
     });
   }
 
@@ -69,97 +102,38 @@ class _EntryListPageState extends State<EntryListPage> {
           builder: (context, viewModel, child) {
             return RefreshIndicator(
               key: _refreshIndicatorKey,
-              onRefresh: () => viewModel.loadNetworkData(widget.feed.id),
+              onRefresh: () => viewModel.loadNetworkData(widget.feed.id, reset: true),
               child: ListView.builder(
-                  itemCount: viewModel.items.length,
+                  controller: _scrollController,
+                  itemCount: viewModel.items.length + 1,
                   itemBuilder: (context, index) {
+                    if (index == viewModel.items.length) {
+                      return _buildLoadMoreIndicator();
+                    }
                     final item = viewModel.items[index];
-                    logger.i(item.mainPic);
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 16.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    item.title,
-                                    maxLines: item.summary == "" ? 2 : 1,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  item.summary == "" ? Container() :
-                                  Text(
-                                    item.summary,
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.grey),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(
-                                    height: item.summary == "" ? 0 : 8,
-                                  ),
-                                  Text(
-                                    'ss',
-                                    // item.publishedAt as String,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                          SizedBox(width: item.mainPic != null ? 16 : 0), // 左右间距
-                          item.mainPic != null ?
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0), // 圆角缩略图
-                            child: CachedNetworkImage(
-                              imageUrl: item.mainPic!,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                width: 80,
-                                height: 80,
-                                color: Colors.grey[300], // 错误时的背景颜色
-                                child: Icon(Icons.error, color: Colors.red), // 错误图标
-                              ),
-                            ),
-                          ) : Container(),
-                        ],
-                      ),
-                    );
+                    return EntryItemView(item: item,);
                   }),
             );
           },
         ),
-
-        // return ListView.builder(
-        //     itemCount: viewModel.items.length,
-        //     itemBuilder: (context, index) {
-        //       final item = viewModel.items[index];
-
-        //         ),
-        //       );
-        //     });
       ),
     );
+  }
+
+
+  Widget _buildLoadMoreIndicator() {
+    if (_viewModel._isLoadingMore) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    } else if (!_viewModel._hasMore) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(child: Text("/")),
+      );
+    }
+    return SizedBox.shrink();
   }
 
   @override
