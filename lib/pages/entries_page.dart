@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/models/entry.dart';
 import 'package:follow_read/services/api.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../models/feed.dart';
 import '../utils/logger.dart';
@@ -22,14 +23,17 @@ class EntryListViewModel extends ChangeNotifier {
   int currentPage = 1;
   bool _isLoadingMore = false;
   bool _hasMore = true;
+  bool pullRefresh = false;
 
   Future<void> loadNetworkData(int feedId, {bool reset = false}) async {
     if (_isLoadingMore) return;
     if (reset) {
       currentPage = 1;
       items.clear();
+      pullRefresh = true;
       notifyListeners();
     } else {
+      pullRefresh = false;
       _isLoadingMore = true;
       notifyListeners();
     }
@@ -44,11 +48,13 @@ class EntryListViewModel extends ChangeNotifier {
           logger.i("hasMore $_hasMore"),
           currentPage++,
           _isLoadingMore = false,
+          pullRefresh = false,
           notifyListeners()
         },
         onError: (error) => {
           logger.e(error),
           _isLoadingMore = false,
+          pullRefresh = false,
           notifyListeners()
         });
   }
@@ -64,7 +70,7 @@ class _EntryListPageState extends State<EntryListPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      _refreshIndicatorKey.currentState?.show(); // 手动显示刷新指示器
+      // _refreshIndicatorKey.currentState?.show(); // 手动显示刷新指示器
       _viewModel.loadNetworkData(widget.feed.id, reset: true);
     });
     _scrollController.addListener(() {
@@ -104,9 +110,13 @@ class _EntryListPageState extends State<EntryListPage> {
               key: _refreshIndicatorKey,
               onRefresh: () => viewModel.loadNetworkData(widget.feed.id, reset: true),
               child: ListView.builder(
+                  physics: viewModel.pullRefresh ? NeverScrollableScrollPhysics() : BouncingScrollPhysics(),
                   controller: _scrollController,
-                  itemCount: viewModel.items.length + 1,
+                  itemCount: viewModel.pullRefresh ? 20 : viewModel.items.length + 1,
                   itemBuilder: (context, index) {
+                    if (viewModel.pullRefresh) {
+                        return _buildRefreshItem();
+                    }
                     if (index == viewModel.items.length) {
                       return _buildLoadMoreIndicator();
                     }
@@ -116,6 +126,53 @@ class _EntryListPageState extends State<EntryListPage> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildRefreshItem(){
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 10, left: 16, right: 16),
+            child: Row(
+              children: [
+                Container(width: 18, height: 18, color: Colors.white),
+                Padding(
+                  padding: EdgeInsets.only(left: 8),
+                  child: Container(height: 12, width: 72, color: Colors.white),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 4, left: 16, right: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(padding: EdgeInsets.only(top: 4), child: Container(height: 14, width: 154, color: Colors.white,),),
+                      Padding(padding: EdgeInsets.only(top: 8), child: Container(height: 12, width: 244, color: Colors.white,),),
+                      Padding(padding: EdgeInsets.only(top: 8), child: Container(height: 12, width: 134, color: Colors.white,),),
+                      SizedBox(height: 18,),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 8,),
+                  child: Container(height: 80, width: 80, color: Colors.white),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 16,),
+          Container(height: 1, color: Colors.black12,)
+        ],
       ),
     );
   }
