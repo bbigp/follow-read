@@ -9,6 +9,21 @@ import '../utils/logger.dart';
 
 class Api {
 
+  static Future<void> getMe({
+    required ValueSetter<List<Feed>> onSuccess,
+    required ValueSetter<String> onError,}) async {
+    try {
+      final response = await HttpService.get("me");
+      if (response.success) {
+        
+        return;
+      }
+      onError(response.error ?? '失败');
+    } catch (e) {
+      onError(e.toString());
+    }
+  }
+
   static Future<void> getFeedsAndCounters({
     required ValueSetter<List<Feed>> onSuccess,
     required ValueSetter<String> onError,
