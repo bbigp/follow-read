@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/routes.dart';
 import 'package:follow_read/services/database.dart';
 import 'package:follow_read/utils/logger.dart';
+import 'package:logger/logger.dart';
 
 void main() async {
+  Logger logger = Logger(
+    printer: PrettyPrinter(
+      methodCount: 0, // 不显示方法调用栈
+      colors: true,
+      printEmojis: false,
+    ),
+  );
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDatabase();
   runApp(const MyApp());

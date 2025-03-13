@@ -10,11 +10,7 @@ class HttpService {
 
   // 单例模式
   static final HttpService _instance = HttpService._internal();
-
-  factory HttpService() {
-    return _instance;
-  }
-
+  factory HttpService() => _instance;
   HttpService._internal();
 
   static Future<ApiResponse> get(String endpoint,

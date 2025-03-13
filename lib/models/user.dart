@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 
 @JsonSerializable()
-class UserSettings {
+class User {
   final int id;
   final String username;
   final bool isAdmin;
@@ -33,7 +33,7 @@ class UserSettings {
   final String blockFilterEntryRules;
   final String keepFilterEntryRules;
 
-  UserSettings({
+  User({
     required this.id,
     required this.username,
     required this.isAdmin,
@@ -62,5 +62,9 @@ class UserSettings {
     this.blockFilterEntryRules = "",
     this.keepFilterEntryRules = "",
   });
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
 }

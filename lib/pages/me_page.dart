@@ -1,6 +1,12 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:follow_read/utils/api_client.dart';
+
+import '../models/user.dart';
+import '../utils/logger.dart';
+
 
 class MePage extends StatefulWidget {
   const MePage({super.key});
@@ -11,9 +17,35 @@ class MePage extends StatefulWidget {
 
 class _MePageState extends State<MePage> {
 
+  User? _user;
+  bool _isLoading = false;
+
+  Future<void> _fetchUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final user = await ApiClient.me(
+      onError: (e) => setState(() {
+        Fluttertoast.showToast(
+          msg: "请求失败: ${e.message}",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+        );
+      })
+    );
+    if (user != null) {
+      setState(() {
+        _user = user;
+      });
+    }
+    setState(() => _isLoading = false);
+  }
+
   @override
   void initState() {
     super.initState();
+    _fetchUser();
   }
 
   @override
@@ -63,7 +95,7 @@ class _MePageState extends State<MePage> {
                       children: [
                         // 账号名称
                         Text(
-                          'accountName',
+                          _user?.username ?? 'Username',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.black87, // 文字颜色
