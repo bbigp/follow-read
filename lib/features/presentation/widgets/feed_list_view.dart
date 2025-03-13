@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:follow_read/models/feed.dart';
-import 'package:follow_read/widgets/feed_icon_view.dart';
+import 'package:follow_read/features/presentation/widgets/feed_icon_view.dart';
 
-import '../routes.dart';
+import '../../../routes/app_route.dart';
+import '../../data/models/feed.dart';
+
 
 
 class RssListSection extends StatelessWidget {

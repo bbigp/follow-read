@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:follow_read/models/entry.dart';
 
+import '../models/entry.dart';
 import '../models/feed.dart';
 import '../models/feed_counter.dart';
+import '../../../core/utils/http_service.dart';
+import '../../../core/utils/logger.dart';
 import '../models/icon.dart';
-import '../utils/http_service.dart';
-import '../utils/logger.dart';
 
 class Api {
 

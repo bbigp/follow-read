@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:follow_read/utils/api_client.dart';
+import 'package:follow_read/features/data/datasources/api_client.dart';
 
-import '../models/user.dart';
-import '../utils/logger.dart';
+import '../../data/models/user_model.dart';
+import '../../../core/utils/logger.dart';
 
 
 class MePage extends StatefulWidget {

@@ -1,7 +1,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-import '../utils/rss_utils.dart';
+import '../../../core/utils/rss_utils.dart';
 
 part 'entry.g.dart';
 

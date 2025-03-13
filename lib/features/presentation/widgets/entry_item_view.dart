@@ -1,10 +1,10 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:follow_read/models/entry.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../utils/rss_utils.dart';
+import '../../../core/utils/rss_utils.dart';
+import '../../data/models/entry.dart';
 
 class EntryItemView extends StatelessWidget {
   final Entry item;

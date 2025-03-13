@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-import '../utils/logger.dart';
+import 'logger.dart';
 
 class ImageCacheService {
   static final DefaultCacheManager _cacheManager = DefaultCacheManager();

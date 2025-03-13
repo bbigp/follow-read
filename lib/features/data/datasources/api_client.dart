@@ -1,9 +1,9 @@
 
 import 'dart:convert';
 
-import '../models/user.dart';
-import 'http_utils.dart';
-import 'logger.dart';
+import '../models/user_model.dart';
+import '../../../core/utils/http_utils.dart';
+import '../../../core/utils/logger.dart';
 
 
 class ApiClient {

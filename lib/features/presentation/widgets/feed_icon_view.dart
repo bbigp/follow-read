@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 
-import '../services/api.dart';
-import '../services/image_cache_service.dart';
+import '../../data/datasources/api.dart';
+import '../../../core/utils/image_cache_service.dart';
 
 class FeedIconView extends StatefulWidget {
   final int iconId;

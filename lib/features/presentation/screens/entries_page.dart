@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:follow_read/models/entry.dart';
-import 'package:follow_read/services/api.dart';
+import 'package:follow_read/features/data/datasources/api.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../models/feed.dart';
-import '../utils/logger.dart';
+import '../../../core/utils/logger.dart';
+import '../../data/models/entry.dart';
+import '../../data/models/feed.dart';
 import '../widgets/entry_item_view.dart';
 
 class EntryListPage extends StatefulWidget {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:follow_read/pages/entries_page.dart';
-import 'package:follow_read/pages/example.dart';
-import 'package:follow_read/pages/home.dart';
-import 'package:follow_read/pages/me_page.dart';
+import 'package:follow_read/features/presentation/screens/entries_page.dart';
+import 'package:follow_read/features/presentation/screens/example.dart';
+import 'package:follow_read/features/presentation/screens/home.dart';
 
-import 'models/feed.dart';
+import '../features/data/models/feed.dart';
+import '../features/presentation/screens/me_page.dart';
+
 
 class AppRoutes {
   static const String feedList = '/feeds';

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:json_annotation/json_annotation.dart' as json;
 
-import '../services/database.dart';
+import '../datasources/database.dart';
 import 'category.dart';
 import 'icon.dart';
 
