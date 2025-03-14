@@ -11,12 +11,12 @@ class ApiClient {
   static final httpUtil = HttpUtil();
 
 
-  static Future<User?> me({Function(ApiException)? onError}) async {
+  static Future<UserModel?> me({Function(ApiException)? onError}) async {
     httpUtil.setAuthorization('lOEQiLk-6QtDmiIz9_AsoBmZrdeKBarjZyjTLyo4600=');
-    return await httpUtil.safeRequest<User>(
+    return await httpUtil.safeRequest<UserModel>(
       path: 'me',
       method: HttpMethod.get,
-      fromJson: (json) => User.fromJson(json),
+      fromJson: (json) => UserModel.fromJson(json),
       onError: onError,
     );
   }

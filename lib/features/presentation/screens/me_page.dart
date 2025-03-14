@@ -17,7 +17,7 @@ class MePage extends StatefulWidget {
 
 class _MePageState extends State<MePage> {
 
-  User? _user;
+  UserModel? _user;
   bool _isLoading = false;
 
   Future<void> _fetchUser() async {

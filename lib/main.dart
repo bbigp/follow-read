@@ -34,7 +34,7 @@ Future<void> initializeDatabase() async {
 }
 
 class MyApp extends ConsumerWidget {
-  final User? user;
+  final UserModel? user;
   const MyApp({super.key, this.user});
 
   @override

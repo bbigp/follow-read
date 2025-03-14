@@ -9,7 +9,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final authState = ref.read(authProvider);
       final isLoggedIn = authState.user != null;
 
-      final isLoggingIn = state.location == '/login';
+      final isLoggingIn = state.uri.toString() == '/login';
 
       if (!isLoggedIn && !isLoggingIn) return '/login';
       if (isLoggedIn && isLoggingIn) return '/';
@@ -18,12 +18,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/login',
-        name: RouteNames.login,
+        name: "login",
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/',
-        name: RouteNames.home,
+        name: "home",
         builder: (context, state) => const HomeScreen(),
       ),
     ],
