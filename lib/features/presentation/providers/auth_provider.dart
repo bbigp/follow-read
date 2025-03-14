@@ -1,9 +1,11 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/entities/user_entry.dart';
 
 import '../../data/models/user_model.dart';
-import 'get_current_user_use_case.dart';
-import 'login_use_case.dart';
+import '../../domain/use_cases/get_current_user_use_case.dart';
+import '../../domain/use_cases/login_user_case.dart';
+import 'app_provider.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
@@ -23,10 +25,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
         _getCurrentUserUseCase = getCurrentUserUseCase,
         super(const AuthState.initial());
 
-  Future<bool> login({required String email, required String password}) async {
+  Future<bool> login({required token, required String baseUrl}) async {
     state = state.copyWith(isLoading: true, error: null);
 
-    final result = await _loginUseCase.execute(email, password);
+    final result = await _loginUseCase.execute(token);
 
     return result.fold(
           (error) {
@@ -55,7 +57,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
 class AuthState {
   final bool isLoading;
-  final UserModel? user;
+  final UserEntity? user;
   final String? error;
 
   const AuthState({
@@ -71,7 +73,7 @@ class AuthState {
 
   AuthState copyWith({
     bool? isLoading,
-    UserModel? user,
+    UserEntity? user,
     String? error,
   }) {
     return AuthState(

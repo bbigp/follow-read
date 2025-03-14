@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/entities/user_entry.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:follow_read/features/data/datasources/database.dart';
 import 'package:follow_read/core/utils/logger.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'features/data/models/user_model.dart';
-import 'features/domain/use_cases/app_router.dart';
-import 'features/domain/use_cases/login_use_case.dart';
+import 'features/presentation/providers/app_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +32,7 @@ Future<void> initializeDatabase() async {
 }
 
 class MyApp extends ConsumerWidget {
-  final UserModel? user;
+  final UserEntity? user;
   const MyApp({super.key, this.user});
 
   @override

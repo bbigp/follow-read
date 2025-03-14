@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.white,
           leading: GestureDetector(
               onTap: (){
-                AppRoutes.navigateTo(context, AppRoutes.me);
+                // AppRoutes.navigateTo(context, AppRoutes.me);
               },
               child: Icon(Icons.person, color: Colors.black)), // 添加"我的"图标
           // title: const Text('RSS阅读器', style: TextStyle(color: Colors.black)),

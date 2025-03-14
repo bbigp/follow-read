@@ -1,132 +1,115 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:go_router/go_router.dart';
-//
-// // 领域层依赖
-// import 'package:your_app/features/auth/presentation/providers/auth_provider.dart';
-// import 'package:your_app/core/styles/app_colors.dart';
-// import 'package:your_app/core/styles/app_text_styles.dart';
-// import 'package:your_app/core/utils/validators.dart';
-// import 'package:your_app/core/widgets/loading_overlay.dart';
-//
-// class LoginScreen extends StatefulWidget {
-//   const LoginScreen({super.key});
-//
-//   @override
-//   State<LoginScreen> createState() => _LoginScreenState();
-// }
-//
-// class _LoginScreenState extends State<LoginScreen> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _emailController = TextEditingController();
-//   final _passwordController = TextEditingController();
-//   bool _obscurePassword = true;
-//
-//   @override
-//   void dispose() {
-//     _emailController.dispose();
-//     _passwordController.dispose();
-//     super.dispose();
-//   }
-//
-//   Future<void> _submit(WidgetRef ref) async {
-//     // 通过 ref 参数访问 provider
-//     await ref.read(authProvider.notifier).login(
-//       _emailController.text,
-//       _passwordController.text,
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final authState = ref.watch(authProvider);
-//
-//     return Scaffold(
-//       body: LoadingOverlay(
-//         isLoading: authState.isLoading,
-//         child: SingleChildScrollView(
-//           padding: const EdgeInsets.all(20),
-//           child: Form(
-//             key: _formKey,
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.stretch,
-//               children: [
-//                 const SizedBox(height: 100),
-//                 Text(
-//                   'Welcome Back',
-//                   style: AppTextStyles.headlineLarge.copyWith(
-//                     color: AppColors.primary,
-//                   ),
-//                   textAlign: TextAlign.center,
-//                 ),
-//                 const SizedBox(height: 40),
-//                 TextFormField(
-//                   controller: _emailController,
-//                   decoration: const InputDecoration(
-//                     labelText: 'Email',
-//                     prefixIcon: Icon(Icons.email_outlined),
-//                   ),
-//                   keyboardType: TextInputType.emailAddress,
-//                   autovalidateMode: AutovalidateMode.onUserInteraction,
-//                   validator: Validators.emailValidator,
-//                 ),
-//                 const SizedBox(height: 20),
-//                 TextFormField(
-//                   controller: _passwordController,
-//                   decoration: InputDecoration(
-//                     labelText: 'Password',
-//                     prefixIcon: const Icon(Icons.lock_outline),
-//                     suffixIcon: IconButton(
-//                       icon: Icon(
-//                         _obscurePassword
-//                             ? Icons.visibility_off
-//                             : Icons.visibility,
-//                       ),
-//                       onPressed: () => setState(() {
-//                         _obscurePassword = !_obscurePassword;
-//                       }),
-//                     ),
-//                   ),
-//                   obscureText: _obscurePassword,
-//                   autovalidateMode: AutovalidateMode.onUserInteraction,
-//                   validator: Validators.passwordValidator,
-//                 ),
-//                 const SizedBox(height: 30),
-//                 ElevatedButton(
-//                   onPressed: _submit,
-//                   style: ElevatedButton.styleFrom(
-//                     padding: const EdgeInsets.symmetric(vertical: 16),
-//                   ),
-//                   child: const Text('Sign In'),
-//                 ),
-//                 const SizedBox(height: 20),
-//                 if (authState.error != null)
-//                   Text(
-//                     authState.error!,
-//                     style: AppTextStyles.bodyMedium.copyWith(
-//                       color: AppColors.error,
-//                     ),
-//                     textAlign: TextAlign.center,
-//                   ),
-//                 TextButton(
-//                   onPressed: () => context.push('/forgot-password'),
-//                   child: const Text('Forgot Password?'),
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     const Text("Don't have an account?"),
-//                     TextButton(
-//                       onPressed: () => context.push('/register'),
-//                       child: const Text('Sign Up'),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/auth_provider.dart';
+
+class LoginScreen extends ConsumerWidget {
+  const LoginScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final urlController = TextEditingController();
+    final tokenController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    // 验证 URL 格式的正则表达式
+    final urlRegExp = RegExp(
+      r'^(http|https):\/\/([\w-]+(\.[\w-]+)+)(:\d+)?(\/[\w-./?%&=]*)?$',
+      caseSensitive: false,
+    );
+
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // URL 输入框
+              TextFormField(
+                controller: urlController,
+                decoration: const InputDecoration(
+                  labelText: 'API Endpoint',
+                  hintText: 'https://api.example.com/auth',
+                ),
+                keyboardType: TextInputType.url,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'API endpoint is required';
+                  }
+                  if (!urlRegExp.hasMatch(value)) {
+                    return 'Please enter a valid URL';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 10),
+              // Token 输入框
+              TextFormField(
+                controller: tokenController,
+                decoration: const InputDecoration(
+                  labelText: 'Access Token',
+                  hintText: 'Enter your authentication token',
+                ),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Access token is required';
+                  }
+                  if (value.length < 16) {
+                    return 'Token must be at least 16 characters';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              // 状态指示器
+              if (authState.isLoading)
+                const CircularProgressIndicator()
+              else
+                ElevatedButton(
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      await ref.read(authProvider.notifier).login(
+                        baseUrl: urlController.text,
+                        token: tokenController.text,
+                      );
+                    }
+                  },
+                  child: const Text('Authenticate'),
+                ),
+              // 错误信息显示
+              if (authState.error != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    authState.error!,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              // 补充说明文本
+              const Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Text(
+                  'Token should be obtained from your API provider\n'
+                      'Example endpoint: https://api.example.com/v1/auth',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

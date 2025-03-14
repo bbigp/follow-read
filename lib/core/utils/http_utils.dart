@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dartz/dartz.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:http/http.dart' as http;
+
+import 'failure.dart';
 
 class HttpUtil {
   static final HttpUtil _instance = HttpUtil._internal();
@@ -21,11 +24,10 @@ class HttpUtil {
     _headers['X-Auth-Token'] = token;
   }
 
-  Future<T?> safeRequest<T>({
+  Future<Either<Failure, T>> safeRequest<T>({
     required String path,
     required HttpMethod method,
     required T Function(Map<String, dynamic>) fromJson,
-    void Function(ApiException)? onError,
   }) async {
     final startTime = DateTime.now(); // 记录请求开始时间
     final requestId = '${startTime.millisecondsSinceEpoch}_${path.replaceAll('/', '_')}'; // 生成唯一请求ID
@@ -51,7 +53,7 @@ class HttpUtil {
         data: response, // 假设返回数据可被转换为Map
       );
 
-      return response;
+      return Right(response);
     } on ApiException catch (e, stackTrace) {
       _logRequestError(
         requestId: requestId,
@@ -59,12 +61,7 @@ class HttpUtil {
         error: e,
         stackTrace: stackTrace,
       );
-
-      onError?.call(e);
-      if (onError == null) {
-        handleGlobalError(e);
-      }
-      return null;
+      return Left(Failure(e.code, e.error));
     }
   }
 

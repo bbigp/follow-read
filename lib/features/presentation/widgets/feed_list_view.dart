@@ -61,7 +61,7 @@ class RssListSection extends StatelessWidget {
                 ),
                 onTap: () async {
                   // Navigator.pushNamed(context, AppRoutes.entryList);
-                  AppRoutes.navigateTo(context, AppRoutes.entryList, arguments: item);
+                  // AppRoutes.navigateTo(context, AppRoutes.entryList, arguments: item);
                 },
               );
             },

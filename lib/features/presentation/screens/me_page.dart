@@ -32,11 +32,11 @@ class _MePageState extends State<MePage> {
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 2,
         );
-      })
+      }), token: ''
     );
     if (user != null) {
       setState(() {
-        _user = user;
+        _user = user as UserModel?;
       });
     }
     setState(() => _isLoading = false);
