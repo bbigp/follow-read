@@ -1,6 +1,10 @@
 
+import 'package:dart_mappable/dart_mappable.dart';
 
-class UserEntity {
+part 'user_entity.mapper.dart';
+
+@MappableClass()
+class UserEntity with UserEntityMappable {
   final int id;
   final String username;
   final bool isAdmin;
