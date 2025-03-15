@@ -1,11 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:follow_read/features/data/datasources/api_client.dart';
 
 import '../../data/models/user_model.dart';
-import '../../../core/utils/logger.dart';
 
 
 class MePage extends StatefulWidget {
@@ -18,28 +15,28 @@ class MePage extends StatefulWidget {
 class _MePageState extends State<MePage> {
 
   UserModel? _user;
-  bool _isLoading = false;
+  // bool _isLoading = false;
 
   Future<void> _fetchUser() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final user = await ApiClient.me(
-      onError: (e) => setState(() {
-        Fluttertoast.showToast(
-          msg: "请求失败: ${e.message}",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 2,
-        );
-      }), token: ''
-    );
-    if (user != null) {
-      setState(() {
-        _user = user as UserModel?;
-      });
-    }
-    setState(() => _isLoading = false);
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    // final user = await ApiClient.me(
+    //   onError: (e) => setState(() {
+    //     Fluttertoast.showToast(
+    //       msg: "请求失败: ${e.message}",
+    //       toastLength: Toast.LENGTH_SHORT,
+    //       gravity: ToastGravity.CENTER,
+    //       timeInSecForIosWeb: 2,
+    //     );
+    //   }), token: ''
+    // );
+    // if (user != null) {
+    //   setState(() {
+    //     _user = user as UserModel?;
+    //   });
+    // }
+    // setState(() => _isLoading = false);
   }
 
   @override
@@ -224,11 +221,11 @@ class _MePageState extends State<MePage> {
                 TextButton(
                   onPressed: isButtonEnabled ? () {
                     // Perform the "Add" action here
-                    String url = urlController.text;
-                    String key = keyController.text;
-                    String name = nameController.text;
+                    // String url = urlController.text;
+                    // String key = keyController.text;
+                    // String name = nameController.text;
 
-                    print('URL: $url, Key: $key, Name: $name');
+                    // print('URL: $url, Key: $key, Name: $name');
 
                     Navigator.of(context).pop(); // Close the dialog
                   } : null,

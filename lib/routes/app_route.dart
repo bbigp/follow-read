@@ -1,18 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/pages/profile_page.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/utils/logger.dart';
+import '../features/presentation/pages/home_screen.dart';
+import '../features/presentation/pages/login_screen.dart';
 import '../features/presentation/providers/auth_provider.dart';
-import '../features/presentation/screens/home_screen.dart';
-import '../features/presentation/screens/login_screen.dart';
-
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
+    initialLocation: "/",
+    debugLogDiagnostics: true,
+    refreshListenable: _AuthNotifierListener(ref),
     redirect: (context, state) {
       final authState = ref.read(authProvider);
       final isLoggedIn = authState.user != null;
-
-      final isLoggingIn = state.uri.toString() == '/login';
+      final isLoggingIn = state.uri.path == '/login';
+      logger.i('[路由重定向] 登录状态: $isLoggedIn, 当前路径: ${state.uri.path}');
 
       if (!isLoggedIn && !isLoggingIn) return '/login';
       if (isLoggedIn && isLoggingIn) return '/';
@@ -21,18 +26,43 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/login',
-        name: "login",
+        name: RouteNames.login,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/',
-        name: "home",
+        name: RouteNames.home,
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+          path: '/profile',
+          name: RouteNames.profile,
+          builder: (context, state) => const ProfilePage()
       ),
     ],
   );
 });
 
+
+class RouteNames {
+  static const home = 'home';
+  static const profile = 'profile';
+  static const settings = 'settings';
+  static const login = 'login';
+}
+
+
+class _AuthNotifierListener extends ChangeNotifier {
+  final Ref ref;
+
+  _AuthNotifierListener(this.ref) {
+    // 当 authProvider 变化时触发路由刷新
+    ref.listen(authProvider, (_, __) {
+      logger.i(('[路由监听] 认证状态变化 → 触发刷新'));
+      notifyListeners();
+    });
+  }
+}
 
 // import 'package:flutter/material.dart';
 // import 'package:follow_read/features/presentation/screens/entries_page.dart';

@@ -8,7 +8,7 @@ class RssUtils {
 
     final regex = RegExp(r'<img[^>]+src="([^">]+)"', caseSensitive: false);
     final match = regex.firstMatch(htmlString);
-    return match != null ? match.group(1) : null;
+    return match?.group(1);
   }
 
   static String cleanHtmlTags(String htmlString) {

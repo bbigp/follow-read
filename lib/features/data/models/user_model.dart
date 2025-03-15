@@ -1,11 +1,8 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/entities/user_entry.dart';
+import '../../domain/entities/user_entity.dart';
 
-// part 'user_model.freezed.dart';
-// part 'user_model.g.dart';
-part 'user_entity.mapper.dart';
+part 'user_model.mapper.dart';
 // @freezed
 // class UserModel with _$UserModel {
 //   const factory UserModel({
@@ -48,8 +45,6 @@ class UserModel with UserModelMappable {
       required this.lastLoginAt,
     });
 
-    UserEntity toEntity() => UserEntityMapper.fromMap(this.toMap());
+    UserEntity toEntity() => UserEntityMapper.fromMap(toMap());
 
-  // factory UserModel.fromJson(Map<String, dynamic> json) =>
-  //     _$UserModelFromJson(json);
 }

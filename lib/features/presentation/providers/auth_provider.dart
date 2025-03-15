@@ -1,8 +1,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/entities/user_entry.dart';
+import 'package:follow_read/features/domain/entities/user_entity.dart';
 
-import '../../data/models/user_model.dart';
 import '../../domain/use_cases/get_current_user_use_case.dart';
 import '../../domain/use_cases/login_user_case.dart';
 import 'app_provider.dart';
@@ -23,12 +22,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required GetCurrentUserUseCase getCurrentUserUseCase,
   })  : _loginUseCase = loginUseCase,
         _getCurrentUserUseCase = getCurrentUserUseCase,
-        super(const AuthState.initial());
+        super(const AuthState.initial()) {
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    final user = await _getCurrentUserUseCase.execute();
+    state = state.copyWith(isLoading: false, user: user);
+  }
+
+  void logout() async {
+    await _loginUseCase.logout();
+    state = state.copyWith(isLoading: false, user: null);
+  }
+
 
   Future<bool> login({required token, required String baseUrl}) async {
     state = state.copyWith(isLoading: true, error: null);
 
-    final result = await _loginUseCase.execute(token);
+    final result = await _loginUseCase.execute(baseUrl, token);
 
     return result.fold(
           (error) {

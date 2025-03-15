@@ -7,13 +7,17 @@ part 'user_entity.mapper.dart';
 class UserEntity with UserEntityMappable {
   final int id;
   final String username;
+  @MappableField(key: 'is_admin')
   final bool isAdmin;
   final String theme;
   final String language;
   final String timezone;
+  @MappableField(key: 'show_reading_time')
   final bool showReadingTime;
+  @MappableField(key: 'last_login_at')
   final String lastLoginAt;
-  String token;
+  final String token;
+  final String baseUrl;
 
 
   UserEntity({
@@ -25,6 +29,8 @@ class UserEntity with UserEntityMappable {
     this.language = "",
     this.timezone = "",
     this.showReadingTime = false,
-    this.lastLoginAt = ""
+    this.lastLoginAt = "",
+    this.baseUrl = "",
   });
+
 }

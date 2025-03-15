@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/features/presentation/widgets/smart_view.dart';
 import 'package:provider/provider.dart';
 
-import '../../../routes/app_route.dart';
 import '../../data/datasources/api.dart';
 import '../../data/datasources/database.dart';
 import '../../../core/utils/logger.dart';

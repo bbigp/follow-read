@@ -10,8 +10,8 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
-    final urlController = TextEditingController();
-    final tokenController = TextEditingController();
+    final urlController = TextEditingController(text: 'https://mflux.coolbet.cn/v1/');
+    final tokenController = TextEditingController(text: 'lOEQiLk-6QtDmiIz9_AsoBmZrdeKBarjZyjTLyo4600=');
     final formKey = GlobalKey<FormState>();
 
     // 验证 URL 格式的正则表达式
@@ -32,16 +32,16 @@ class LoginScreen extends ConsumerWidget {
               TextFormField(
                 controller: urlController,
                 decoration: const InputDecoration(
-                  labelText: 'API Endpoint',
-                  hintText: 'https://api.example.com/auth',
+                  labelText: '服务器URL',
+                  hintText: 'ex. https://api.example.cn/v1/',
                 ),
                 keyboardType: TextInputType.url,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'API endpoint is required';
+                    return '服务器URL必填';
                   }
                   if (!urlRegExp.hasMatch(value)) {
-                    return 'Please enter a valid URL';
+                    return '请输入正确的服务器URL';
                   }
                   return null;
                 },
@@ -51,16 +51,13 @@ class LoginScreen extends ConsumerWidget {
               TextFormField(
                 controller: tokenController,
                 decoration: const InputDecoration(
-                  labelText: 'Access Token',
-                  hintText: 'Enter your authentication token',
+                  labelText: 'API密钥',
+                  hintText: '',
                 ),
-                obscureText: true,
+                obscureText: false,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Access token is required';
-                  }
-                  if (value.length < 16) {
-                    return 'Token must be at least 16 characters';
+                    return 'API密钥必填';
                   }
                   return null;
                 },
@@ -79,7 +76,7 @@ class LoginScreen extends ConsumerWidget {
                       );
                     }
                   },
-                  child: const Text('Authenticate'),
+                  child: const Text('继续'),
                 ),
               // 错误信息显示
               if (authState.error != null)
@@ -97,8 +94,8 @@ class LoginScreen extends ConsumerWidget {
               const Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: Text(
-                  'Token should be obtained from your API provider\n'
-                      'Example endpoint: https://api.example.com/v1/auth',
+                  'API密钥需从您的 API 提供商处获取\n'
+                      '示例服务器URL: https://api.example.com/v1/',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.grey,

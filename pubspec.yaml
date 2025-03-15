@@ -29,7 +29,8 @@ dependencies:
   go_router: ^14.0.4
   dartz: ^0.10.1
   freezed_annotation: ^2.4.1
-  dart_mappable: ^2.0.2
+  dart_mappable: ^4.5.0
+  flutter_svg: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -39,7 +40,19 @@ dev_dependencies:
   drift_dev: ^2.14.1
   json_serializable: ^6.7.0
   freezed: ^2.4.2
+  dart_mappable_builder: ^4.5.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png" # 你的1024x1024图标路径
+
+  # 可选 - Android 自适应图标
+  android_adaptive_icon_background: "#FFFFFF"
+  android_adaptive_icon_foreground: "assets/icons/foreground.png"
+
 

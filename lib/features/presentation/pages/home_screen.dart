@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/routes/app_route.dart';
 
 import '../providers/auth_provider.dart';
 
@@ -13,7 +14,12 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false, //禁用自动返回箭头
+        leading: IconButton(onPressed: () {
+          ref.read(appRouterProvider).pushNamed(RouteNames.profile);
+        }, icon: const Icon(Icons.person)),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
