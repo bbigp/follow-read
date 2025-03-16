@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:follow_read/core/utils/logger.dart';
@@ -23,7 +22,7 @@ class HttpUtil {
   Future<Either<Failure, T>> safeRequest<T>({
     required String path,
     required HttpMethod method,
-    required T Function(Map<String, dynamic>) fromJson,
+    required T Function(String) fromJson,
     Map<String, String>? headers,
     Map<String, String>? queryParams,
   }) async {
@@ -50,7 +49,7 @@ class HttpUtil {
       ).timeout(const Duration(seconds: _timeoutSeconds));
 
       if (response.statusCode == 200) {
-        final result = fromJson(json.decode(response.body));
+        final result = fromJson(response.body);
         _logRequestSuccess(
           requestId: requestId,
           path: path,

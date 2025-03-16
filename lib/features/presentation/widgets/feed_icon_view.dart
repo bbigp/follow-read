@@ -50,31 +50,31 @@ class _FeedIconViewState extends State<FeedIconView> {
       });
       return;
     }
-    Api.getFeedIcon(
-        iconId: widget.iconId,
-        onSuccess: (icon) async {
-          if (!mounted) return;
-          final cleanBase64 = icon.data.split(',').last;
-          final newImageData = base64Decode(cleanBase64);
-
-          await ImageCacheService.cacheBase64Image(
-            icon.data,
-            'feed_icon_${widget.iconId}',
-          );
-          setState(() {
-            imageData = newImageData;
-            isLoading = false;
-          });
-        },
-        onError: (error) async {
-          if (!mounted) return;
-          await ImageCacheService.markAsFailed('feed_icon_${widget.iconId}');
-          setState(() {
-            this.error = error;
-            isLoading = false;
-          });
-        },
-    );
+    // Api.getFeedIcon(
+    //     iconId: widget.iconId,
+    //     onSuccess: (icon) async {
+    //       if (!mounted) return;
+    //       final cleanBase64 = icon.data.split(',').last;
+    //       final newImageData = base64Decode(cleanBase64);
+    //
+    //       await ImageCacheService.cacheBase64Image(
+    //         icon.data,
+    //         'feed_icon_${widget.iconId}',
+    //       );
+    //       setState(() {
+    //         imageData = newImageData;
+    //         isLoading = false;
+    //       });
+    //     },
+    //     onError: (error) async {
+    //       if (!mounted) return;
+    //       await ImageCacheService.markAsFailed('feed_icon_${widget.iconId}');
+    //       setState(() {
+    //         this.error = error;
+    //         isLoading = false;
+    //       });
+    //     },
+    // );
   }
 
   @override

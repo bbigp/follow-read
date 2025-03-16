@@ -1,10 +1,10 @@
 
 import 'package:dart_mappable/dart_mappable.dart';
 
-part 'user_entity.mapper.dart';
+part 'user.mapper.dart';
 
 @MappableClass()
-class UserEntity with UserEntityMappable {
+class User with UserMappable {
   final int id;
   final String username;
   @MappableField(key: 'is_admin')
@@ -20,7 +20,7 @@ class UserEntity with UserEntityMappable {
   final String baseUrl;
 
 
-  UserEntity({
+  User({
     required this.id,
     required this.username,
     required this.isAdmin,

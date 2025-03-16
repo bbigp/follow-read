@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/presentation/providers/app_provider.dart';
 import 'package:follow_read/routes/app_route.dart';
 
-import '../../domain/entities/user_entity.dart';
+import '../../domain/models/user.dart';
 import '../providers/auth_provider.dart'; // 用于复制操作
 
 class ProfilePage extends ConsumerWidget {
@@ -47,7 +46,7 @@ class ProfilePage extends ConsumerWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: () async {
+        onPressed: () {
           // 退出登录逻辑
           ref.read(authProvider.notifier).logout();
           ref.read(appRouterProvider).goNamed(RouteNames.login);
@@ -64,7 +63,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
 
-  Widget _buildUserInfoSection(UserEntity user) {
+  Widget _buildUserInfoSection(User user) {
     return Column(
       children: [
         Padding(
@@ -153,7 +152,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   // 偏好设置
-  Widget _buildPreferencesSection(UserEntity user) {
+  Widget _buildPreferencesSection(User user) {
     return Column(
      children: [
         _buildPreferenceItem("主题模式", user.theme, Icons.color_lens, Icons.chevron_right),
@@ -164,7 +163,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   // 服务器信息
-  Widget _buildServerInfoSection(UserEntity user) {
+  Widget _buildServerInfoSection(User user) {
     return Column(
       children: [
         _buildPreferenceItem("服务器地址", user.baseUrl, Icons.cloud, Icons.content_copy),

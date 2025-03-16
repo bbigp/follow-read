@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-import 'package:follow_read/features/domain/entities/user_entity.dart';
+import 'package:follow_read/features/domain/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalData {
@@ -11,13 +11,13 @@ class LocalData {
 
   LocalData(this._prefs);
 
-  Future<void> cacheUser(UserEntity user) async {
+  Future<void> cacheUser(User user) async {
     await _prefs.setString('cachedUser', jsonEncode(user.toJson()));
   }
 
-  Future<UserEntity?> getCachedUser() async {
+  Future<User?> getCachedUser() async {
     final json = _prefs.getString('cachedUser');
-    return json != null ? UserEntityMapper.fromJson(jsonDecode(json)) : null;
+    return json != null ? UserMapper.fromJson(jsonDecode(json)) : null;
   }
 
   Future<void> deleteUser() async {

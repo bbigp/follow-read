@@ -1,10 +1,10 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/entities/user_entity.dart';
 
+import '../../domain/models/user.dart';
 import '../../domain/use_cases/get_current_user_use_case.dart';
 import '../../domain/use_cases/login_user_case.dart';
-import 'app_provider.dart';
+import 'app_container.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
@@ -69,7 +69,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
 class AuthState {
   final bool isLoading;
-  final UserEntity? user;
+  final User? user;
   final String? error;
 
   const AuthState({
@@ -85,7 +85,7 @@ class AuthState {
 
   AuthState copyWith({
     bool? isLoading,
-    UserEntity? user,
+    User? user,
     String? error,
   }) {
     return AuthState(

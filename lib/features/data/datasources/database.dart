@@ -5,30 +5,30 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 import '../../../core/utils/logger.dart';
-import '../models/feed.dart';
+import 'feed_entity.dart';
 
 part 'database.g.dart';
 
-class FeedsData extends Table {
-  IntColumn get id => integer()();
-  IntColumn get userId => integer()();
-  TextColumn get feedUrl => text()();
-  TextColumn get siteUrl => text()();
-  TextColumn get title => text()();
-  TextColumn get description => text()();
-  TextColumn get checkedAt => text()();
-  TextColumn get nextCheckAt => text()();
-  IntColumn get icon => integer().nullable()();
-  TextColumn get parsingErrorMsg => text().nullable()();
-  IntColumn get parsingErrorCount => integer().withDefault(const Constant(0))();
-  IntColumn get read => integer().withDefault(const Constant(0))();
-  IntColumn get unread => integer().withDefault(const Constant(0))();
-}
+// class FeedsData extends Table {
+//   IntColumn get id => integer()();
+//   IntColumn get userId => integer()();
+//   TextColumn get feedUrl => text()();
+//   TextColumn get siteUrl => text()();
+//   TextColumn get title => text()();
+//   TextColumn get description => text()();
+//   TextColumn get checkedAt => text()();
+//   TextColumn get nextCheckAt => text()();
+//   IntColumn get icon => integer().nullable()();
+//   TextColumn get parsingErrorMsg => text().nullable()();
+//   IntColumn get parsingErrorCount => integer().withDefault(const Constant(0))();
+//   IntColumn get read => integer().withDefault(const Constant(0))();
+//   IntColumn get unread => integer().withDefault(const Constant(0))();
+// }
 
 
-@DriftDatabase(tables: [FeedsData])
+@DriftDatabase(tables: [FeedsTable])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(connect());
+  AppDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 1;  // 增加版本号
@@ -46,31 +46,31 @@ class AppDatabase extends _$AppDatabase {
     },
   );
 
-  Future<void> insertFeed(Feed feed) async {
-    await into(feedsData).insert(feed.toFeedsData());
-  }
-
-  Future<List<Feed>> getAllFeeds() async {
-    try {
-      final results = await (select(feedsData)).get();
-      return results.map((entry) => Feed.fromEntry(entry)).toList();
-    } catch (e) {
-      logger.e("select feeds失败$e");
-      return [];
-    }
-  }
-
-  Future<void> deleteAllFeeds() => delete(feedsData).go();
-
-  Future<void> insertFeeds(List<Feed> feeds) async {
-    await batch((batch) {
-      batch.insertAll(
-        feedsData,
-        feeds.map((feed) => feed.toFeedsData()),
-        mode: InsertMode.replace,
-      );
-    });
-  }
+  // Future<void> insertFeed(Feed feed) async {
+  //   await into(feedsData).insert(feed.toFeedsData());
+  // }
+  //
+  // Future<List<Feed>> getAllFeeds() async {
+  //   try {
+  //     final results = await (select(feedsData)).get();
+  //     return results.map((entry) => Feed.fromEntry(entry)).toList();
+  //   } catch (e) {
+  //     logger.e("select feeds失败$e");
+  //     return [];
+  //   }
+  // }
+  //
+  // Future<void> deleteAllFeeds() => delete(feedsData).go();
+  //
+  // Future<void> insertFeeds(List<Feed> feeds) async {
+  //   await batch((batch) {
+  //     batch.insertAll(
+  //       feedsData,
+  //       feeds.map((feed) => feed.toFeedsData()),
+  //       mode: InsertMode.replace,
+  //     );
+  //   });
+  // }
 
   // 监听 Feed 变化
   // Stream<List<Feed>> watchAllFeeds() {
@@ -85,12 +85,20 @@ class AppDatabase extends _$AppDatabase {
   //   )).toList());
   // }
 }
-
-DatabaseConnection connect() {
-  final db = LazyDatabase(() async {
+LazyDatabase _openConnection() {
+  logger.i("数据库初始化完成");
+  return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'feeds.db'));
-    return NativeDatabase.createInBackground(file);
+    final file = File(p.join(dbFolder.path, 'follow.db'));
+    return NativeDatabase(file);
   });
-  return DatabaseConnection(db);
 }
+
+// DatabaseConnection connect() {
+//   final db = LazyDatabase(() async {
+//     final dbFolder = await getApplicationDocumentsDirectory();
+//     final file = File(p.join(dbFolder.path, 'follow.db'));
+//     return NativeDatabase.createInBackground(file);
+//   });
+//   return DatabaseConnection(db);
+// }

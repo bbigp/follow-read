@@ -1,16 +1,16 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/providers/auth_provider.dart';
 import 'package:follow_read/routes/app_route.dart';
-import 'package:follow_read/features/data/datasources/database.dart';
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'features/presentation/providers/app_provider.dart';
+import 'core/utils/bigint_mapper.dart';
+import 'features/presentation/providers/app_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDatabase();
+  MapperContainer.globals.use(const BigIntMapper());
   final sharedPreferences = await SharedPreferences.getInstance();
   final container = ProviderContainer(
     overrides: [
@@ -24,11 +24,6 @@ void main() async {
       child: MyApp(),
     ),
   );
-}
-
-Future<void> initializeDatabase() async {
-  AppDatabase();
-  logger.i("数据库初始化完成");
 }
 
 class MyApp extends ConsumerWidget {

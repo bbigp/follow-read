@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/datasources/local_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/datasources/database.dart';
+import '../../data/datasources/feed_dao.dart';
+import '../../data/repositories/feed_repository.dart';
 import '../../data/repositories/user_repository.dart';
 import '../../domain/use_cases/get_current_user_use_case.dart';
 import '../../domain/use_cases/login_user_case.dart';
@@ -14,11 +17,14 @@ final localDataSourceProvider = Provider<LocalData>((ref) {
   return LocalData(ref.watch(sharedPreferencesProvider));
 });
 
-final userRepositoryProvider = Provider<UserRepository>((ref) {
-  return UserRepository(
-    ref.watch(localDataSourceProvider),
-  );
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  return AppDatabase();
 });
+
+
+
+
+
 //
 final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
   return LoginUseCase(ref.watch(userRepositoryProvider));
@@ -26,4 +32,25 @@ final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
 
 final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
   return GetCurrentUserUseCase(ref.watch(userRepositoryProvider));
+});
+
+
+
+
+
+
+
+final feedDaoProvider = Provider<FeedDao>((ref) {
+  return FeedDao(ref.watch(appDatabaseProvider));
+});
+
+
+
+
+final feedRepositoryProvider = Provider<FeedRepository>((ref) {
+  return FeedRepository(feedDao: ref.watch(feedDaoProvider));
+});
+
+final userRepositoryProvider = Provider<UserRepository>((ref) {
+  return UserRepository(ref.watch(localDataSourceProvider),);
 });

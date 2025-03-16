@@ -1,8 +1,8 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
-import '../../domain/entities/user_entity.dart';
+import '../../domain/models/user.dart';
 
-part 'user_model.mapper.dart';
+part 'user_response.mapper.dart';
 // @freezed
 // class UserModel with _$UserModel {
 //   const factory UserModel({
@@ -21,7 +21,7 @@ part 'user_model.mapper.dart';
 // }
 
 @MappableClass()
-class UserModel with UserModelMappable {
+class UserResponse with UserResponseMappable {
     final int id;
     final String username;
     @MappableField(key: 'is_admin')
@@ -34,7 +34,7 @@ class UserModel with UserModelMappable {
     @MappableField(key: 'last_login_at')
     final String lastLoginAt;
 
-    UserModel({
+    UserResponse({
       required this.id,
       required this.username,
       required this.isAdmin,
@@ -45,6 +45,6 @@ class UserModel with UserModelMappable {
       required this.lastLoginAt,
     });
 
-    UserEntity toEntity() => UserEntityMapper.fromMap(toMap());
+    User to() => UserMapper.fromMap(toMap());
 
 }
