@@ -15,11 +15,11 @@ class FeedRepository {
   FeedRepository({required FeedDao feedDao}) : _feedDao = feedDao;
 
   Future<Either<Failure, List<Feed>>> refreshFeeds() async {
-    final _feeds = await ApiClient.getFeeds();
-    return await _feeds.fold((failure) async => Left(failure),
-            (_feeds) async {
-          await _feedDao.bulkInsertWithTransaction(_feeds.map((item) => item.toCompanion()).toList());
-          final feeds = _feeds.map((item) => FeedMapper.fromMap(item.toMap())).toList();
+    final result = await ApiClient.getFeeds();
+    return await result.fold((failure) async => Left(failure),
+            (feedResponse) async {
+          await _feedDao.bulkInsertWithTransaction(feedResponse.map((item) => item.toCompanion()).toList());
+          final feeds = feedResponse.map((item) => FeedMapper.fromMap(item.toMap())).toList();
           return Right(feeds);
         });
   }

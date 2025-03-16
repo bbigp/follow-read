@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
@@ -55,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (feed.viewType == ViewType.feedItem) {
       return Column(
         children: [
-          Container(
+          SizedBox(
             height: 52,
             child: ListTile(
               dense: true,
@@ -113,7 +112,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     } else if (feed.viewType == ViewType.listItem) {
       return Column(
         children: [
-          Container(
+          SizedBox(
             height: 44,
             child: ListTile(
               dense: true,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/routes/app_route.dart';
 
@@ -216,19 +215,19 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  // 复制到剪贴板
-  void _copyToClipboard(String text) {
-    // Clipboard.setData(ClipboardData(text: text));
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text("已复制到剪贴板")),
-    // );
-  }
-
-  // 令牌脱敏处理
-  String _obscureToken(String token) {
-    if (token.length <= 8) return "****";
-    return "${token.substring(0, 4)}****${token.substring(token.length - 4)}";
-  }
+  // // 复制到剪贴板
+  // void _copyToClipboard(String text) {
+  //   // Clipboard.setData(ClipboardData(text: text));
+  //   // ScaffoldMessenger.of(context).showSnackBar(
+  //   //   const SnackBar(content: Text("已复制到剪贴板")),
+  //   // );
+  // }
+  //
+  // // 令牌脱敏处理
+  // String _obscureToken(String token) {
+  //   if (token.length <= 8) return "****";
+  //   return "${token.substring(0, 4)}****${token.substring(token.length - 4)}";
+  // }
 }
 
 // 模拟用户数据（实际应从状态管理获取）

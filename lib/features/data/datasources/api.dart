@@ -5,7 +5,6 @@ import '../models/entry.dart';
 import '../models/feed_counter.dart';
 import '../../../core/utils/http_service.dart';
 import '../../../core/utils/logger.dart';
-import '../models/icon.dart';
 
 class Api {
 

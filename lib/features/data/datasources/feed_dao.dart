@@ -8,7 +8,7 @@ part 'feed_dao.g.dart';
 
 @DriftAccessor(tables: [FeedsTable])
 class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
-  FeedDao(AppDatabase db) : super(db);
+  FeedDao(super.db);
 
 
   Future<void> bulkInsertWithTransaction(List<FeedsTableCompanion> feeds) async {
