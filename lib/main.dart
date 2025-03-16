@@ -1,7 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/presentation/providers/auth_provider.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';

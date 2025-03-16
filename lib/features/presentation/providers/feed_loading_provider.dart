@@ -24,8 +24,9 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
     result.fold((error) {
       state = state.copyWith(isSyncing: false);
       //toast提示同步失败
-    }, (feeds) {
+    }, (feeds) async {
       state = state.copyWith(isSyncing: false);
+      await getFeeds();
     });
   }
 

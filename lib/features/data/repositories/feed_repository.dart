@@ -19,10 +19,7 @@ class FeedRepository {
     return await result.fold((failure) async => Left(failure),
             (feedResponse) async {
           await _feedDao.bulkInsertWithTransaction(feedResponse.map((item) => item.toCompanion()).toList());
-          final feeds = feedResponse.map((item) {
-            final ddd = item.toMap();
-            return FeedMapper.fromMap(item.toMap());
-          }).toList();
+          final feeds = feedResponse.map((item) => item.toModel()).toList();
           return Right(feeds);
         });
   }

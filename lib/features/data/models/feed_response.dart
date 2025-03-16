@@ -1,6 +1,7 @@
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:drift/drift.dart';
+import 'package:follow_read/features/domain/models/feed.dart';
 
 import '../datasources/database.dart';
 
@@ -115,6 +116,18 @@ extension FeedResponseConversion on FeedResponse {
       siteUrl: siteUrl,
       title: title,
       id: Value(id),
+    );
+  }
+
+  Feed toModel() {
+    return Feed(
+      id: id,
+      userId: userId,
+      feedUrl: feedUrl,
+      siteUrl: siteUrl,
+      title: title,
+      unreadCount: 0,
+      viewType: ViewType.feedItem,
     );
   }
 }
