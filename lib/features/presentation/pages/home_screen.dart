@@ -8,7 +8,6 @@ import 'package:follow_read/routes/app_route.dart';
 import '../../domain/models/feed.dart';
 import '../widgets/feed_icon.dart';
 
-
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -17,7 +16,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -31,27 +29,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final feedsState = ref.watch(feedLoadingProvider);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        //禁用自动返回箭头
-        leading: IconButton(
-            onPressed: () {
-              ref.read(appRouterProvider).pushNamed(RouteNames.profile);
-            },
-            icon: const Icon(Icons.person)),
-        actions: [
-          _buildRefreshButton(ref, feedsState.isSyncing),
-          const SizedBox(width: 12),
-        ],
-      ),
-      body: ListView.builder(
-          itemCount: feedsState.feeds.length,
-          itemBuilder: (context, index) {
-          return _buildFeedItem(feedsState.feeds[index]);
-      })
-    );
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          //禁用自动返回箭头
+          leading: IconButton(
+              onPressed: () {
+                ref.read(appRouterProvider).pushNamed(RouteNames.profile);
+              },
+              icon: const Icon(Icons.person)),
+          actions: [
+            _buildRefreshButton(ref, feedsState.isSyncing),
+            const SizedBox(width: 12),
+          ],
+        ),
+        body: ListView.builder(
+            itemCount: feedsState.feeds.length,
+            itemBuilder: (context, index) {
+              return _buildFeedItem(feedsState.feeds[index]);
+            }));
   }
 
   Widget _buildFeedItem(Feed feed) {
@@ -62,19 +59,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             height: 52,
             child: ListTile(
               dense: true,
-              horizontalTitleGap: 12, // 图标与标题的水平间距（默认16）
-              onTap: () {
-
-              },
-              leading: FeedIcon(title: feed.title, iconUrl: "",),
-              title: Text(feed.title, maxLines: 1, style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                height: 1.33,
-                color: Color(0xF2000000),
-              )),
+              horizontalTitleGap: 12,
+              // 图标与标题的水平间距（默认16）
+              onTap: () {},
+              leading: FeedIcon(
+                title: feed.title,
+                iconUrl: "",
+              ),
+              title: Text(feed.title,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    height: 1.33,
+                    color: Color(0xF2000000),
+                  )),
               trailing: Text(
-                '${feed.unreadCount > 0 ? feed.unreadCount : ''}', // 这里可以是你想显示的任何数字
+                '${feed.unreadCount > 0 ? feed.unreadCount : ''}',
+                // 这里可以是你想显示的任何数字
                 style: const TextStyle(
                   color: Color(0x40000000),
                   fontSize: 13,
@@ -84,7 +86,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-          SpacerDivider(spacing: 1, thickness: 0.5,),
+          SpacerDivider(
+            spacing: 1,
+            thickness: 0.5,
+          ),
         ],
       );
     } else if (feed.viewType == ViewType.groupTitleItem) {
@@ -92,16 +97,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         height: 40,
         // color: Colors.blue,
         alignment: Alignment.centerLeft,
-        child: Padding(padding: EdgeInsets.symmetric(horizontal: 12),
-        child: Text(
-          feed.title,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
-            height: 1.29,
-            color: const Color(0xF2000000),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            feed.title,
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w500,
+              height: 1.29,
+              color: const Color(0xF2000000),
+            ),
           ),
-        ),),
+        ),
       );
     } else if (feed.viewType == ViewType.listItem) {
       return Column(
@@ -110,19 +117,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             height: 44,
             child: ListTile(
               dense: true,
-              horizontalTitleGap: 12, // 图标与标题的水平间距（默认16）
-              onTap: () {
-
-              },
+              horizontalTitleGap: 12,
+              // 图标与标题的水平间距（默认16）
+              onTap: () {},
               leading: Icon(feed.iconData),
-              title: Text(feed.title, maxLines: 1, style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                height: 1.33,
-                color: Color(0xF2000000),
-              )),
+              title: Text(feed.title,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    height: 1.33,
+                    color: Color(0xF2000000),
+                  )),
               trailing: Text(
-                '${feed.unreadCount > 0 ? feed.unreadCount : ''}', // 这里可以是你想显示的任何数字
+                '${feed.unreadCount > 0 ? feed.unreadCount : ''}',
+                // 这里可以是你想显示的任何数字
                 style: const TextStyle(
                   color: Color(0x40000000),
                   fontSize: 13,
@@ -136,11 +145,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     } else if (feed.viewType == ViewType.divider32) {
       // return Container(height: 32,);
-      return SpacerDivider(thickness: 0.2, spacing: 32, color: const Color(0x14000000),);
+      return SpacerDivider(
+        thickness: 0.2,
+        spacing: 32,
+        color: const Color(0x14000000),
+      );
     } else {
-      return Container(height: 0,);
+      return Container(
+        height: 0,
+      );
     }
-
   }
 
   Widget _buildRefreshButton(WidgetRef ref, bool isLoading) {
