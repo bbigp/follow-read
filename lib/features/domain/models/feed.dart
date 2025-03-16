@@ -5,7 +5,7 @@ import 'package:follow_read/features/data/datasources/database.dart';
 
 part 'feed.mapper.dart';
 
-@MappableClass()
+@MappableClass(ignoreNull: true)
 class Feed with FeedMappable {
   final BigInt id;
   @MappableField(key: 'user_id')
