@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
-import 'package:follow_read/features/data/datasources/database.dart';
+import 'package:follow_read/features/domain/models/view_type.dart';
 
 part 'feed.mapper.dart';
 
@@ -37,9 +37,4 @@ class Feed with FeedMappable {
         iconData = iconData ?? Icons.ac_unit_outlined;
 }
 
-enum ViewType {
-  feedItem,
-  groupTitleItem,
-  listItem,
-  divider32,
-}
+

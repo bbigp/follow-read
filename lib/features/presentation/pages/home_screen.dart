@@ -5,6 +5,7 @@ import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/routes/app_route.dart';
 
 import '../../domain/models/feed.dart';
+import '../../domain/models/view_type.dart';
 import '../widgets/feed_icon.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {

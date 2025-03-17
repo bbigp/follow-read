@@ -13,7 +13,7 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
 
 
   Future<void> bulkInsertWithTransaction(List<FeedsTableCompanion> feeds) async {
-    if (feeds.length <= 0) {
+    if (feeds.isEmpty) {
       return;
     }
     await transaction(() async {
@@ -32,7 +32,7 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
   }
 
   Future<void> bulkUpdateCounter(List<FeedCounter> list) async {
-    if (list.length <= 0) {
+    if (list.isEmpty) {
       return;
     }
     await transaction(() async {

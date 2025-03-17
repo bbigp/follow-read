@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 
 import '../../domain/models/feed.dart';
 import '../models/entry.dart';
-import '../models/feed_counter_response.dart';
 import '../../../core/utils/http_service.dart';
 import '../../../core/utils/logger.dart';
 

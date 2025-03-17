@@ -9,7 +9,7 @@ class SpacerDivider extends StatelessWidget {
 
   const SpacerDivider({
     super.key,
-    this.color = const Color(0x14000000),
+    this.color = const Color(0x14000000),//8%透明度的黑色
     this.thickness = 1,
     this.spacing = 32,
     this.indent = 12,

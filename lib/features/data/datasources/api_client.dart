@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/utils/failure.dart';
 import '../../../core/utils/follow_request.dart';

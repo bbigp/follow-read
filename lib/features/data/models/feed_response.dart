@@ -3,6 +3,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:drift/drift.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 
+import '../../domain/models/view_type.dart';
 import '../datasources/database.dart';
 
 part 'feed_response.mapper.dart';

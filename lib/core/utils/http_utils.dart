@@ -72,18 +72,18 @@ class HttpUtil {
           queryParameters: queryParams,
         );
       }
-      var _h = defaultHeaders;
+      var h = defaultHeaders;
       if (headers != null) {
-        _h = headers;
+        h = headers;
       }
       if (token != "") {
-        _h = buildHeaders(_h, token);
+        h = buildHeaders(h, token);
       }
 
       final response = await FollowRequest.sendRequest(
         uri: uri,
         method: method,
-        headers: _h,
+        headers: h,
       ).timeout(const Duration(seconds: _timeoutSeconds));
 
       if (response.statusCode == 200) {
