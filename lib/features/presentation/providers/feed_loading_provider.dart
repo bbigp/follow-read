@@ -21,6 +21,7 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
   Future<void> refresh() async {
     state = state.copyWith(isSyncing: true);
     final result = await _feedRepository.refreshFeeds();
+    await _feedRepository.refreshFeedCounter();
     result.fold((error) {
       state = state.copyWith(isSyncing: false);
       //toast提示同步失败
@@ -38,7 +39,7 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.listItem,
-      unreadCount: 90,
+      unread: 90, read: 0,
     );
     final read = Feed(
       id: BigInt.zero,

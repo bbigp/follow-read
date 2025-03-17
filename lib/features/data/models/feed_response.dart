@@ -126,7 +126,8 @@ extension FeedResponseConversion on FeedResponse {
       feedUrl: feedUrl,
       siteUrl: siteUrl,
       title: title,
-      unreadCount: 0,
+      unread: 0,
+      read: 0,
       viewType: ViewType.feedItem,
     );
   }

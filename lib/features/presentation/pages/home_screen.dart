@@ -74,7 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     color: Color(0xF2000000),
                   )),
               trailing: Text(
-                '${feed.unreadCount > 0 ? feed.unreadCount : ''}',
+                '${feed.unread > 0 ? feed.unread : ''}',
                 // 这里可以是你想显示的任何数字
                 style: const TextStyle(
                   color: Color(0x40000000),
@@ -129,7 +129,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     color: Color(0xF2000000),
                   )),
               trailing: Text(
-                '${feed.unreadCount > 0 ? feed.unreadCount : ''}',
+                '${feed.unread > 0 ? feed.unread : ''}',
                 // 这里可以是你想显示的任何数字
                 style: const TextStyle(
                   color: Color(0x40000000),

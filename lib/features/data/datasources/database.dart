@@ -5,26 +5,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 import '../../../core/utils/logger.dart';
-import 'feed_entity.dart';
+import 'entities/feed_entity.dart';
 
 part 'database.g.dart';
-
-// class FeedsData extends Table {
-//   IntColumn get id => integer()();
-//   IntColumn get userId => integer()();
-//   TextColumn get feedUrl => text()();
-//   TextColumn get siteUrl => text()();
-//   TextColumn get title => text()();
-//   TextColumn get description => text()();
-//   TextColumn get checkedAt => text()();
-//   TextColumn get nextCheckAt => text()();
-//   IntColumn get icon => integer().nullable()();
-//   TextColumn get parsingErrorMsg => text().nullable()();
-//   IntColumn get parsingErrorCount => integer().withDefault(const Constant(0))();
-//   IntColumn get read => integer().withDefault(const Constant(0))();
-//   IntColumn get unread => integer().withDefault(const Constant(0))();
-// }
-
 
 @DriftDatabase(tables: [FeedsTable])
 class AppDatabase extends _$AppDatabase {

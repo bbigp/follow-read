@@ -1,4 +1,3 @@
-
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:follow_read/features/data/datasources/database.dart';
@@ -16,7 +15,8 @@ class Feed with FeedMappable {
   final String siteUrl;
   final String title;
   final String? avatarUrl;
-  final int unreadCount;
+  final int unread;
+  final int read;
   final ViewType viewType;
   final IconData iconData;
 
@@ -27,23 +27,14 @@ class Feed with FeedMappable {
     required this.siteUrl,
     required this.title,
     this.avatarUrl,
-    this.unreadCount = 0,
-    this.viewType = ViewType.feedItem,
-    this.iconData = Icons.ac_unit_outlined,
-  });
-
-  factory Feed.fromEntity(FeedEntity feed) {
-    return Feed(
-      id: feed.id,
-      title: feed.title,
-      userId: feed.userId,
-      feedUrl: feed.feedUrl,
-      siteUrl: feed.siteUrl,
-      avatarUrl: "",
-      unreadCount: 10,
-      viewType: ViewType.feedItem,
-    );
-  }
+    int? unread,
+    int? read,
+    ViewType? viewType,
+    IconData? iconData,
+  })  : unread = unread ?? 0,
+        read = read ?? 0,
+        viewType = viewType ?? ViewType.feedItem,
+        iconData = iconData ?? Icons.ac_unit_outlined;
 }
 
 enum ViewType {
@@ -51,8 +42,4 @@ enum ViewType {
   groupTitleItem,
   listItem,
   divider32,
-
-
-
-
 }

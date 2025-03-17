@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/domain/models/user.dart';
 import 'failure.dart';
 import 'follow_request.dart';
 
@@ -14,10 +17,34 @@ class HttpUtil {
   HttpUtil._internal();
 
   static const int _timeoutSeconds = 15;
-  final Map<String, String> _headers = {
+  final Map<String, String> defaultHeaders = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
+
+  String buildPath(String baseUrl, String path) {
+    if (baseUrl.endsWith("/")) {
+      return baseUrl + path;
+    }
+    return "$baseUrl/$path";
+  }
+
+
+  Map<String, String> buildHeaders(Map<String, String> headers, String token) {
+    headers['X-Auth-Token'] = token;
+    return headers;
+  }
+
+
+  Future<(String, String)> _getAuthInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final json = prefs.getString('cachedUser');
+    if (json == null) {
+      return ("", "");
+    }
+    final user = UserMapper.fromJson(jsonDecode(json));
+    return (user.baseUrl, user.token);
+  }
 
   Future<Either<Failure, T>> safeRequest<T>({
     required String path,
@@ -38,14 +65,25 @@ class HttpUtil {
       // parameters: parameters,
     );
     try {
-      final uri = Uri.parse(path).replace(
-        queryParameters: queryParams,
-      );
+    final (baseUrl, token) = await _getAuthInfo();
+      var uri = Uri.parse(path);
+      if (!path.startsWith("http")) {
+        uri = Uri.parse(buildPath(baseUrl, path)).replace(
+          queryParameters: queryParams,
+        );
+      }
+      var _h = defaultHeaders;
+      if (headers != null) {
+        _h = headers;
+      }
+      if (token != "") {
+        _h = buildHeaders(_h, token);
+      }
 
       final response = await FollowRequest.sendRequest(
         uri: uri,
         method: method,
-        headers: headers ?? _headers,
+        headers: _h,
       ).timeout(const Duration(seconds: _timeoutSeconds));
 
       if (response.statusCode == 200) {

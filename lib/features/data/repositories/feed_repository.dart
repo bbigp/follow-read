@@ -1,5 +1,6 @@
 
 import 'package:dartz/dartz.dart';
+import 'package:follow_read/features/data/datasources/entities/feed_entity.dart';
 import 'package:follow_read/features/data/datasources/feed_dao.dart';
 import 'package:follow_read/features/data/models/feed_response.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
@@ -24,10 +25,17 @@ class FeedRepository {
         });
   }
 
+  Future<void> refreshFeedCounter() async {
+    final result = await ApiClient.getFeedCounters();
+    result.fold((failure) {}, (counter) async {
+        await _feedDao.bulkUpdateCounter(counter.toConters());
+    });
+  }
+
   Future<List<Feed>> getFeeds() async {
     final feeds = await _feedDao.getAllFeeds();
     logger.i('查询到本地feeds: ${feeds.length}');
-    return feeds.map((e) => Feed.fromEntity(e)).toList();
+    return feeds.map((e) => e.toModel()).toList();
   }
 
 }

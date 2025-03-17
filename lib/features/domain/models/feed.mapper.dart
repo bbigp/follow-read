@@ -36,9 +36,17 @@ class FeedMapper extends ClassMapperBase<Feed> {
   static String? _$avatarUrl(Feed v) => v.avatarUrl;
   static const Field<Feed, String> _f$avatarUrl =
       Field('avatarUrl', _$avatarUrl, opt: true);
-  static int? _$unreadCount(Feed v) => v.unreadCount;
-  static const Field<Feed, int> _f$unreadCount =
-      Field('unreadCount', _$unreadCount, opt: true);
+  static int _$unread(Feed v) => v.unread;
+  static const Field<Feed, int> _f$unread =
+      Field('unread', _$unread, opt: true);
+  static int _$read(Feed v) => v.read;
+  static const Field<Feed, int> _f$read = Field('read', _$read, opt: true);
+  static ViewType _$viewType(Feed v) => v.viewType;
+  static const Field<Feed, ViewType> _f$viewType =
+      Field('viewType', _$viewType, opt: true);
+  static IconData _$iconData(Feed v) => v.iconData;
+  static const Field<Feed, IconData> _f$iconData =
+      Field('iconData', _$iconData, opt: true);
 
   @override
   final MappableFields<Feed> fields = const {
@@ -48,8 +56,13 @@ class FeedMapper extends ClassMapperBase<Feed> {
     #siteUrl: _f$siteUrl,
     #title: _f$title,
     #avatarUrl: _f$avatarUrl,
-    #unreadCount: _f$unreadCount,
+    #unread: _f$unread,
+    #read: _f$read,
+    #viewType: _f$viewType,
+    #iconData: _f$iconData,
   };
+  @override
+  final bool ignoreNull = true;
 
   static Feed _instantiate(DecodingData data) {
     return Feed(
@@ -59,7 +72,10 @@ class FeedMapper extends ClassMapperBase<Feed> {
         siteUrl: data.dec(_f$siteUrl),
         title: data.dec(_f$title),
         avatarUrl: data.dec(_f$avatarUrl),
-        unreadCount: data.dec(_f$unreadCount));
+        unread: data.dec(_f$unread),
+        read: data.dec(_f$read),
+        viewType: data.dec(_f$viewType),
+        iconData: data.dec(_f$iconData));
   }
 
   @override
@@ -115,7 +131,10 @@ abstract class FeedCopyWith<$R, $In extends Feed, $Out>
       String? siteUrl,
       String? title,
       String? avatarUrl,
-      int? unreadCount});
+      int? unread,
+      int? read,
+      ViewType? viewType,
+      IconData? iconData});
   FeedCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -133,7 +152,10 @@ class _FeedCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Feed, $Out>
           String? siteUrl,
           String? title,
           Object? avatarUrl = $none,
-          Object? unreadCount = $none}) =>
+          Object? unread = $none,
+          Object? read = $none,
+          Object? viewType = $none,
+          Object? iconData = $none}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,
         if (userId != null) #userId: userId,
@@ -141,7 +163,10 @@ class _FeedCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Feed, $Out>
         if (siteUrl != null) #siteUrl: siteUrl,
         if (title != null) #title: title,
         if (avatarUrl != $none) #avatarUrl: avatarUrl,
-        if (unreadCount != $none) #unreadCount: unreadCount
+        if (unread != $none) #unread: unread,
+        if (read != $none) #read: read,
+        if (viewType != $none) #viewType: viewType,
+        if (iconData != $none) #iconData: iconData
       }));
   @override
   Feed $make(CopyWithData data) => Feed(
@@ -151,7 +176,10 @@ class _FeedCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Feed, $Out>
       siteUrl: data.get(#siteUrl, or: $value.siteUrl),
       title: data.get(#title, or: $value.title),
       avatarUrl: data.get(#avatarUrl, or: $value.avatarUrl),
-      unreadCount: data.get(#unreadCount, or: $value.unreadCount));
+      unread: data.get(#unread, or: $value.unread),
+      read: data.get(#read, or: $value.read),
+      viewType: data.get(#viewType, or: $value.viewType),
+      iconData: data.get(#iconData, or: $value.iconData));
 
   @override
   FeedCopyWith<$R2, Feed, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>

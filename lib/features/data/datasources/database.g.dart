@@ -36,8 +36,23 @@ class $FeedsTableTable extends FeedsTable
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _unreadMeta = const VerificationMeta('unread');
   @override
-  List<GeneratedColumn> get $columns => [id, userId, feedUrl, siteUrl, title];
+  late final GeneratedColumn<int> unread = GeneratedColumn<int>(
+      'unread', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _readMeta = const VerificationMeta('read');
+  @override
+  late final GeneratedColumn<int> read = GeneratedColumn<int>(
+      'read', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, userId, feedUrl, siteUrl, title, unread, read];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -75,6 +90,14 @@ class $FeedsTableTable extends FeedsTable
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
+    if (data.containsKey('unread')) {
+      context.handle(_unreadMeta,
+          unread.isAcceptableOrUnknown(data['unread']!, _unreadMeta));
+    }
+    if (data.containsKey('read')) {
+      context.handle(
+          _readMeta, read.isAcceptableOrUnknown(data['read']!, _readMeta));
+    }
     return context;
   }
 
@@ -94,6 +117,10 @@ class $FeedsTableTable extends FeedsTable
           .read(DriftSqlType.string, data['${effectivePrefix}site_url'])!,
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      unread: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}unread'])!,
+      read: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}read'])!,
     );
   }
 
@@ -109,12 +136,16 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
   final String feedUrl;
   final String siteUrl;
   final String title;
+  final int unread;
+  final int read;
   const FeedEntity(
       {required this.id,
       required this.userId,
       required this.feedUrl,
       required this.siteUrl,
-      required this.title});
+      required this.title,
+      required this.unread,
+      required this.read});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -123,6 +154,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
     map['feed_url'] = Variable<String>(feedUrl);
     map['site_url'] = Variable<String>(siteUrl);
     map['title'] = Variable<String>(title);
+    map['unread'] = Variable<int>(unread);
+    map['read'] = Variable<int>(read);
     return map;
   }
 
@@ -133,6 +166,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       feedUrl: Value(feedUrl),
       siteUrl: Value(siteUrl),
       title: Value(title),
+      unread: Value(unread),
+      read: Value(read),
     );
   }
 
@@ -145,6 +180,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       feedUrl: serializer.fromJson<String>(json['feedUrl']),
       siteUrl: serializer.fromJson<String>(json['siteUrl']),
       title: serializer.fromJson<String>(json['title']),
+      unread: serializer.fromJson<int>(json['unread']),
+      read: serializer.fromJson<int>(json['read']),
     );
   }
   @override
@@ -156,6 +193,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       'feedUrl': serializer.toJson<String>(feedUrl),
       'siteUrl': serializer.toJson<String>(siteUrl),
       'title': serializer.toJson<String>(title),
+      'unread': serializer.toJson<int>(unread),
+      'read': serializer.toJson<int>(read),
     };
   }
 
@@ -164,13 +203,17 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           BigInt? userId,
           String? feedUrl,
           String? siteUrl,
-          String? title}) =>
+          String? title,
+          int? unread,
+          int? read}) =>
       FeedEntity(
         id: id ?? this.id,
         userId: userId ?? this.userId,
         feedUrl: feedUrl ?? this.feedUrl,
         siteUrl: siteUrl ?? this.siteUrl,
         title: title ?? this.title,
+        unread: unread ?? this.unread,
+        read: read ?? this.read,
       );
   FeedEntity copyWithCompanion(FeedsTableCompanion data) {
     return FeedEntity(
@@ -179,6 +222,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       feedUrl: data.feedUrl.present ? data.feedUrl.value : this.feedUrl,
       siteUrl: data.siteUrl.present ? data.siteUrl.value : this.siteUrl,
       title: data.title.present ? data.title.value : this.title,
+      unread: data.unread.present ? data.unread.value : this.unread,
+      read: data.read.present ? data.read.value : this.read,
     );
   }
 
@@ -189,13 +234,16 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           ..write('userId: $userId, ')
           ..write('feedUrl: $feedUrl, ')
           ..write('siteUrl: $siteUrl, ')
-          ..write('title: $title')
+          ..write('title: $title, ')
+          ..write('unread: $unread, ')
+          ..write('read: $read')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, userId, feedUrl, siteUrl, title);
+  int get hashCode =>
+      Object.hash(id, userId, feedUrl, siteUrl, title, unread, read);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -204,7 +252,9 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           other.userId == this.userId &&
           other.feedUrl == this.feedUrl &&
           other.siteUrl == this.siteUrl &&
-          other.title == this.title);
+          other.title == this.title &&
+          other.unread == this.unread &&
+          other.read == this.read);
 }
 
 class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
@@ -213,12 +263,16 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
   final Value<String> feedUrl;
   final Value<String> siteUrl;
   final Value<String> title;
+  final Value<int> unread;
+  final Value<int> read;
   const FeedsTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
     this.feedUrl = const Value.absent(),
     this.siteUrl = const Value.absent(),
     this.title = const Value.absent(),
+    this.unread = const Value.absent(),
+    this.read = const Value.absent(),
   });
   FeedsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -226,6 +280,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     required String feedUrl,
     required String siteUrl,
     required String title,
+    this.unread = const Value.absent(),
+    this.read = const Value.absent(),
   })  : userId = Value(userId),
         feedUrl = Value(feedUrl),
         siteUrl = Value(siteUrl),
@@ -236,6 +292,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     Expression<String>? feedUrl,
     Expression<String>? siteUrl,
     Expression<String>? title,
+    Expression<int>? unread,
+    Expression<int>? read,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -243,6 +301,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       if (feedUrl != null) 'feed_url': feedUrl,
       if (siteUrl != null) 'site_url': siteUrl,
       if (title != null) 'title': title,
+      if (unread != null) 'unread': unread,
+      if (read != null) 'read': read,
     });
   }
 
@@ -251,13 +311,17 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       Value<BigInt>? userId,
       Value<String>? feedUrl,
       Value<String>? siteUrl,
-      Value<String>? title}) {
+      Value<String>? title,
+      Value<int>? unread,
+      Value<int>? read}) {
     return FeedsTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       feedUrl: feedUrl ?? this.feedUrl,
       siteUrl: siteUrl ?? this.siteUrl,
       title: title ?? this.title,
+      unread: unread ?? this.unread,
+      read: read ?? this.read,
     );
   }
 
@@ -279,6 +343,12 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
+    if (unread.present) {
+      map['unread'] = Variable<int>(unread.value);
+    }
+    if (read.present) {
+      map['read'] = Variable<int>(read.value);
+    }
     return map;
   }
 
@@ -289,7 +359,9 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
           ..write('userId: $userId, ')
           ..write('feedUrl: $feedUrl, ')
           ..write('siteUrl: $siteUrl, ')
-          ..write('title: $title')
+          ..write('title: $title, ')
+          ..write('unread: $unread, ')
+          ..write('read: $read')
           ..write(')'))
         .toString();
   }
@@ -312,6 +384,8 @@ typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
   required String feedUrl,
   required String siteUrl,
   required String title,
+  Value<int> unread,
+  Value<int> read,
 });
 typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> id,
@@ -319,6 +393,8 @@ typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<String> feedUrl,
   Value<String> siteUrl,
   Value<String> title,
+  Value<int> unread,
+  Value<int> read,
 });
 
 class $$FeedsTableTableFilterComposer
@@ -344,6 +420,12 @@ class $$FeedsTableTableFilterComposer
 
   ColumnFilters<String> get title => $composableBuilder(
       column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get unread => $composableBuilder(
+      column: $table.unread, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get read => $composableBuilder(
+      column: $table.read, builder: (column) => ColumnFilters(column));
 }
 
 class $$FeedsTableTableOrderingComposer
@@ -369,6 +451,12 @@ class $$FeedsTableTableOrderingComposer
 
   ColumnOrderings<String> get title => $composableBuilder(
       column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get unread => $composableBuilder(
+      column: $table.unread, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get read => $composableBuilder(
+      column: $table.read, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FeedsTableTableAnnotationComposer
@@ -394,6 +482,12 @@ class $$FeedsTableTableAnnotationComposer
 
   GeneratedColumn<String> get title =>
       $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<int> get unread =>
+      $composableBuilder(column: $table.unread, builder: (column) => column);
+
+  GeneratedColumn<int> get read =>
+      $composableBuilder(column: $table.read, builder: (column) => column);
 }
 
 class $$FeedsTableTableTableManager extends RootTableManager<
@@ -424,6 +518,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<String> feedUrl = const Value.absent(),
             Value<String> siteUrl = const Value.absent(),
             Value<String> title = const Value.absent(),
+            Value<int> unread = const Value.absent(),
+            Value<int> read = const Value.absent(),
           }) =>
               FeedsTableCompanion(
             id: id,
@@ -431,6 +527,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             feedUrl: feedUrl,
             siteUrl: siteUrl,
             title: title,
+            unread: unread,
+            read: read,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -438,6 +536,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             required String feedUrl,
             required String siteUrl,
             required String title,
+            Value<int> unread = const Value.absent(),
+            Value<int> read = const Value.absent(),
           }) =>
               FeedsTableCompanion.insert(
             id: id,
@@ -445,6 +545,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             feedUrl: feedUrl,
             siteUrl: siteUrl,
             title: title,
+            unread: unread,
+            read: read,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
