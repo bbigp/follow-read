@@ -35,7 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           //禁用自动返回箭头
           leading: IconButton(
               onPressed: () {
-                ref.read(appRouterProvider).pushNamed(RouteNames.profile);
+                ref.read(routerProvider).pushNamed(RouteNames.profile);
               },
               icon: const Icon(Icons.person)),
           actions: [
@@ -60,7 +60,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               dense: true,
               horizontalTitleGap: 12,
               // 图标与标题的水平间距（默认16）
-              onTap: () {},
+              onTap: () {
+                ref.read(routerProvider).pushNamed(
+                    RouteNames.entry,
+                    pathParameters: {'feedId': feed.id.toString()}
+                );
+              },
               leading: FeedIcon(
                 title: feed.title,
                 iconUrl: "",

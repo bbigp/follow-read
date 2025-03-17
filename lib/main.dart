@@ -37,7 +37,7 @@ class MyApp extends ConsumerWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
-      routerConfig: ref.watch(appRouterProvider),
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }

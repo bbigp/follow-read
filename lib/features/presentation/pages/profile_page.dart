@@ -48,7 +48,7 @@ class ProfilePage extends ConsumerWidget {
         onPressed: () {
           // 退出登录逻辑
           ref.read(authProvider.notifier).logout();
-          ref.read(appRouterProvider).goNamed(RouteNames.login);
+          ref.read(routerProvider).goNamed(RouteNames.login);
         },
         child: const Text(
           "退出登录",

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/profile_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,7 +9,7 @@ import '../features/presentation/pages/home_screen.dart';
 import '../features/presentation/pages/login_screen.dart';
 import '../features/presentation/providers/auth_provider.dart';
 
-final appRouterProvider = Provider<GoRouter>((ref) {
+final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: "/",
     debugLogDiagnostics: true,
@@ -39,6 +40,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           name: RouteNames.profile,
           builder: (context, state) => const ProfilePage()
       ),
+      GoRoute(
+        path: '/entry/:feedId',
+        name: RouteNames.entry,
+        builder: (context, state) {
+          final feedId = BigInt.parse(state.pathParameters['feedId']!);
+          return EntryPage(feedId: feedId);
+        }
+      )
     ],
   );
 });
@@ -49,6 +58,7 @@ class RouteNames {
   static const profile = 'profile';
   static const settings = 'settings';
   static const login = 'login';
+  static const entry = 'entry';
 }
 
 
