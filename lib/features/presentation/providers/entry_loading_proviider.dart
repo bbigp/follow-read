@@ -40,13 +40,12 @@ class EntriesLoadingNotifier extends StateNotifier<EntryListState> {
           UiItem(type: ViewType.noMore, content: EmptyUiData()),
       ]);
 
-    // list.clear();
-    // list.addAll([
-    //   UiItem(type: ViewType.feedHeaderItem, content: FeedHeader(title: 'All', subTitle: '')),
-    //   UiItem(type: ViewType.noContentYetItem, content: EmptyUiData()),
-    // ]);
-    logger.i('dsdsdsd');
-    state = state.copyWith(contents: list);
+    list.clear();
+    list.addAll([
+      UiItem(type: ViewType.feedHeaderItem, content: FeedHeader(title: 'All', subTitle: '')),
+      UiItem(type: ViewType.noContentYetItem, content: EmptyUiData()),
+    ]);
+    state = state.copyWith(uiItems: list);
   }
 
 
@@ -66,7 +65,7 @@ class EntryListState {
 
 
   EntryListState copyWith({
-    List<UiItem>? contents,
+    List<UiItem>? uiItems,
     int? page,
     int? size,
   }) {

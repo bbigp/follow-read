@@ -71,7 +71,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
   Widget _buildFeedHeader(UiItem uiItem){
-    final feed = uiItem as FeedHeader;
+    final feed = uiItem.content as FeedHeader;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14),
       child: Column(
@@ -149,32 +149,37 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
   Widget _noContentYet() {
-    return Center(child: Padding(padding: EdgeInsets.symmetric(horizontal: 24),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(padding: EdgeInsets.only(top: 24, left: 35, right: 35, bottom: 0),
-          child: Image.asset(
-            'assets/png/no_content_yet.png',
-            width: 90,
-            height: 46,
-          ),),
-        Padding(padding: EdgeInsets.only(top: 8),
-          child: Text('没有内容了', style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            height: 1.33,
-            color: AppTheme.black25,
-          ),),)
-      ],
-    ),
-    ),);
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.only(top: screenHeight / 5),
+      child: Padding(padding: EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(padding: EdgeInsets.only(top: 24, left: 35, right: 35, bottom: 0),
+              child: Image.asset(
+                'assets/png/no_content_yet.png',
+                width: 90,
+                height: 46,
+              ),),
+            Padding(padding: EdgeInsets.only(top: 8),
+              child: Text('没有内容了', style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                height: 1.33,
+                color: AppTheme.black25,
+              ),),)
+          ],
+        ),
+      ),
+    );
+
 
   }
 
   Widget _buildEntryItem(UiItem uiItem) {
-    final entry = uiItem as Entry;
+    final entry = uiItem.content as Entry;
     return Column(
       children: [
         Padding(
