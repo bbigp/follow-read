@@ -1,4 +1,6 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,7 +32,33 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.watch(entriesLoadingProvider.notifier).fetchEntry();
     });
+    _scrollController.addListener(_scrollListener);
   }
+
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _loadMoreData();
+    }
+  }
+
+  Future<void> _refreshData() async {
+    await Future.delayed(Duration(seconds: 2));
+    ref.watch(entriesLoadingProvider.notifier).fetchEntry();
+  }
+
+  Future<void> _loadMoreData() async {
+    await Future.delayed(Duration(seconds: 2));
+    ref.watch(entriesLoadingProvider.notifier).loadMore();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +74,34 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           ],
         ),
         body: ListView.builder(
-                itemCount: state.uiItems.length,
-                itemBuilder: (context, index) {
-                  return _buildItem(state.uiItems[index]);
-            })
+            controller: _scrollController,
+            itemCount: state.uiItems.length + 1,
+            itemBuilder: (context, index) {
+              if (index >= state.uiItems.length) {
+                return _buildLoadingIndicator();
+              }
+              return _buildItem(state.uiItems[index]);
+            }),
 
     );
   }
+
+  Widget _buildLoadingIndicator() {
+    return CupertinoActivityIndicator(
+      radius: 14,
+    );
+  }
+
+  Widget _buildCustomLoading() {
+    return Column(
+      children: [
+        CircularProgressIndicator(),
+        SizedBox(height: 8),
+        Text('努力加载中...', style: TextStyle(color: Colors.grey)),
+      ],
+    );
+  }
+
 
   Widget _buildItem(UiItem uiItem) {
     if (uiItem.type == ViewType.entryItem) {
