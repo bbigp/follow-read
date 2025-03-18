@@ -1,17 +1,11 @@
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
-import 'package:follow_read/features/domain/models/view_type.dart';
+import 'package:follow_read/features/domain/models/ui_item.dart';
 
-part 'feed.mapper.dart';
 
-@MappableClass(ignoreNull: true)
-class Feed with FeedMappable {
+class Feed extends BaseUiItem {
   final BigInt id;
-  @MappableField(key: 'user_id')
   final BigInt userId;
-  @MappableField(key: 'feed_url')
   final String feedUrl;
-  @MappableField(key: 'site_url')
   final String siteUrl;
   final String title;
   final String? avatarUrl;

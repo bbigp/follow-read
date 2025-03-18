@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:follow_read/features/domain/models/view_type.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../config/theme.dart';
+import '../../domain/models/ui_item.dart';
 import '../../domain/models/entry.dart';
 import '../providers/entry_loading_proviider.dart';
 import '../widgets/dashed_line.dart';
@@ -46,92 +46,135 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           ],
         ),
         body: ListView.builder(
-            itemCount: state.entries.length,
-            itemBuilder: (context, index) {
-              return _buildItem(state.entries[index]);
-            }));
+                itemCount: state.uiItems.length,
+                itemBuilder: (context, index) {
+                  return _buildItem(state.uiItems[index]);
+            })
+
+    );
   }
 
-  Widget _buildItem(Entry entry) {
-    if (entry.viewType == ViewType.entryItem) {
-      return _buildFeedItem(entry);
+  Widget _buildItem(UiItem uiItem) {
+    if (uiItem.type == ViewType.entryItem) {
+      return _buildEntryItem(uiItem);
     }
-    if (entry.viewType == ViewType.entryAllItem) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 14),
-        child: Column(
+    if (uiItem.type == ViewType.feedHeaderItem) {
+      return _buildFeedHeader(uiItem);
+    }
+    if (uiItem.type == ViewType.noMore) {
+      return _buildNoMore();
+    }
+    if (uiItem.type == ViewType.noContentYetItem) {
+      return _noContentYet();
+    }
+    return Text('dsds');
+  }
+
+  Widget _buildFeedHeader(UiItem uiItem){
+    final feed = uiItem as FeedHeader;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 14),
+      child: Column(
+        children: [
+          Padding(padding: EdgeInsets.only(top: 8, bottom: 16),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      feed.title,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                        height: 1.21,
+                        color: AppTheme.black95,
+                      ),
+                    )
+                  ],
+                ),
+                if (feed.subTitle.isNotEmpty)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 4),
+                        child: Text(
+                          '99+ 未读',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            height: 1.18,
+                            color: AppTheme.black25,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+              ],
+            ),),
+          DashedDivider(
+            indent: 0,
+            spacing: 16,
+            thickness: 1,
+            color: AppTheme.black8,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoMore() {
+    return SizedBox(
+      height: 60,
+      child: Center(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Text(
-                    'All',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w500,
-                      height: 1.21,
-                      color: AppTheme.black95,
-                    ),
-                  ),
-                )
-              ],
+            SvgPicture.asset(
+              'assets/svg/no_more.svg',
+              width: 14,
+              height: 14,
+              colorFilter: ColorFilter.mode(
+                AppTheme.black50, // 设置颜色
+                BlendMode.srcIn, // 等效于原 color 属性的效果
+              ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 4, bottom: 16),
-                  child: Text(
-                    '99+ 未读',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      height: 1.18,
-                      color: AppTheme.black25,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            DashedDivider(
-              indent: 0,
-              spacing: 16,
-              thickness: 1,
-              color: AppTheme.black8,
-            ),
+            //
           ],
         ),
-      );
-    }
-    if (entry.viewType == ViewType.noMore) {
-      return SizedBox(
-        height: 60,
-        child: Center(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                'assets/images/no-more.svg',
-                width: 14,
-                height: 14,
-                colorFilter: ColorFilter.mode(
-                  AppTheme.black50, // 设置颜色
-                  BlendMode.srcIn, // 等效于原 color 属性的效果
-                ),
-              ),
-              //
-            ],
-          ),
-        ),
-      );
-    }
-    return Container();
+      ),
+    );
   }
 
-  Widget _buildFeedItem(Entry entry) {
+  Widget _noContentYet() {
+    return Center(child: Padding(padding: EdgeInsets.symmetric(horizontal: 24),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(padding: EdgeInsets.only(top: 24, left: 35, right: 35, bottom: 0),
+          child: Image.asset(
+            'assets/png/no_content_yet.png',
+            width: 90,
+            height: 46,
+          ),),
+        Padding(padding: EdgeInsets.only(top: 8),
+          child: Text('没有内容了', style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            height: 1.33,
+            color: AppTheme.black25,
+          ),),)
+      ],
+    ),
+    ),);
+
+  }
+
+  Widget _buildEntryItem(UiItem uiItem) {
+    final entry = uiItem as Entry;
     return Column(
       children: [
         Padding(
@@ -162,7 +205,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                           width: 18,
                           height: 18,
                           color: Colors.grey[300], // 错误时的背景颜色
-                          child: Icon(Icons.error, color: Colors.red), // 错误图标
+                          child: Icon(Icons.error, color: Colors.red, size: 10,), // 错误图标
                         ),
                       ),
                     ),

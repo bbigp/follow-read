@@ -6,7 +6,7 @@ import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
 import '../../data/repositories/feed_repository.dart';
-import '../../domain/models/view_type.dart';
+import '../../domain/models/ui_item.dart';
 
 final feedLoadingProvider = StateNotifierProvider<FeedLoadingNotifier, FeedsState>((ref) {
   return FeedLoadingNotifier(feedRepository: ref.watch(feedRepositoryProvider));

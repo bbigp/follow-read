@@ -44,12 +44,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/no-more.svg
+    - assets/svg/
+    - assets/png/
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/no-more.svg" # 你的1024x1024图标路径
+  image_path: "assets/icons/app_icon.png" # 你的1024x1024图标路径
 
   # 可选 - Android 自适应图标
   android_adaptive_icon_background: "#FFFFFF"

@@ -1,6 +1,6 @@
-import 'package:follow_read/features/domain/models/view_type.dart';
+import 'package:follow_read/features/domain/models/ui_item.dart';
 
-class Entry {
+class Entry extends BaseUiItem {
   final BigInt id;
   final BigInt userId;
   final BigInt feedId;
@@ -19,7 +19,6 @@ class Entry {
   final String feedTitle;
   final String feedIcon;
   final bool showReadingTime;
-  final ViewType viewType;
 
   Entry({
     required this.id,
@@ -39,7 +38,6 @@ class Entry {
     String? feedTitle,
     String? feedIcon,
     bool? showReadingTime,
-    ViewType? viewType,
   })  : userId = userId ?? BigInt.zero,
         feedId = feedId ?? BigInt.zero,
         status = status ?? "unread",
@@ -53,8 +51,7 @@ class Entry {
         pic = pic ?? "",
         feedTitle = feedTitle ?? "",
         feedIcon = feedIcon ?? "",
-        showReadingTime = showReadingTime ?? false,
-        viewType = viewType ?? ViewType.entryItem;
+        showReadingTime = showReadingTime ?? false;
 
   int get tilteLines {
     if (showReadingTime) {
