@@ -1,23 +1,23 @@
+import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/ui_item.dart';
 
 class Entry extends BaseUiItem {
-  final BigInt id;
-  final BigInt userId;
-  final BigInt feedId;
+  final int id;
+  final int userId;
+  final int feedId;
   final String status;
   final String hash;
   final String title;
   final String description;
   final String url;
-  final String publishedAt;
+  final DateTime publishedAt;
   final String content;
   final String author;
   final bool starred;
   final int readingTime;
   final String pic;
+  final Feed feed;
 
-  final String feedTitle;
-  final String feedIcon;
   final bool showReadingTime;
 
   Entry({
@@ -25,32 +25,30 @@ class Entry extends BaseUiItem {
     required this.title,
     required this.hash,
     String? description,
-    BigInt? userId,
-    BigInt? feedId,
+    int? userId,
+    int? feedId,
     String? status,
     String? url,
-    String? publishedAt,
+    DateTime? publishedAt,
     String? content,
     String? author,
     bool? starred,
     int? readingTime,
     String? pic,
-    String? feedTitle,
-    String? feedIcon,
+    Feed? feed,
     bool? showReadingTime,
-  })  : userId = userId ?? BigInt.zero,
-        feedId = feedId ?? BigInt.zero,
+  })  : userId = userId ?? 0,
+        feedId = feedId ?? 0,
         status = status ?? "unread",
         url = url ?? "",
-        publishedAt = publishedAt ?? "",
+        publishedAt = publishedAt ?? DateTime.now(),
         content = content ?? "<div></div>",
         author = author ?? "",
         starred = starred ?? false,
         readingTime = readingTime ?? 0,
         description = description ?? "",
         pic = pic ?? "",
-        feedTitle = feedTitle ?? "",
-        feedIcon = feedIcon ?? "",
+        feed = feed ?? Feed.empty,
         showReadingTime = showReadingTime ?? false;
 
   int get tilteLines {
@@ -62,5 +60,25 @@ class Entry extends BaseUiItem {
     } else {
       return 2;
     }
+  }
+}
+
+extension DateTimeConversion on DateTime{
+
+  String toShowTime() {
+    final now = DateTime.now();
+    final difference = now.difference(this);
+    final units = [
+      (value: difference.inDays, unit: "天"),
+      (value: difference.inHours % 24, unit: "小时"),
+      (value: difference.inMinutes % 60, unit: "分钟"),
+    ];
+
+    for (var u in units) {
+      if (u.value > 0) {
+        return "${u.value}${u.unit}前";
+      }
+    }
+    return "刚刚";
   }
 }

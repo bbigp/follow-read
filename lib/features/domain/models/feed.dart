@@ -3,8 +3,8 @@ import 'package:follow_read/features/domain/models/ui_item.dart';
 
 
 class Feed extends BaseUiItem {
-  final BigInt id;
-  final BigInt userId;
+  final int id;
+  final int userId;
   final String feedUrl;
   final String siteUrl;
   final String title;
@@ -29,6 +29,8 @@ class Feed extends BaseUiItem {
         read = read ?? 0,
         viewType = viewType ?? ViewType.feedItem,
         iconData = iconData ?? Icons.ac_unit_outlined;
+
+  static Feed empty = Feed(id: 0, userId: 0, feedUrl: "", siteUrl: "", title: "");
 }
 
 

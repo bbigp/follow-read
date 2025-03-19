@@ -10,9 +10,9 @@ part 'feed_response.mapper.dart';
 
 @MappableClass()
 class FeedResponse with FeedResponseMappable {
-  final BigInt id;
+  final int id;
   @MappableField(key: 'user_id')
-  final BigInt userId;
+  final int userId;
   @MappableField(key: 'feed_url')
   final String feedUrl;
   @MappableField(key: 'site_url')
@@ -112,11 +112,11 @@ class FeedResponse with FeedResponseMappable {
 extension FeedResponseConversion on FeedResponse {
   FeedsTableCompanion toCompanion() {
     return FeedsTableCompanion.insert(
-      userId: userId,
+      userId: BigInt.from(userId),
       feedUrl: feedUrl,
       siteUrl: siteUrl,
       title: title,
-      id: Value(id),
+      id: Value(BigInt.from(id)),
     );
   }
 

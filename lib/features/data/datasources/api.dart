@@ -109,25 +109,7 @@ class Api {
     }
   }
 
-  // static Future<void> getFeedsCounters({
-  //   required ValueSetter<FeedCounter> onSuccess,
-  //   required ValueSetter<String> onError,
-  //   VoidCallback? onComplete,
-  // }) async {
-  //   try {
-  //     final response = await HttpService.get('feeds/counters');
-  //     if (response.success) {
-  //       final Map<String, dynamic> counter = response.data as Map<String, dynamic>;
-  //       onSuccess(FeedCounter.fromJson(counter));
-  //     } else {
-  //       onError(response.error ?? '获取订阅源未读数失败');
-  //     }
-  //   } catch (e) {
-  //     onError(e.toString());
-  //   } finally {
-  //     onComplete?.call();
-  //   }
-  // }
+
 
   // static Future<void> getFeedIcon({
   //   required int iconId,

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/datasources/local_data.dart';
+import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/database.dart';
@@ -53,4 +54,8 @@ final feedRepositoryProvider = Provider<FeedRepository>((ref) {
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepository(ref.watch(localDataSourceProvider),);
+});
+
+final entryRepositoryProvider = Provider<EntryRepository>((ref) {
+  return EntryRepository();
 });

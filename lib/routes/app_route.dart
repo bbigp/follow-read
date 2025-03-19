@@ -44,8 +44,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/entry/:feedId',
         name: RouteNames.entry,
         builder: (context, state) {
-          final feedId = BigInt.parse(state.pathParameters['feedId']!);
-          return EntryPage(feedId: feedId);
+          final feedId = state.pathParameters['feedId']!;
+          return EntryPage(feedId: int.parse(feedId));
         }
       )
     ],

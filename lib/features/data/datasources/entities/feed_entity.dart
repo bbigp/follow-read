@@ -26,9 +26,9 @@ class FeedsTable extends Table {
 extension FeedEntityConversion on FeedEntity {
   Feed toModel() {
     return Feed(
-      id: id,
+      id: id.toInt(),
       title: title,
-      userId: userId,
+      userId: userId.toInt(),
       feedUrl: feedUrl,
       siteUrl: siteUrl,
       avatarUrl: "",

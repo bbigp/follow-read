@@ -51,7 +51,7 @@ class HttpUtil {
     required HttpMethod method,
     required T Function(String) fromJson,
     Map<String, String>? headers,
-    Map<String, String>? queryParams,
+    Map<String, dynamic>? queryParams,
   }) async {
     final startTime = DateTime.now(); // 记录请求开始时间
     final requestId =
@@ -62,16 +62,18 @@ class HttpUtil {
       requestId: requestId,
       path: path,
       method: method,
-      // parameters: parameters,
+      parameters: queryParams,
     );
     try {
-    final (baseUrl, token) = await _getAuthInfo();
-      var uri = Uri.parse(path);
-      if (!path.startsWith("http")) {
-        uri = Uri.parse(buildPath(baseUrl, path)).replace(
-          queryParameters: queryParams,
-        );
-      }
+      final (baseUrl, token) = await _getAuthInfo();
+      final isAbsolutePath = path.startsWith("http");
+      var uri = isAbsolutePath ? Uri.parse(path) : Uri.parse(buildPath(baseUrl, path));
+      final encodedParams = _encodeQueryParams(queryParams);
+      uri = uri.replace(queryParameters: {
+        ...uri.queryParameters, // 保留路径中已有的参数
+        ...encodedParams,       // 添加新参数
+      });
+
       var h = defaultHeaders;
       if (headers != null) {
         h = headers;
@@ -139,6 +141,27 @@ class HttpUtil {
       );
       return Left(Failure(error.code, error.error));
     }
+  }
+
+  Map<String, String> _encodeQueryParams(Map<String, dynamic>? params) {
+    return params?.map((key, value) {
+      if (value == null) return MapEntry(key, '');
+
+      // 处理列表类型参数 (根据API需求选择逗号分隔或多参数)
+      if (value is Iterable) {
+        return MapEntry(key, value.map((e) => _valueToString(e)).join(','));
+      }
+
+      return MapEntry(key, _valueToString(value));
+    }) ?? {};
+  }
+
+  String _valueToString(dynamic value) {
+    if (value is String) return value;
+    if (value is bool) return value.toString();
+    if (value is num) return value.toString();
+    if (value is DateTime) return value.toIso8601String();
+    throw ArgumentError('Unsupported query parameter type: ${value.runtimeType}');
   }
 
   static void Function(ApiException) handleGlobalError = (e) {

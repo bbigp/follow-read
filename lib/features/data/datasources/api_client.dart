@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:follow_read/features/data/models/entry_page_response.dart';
 
 import '../../../core/utils/failure.dart';
 import '../../../core/utils/follow_request.dart';
@@ -47,5 +48,36 @@ class ApiClient {
     );
   }
 
+  static Future<Either<Failure, EntryPageResponse>> getEntries(int feedId, {
+    int page = 1, int size = 10,
+  }) async {
+    return await httpUtil.safeRequest(
+        path: 'feeds/$feedId/entries',
+        method: HttpMethod.get,
+        queryParams: {
+          'limit': size, 'offset': (page -1) * size,
+          'status': 'unread',
+          'order': 'published_at',//"id", "status", "changed_at", "published_at", "created_at", "category_title", "category_id", "title", "author"
+          'direction': 'desc', //desc asc
+          // 'category_id': null,
+          // 'feed_id': feedId,
+          // 'tags': null,
+          'globally_visible': false,
+        },
+        fromJson: (json) => EntryPageResponseMapper.fromJson(json)
+    );
+  }
+
+
+
 
 }
+
+// extension QueryParamConversion on dynamic {
+//   String toQueryParam() {
+//     if (this == null) return '';
+//     if (this is String) return this as String;
+//     if (this is bool) return this ? 'true' : 'false';
+//     return toString();
+//   }
+// }

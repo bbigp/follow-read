@@ -34,69 +34,69 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
 
   Future<void> getFeeds() async {
     final all = Feed(
-      id: BigInt.zero,
+      id: 0,
       title: '全部',
-      userId: BigInt.zero,
+      userId: 0,
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.listItem,
       unread: 90, read: 0,
     );
     final read = Feed(
-      id: BigInt.zero,
+      id: 0,
       title: '近期已读',
-      userId: BigInt.zero,
+      userId: 0,
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.listItem,
       iconData: Icons.history,
     );
     final star = Feed(
-      id: BigInt.zero,
+      id: 0,
       title: '星标',
-      userId: BigInt.zero,
+      userId: 0,
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.listItem,
       iconData: Icons.star_border,
     );
     final unread = Feed(
-      id: BigInt.zero,
+      id: 0,
       title: '未读',
-      userId: BigInt.zero,
+      userId: 0,
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.listItem,
       iconData: Icons.circle_outlined,
     );
     final today = Feed(
-      id: BigInt.zero,
+      id: 0,
       title: '今日',
-      userId: BigInt.zero,
+      userId: 0,
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.listItem,
       iconData: Icons.calendar_today_outlined,
     );
     final smartview = Feed(
-      id: BigInt.zero,
+      id: 0,
       title: '智能视图',
-      userId: BigInt.zero,
+      userId: 0,
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.groupTitleItem,
     );
     final feed = Feed(
-      id: BigInt.zero,
+      id: 0,
       title: '订阅源',
-      userId: BigInt.zero,
+      userId: 0,
       feedUrl: '',
       siteUrl: '',
       viewType: ViewType.groupTitleItem,
     );
     final feeds = await _feedRepository.getFeeds();
     feeds.insert(0, feed);
-    feeds.insert(0, Feed(id: BigInt.zero, userId: BigInt.zero, feedUrl: '', siteUrl: '', title: '', viewType: ViewType.divider32));
+    feeds.insert(0, Feed(id: 0, userId: 0, feedUrl: '', siteUrl: '', title: '', viewType: ViewType.divider32));
     feeds.insert(0, today);
     feeds.insert(0, unread);
     feeds.insert(0, star);

@@ -1,9 +1,14 @@
 
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/features/presentation/widgets/loading_more.dart';
+import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../config/theme.dart';
@@ -14,7 +19,7 @@ import '../widgets/dashed_line.dart';
 import '../widgets/spacer_divider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
-  final BigInt feedId;
+  final int feedId;
 
   const EntryPage({
     required this.feedId,
@@ -30,31 +35,29 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(entriesLoadingProvider.notifier).fetchEntry();
+      ref.watch(entriesLoadingProvider.notifier).fetchEntry(feedId: widget.feedId, reset: true);
     });
     _scrollController.addListener(_scrollListener);
   }
 
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
+    final state = ref.read(entriesLoadingProvider);
+    final position = _scrollController.position;
+
+    // 空列表或未加载完成时直接返回
+    if (position.maxScrollExtent <= 0) return;
+
+    if (state.hasMore &&
+        !state.isLoadingMore && _scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      _loadMoreData();
+      ref.watch(entriesLoadingProvider.notifier).fetchEntry();
     }
-  }
-
-  Future<void> _refreshData() async {
-    await Future.delayed(Duration(seconds: 2));
-    ref.watch(entriesLoadingProvider.notifier).fetchEntry();
-  }
-
-  Future<void> _loadMoreData() async {
-    await Future.delayed(Duration(seconds: 2));
-    ref.watch(entriesLoadingProvider.notifier).loadMore();
   }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
   }
@@ -73,35 +76,85 @@ class _EntryPageState extends ConsumerState<EntryPage> {
             // const SizedBox(width: 12),
           ],
         ),
-        body: ListView.builder(
+        body: state.isInitializing ? _buildSmartSkeleton () : RefreshIndicator(child: ListView.builder(
             controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             itemCount: state.uiItems.length + 1,
             itemBuilder: (context, index) {
               if (index >= state.uiItems.length) {
-                return _buildLoadingIndicator();
+                if (state.isInitializing) {
+                  return NoMoreLoading();
+                }
+                return state.hasMore ? LoadingMore() : NoMoreLoading();
               }
               return _buildItem(state.uiItems[index]);
-            }),
-
+            }), onRefresh: () async {
+          ref.watch(entriesLoadingProvider.notifier).fetchEntry(feedId: widget.feedId, reset: true);
+        }),
     );
   }
 
-  Widget _buildLoadingIndicator() {
-    return CupertinoActivityIndicator(
-      radius: 14,
+  double? _skeletonItemHeight; // 存储测量后的骨架项高度
+
+  final GlobalKey _skeletonItemKey = GlobalKey(); // 用于测量骨架项高度
+
+  int _calculateItemCount(double maxHeight) {
+    if (_skeletonItemHeight == null || _skeletonItemHeight! <= 0) {
+      return 10; // 默认显示10项直到完成测量
+    }
+    // 计算项数公式：屏幕高度/单项高度 + 2个缓冲项
+    return (maxHeight / _skeletonItemHeight!).ceil() + 2;
+  }
+
+  Widget _buildSmartSkeleton(){
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // 首次测量骨架项高度
+          if (_skeletonItemHeight == null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              final renderBox = _skeletonItemKey.currentContext?.findRenderObject() as RenderBox?;
+              if (renderBox != null && mounted) {
+                setState(() {
+                  _skeletonItemHeight = renderBox.size.height;
+                });
+              }
+            });
+          }
+
+          // 动态计算项数
+          final itemCount = _calculateItemCount(constraints.maxHeight);
+
+          logger.i('计算count: ${itemCount}');
+
+          var title = 'The best last-minute Cyber Monday you can still shop';
+          var desc = 'There’s still some time to save on a wide range of Verge-approved goods, including streaming services, iPads, and ebook readers.';
+          var url = 'https://i1.hdslb.com/bfs/article/26c34746fceeeea24c72fdba06fe006757276677.png@1192w.avif';
+          var url2 = 'https://i1.hdslb.com/bfs/article/b5a29a9b8ad1aba8b45e64fa505e410357276677.png@1192w.avif';
+
+          final e2 = Entry(id: 2, hash: '2', title: title, description: desc, readingTime: 5, pic: url2, showReadingTime: true);
+          final u = UiItem(type: ViewType.entryItem, content: e2);
+
+          return ListView.builder(
+            itemCount: itemCount,
+            itemBuilder: (context, index) => index == 0
+                ? _buildMeasurableSkeletonItem(u) // 第一个项用于测量
+                : _buildItem(u),          // 后续项复用
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildCustomLoading() {
-    return Column(
-      children: [
-        CircularProgressIndicator(),
-        SizedBox(height: 8),
-        Text('努力加载中...', style: TextStyle(color: Colors.grey)),
-      ],
+  Widget _buildMeasurableSkeletonItem(UiItem u) {
+
+    return SizedBox(
+      key: _skeletonItemKey,
+      child: _buildItem(u),
     );
   }
-
 
   Widget _buildItem(UiItem uiItem) {
     if (uiItem.type == ViewType.entryItem) {
@@ -109,9 +162,6 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     }
     if (uiItem.type == ViewType.feedHeaderItem) {
       return _buildFeedHeader(uiItem);
-    }
-    if (uiItem.type == ViewType.noMore) {
-      return _buildNoMore();
     }
     if (uiItem.type == ViewType.noContentYetItem) {
       return _noContentYet();
@@ -173,29 +223,6 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     );
   }
 
-  Widget _buildNoMore() {
-    return SizedBox(
-      height: 60,
-      child: Center(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              'assets/svg/no_more.svg',
-              width: 14,
-              height: 14,
-              colorFilter: ColorFilter.mode(
-                AppTheme.black50, // 设置颜色
-                BlendMode.srcIn, // 等效于原 color 属性的效果
-              ),
-            ),
-            //
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _noContentYet() {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -242,7 +269,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4.0),
                       child: CachedNetworkImage(
-                        imageUrl: entry.feedIcon,
+                        imageUrl: entry.feed.feedUrl,
                         width: 18,
                         height: 18,
                         fit: BoxFit.cover,
@@ -267,7 +294,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 6),
                         child: Text(
-                          entry.feedTitle,
+                          entry.feed.title,
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -280,7 +307,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                     SizedBox(
                       width: 25,
                       child: Text(
-                        entry.publishedAt,
+                        entry.publishedAt.toShowTime(),
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,

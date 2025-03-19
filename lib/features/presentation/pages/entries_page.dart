@@ -4,7 +4,7 @@
 // import 'package:shimmer/shimmer.dart';
 //
 // import '../../../core/utils/logger.dart';
-// import '../../data/models/entry.dart';
+// import '../../data/models/entry_repository.dart';
 // import '../../data/models/feed.dart';
 // import '../widgets/entry_item_view.dart';
 //
