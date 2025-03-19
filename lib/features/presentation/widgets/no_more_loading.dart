@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../config/theme.dart';
 
 class NoMoreLoading extends StatelessWidget {
+  const NoMoreLoading({super.key});
   @override
   Widget build(BuildContext context) {
     return SizedBox(

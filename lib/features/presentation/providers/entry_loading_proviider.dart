@@ -3,11 +3,8 @@
 
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/data/datasources/api_client.dart';
 import 'package:follow_read/features/domain/models/ui_item.dart';
-import 'package:follow_read/features/domain/models/entry.dart';
 
-import '../../../core/utils/logger.dart';
 import '../../data/repositories/entry_repository.dart';
 import 'app_container.dart';
 
@@ -44,7 +41,7 @@ class EntriesLoadingNotifier extends StateNotifier<EntryListState> {
       state = state.copyWith(isLoadingMore: true);
       final nextPage = state.page + 1;
       final list = await _entryRepository.getEntries(state.feedId, nextPage, state.size);
-      final allFeeds = [...state.uiItems, ...list.map((item) => UiItem(type: ViewType.entryItem, content: item)).toList()];
+      final allFeeds = [...state.uiItems, ...list.map((item) => UiItem(type: ViewType.entryItem, content: item))];
       state = state.copyWith(
           isLoadingMore: false,
           uiItems: allFeeds,

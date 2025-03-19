@@ -1,9 +1,9 @@
 
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class LoadingMore extends StatelessWidget {
+  const LoadingMore({super.key});
   @override
   Widget build(BuildContext context) {
     return SizedBox(

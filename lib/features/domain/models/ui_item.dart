@@ -25,13 +25,7 @@ class UiItem {
   });
 }
 
-class FeedHeader extends BaseUiItem{
-  final String title;
-  final String subTitle;
-  const FeedHeader({
-   required this.title, required this.subTitle,
-});
-}
+
 
 class EmptyUiData extends BaseUiItem {
 

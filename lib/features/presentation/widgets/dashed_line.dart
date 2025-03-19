@@ -6,9 +6,9 @@ class DashedDivider extends StatelessWidget {
   final Color color;
   final double dashLength;
   final double dashSpacing;
-  final double thickness;
-  final double spacing;
-  final double indent;
+  final double thickness;//分割线粗细
+  final double spacing;//空白模块总高度
+  final double indent;//分割线左右边距
 
   const DashedDivider({
     super.key,
