@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/models/feed.dart';
-import '../models/entry.dart';
 import '../../../core/utils/http_service.dart';
 import '../../../core/utils/logger.dart';
 
@@ -62,28 +61,28 @@ class Api {
   }
 
 
-  static Future<void> getEntries({
-    required int feedId,
-    required int page,
-    required int limit,
-    required ValueSetter<List<Entry>> onSuccess,
-    required ValueSetter<String> onError,
-    VoidCallback? onComplete,
-  }) async {
-    try {
-      //status order  direction   limit  offset  category_id  feed_id  tags globally_visible
-      final response = await HttpService.get('feeds/$feedId/entries?limit=$limit&offset=${(page - 1) * limit}');
-      if (response.success) {
-        onSuccess(EntryResponse.fromJson(response.data as Map<String, dynamic>).entries);
-      } else {
-        onError(response.error ?? '获取订阅源失败');
-      }
-    } catch (e) {
-      onError(e.toString());
-    } finally {
-      onComplete?.call();
-    }
-  }
+  // static Future<void> getEntries({
+  //   required int feedId,
+  //   required int page,
+  //   required int limit,
+  //   required ValueSetter<List<Entry>> onSuccess,
+  //   required ValueSetter<String> onError,
+  //   VoidCallback? onComplete,
+  // }) async {
+  //   try {
+  //     //status order  direction   limit  offset  category_id  feed_id  tags globally_visible
+  //     final response = await HttpService.get('feeds/$feedId/entries?limit=$limit&offset=${(page - 1) * limit}');
+  //     if (response.success) {
+  //       onSuccess(EntryResponse.fromJson(response.data as Map<String, dynamic>).entries);
+  //     } else {
+  //       onError(response.error ?? '获取订阅源失败');
+  //     }
+  //   } catch (e) {
+  //     onError(e.toString());
+  //   } finally {
+  //     onComplete?.call();
+  //   }
+  // }
 
 
   static Future<void> getFeeds({

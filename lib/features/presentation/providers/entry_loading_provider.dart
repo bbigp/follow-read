@@ -21,7 +21,7 @@ class EntriesLoadingNotifier extends StateNotifier<EntryListState> {
   EntriesLoadingNotifier({required EntryRepository entryRepository})
       : _entryRepository = entryRepository, super(EntryListState.empty());
 
-  Future<void> fetchEntry({int? feedId, bool reset = false}) async {
+  Future<void> fetchEntries({int? feedId, bool reset = false}) async {
     feedId = feedId ?? state.feedId;
     if (reset) {
       if (state.isInitializing) return;

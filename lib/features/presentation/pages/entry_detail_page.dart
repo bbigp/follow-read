@@ -4,9 +4,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/features/presentation/providers/entry_detail_provider.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../domain/models/entry.dart';
 import '../widgets/spacer_divider.dart';
 
 class EntryDetailPage extends ConsumerStatefulWidget {
@@ -30,7 +32,17 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
       '<p>Re-reading is a practice fits into every reader&#39;s life in a different way, and today&#39;s guest has embarked on a unique reading challenge that brings a fresh perspective to her re-reading. </p><p><br></p><p>Sarah Swarbrick joins Anne today from the outskirts of Sydney, Australia, to talk about the special project she&#39;s crafted in advance of her 53rd birthday. With her responsibilities shifting and her kids getting older, Sarah&#39;s finding more time for reading lately, and she&#39;s excited about having extra space to approach her books with a different kind of thoughtfulness and intention.</p><p><br></p><p>Sarah&#39;s decided to re-read a selection of her favorite books from childhood, and she&#39;s also trying to pair each childhood favorite with a more recent release. She&#39;s looking for books that have a lot to say to each other, that can really be in conversation with each other, and not just in the ways that are obvious on the surface. She and Anne discuss Sarah&#39;s project so far, and explore some unpaired re-reads to discover which new-to-her titles Sarah might enjoy matching with her long-standing favorites.</p><p><br></p><p>See the list of titles discussed today and leave your suggestions for Sarah on our show notes page at <a href="http://whatshouldireadnextpodcast.com/470" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">whatshouldireadnextpodcast.com/470</a>.</p><p><br></p><p>Our What Should I Read Next Patreon community makes a very real difference in our ability to do the work we do: as a way to say thank you for that ongoing financial support, we share weekly bonus episodes and invite our community members to join us for special events, like our upcoming Summer Reading Guide live unboxing. Thanks to everyone who is already a part of our Patreon community, we are so appreciative. If you would like to come join us, get the details at <a href="https://www.patreon.com/whatshouldireadnext" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">patreon.com/whatshouldireadnext</a>. </p><p> </p><p>Learn more about your ad choices. Visit <a href="https://megaphone.fm/adchoices" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">megaphone.fm/adchoices</a></p>';
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(entryDetailProvider.notifier)
+          .fetchEntry(widget.entryId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final state = ref.watch(entryDetailProvider);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -43,7 +55,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
       ),
       body: Stack(
         children: [
-          _buildScrollableContent(),
+          _buildScrollableContent(state.entry),
           Positioned(
             bottom: 0,
             left: 0,
@@ -153,7 +165,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
     );
   }
 
-  Widget _buildScrollableContent() {
+  Widget _buildScrollableContent(Entry entry) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return SingleChildScrollView(
@@ -173,8 +185,8 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
                     SizedBox(
                       height: 12,
                     ),
-                  _buildTitle(),
-                  _buildContent(),
+                  _buildTitle(entry),
+                  _buildContent(entry),
                   Padding(
                     padding: EdgeInsets.only(top: 12),
                     child: NoMoreLoading(),
@@ -232,11 +244,11 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(Entry entry) {
     return Padding(
       padding: EdgeInsets.only(top: 12),
       child: Html(
-        data: content1,
+        data: entry.content,
         style: {
           "*": Style(
             margin: Margins.zero,
@@ -253,14 +265,14 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(Entry entry) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Home Assistant’s new voice assistant answers to ‘Hey Jarvis’',
+            entry.title,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
@@ -273,7 +285,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
             child: Row(
               children: [
                 Text(
-                  'Jennifer Pattison Tuohy',
+                  entry.author,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
@@ -281,15 +293,16 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
                     color: AppTheme.black50,
                   ),
                 ),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: SvgPicture.asset(
-                      'assets/svg/vector.svg',
-                      width: 2,
-                      height: 6,
-                    )),
+                if (entry.author != "")
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: SvgPicture.asset(
+                        'assets/svg/vector.svg',
+                        width: 2,
+                        height: 6,
+                      )),
                 Text(
-                  'The Verge',
+                  entry.feed.title,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
@@ -303,7 +316,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
           Padding(
             padding: EdgeInsets.only(top: 8),
             child: Text(
-              'Dec 20, 2024, 5:50 AM GMT+8',
+              entry.publishedAt.toShowTime(),
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,

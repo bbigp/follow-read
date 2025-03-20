@@ -8,7 +8,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../config/theme.dart';
 import '../../domain/models/entry.dart';
-import '../providers/entry_loading_proviider.dart';
+import '../providers/entry_loading_provider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int feedId;
@@ -29,7 +29,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .watch(entriesLoadingProvider.notifier)
-          .fetchEntry(feedId: widget.feedId, reset: true);
+          .fetchEntries(feedId: widget.feedId, reset: true);
     });
     _scrollController.addListener(_scrollListener);
   }
@@ -45,7 +45,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         !state.isLoadingMore &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200) {
-      ref.watch(entriesLoadingProvider.notifier).fetchEntry();
+      ref.watch(entriesLoadingProvider.notifier).fetchEntries();
     }
   }
 
@@ -76,7 +76,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           : RefreshIndicator(
               onRefresh: () async {
                 ref.watch(entriesLoadingProvider.notifier)
-                    .fetchEntry(feedId: widget.feedId, reset: true);
+                    .fetchEntries(feedId: widget.feedId, reset: true);
               },
               child: ListView.builder(
                   controller: _scrollController,

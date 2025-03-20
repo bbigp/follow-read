@@ -15,4 +15,14 @@ class EntryRepository {
     });
   }
 
+
+  Future<Entry> getEntry(int entryId) async {
+    final result = await ApiClient.getEntry(entryId);
+    return result.fold((failure) {
+      return Entry(id: 0, title: '', hash: '');
+    }, (data) {
+      return data.toModel();
+    });
+  }
+
 }

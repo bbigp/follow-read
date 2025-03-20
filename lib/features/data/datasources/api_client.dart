@@ -68,6 +68,11 @@ class ApiClient {
     );
   }
 
+  static Future<Either<Failure, EntryResponse>> getEntry(int entryId) async {
+    return await httpUtil.safeRequest(path: 'entries/$entryId',
+        method: HttpMethod.get,
+        fromJson: (json) => EntryResponseMapper.fromJson(json));
+  }
 
 
 
