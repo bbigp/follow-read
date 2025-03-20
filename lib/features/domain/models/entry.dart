@@ -16,7 +16,7 @@ class Entry extends BaseUiItem {
   final bool starred;
   final int readingTime;
   final String pic;
-  final Feed feed;
+  late final Feed feed;
 
   final bool showReadingTime;
 
@@ -60,6 +60,44 @@ class Entry extends BaseUiItem {
     } else {
       return 2;
     }
+  }
+
+  Entry copyWith({
+    int? id,
+    int? userId,
+    int? feedId,
+    String? status,
+    String? hash,
+    String? title,
+    String? description,
+    String? url,
+    DateTime? publishedAt,
+    String? content,
+    String? author,
+    bool? starred,
+    int? readingTime,
+    String? pic,
+    Feed? feed,
+    bool? showReadingTime,
+  }) {
+    return Entry(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      hash: hash ?? this.hash,
+      description: description ?? this.description,
+      userId: userId ?? this.userId,
+      feedId: feedId ?? this.feedId,
+      status: status ?? this.status,
+      url: url ?? this.url,
+      publishedAt: publishedAt ?? this.publishedAt,
+      content: content ?? this.content,
+      author: author ?? this.author,
+      starred: starred ?? this.starred,
+      readingTime: readingTime ?? this.readingTime,
+      pic: pic ?? this.pic,
+      feed: feed ?? this.feed,
+      showReadingTime: showReadingTime ?? this.showReadingTime,
+    );
   }
 }
 

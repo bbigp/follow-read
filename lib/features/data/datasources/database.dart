@@ -5,11 +5,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 import '../../../core/utils/logger.dart';
+import 'entities/entry_entity.dart';
 import 'entities/feed_entity.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [FeedsTable])
+@DriftDatabase(tables: [FeedsTable, EntriesTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -73,7 +74,11 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'follow.db'));
-    return NativeDatabase(file);
+    return NativeDatabase.createInBackground(file,
+        setup: (db) {
+          db.execute("PRAGMA encoding = 'UTF-8'"); // ✅ 强制 UTF-8
+        }
+    );
   });
 }
 

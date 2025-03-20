@@ -89,7 +89,7 @@ class HttpUtil {
       ).timeout(const Duration(seconds: _timeoutSeconds));
 
       if (response.statusCode == 200) {
-        final result = fromJson(response.body);
+        final result = fromJson(utf8.decode(response.bodyBytes));
         _logRequestSuccess(
           requestId: requestId,
           path: path,

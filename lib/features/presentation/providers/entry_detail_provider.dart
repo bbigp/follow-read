@@ -18,7 +18,7 @@ class EntryDetailNotifier extends StateNotifier<EntryDetailState> {
       : _entryRepository = entryRepository, super(EntryDetailState.empty());
 
   Future<void> fetchEntry(int entryId) async {
-    state = state.copyWith(isLoading: true);
+    state = state.copyWith(isLoading: true, entryId: entryId);
     final entry = await _entryRepository.getEntry(state.entryId);
     state = state.copyWith(isLoading: false, entry: entry);
   }

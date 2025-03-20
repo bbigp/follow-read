@@ -1,6 +1,8 @@
 
 
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:drift/drift.dart';
+import 'package:follow_read/features/data/datasources/database.dart';
 import 'package:follow_read/features/data/models/feed_response.dart';
 
 import '../../domain/models/entry.dart';
@@ -71,15 +73,22 @@ class EntryResponse with EntryResponseMappable{
 }
 
 extension EntryResponseConversion on EntryResponse {
-  // FeedsTableCompanion toCompanion() {
-  //   return FeedsTableCompanion.insert(
-  //     userId: userId,
-  //     feedUrl: feedUrl,
-  //     siteUrl: siteUrl,
-  //     title: title,
-  //     id: Value(id),
-  //   );
-  // }
+  EntriesTableCompanion toCompanion() {
+    return EntriesTableCompanion.insert(
+      id: Value(BigInt.from(id)),
+      title: title,
+      hash: hash,
+      userId: BigInt.from(userId),
+      feedId: BigInt.from(feedId),
+      status: Value(status),
+      url: url,
+      publishedAt: Value(publishedAt),
+      content: Value(content),
+      author: Value(author),
+      starred: Value(starred),
+      readingTime: Value(readingTime),
+    );
+  }
 
   Entry toModel() {
     return Entry(

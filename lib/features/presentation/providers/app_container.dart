@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/data/datasources/entry_dao.dart';
 import 'package:follow_read/features/data/datasources/local_data.dart';
 import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,6 +45,9 @@ final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
 final feedDaoProvider = Provider<FeedDao>((ref) {
   return FeedDao(ref.watch(appDatabaseProvider));
 });
+final entryDaoProvider = Provider<EntryDao>((ref) {
+  return EntryDao(ref.watch(appDatabaseProvider));
+});
 
 
 
@@ -57,5 +61,8 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
 });
 
 final entryRepositoryProvider = Provider<EntryRepository>((ref) {
-  return EntryRepository();
+  return EntryRepository(
+      dao: ref.watch(entryDaoProvider),
+      feedDao: ref.watch(feedDaoProvider),
+  );
 });

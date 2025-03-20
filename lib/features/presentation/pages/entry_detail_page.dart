@@ -293,7 +293,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
                     color: AppTheme.black50,
                   ),
                 ),
-                if (entry.author != "")
+                if (entry.author != "" && entry.feed.title != "")
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: SvgPicture.asset(

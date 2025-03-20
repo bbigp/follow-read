@@ -27,6 +27,10 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     });
   }
 
+  Future<FeedEntity> getFeed(int feedId) async {
+    return await (select(feedsTable)..where((t) => t.id.equals(BigInt.from(feedId)))).getSingle();
+  }
+
   Future<List<FeedEntity>> getAllFeeds() async {
     return await select(feedsTable).get();
   }
