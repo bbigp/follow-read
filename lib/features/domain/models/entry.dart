@@ -1,5 +1,6 @@
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/ui_item.dart';
+import 'package:html/parser.dart' as html;
 
 class Entry extends BaseUiItem {
   final int id;
@@ -15,7 +16,6 @@ class Entry extends BaseUiItem {
   final String author;
   final bool starred;
   final int readingTime;
-  final String pic;
   late final Feed feed;
 
   final bool showReadingTime;
@@ -34,7 +34,6 @@ class Entry extends BaseUiItem {
     String? author,
     bool? starred,
     int? readingTime,
-    String? pic,
     Feed? feed,
     bool? showReadingTime,
   })  : userId = userId ?? 0,
@@ -47,9 +46,23 @@ class Entry extends BaseUiItem {
         starred = starred ?? false,
         readingTime = readingTime ?? 0,
         description = description ?? "",
-        pic = pic ?? "",
         feed = feed ?? Feed.empty,
         showReadingTime = showReadingTime ?? false;
+
+  String get pic {
+    try {
+      final document = html.parse(content);
+      final imgs = document.getElementsByTagName('img');
+      if (imgs.isEmpty) return "";
+
+      final firstImg = imgs.first;
+      return firstImg.attributes['data-src'] ??
+          firstImg.attributes['srcset']?.split(',').first.trim().split(' ').first ??
+          firstImg.attributes['src'] ?? "";
+    } catch (e) {
+      return "";
+    }
+  }
 
   int get tilteLines {
     if (showReadingTime) {
@@ -94,7 +107,6 @@ class Entry extends BaseUiItem {
       author: author ?? this.author,
       starred: starred ?? this.starred,
       readingTime: readingTime ?? this.readingTime,
-      pic: pic ?? this.pic,
       feed: feed ?? this.feed,
       showReadingTime: showReadingTime ?? this.showReadingTime,
     );

@@ -180,8 +180,8 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min, // 自适应内容高度
                 children: [
-                  _buildImage(),
-                  if (true)
+                  if (entry.pic != "")
+                    _buildImage(entry),
                     SizedBox(
                       height: 12,
                     ),
@@ -330,7 +330,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
     );
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(Entry entry) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -340,8 +340,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: CachedNetworkImage(
-                imageUrl:
-                    'https://i0.hdslb.com/bfs/article/a6f233802d3ef6496869e9a89c18e29a57276677.png@1192w.avif',
+                imageUrl: entry.pic,
                 height: 241,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Shimmer.fromColors(
@@ -366,18 +365,19 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 12),
-            child: Text(
-              'The Home Assistant Voice Preview Edition is the first hardware from the open-source smart home platform that’s designed for voice control. Image: Nabu Casa',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w500,
-                height: 1.18,
-                color: AppTheme.black25,
+          if (false)
+            Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: Text(
+                'The Home Assistant Voice Preview Edition is the first hardware from the open-source smart home platform that’s designed for voice control. Image: Nabu Casa',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  height: 1.18,
+                  color: AppTheme.black25,
+                ),
               ),
-            ),
-          )
+            )
         ],
       ),
     );
