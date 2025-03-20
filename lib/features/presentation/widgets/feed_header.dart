@@ -4,8 +4,8 @@ import '../../../config/theme.dart';
 import 'dashed_line.dart';
 
 class FeedHeader extends StatelessWidget {
-  final title;
-  final subTitle;
+  final String title;
+  final String subTitle;
 
   const FeedHeader({
     required this.title,

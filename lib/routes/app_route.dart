@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/profile_page.dart';
 import 'package:go_router/go_router.dart';
@@ -47,18 +48,28 @@ final routerProvider = Provider<GoRouter>((ref) {
           final feedId = state.pathParameters['feedId']!;
           return EntryPage(feedId: int.parse(feedId));
         }
-      )
+      ),
+      GoRoute(
+          path: '/entry_detail/:entryId',
+        name: RouteNames.entryDetail,
+        builder: (context, state) {
+          final entryId = state.pathParameters['entryId']!;
+          return EntryDetailPage(entryId: int.parse(entryId));
+        }
+      ),
     ],
   );
 });
 
 
 class RouteNames {
+  const RouteNames._();
   static const home = 'home';
   static const profile = 'profile';
   static const settings = 'settings';
   static const login = 'login';
   static const entry = 'entry';
+  static const entryDetail = 'entryDetail';
 }
 
 

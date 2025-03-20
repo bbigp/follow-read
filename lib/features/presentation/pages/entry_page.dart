@@ -7,7 +7,6 @@ import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../config/theme.dart';
-import '../../domain/models/ui_item.dart';
 import '../../domain/models/entry.dart';
 import '../providers/entry_loading_proviider.dart';
 
@@ -87,13 +86,13 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                     if (index == 0) {
                       return FeedHeader(title: 'All', subTitle: '99+未读');
                     }
-                    if (index >= state.uiItems.length + 1) {
+                    if (index - 1 >= state.uiItems.length) {
                       if (state.isInitializing) {
                         return NoMoreLoading();
                       }
                       return state.hasMore ? LoadingMore() : NoMoreLoading();
                     }
-                    return _buildItem(state.uiItems[index]);
+                    return EntryItem(entry: state.uiItems[index - 1].content as Entry);
                   })),
     );
   }
@@ -112,21 +111,6 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     );
   }
 
-  Widget _buildItem(UiItem uiItem) {
-    if (uiItem.type == ViewType.entryItem) {
-      return EntryItem(entry: uiItem.content as Entry);
-    }
-    if (uiItem.type == ViewType.feedHeaderItem) {
-      return FeedHeader(
-        title: '',
-        subTitle: '',
-      );
-    }
-    if (uiItem.type == ViewType.noContentYetItem) {
-      return _noContentYet();
-    }
-    return Text('dsds');
-  }
 
   Widget _noContentYet() {
     final screenHeight = MediaQuery.of(context).size.height;

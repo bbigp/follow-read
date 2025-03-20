@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../config/theme.dart';
-
 class NoMoreLoading extends StatelessWidget {
   const NoMoreLoading({super.key});
   @override
@@ -20,10 +18,10 @@ class NoMoreLoading extends StatelessWidget {
               'assets/svg/no_more.svg',
               width: 14,
               height: 14,
-              colorFilter: ColorFilter.mode(
-                AppTheme.black50, // 设置颜色
-                BlendMode.srcIn, // 等效于原 color 属性的效果
-              ),
+              // colorFilter: ColorFilter.mode(
+              //   AppTheme.black50, // 设置颜色
+              //   BlendMode.srcIn, // 等效于原 color 属性的效果
+              // ),
             ),
             //
           ],
