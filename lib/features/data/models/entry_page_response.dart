@@ -87,6 +87,7 @@ extension EntryResponseConversion on EntryResponse {
       author: Value(author),
       starred: Value(starred),
       readingTime: Value(readingTime),
+      summary: Value(""),
     );
   }
 

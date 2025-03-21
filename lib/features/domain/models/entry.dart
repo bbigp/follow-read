@@ -9,14 +9,14 @@ class Entry extends BaseUiItem {
   final String status;
   final String hash;
   final String title;
-  final String description;
   final String url;
   final DateTime publishedAt;
   final String content;
   final String author;
   final bool starred;
   final int readingTime;
-  late final Feed feed;
+  final Feed feed;
+  final String summary;
 
   final bool showReadingTime;
 
@@ -24,7 +24,6 @@ class Entry extends BaseUiItem {
     required this.id,
     required this.title,
     required this.hash,
-    String? description,
     int? userId,
     int? feedId,
     String? status,
@@ -36,6 +35,7 @@ class Entry extends BaseUiItem {
     int? readingTime,
     Feed? feed,
     bool? showReadingTime,
+    String? summary,
   })  : userId = userId ?? 0,
         feedId = feedId ?? 0,
         status = status ?? "unread",
@@ -45,9 +45,9 @@ class Entry extends BaseUiItem {
         author = author ?? "",
         starred = starred ?? false,
         readingTime = readingTime ?? 0,
-        description = description ?? "",
         feed = feed ?? Feed.empty,
-        showReadingTime = showReadingTime ?? false;
+        showReadingTime = showReadingTime ?? false,
+        summary = summary ?? "";
 
   String get pic {
     try {
@@ -59,6 +59,23 @@ class Entry extends BaseUiItem {
       return firstImg.attributes['data-src'] ??
           firstImg.attributes['srcset']?.split(',').first.trim().split(' ').first ??
           firstImg.attributes['src'] ?? "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  String get description {
+    try {
+      final document = html.parse(content);
+      final element = document.body ?? document.documentElement;
+      String text = element?.text ?? '';
+      text = text
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .trim();
+      return text.isEmpty
+          ? ''
+          : text.substring(0, text.length.clamp(0, 200)) +
+          (text.length > 200 ? '...' : '');
     } catch (e) {
       return "";
     }
@@ -92,12 +109,12 @@ class Entry extends BaseUiItem {
     String? pic,
     Feed? feed,
     bool? showReadingTime,
+    String? summary,
   }) {
     return Entry(
       id: id ?? this.id,
       title: title ?? this.title,
       hash: hash ?? this.hash,
-      description: description ?? this.description,
       userId: userId ?? this.userId,
       feedId: feedId ?? this.feedId,
       status: status ?? this.status,
@@ -109,6 +126,7 @@ class Entry extends BaseUiItem {
       readingTime: readingTime ?? this.readingTime,
       feed: feed ?? this.feed,
       showReadingTime: showReadingTime ?? this.showReadingTime,
+      summary: summary ?? this.summary,
     );
   }
 }

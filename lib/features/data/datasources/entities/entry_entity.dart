@@ -21,6 +21,8 @@ class EntriesTable extends Table {
       .withDefault(Constant(DateTime.now()))();
   DateTimeColumn get changedAt => dateTime().named('changed_at')
       .withDefault(Constant(DateTime.now()))();
+  TextColumn get summary => text().named('summary')
+      .withDefault(const Constant(""))();
   TextColumn get content => text().named('content')
       .withDefault(const Constant(""))();
   TextColumn get author => text().named('author')
@@ -55,6 +57,7 @@ extension EntryEntityConversion on EntryEntity {
       author: author,
       starred: starred,
       readingTime: readingTime,
+      summary: summary,
     );
   }
 }

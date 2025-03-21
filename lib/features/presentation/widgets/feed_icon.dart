@@ -1,7 +1,11 @@
 
 
+import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class FeedIcon extends StatelessWidget {
 
@@ -51,6 +55,15 @@ class FeedIcon extends StatelessWidget {
       ),
       child: CachedNetworkImage(
         imageUrl: iconUrl,
+        httpHeaders: {
+          "X-Auth-Token": "lOEQiLk-6QtDmiIz9_AsoBmZrdeKBarjZyjTLyo4600=",
+        },
+        imageBuilder: (context, imageProvider) {
+          if (imageProvider is MemoryImage) {
+            return Image(image: imageProvider);
+          }
+          return _processResponseToBase64(imageProvider);
+        },
         fit: BoxFit.cover,
         width: size,
         height: size,
@@ -59,6 +72,46 @@ class FeedIcon extends StatelessWidget {
       ),
     );
   }
+
+  Future<ByteData> _loadImageData(ImageProvider provider) async {
+    final Completer<ByteData> completer = Completer<ByteData>();
+    final ImageStream stream = provider.resolve(ImageConfiguration.empty);
+
+    late final ImageStreamListener listener;
+    listener = ImageStreamListener(
+            (ImageInfo image, bool sync) async {
+          try {
+            final ByteData? byteData = await image.image.toByteData();
+            if (byteData != null) {
+              completer.complete(byteData); // ✅ 类型安全传递
+            } else {
+              completer.completeError(Exception('图片数据为空'));
+            }
+          } catch (e) {
+            completer.completeError(e);
+          } finally {
+            stream.removeListener(listener);
+          }
+        },
+        onError: (error, stackTrace) {
+          completer.completeError(error, stackTrace);
+          stream.removeListener(listener);
+        }
+    );
+    stream.addListener(listener);
+    return completer.future;
+  }
+
+  Widget _processResponseToBase64(ImageProvider imageProvider) {
+    return FutureBuilder<ByteData>(
+      future: _loadImageData(imageProvider),
+      builder: (context, snapshot) {
+
+        return _buildInitialsAvatar();
+      },
+    );
+  }
+
 
   Widget _buildInitialsAvatar(){
     final initials = _getInitials(title);
