@@ -9,7 +9,6 @@ android {
     namespace = "com.example.follow_read"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
-    compileSdkVersion 34
 
     compileOptions {
 //        sourceCompatibility = JavaVersion.VERSION_1_8

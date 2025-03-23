@@ -5,8 +5,6 @@ import 'package:drift/drift.dart';
 import 'package:follow_read/features/data/datasources/database.dart';
 import 'package:follow_read/features/data/models/feed_response.dart';
 
-import '../../domain/models/entry.dart';
-
 part 'entry_page_response.mapper.dart';
 
 @MappableClass()

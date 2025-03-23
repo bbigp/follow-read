@@ -1,7 +1,6 @@
 
 import 'package:drift/drift.dart';
 import 'package:follow_read/features/data/models/feed_counter_response.dart';
-import 'package:follow_read/features/domain/models/feed.dart';
 
 import 'database.dart';
 import 'entities/feed_entity.dart';

@@ -21,3 +21,8 @@ flutter pub run build_runner build
 flutter run -v > build.log 2>&1
 
 flutter pub run flutter_launcher_icons:main
+
+
+
+# 执行同步命令
+./gradlew clean && ./gradlew assembleDebug

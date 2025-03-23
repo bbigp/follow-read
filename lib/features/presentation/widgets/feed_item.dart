@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 

@@ -7,7 +7,6 @@ import 'package:follow_read/routes/app_route.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../config/theme.dart';
-import '../../../core/utils/logger.dart';
 import '../../domain/models/entry.dart';
 
 class EntryItem extends ConsumerWidget {

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/listx.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 

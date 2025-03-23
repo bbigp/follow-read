@@ -1,5 +1,4 @@
 
-import 'package:dartz/dartz.dart';
 import 'package:follow_read/features/data/datasources/entities/entry_entity.dart';
 import 'package:follow_read/features/data/datasources/entities/feed_entity.dart';
 import 'package:follow_read/features/data/datasources/entry_dao.dart';

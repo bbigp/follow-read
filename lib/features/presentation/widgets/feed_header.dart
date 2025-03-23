@@ -45,7 +45,7 @@ class FeedHeader extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(top: 6, left: 4),
                         child: Text(
-                          '${unread}未读',
+                          '${unread.toString()}未读',
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,

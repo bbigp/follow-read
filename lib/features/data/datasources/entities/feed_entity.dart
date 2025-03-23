@@ -3,7 +3,6 @@ import 'package:drift/drift.dart';
 import 'package:follow_read/features/data/datasources/database.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 
-import '../../../domain/models/ui_item.dart';
 
 @DataClassName("FeedEntity")
 class FeedsTable extends Table {

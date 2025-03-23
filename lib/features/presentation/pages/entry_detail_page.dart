@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -5,11 +7,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/providers/entry_detail_provider.dart';
+import 'package:follow_read/features/presentation/widgets/entry_detail_bottom_bar.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
+import 'package:follow_read/features/presentation/widgets/view_website_button.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:http/http.dart' as http;
 
 import '../../domain/models/entry.dart';
-import '../widgets/spacer_divider.dart';
 
 class EntryDetailPage extends ConsumerStatefulWidget {
   final int entryId;
@@ -56,114 +62,12 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
       body: Stack(
         children: [
           _buildScrollableContent(state.entry),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _buildBottomActionBar(),
-          ),
+          EntryDetailBottomBar(),
         ],
       ),
     );
   }
 
-  Widget _buildBottomActionBar() {
-    return SafeArea(
-      // 处理全面屏底部安全区域
-      top: false,
-      child: Column(
-        children: [
-          SpacerDivider(
-            spacing: 1,
-            thickness: 1,
-            indent: 0,
-            color: AppTheme.black8,
-          ),
-          Container(
-            color: Colors.white,
-            padding:
-                const EdgeInsets.only(top: 16, bottom: 20, left: 20, right: 20),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 28,
-                      height: 28,
-                      child: SvgPicture.asset(
-                        'assets/svg/ai_outline.svg',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
-                    // 中间自适应区域
-                    Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          // 计算可用空间和间距
-                          final totalSpacing =
-                              constraints.maxWidth - (28 * 3); // 20为图标宽度
-                          final eachSpacing =
-                              totalSpacing / 4; // 4个间隔区域：左间隔 + 图标间*2 + 右间隔
-
-                          return Row(
-                            children: [
-                              SizedBox(width: eachSpacing),
-                              SizedBox(
-                                width: 28,
-                                height: 28,
-                                child: SvgPicture.asset(
-                                  'assets/svg/bubble_language.svg',
-                                  width: 24,
-                                  height: 24,
-                                ),
-                              ),
-                              SizedBox(width: eachSpacing),
-                              SizedBox(
-                                width: 28,
-                                height: 28,
-                                child: SvgPicture.asset(
-                                  'assets/svg/queue.svg',
-                                  width: 24,
-                                  height: 24,
-                                ),
-                              ),
-                              SizedBox(width: eachSpacing),
-                              SizedBox(
-                                width: 28,
-                                height: 28,
-                                child: SvgPicture.asset(
-                                  'assets/svg/plus_o.svg',
-                                  width: 24,
-                                  height: 24,
-                                ),
-                              ),
-                              SizedBox(width: eachSpacing),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-
-                    // 右侧固定图标
-                    SizedBox(
-                      width: 28,
-                      height: 28,
-                      child: SvgPicture.asset(
-                        'assets/svg/share.svg',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
   Widget _buildScrollableContent(Entry entry) {
     return LayoutBuilder(
@@ -193,7 +97,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 12, bottom: 48 + 60),
-                    child: _buildViewWebsite(),
+                    child: ViewWebsiteButton(),
                   )
                 ],
               ),
@@ -204,51 +108,31 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
     );
   }
 
-  Widget _buildViewWebsite() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: IntrinsicWidth(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: Container(
-            height: 44,
-            constraints: const BoxConstraints(
-              minWidth: 125, // 可选：设置最小宽度
-            ),
-            color: Color.fromRGBO(0, 0, 0, 0.04),
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Row(
-              mainAxisSize: MainAxisSize.min, // 关键属性：收缩宽度
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'View Website',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    height: 1.33,
-                    color: AppTheme.black95,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                SvgPicture.asset(
-                  'assets/svg/out_o.svg',
-                  width: 20,
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildContent(Entry entry) {
     return Padding(
       padding: EdgeInsets.only(top: 12),
       child: Html(
         data: entry.content,
+        extensions: [
+          TagExtension(
+            tagsToExtend: {'img'},
+            builder: (context) {
+              final element = context.node as dom.Element;
+              final src = element.attributes['src'] ?? '';
+              return GestureDetector(
+                onTap: () async {
+                  await openNetworkImage(src);
+                },
+                child: Image.network(
+                  src,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) => Icon(Icons.broken_image),
+                ),
+              );
+            }
+          )
+        ],
         style: {
           "*": Style(
             margin: Margins.zero,
@@ -263,6 +147,28 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
         },
       ),
     );
+  }
+
+  Future<void> openNetworkImage(String imageUrl) async {
+    try {
+      // 1. 下载网络图片
+      final response = await http.get(Uri.parse(imageUrl));
+      if (response.statusCode != 200) {
+        throw Exception('下载失败: HTTP ${response.statusCode}');
+      }
+
+      // 2. 保存到临时文件
+      final tempDir = await getTemporaryDirectory();
+      final fileName = imageUrl.split('/').last; // 从URL提取文件名
+      final filePath = '${tempDir.path}/$fileName';
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+
+      // 3. 用系统应用打开文件
+      // await OpenFile.open(filePath);
+    } catch (e) {
+      print('操作失败: $e');
+    }
   }
 
   Widget _buildTitle(Entry entry) {
