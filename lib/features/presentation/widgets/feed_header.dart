@@ -4,13 +4,14 @@ import '../../../config/theme.dart';
 import 'dashed_line.dart';
 
 class FeedHeader extends StatelessWidget {
+
   final String title;
-  final String subTitle;
+  final int unread;
 
   const FeedHeader({
-    required this.title,
-    required this.subTitle,
     super.key,
+    this.title = 'All',
+    this.unread = 0,
   });
 
   @override
@@ -37,14 +38,14 @@ class FeedHeader extends StatelessWidget {
                     )
                   ],
                 ),
-                if (subTitle.isNotEmpty)
+                if (unread > 0)
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 6, left: 4),
                         child: Text(
-                          subTitle,
+                          '${unread}未读',
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,

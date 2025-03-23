@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/providers/feed_detail_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/loading_more.dart';
@@ -27,9 +28,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .watch(entriesLoadingProvider.notifier)
+      ref.watch(entriesLoadingProvider.notifier)
           .fetchEntries(feedId: widget.feedId, reset: true);
+      ref.watch(feedDetailProvider.notifier).fetchFeed(widget.feedId);
     });
     _scrollController.addListener(_scrollListener);
   }
@@ -61,6 +62,12 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(entriesLoadingProvider);
+    final unread = ref.watch(
+      feedDetailProvider.select((state) => state.feed.unread),
+    );
+    final title = ref.watch(
+      feedDetailProvider.select((state) => state.feed.title),
+    );
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -84,7 +91,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                   itemCount: state.uiItems.length + 2,
                   itemBuilder: (context, index) {
                     if (index == 0) {
-                      return FeedHeader(title: 'All', subTitle: '99+未读');
+                      return FeedHeader(title: title, unread: unread,);
                     }
                     if (index - 1 >= state.uiItems.length) {
                       if (state.isInitializing) {

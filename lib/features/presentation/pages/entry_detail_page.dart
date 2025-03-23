@@ -365,19 +365,19 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
               ),
             ),
           ),
-          if (false)
-            Padding(
-              padding: EdgeInsets.only(top: 12),
-              child: Text(
-                'The Home Assistant Voice Preview Edition is the first hardware from the open-source smart home platform that’s designed for voice control. Image: Nabu Casa',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  height: 1.18,
-                  color: AppTheme.black25,
-                ),
-              ),
-            )
+          // if (false)
+          //   Padding(
+          //     padding: EdgeInsets.only(top: 12),
+          //     child: Text(
+          //       'The Home Assistant Voice Preview Edition is the first hardware from the open-source smart home platform that’s designed for voice control. Image: Nabu Casa',
+          //       style: TextStyle(
+          //         fontSize: 11,
+          //         fontWeight: FontWeight.w500,
+          //         height: 1.18,
+          //         color: AppTheme.black25,
+          //       ),
+          //     ),
+          //   )
         ],
       ),
     );

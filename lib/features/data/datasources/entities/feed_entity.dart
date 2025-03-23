@@ -17,6 +17,8 @@ class FeedsTable extends Table {
       .withDefault(const Constant(0))();
   IntColumn get read => integer().named('read')
       .withDefault(const Constant(0))();
+  TextColumn get iconUrl => text().named('icon_url')
+    .withDefault(const Constant(""))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -31,10 +33,9 @@ extension FeedEntityConversion on FeedEntity {
       userId: userId.toInt(),
       feedUrl: feedUrl,
       siteUrl: siteUrl,
-      avatarUrl: "",
       read: read,
       unread: unread,
-      viewType: ViewType.feedItem,
+      iconUrl: iconUrl,
     );
   }
 }

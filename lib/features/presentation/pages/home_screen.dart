@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
+import 'package:follow_read/features/presentation/widgets/feed_item.dart';
+import 'package:follow_read/features/presentation/widgets/list_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/routes/app_route.dart';
 
 import '../../domain/models/feed.dart';
+import '../../domain/models/listx.dart';
 import '../../domain/models/ui_item.dart';
-import '../widgets/feed_icon.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -45,59 +48,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
         body: ListView.builder(
-            itemCount: feedsState.feeds.length,
+            itemCount: feedsState.items.length,
             itemBuilder: (context, index) {
-              return _buildFeedItem(feedsState.feeds[index]);
-            }));
+              return _buildFeedItem(feedsState.items[index]);
+            })
+    );
   }
 
-  Widget _buildFeedItem(Feed feed) {
-    if (feed.viewType == ViewType.feedItem) {
-      return Column(
-        children: [
-          SizedBox(
-            height: 52,
-            child: ListTile(
-              dense: true,
-              horizontalTitleGap: 12,
-              // 图标与标题的水平间距（默认16）
-              onTap: () {
-                ref.read(routerProvider).pushNamed(
-                    RouteNames.entry,
-                    pathParameters: {'feedId': feed.id.toString()}
-                );
-              },
-              leading: FeedIcon(
-                title: feed.title,
-                iconUrl: "",
-              ),
-              title: Text(feed.title,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    height: 1.33,
-                    color: Color(0xF2000000),
-                  )),
-              trailing: Text(
-                '${feed.unread > 0 ? feed.unread : ''}',
-                // 这里可以是你想显示的任何数字
-                style: const TextStyle(
-                  color: Color(0x40000000),
-                  fontSize: 13,
-                  height: 1.38,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-          SpacerDivider(
-            spacing: 1,
-            thickness: 0.5,
-          ),
-        ],
-      );
-    } else if (feed.viewType == ViewType.groupTitleItem) {
+  Widget _buildFeedItem(UiItem item) {
+    if (item.type == ViewType.feedItem) {
+      return FeedItem(feed: item.content as Feed);
+    } else if (item.type == ViewType.groupTitleItem) {
+      final title = item.content as TitleUiData;
       return Container(
         height: 40,
         // color: Colors.blue,
@@ -105,55 +67,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            feed.title,
+            title.title,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w500,
               height: 1.29,
-              color: const Color(0xF2000000),
+              color: AppTheme.black95,
             ),
           ),
         ),
       );
-    } else if (feed.viewType == ViewType.listItem) {
-      return Column(
-        children: [
-          SizedBox(
-            height: 44,
-            child: ListTile(
-              dense: true,
-              horizontalTitleGap: 12,
-              // 图标与标题的水平间距（默认16）
-              onTap: () {},
-              leading: Icon(feed.iconData),
-              title: Text(feed.title,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    height: 1.33,
-                    color: Color(0xF2000000),
-                  )),
-              trailing: Text(
-                '${feed.unread > 0 ? feed.unread : ''}',
-                // 这里可以是你想显示的任何数字
-                style: const TextStyle(
-                  color: Color(0x40000000),
-                  fontSize: 13,
-                  height: 1.38,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (feed.viewType == ViewType.divider32) {
-      // return Container(height: 32,);
+    } else if (item.type == ViewType.listItem) {
+      return ListItem(list: item.content as Listx,);
+    } else if (item.type == ViewType.divider32) {
       return SpacerDivider(
         thickness: 0.2,
         spacing: 32,
-        color: const Color(0x14000000),
+        color: AppTheme.black8,
       );
     } else {
       return Container(

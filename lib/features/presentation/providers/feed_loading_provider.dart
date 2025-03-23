@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
+import 'package:follow_read/features/domain/models/listx.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
 import '../../data/repositories/feed_repository.dart';
@@ -33,102 +34,53 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
   }
 
   Future<void> getFeeds() async {
-    final all = Feed(
-      id: 0,
-      title: '全部',
-      userId: 0,
-      feedUrl: '',
-      siteUrl: '',
-      viewType: ViewType.listItem,
-      unread: 90, read: 0,
-    );
-    final read = Feed(
-      id: 0,
-      title: '近期已读',
-      userId: 0,
-      feedUrl: '',
-      siteUrl: '',
-      viewType: ViewType.listItem,
-      iconData: Icons.history,
-    );
-    final star = Feed(
-      id: 0,
-      title: '星标',
-      userId: 0,
-      feedUrl: '',
-      siteUrl: '',
-      viewType: ViewType.listItem,
-      iconData: Icons.star_border,
-    );
-    final unread = Feed(
-      id: 0,
-      title: '未读',
-      userId: 0,
-      feedUrl: '',
-      siteUrl: '',
-      viewType: ViewType.listItem,
-      iconData: Icons.circle_outlined,
-    );
-    final today = Feed(
-      id: 0,
-      title: '今日',
-      userId: 0,
-      feedUrl: '',
-      siteUrl: '',
-      viewType: ViewType.listItem,
-      iconData: Icons.calendar_today_outlined,
-    );
-    final smartview = Feed(
-      id: 0,
-      title: '智能视图',
-      userId: 0,
-      feedUrl: '',
-      siteUrl: '',
-      viewType: ViewType.groupTitleItem,
-    );
-    final feed = Feed(
-      id: 0,
-      title: '订阅源',
-      userId: 0,
-      feedUrl: '',
-      siteUrl: '',
-      viewType: ViewType.groupTitleItem,
-    );
     final feeds = await _feedRepository.getFeeds();
-    feeds.insert(0, feed);
-    feeds.insert(0, Feed(id: 0, userId: 0, feedUrl: '', siteUrl: '', title: '', viewType: ViewType.divider32));
-    feeds.insert(0, today);
-    feeds.insert(0, unread);
-    feeds.insert(0, star);
-    feeds.insert(0, read);
-    feeds.insert(0, all);
-    feeds.insert(0, smartview);
-    state = state.copyWith(feeds: feeds);
+    final all = [...firstPage(), ...feeds.map((item) => UiItem(type: ViewType.feedItem, content: item))];
+    state = state.copyWith(items: all);
+  }
+
+  List<UiItem> firstPage(){
+    final all = Listx(title: '全部', unread: 90, iconData: Icons.ac_unit);
+    final read = Listx(title: '近期已读', iconData: Icons.history,);
+    final star = Listx(title: '星标', iconData: Icons.star_border,);
+    final unread = Listx(title: '未读', iconData: Icons.circle_outlined,);
+    final today = Listx(title: '今日', iconData: Icons.calendar_today_outlined,);
+
+    return [
+      UiItem(type: ViewType.groupTitleItem, content: TitleUiData(title: '智能视图')),
+      UiItem(type: ViewType.listItem, content: all),
+      UiItem(type: ViewType.listItem, content: read),
+      UiItem(type: ViewType.listItem, content: star),
+      UiItem(type: ViewType.listItem, content: unread),
+      UiItem(type: ViewType.listItem, content: today),
+      UiItem(type: ViewType.divider32, content: EmptyUiData()),
+      UiItem(type: ViewType.groupTitleItem, content: TitleUiData(title: '订阅源')),
+    ];
   }
 }
 
 class FeedsState {
   final bool isSyncing;
-  final List<Feed> feeds;
+  final List<UiItem> items;
 
   const FeedsState({
     required this.isSyncing,
-    required this.feeds,
+    required this.items,
   });
 
   static const empty = FeedsState(
     isSyncing: false,
-    feeds: <Feed>[],
+    items: <UiItem>[],
   );
 
 
   FeedsState copyWith({
     bool? isSyncing,
-    List<Feed>? feeds
+    List<UiItem>? items
   }) {
     return FeedsState(
       isSyncing: isSyncing ?? this.isSyncing,
-      feeds: feeds ?? this.feeds,
+      items: items ?? this.items,
     );
   }
 }

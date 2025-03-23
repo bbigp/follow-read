@@ -50,9 +50,17 @@ class $FeedsTableTable extends FeedsTable
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _iconUrlMeta =
+      const VerificationMeta('iconUrl');
+  @override
+  late final GeneratedColumn<String> iconUrl = GeneratedColumn<String>(
+      'icon_url', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, userId, feedUrl, siteUrl, title, unread, read];
+      [id, userId, feedUrl, siteUrl, title, unread, read, iconUrl];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -98,6 +106,10 @@ class $FeedsTableTable extends FeedsTable
       context.handle(
           _readMeta, read.isAcceptableOrUnknown(data['read']!, _readMeta));
     }
+    if (data.containsKey('icon_url')) {
+      context.handle(_iconUrlMeta,
+          iconUrl.isAcceptableOrUnknown(data['icon_url']!, _iconUrlMeta));
+    }
     return context;
   }
 
@@ -121,6 +133,8 @@ class $FeedsTableTable extends FeedsTable
           .read(DriftSqlType.int, data['${effectivePrefix}unread'])!,
       read: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}read'])!,
+      iconUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon_url'])!,
     );
   }
 
@@ -138,6 +152,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
   final String title;
   final int unread;
   final int read;
+  final String iconUrl;
   const FeedEntity(
       {required this.id,
       required this.userId,
@@ -145,7 +160,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       required this.siteUrl,
       required this.title,
       required this.unread,
-      required this.read});
+      required this.read,
+      required this.iconUrl});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -156,6 +172,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
     map['title'] = Variable<String>(title);
     map['unread'] = Variable<int>(unread);
     map['read'] = Variable<int>(read);
+    map['icon_url'] = Variable<String>(iconUrl);
     return map;
   }
 
@@ -168,6 +185,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       title: Value(title),
       unread: Value(unread),
       read: Value(read),
+      iconUrl: Value(iconUrl),
     );
   }
 
@@ -182,6 +200,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       title: serializer.fromJson<String>(json['title']),
       unread: serializer.fromJson<int>(json['unread']),
       read: serializer.fromJson<int>(json['read']),
+      iconUrl: serializer.fromJson<String>(json['iconUrl']),
     );
   }
   @override
@@ -195,6 +214,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       'title': serializer.toJson<String>(title),
       'unread': serializer.toJson<int>(unread),
       'read': serializer.toJson<int>(read),
+      'iconUrl': serializer.toJson<String>(iconUrl),
     };
   }
 
@@ -205,7 +225,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           String? siteUrl,
           String? title,
           int? unread,
-          int? read}) =>
+          int? read,
+          String? iconUrl}) =>
       FeedEntity(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -214,6 +235,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
         title: title ?? this.title,
         unread: unread ?? this.unread,
         read: read ?? this.read,
+        iconUrl: iconUrl ?? this.iconUrl,
       );
   FeedEntity copyWithCompanion(FeedsTableCompanion data) {
     return FeedEntity(
@@ -224,6 +246,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       title: data.title.present ? data.title.value : this.title,
       unread: data.unread.present ? data.unread.value : this.unread,
       read: data.read.present ? data.read.value : this.read,
+      iconUrl: data.iconUrl.present ? data.iconUrl.value : this.iconUrl,
     );
   }
 
@@ -236,14 +259,15 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           ..write('siteUrl: $siteUrl, ')
           ..write('title: $title, ')
           ..write('unread: $unread, ')
-          ..write('read: $read')
+          ..write('read: $read, ')
+          ..write('iconUrl: $iconUrl')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, userId, feedUrl, siteUrl, title, unread, read);
+      Object.hash(id, userId, feedUrl, siteUrl, title, unread, read, iconUrl);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -254,7 +278,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           other.siteUrl == this.siteUrl &&
           other.title == this.title &&
           other.unread == this.unread &&
-          other.read == this.read);
+          other.read == this.read &&
+          other.iconUrl == this.iconUrl);
 }
 
 class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
@@ -265,6 +290,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
   final Value<String> title;
   final Value<int> unread;
   final Value<int> read;
+  final Value<String> iconUrl;
   const FeedsTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -273,6 +299,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.title = const Value.absent(),
     this.unread = const Value.absent(),
     this.read = const Value.absent(),
+    this.iconUrl = const Value.absent(),
   });
   FeedsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -282,6 +309,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     required String title,
     this.unread = const Value.absent(),
     this.read = const Value.absent(),
+    this.iconUrl = const Value.absent(),
   })  : userId = Value(userId),
         feedUrl = Value(feedUrl),
         siteUrl = Value(siteUrl),
@@ -294,6 +322,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     Expression<String>? title,
     Expression<int>? unread,
     Expression<int>? read,
+    Expression<String>? iconUrl,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -303,6 +332,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       if (title != null) 'title': title,
       if (unread != null) 'unread': unread,
       if (read != null) 'read': read,
+      if (iconUrl != null) 'icon_url': iconUrl,
     });
   }
 
@@ -313,7 +343,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       Value<String>? siteUrl,
       Value<String>? title,
       Value<int>? unread,
-      Value<int>? read}) {
+      Value<int>? read,
+      Value<String>? iconUrl}) {
     return FeedsTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -322,6 +353,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       title: title ?? this.title,
       unread: unread ?? this.unread,
       read: read ?? this.read,
+      iconUrl: iconUrl ?? this.iconUrl,
     );
   }
 
@@ -349,6 +381,9 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     if (read.present) {
       map['read'] = Variable<int>(read.value);
     }
+    if (iconUrl.present) {
+      map['icon_url'] = Variable<String>(iconUrl.value);
+    }
     return map;
   }
 
@@ -361,7 +396,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
           ..write('siteUrl: $siteUrl, ')
           ..write('title: $title, ')
           ..write('unread: $unread, ')
-          ..write('read: $read')
+          ..write('read: $read, ')
+          ..write('iconUrl: $iconUrl')
           ..write(')'))
         .toString();
   }
@@ -1075,6 +1111,7 @@ typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
   required String title,
   Value<int> unread,
   Value<int> read,
+  Value<String> iconUrl,
 });
 typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> id,
@@ -1084,6 +1121,7 @@ typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<String> title,
   Value<int> unread,
   Value<int> read,
+  Value<String> iconUrl,
 });
 
 class $$FeedsTableTableFilterComposer
@@ -1115,6 +1153,9 @@ class $$FeedsTableTableFilterComposer
 
   ColumnFilters<int> get read => $composableBuilder(
       column: $table.read, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get iconUrl => $composableBuilder(
+      column: $table.iconUrl, builder: (column) => ColumnFilters(column));
 }
 
 class $$FeedsTableTableOrderingComposer
@@ -1146,6 +1187,9 @@ class $$FeedsTableTableOrderingComposer
 
   ColumnOrderings<int> get read => $composableBuilder(
       column: $table.read, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get iconUrl => $composableBuilder(
+      column: $table.iconUrl, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FeedsTableTableAnnotationComposer
@@ -1177,6 +1221,9 @@ class $$FeedsTableTableAnnotationComposer
 
   GeneratedColumn<int> get read =>
       $composableBuilder(column: $table.read, builder: (column) => column);
+
+  GeneratedColumn<String> get iconUrl =>
+      $composableBuilder(column: $table.iconUrl, builder: (column) => column);
 }
 
 class $$FeedsTableTableTableManager extends RootTableManager<
@@ -1209,6 +1256,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<String> title = const Value.absent(),
             Value<int> unread = const Value.absent(),
             Value<int> read = const Value.absent(),
+            Value<String> iconUrl = const Value.absent(),
           }) =>
               FeedsTableCompanion(
             id: id,
@@ -1218,6 +1266,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             title: title,
             unread: unread,
             read: read,
+            iconUrl: iconUrl,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -1227,6 +1276,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             required String title,
             Value<int> unread = const Value.absent(),
             Value<int> read = const Value.absent(),
+            Value<String> iconUrl = const Value.absent(),
           }) =>
               FeedsTableCompanion.insert(
             id: id,
@@ -1236,6 +1286,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             title: title,
             unread: unread,
             read: read,
+            iconUrl: iconUrl,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

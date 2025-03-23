@@ -25,6 +25,12 @@ class UiItem {
   });
 }
 
+class TitleUiData extends BaseUiItem {
+
+  final String title;
+
+  const TitleUiData({required this.title});
+}
 
 
 class EmptyUiData extends BaseUiItem {

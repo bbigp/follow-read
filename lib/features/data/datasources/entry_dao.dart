@@ -1,10 +1,8 @@
 
 import 'package:drift/drift.dart';
-import 'package:follow_read/features/data/models/feed_counter_response.dart';
 
 import 'database.dart';
 import 'entities/entry_entity.dart';
-import 'entities/feed_entity.dart';
 
 part 'entry_dao.g.dart';
 
@@ -30,6 +28,11 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
 
   Future<List<EntryEntity>> getAllEntries() async {
     return await select(entriesTable).get();
+  }
+
+  Future<List<EntryEntity>> getAllEntriesByIds(List<int> ids) async {
+    if (ids.isEmpty) return [];
+    return await (select(entriesTable)..where((t) => t.id.isIn(ids.map((e) => BigInt.from(e)).toList()))).get();
   }
 
   Future<EntryEntity?> getEntry(int entryId) async {

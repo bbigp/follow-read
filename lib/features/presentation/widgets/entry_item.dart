@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../config/theme.dart';
+import '../../../core/utils/logger.dart';
 import '../../domain/models/entry.dart';
 
 class EntryItem extends ConsumerWidget {
@@ -34,32 +36,16 @@ class EntryItem extends ConsumerWidget {
                   height: 18,
                   child: Row(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4.0),
-                        child: CachedNetworkImage(
-                          imageUrl: entry.feed.feedUrl,
-                          width: 18,
-                          height: 18,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(
-                              width: 18,
-                              height: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            width: 18,
-                            height: 18,
-                            color: Colors.grey[300], // 错误时的背景颜色
-                            child: Icon(
-                              Icons.error,
-                              color: Colors.red,
-                              size: 10,
-                            ), // 错误图标
-                          ),
+                      FeedIcon(
+                        title: entry.feed.title,
+                        iconUrl: entry.feed.iconUrl,
+                        size: 18,
+                        radius: 4,
+                        textStyle: TextStyle(
+                          fontSize: 11,
+                          height: 1.33,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
                         ),
                       ),
                       Expanded(

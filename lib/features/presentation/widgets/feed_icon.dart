@@ -1,14 +1,12 @@
-
-
-import 'dart:async';
-import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/providers/auth_provider.dart';
+import 'package:shimmer/shimmer.dart';
 
-class FeedIcon extends StatelessWidget {
+import '../../../config/theme.dart';
+import 'base64_icon.dart';
 
+class FeedIcon extends ConsumerWidget {
   final String title;
   final String iconUrl;
   final double size;
@@ -16,7 +14,6 @@ class FeedIcon extends StatelessWidget {
   final Color beginBackgroundColor;
   final Color endBackgroundColor;
   final double radius;
-
 
   const FeedIcon({
     super.key,
@@ -29,110 +26,75 @@ class FeedIcon extends StatelessWidget {
       fontWeight: FontWeight.w500,
       color: Colors.white,
     ),
-    this.beginBackgroundColor = const Color(0x80555555), // 50% 透明度 (0x80 = 128)
-    this.endBackgroundColor = const Color(0xBF555555), // 75% 透明度 (0xBF = 191)
+    this.beginBackgroundColor = AppTheme.black25, // 50% 透明度 (0x80 = 128)
+    this.endBackgroundColor = AppTheme.black75, // 75% 透明度 (0xBF = 191)
     this.radius = 6,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider.select((state) => state.user));
     return SizedBox(
       width: size,
       height: size,
-      child: iconUrl.isNotEmpty == true
-          ?  _buildCachedNetworkImage()
-          :  _buildInitialsAvatar(),
+      child: iconUrl.isNotEmpty == true && user != null
+          ? _buildCachedNetworkImage(user.token)
+          : _buildInitialsAvatar(),
     );
   }
 
-  Widget _buildCachedNetworkImage(){
-    return Container(
-      width: size,
-      height: size,
-      color: Colors.transparent,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      child: CachedNetworkImage(
-        imageUrl: iconUrl,
-        httpHeaders: {
-          "X-Auth-Token": "lOEQiLk-6QtDmiIz9_AsoBmZrdeKBarjZyjTLyo4600=",
-        },
-        imageBuilder: (context, imageProvider) {
-          if (imageProvider is MemoryImage) {
-            return Image(image: imageProvider);
-          }
-          return _processResponseToBase64(imageProvider);
-        },
-        fit: BoxFit.cover,
+  Widget _buildCachedNetworkImage(String token) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: Container(
         width: size,
         height: size,
-        progressIndicatorBuilder: (context, url, progress) => _buildInitialsAvatar(),
-        errorWidget: (context, url, error) => _buildInitialsAvatar(),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        child: Base64Icon(
+          imageUrl: iconUrl,
+          headers: {
+            "X-Auth-Token": token,
+          },
+          width: size,
+          height: size,
+          placeholder: Shimmer.fromColors(
+            baseColor: AppTheme.black4,
+            highlightColor: AppTheme.black8,
+            child: Container(width: size, height: size, color: Colors.white,), // 后续项复用
+          ),
+          errorWidget: _buildInitialsAvatar(),
+        ),
       ),
     );
   }
 
-  Future<ByteData> _loadImageData(ImageProvider provider) async {
-    final Completer<ByteData> completer = Completer<ByteData>();
-    final ImageStream stream = provider.resolve(ImageConfiguration.empty);
-
-    late final ImageStreamListener listener;
-    listener = ImageStreamListener(
-            (ImageInfo image, bool sync) async {
-          try {
-            final ByteData? byteData = await image.image.toByteData();
-            if (byteData != null) {
-              completer.complete(byteData); // ✅ 类型安全传递
-            } else {
-              completer.completeError(Exception('图片数据为空'));
-            }
-          } catch (e) {
-            completer.completeError(e);
-          } finally {
-            stream.removeListener(listener);
-          }
-        },
-        onError: (error, stackTrace) {
-          completer.completeError(error, stackTrace);
-          stream.removeListener(listener);
-        }
-    );
-    stream.addListener(listener);
-    return completer.future;
-  }
-
-  Widget _processResponseToBase64(ImageProvider imageProvider) {
-    return FutureBuilder<ByteData>(
-      future: _loadImageData(imageProvider),
-      builder: (context, snapshot) {
-
-        return _buildInitialsAvatar();
-      },
-    );
-  }
-
-
-  Widget _buildInitialsAvatar(){
+  Widget _buildInitialsAvatar() {
     final initials = _getInitials(title);
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              beginBackgroundColor,
-              endBackgroundColor,
-            ]
+          end: Alignment.bottomCenter,
+          colors: [
+            beginBackgroundColor,
+            endBackgroundColor,
+          ],
         ),
-        borderRadius: BorderRadius.circular(radius),
       ),
       child: Center(
         child: Text(
           initials,
           style: textStyle,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.visible,
         ),
       ),
     );
@@ -149,6 +111,4 @@ class FeedIcon extends StatelessWidget {
     // }
     // return trimmed[0].toUpperCase();
   }
-
-
 }

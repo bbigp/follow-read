@@ -1,4 +1,5 @@
 
+import 'package:dartz/dartz.dart';
 import 'package:follow_read/features/data/datasources/entities/entry_entity.dart';
 import 'package:follow_read/features/data/datasources/entities/feed_entity.dart';
 import 'package:follow_read/features/data/datasources/entry_dao.dart';
@@ -6,6 +7,7 @@ import 'package:follow_read/features/data/datasources/feed_dao.dart';
 import 'package:follow_read/features/data/models/entry_page_response.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 
+import '../../../core/utils/logger.dart';
 import '../datasources/api_client.dart';
 
 class EntryRepository {
@@ -15,13 +17,46 @@ class EntryRepository {
       : _dao = dao, _feedDao = feedDao ;
 
   Future<List<Entry>> getEntries(int feedId, int page, int size) async {
+    final stopwatch = Stopwatch();
+    stopwatch.start();
     final result = await ApiClient.getEntries(feedId, page: page, size: size);
+    stopwatch.stop();
+    final requestTime = stopwatch.elapsedMilliseconds;
+    logger.i('🕒 网络请求耗时: ${requestTime}ms');
     return result.fold((failure) async {
       return [];
     }, (data) async {
-      await _dao.bulkInsertWithTransaction(data.entries.map((item) => item.toCompanion()).toList());
-      return data.entries.map((item) => item.toModel()).toList();
+      stopwatch.reset();
+      stopwatch.start();
+      final savedEntries = await saveAndReturnData(data.entries);
+      stopwatch.stop();
+      final saveTime = stopwatch.elapsedMilliseconds;
+      logger.i('💾 数据库保存耗时: ${saveTime}ms');
+      logger.i('⏱️ 总耗时: ${requestTime + saveTime}ms');
+      return savedEntries;
     });
+  }
+
+  Future<List<Entry>> saveAndReturnData(List<EntryResponse> list) async {
+    if (list.isEmpty) {
+      return [];
+    }
+    await _dao.bulkInsertWithTransaction(list.map((item) => item.toCompanion()).toList());
+
+    final entryIds = list.map((item) => item.id).toList();
+    final entrys = await _dao.getAllEntriesByIds(entryIds);
+
+    final feedIds = list.map((e) => e.feedId).toSet().toList();
+    final feeds = await _feedDao.getFeedsByIds(feedIds);
+    final feedMap = {for (var feed in feeds) feed.id: feed};
+
+    return entrys.map((entry) {
+      final feed = feedMap[entry.feedId];
+      if (feed != null) {
+        return entry.toModel().copyWith(feed: feed.toModel());
+      }
+      return entry.toModel();
+    }).toList();
   }
 
 
@@ -35,8 +70,9 @@ class EntryRepository {
     final result = await ApiClient.getEntry(entryId);
     return result.fold((failure) {
       return Entry(id: 0, title: '', hash: '');
-    }, (data) {
-      return data.toModel();
+    }, (data) async{
+      final list = await saveAndReturnData([data]);
+      return list[0];
     });
   }
 

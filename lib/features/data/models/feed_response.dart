@@ -110,28 +110,33 @@ class FeedResponse with FeedResponseMappable {
 }
 
 extension FeedResponseConversion on FeedResponse {
-  FeedsTableCompanion toCompanion() {
+  FeedsTableCompanion toCompanion(String baseUrl) {
+    String iconUrl = "";
+    final icon = this.icon;
+    if (icon != null) {
+      iconUrl = '${baseUrl}icons/${icon.iconId}';
+    }
     return FeedsTableCompanion.insert(
       userId: BigInt.from(userId),
       feedUrl: feedUrl,
       siteUrl: siteUrl,
       title: title,
       id: Value(BigInt.from(id)),
+      iconUrl: Value(iconUrl),
     );
   }
 
-  Feed toModel() {
-    return Feed(
-      id: id,
-      userId: userId,
-      feedUrl: feedUrl,
-      siteUrl: siteUrl,
-      title: title,
-      unread: 0,
-      read: 0,
-      viewType: ViewType.feedItem,
-    );
-  }
+  // Feed toModel() {
+  //   return Feed(
+  //     id: id,
+  //     userId: userId,
+  //     feedUrl: feedUrl,
+  //     siteUrl: siteUrl,
+  //     title: title,
+  //     unread: 0,
+  //     read: 0,
+  //   );
+  // }
 }
 
 

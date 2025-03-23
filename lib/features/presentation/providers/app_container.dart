@@ -53,7 +53,10 @@ final entryDaoProvider = Provider<EntryDao>((ref) {
 
 
 final feedRepositoryProvider = Provider<FeedRepository>((ref) {
-  return FeedRepository(feedDao: ref.watch(feedDaoProvider));
+  return FeedRepository(
+      feedDao: ref.watch(feedDaoProvider),
+      localData: ref.watch(localDataSourceProvider),
+  );
 });
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {

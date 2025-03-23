@@ -1,6 +1,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:follow_read/features/data/models/feed_counter_response.dart';
+import 'package:follow_read/features/domain/models/feed.dart';
 
 import 'database.dart';
 import 'entities/feed_entity.dart';
@@ -33,6 +34,15 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
 
   Future<List<FeedEntity>> getAllFeeds() async {
     return await select(feedsTable).get();
+  }
+
+  Future<List<FeedEntity>> getFeedsByIds(List<int> ids) async {
+    if (ids.isEmpty) return [];
+    return await (select(feedsTable)..where((t) => t.id.isIn(ids.map((e) => BigInt.from(e)).toList()))).get();
+  }
+
+  Future<FeedEntity> getFeedById(int id) async {
+    return await (select(feedsTable)..where((t) => t.id.equals(BigInt.from(id)))).getSingle();
   }
 
   Future<void> bulkUpdateCounter(List<FeedCounter> list) async {

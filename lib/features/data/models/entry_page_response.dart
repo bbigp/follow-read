@@ -91,21 +91,21 @@ extension EntryResponseConversion on EntryResponse {
     );
   }
 
-  Entry toModel() {
-    return Entry(
-      id: id,
-      userId: userId,
-      feedId: feedId,
-      title: title,
-      hash: hash,
-      status: status,
-      url: url,
-      publishedAt: publishedAt,
-      content: content,
-      author: author,
-      starred: starred,
-      readingTime: readingTime,
-      feed: feed.toModel(),
-    );
-  }
+  // Entry toModel() {
+  //   return Entry(
+  //     id: id,
+  //     userId: userId,
+  //     feedId: feedId,
+  //     title: title,
+  //     hash: hash,
+  //     status: status,
+  //     url: url,
+  //     publishedAt: publishedAt,
+  //     content: content,
+  //     author: author,
+  //     starred: starred,
+  //     readingTime: readingTime,
+  //     feed: feed.toModel(),
+  //   );
+  // }
 }
