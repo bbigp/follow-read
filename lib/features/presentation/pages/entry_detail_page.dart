@@ -6,6 +6,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/features/presentation/providers/entry_detail_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_detail_bottom_bar.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
@@ -97,7 +98,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 12, bottom: 48 + 60),
-                    child: ViewWebsiteButton(),
+                    child: ViewWebsiteButton(url: entry.url),
                   )
                 ],
               ),
@@ -121,8 +122,9 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
               final element = context.node as dom.Element;
               final src = element.attributes['src'] ?? '';
               return GestureDetector(
-                onTap: () async {
-                  await openNetworkImage(src);
+                onTap: () {
+                  logger.i('${src}');
+                  // await openNetworkImage(src);
                 },
                 child: Image.network(
                   src,
