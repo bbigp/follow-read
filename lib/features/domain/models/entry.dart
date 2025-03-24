@@ -64,6 +64,13 @@ class Entry extends BaseUiItem {
     }
   }
 
+  List<String> get allImageUrls {
+    final doc = html.parse(content);
+    return doc.querySelectorAll('img').map((img) {
+      return img.attributes['src'] ?? '';
+    }).where((src) => src.isNotEmpty).toList();
+  }
+
   String get description {
     try {
       final document = html.parse(content);

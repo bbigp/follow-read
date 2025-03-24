@@ -52,6 +52,7 @@ class HttpUtil {
     required T Function(String) fromJson,
     Map<String, String>? headers,
     Map<String, dynamic>? queryParams,
+    dynamic body,
   }) async {
     final startTime = DateTime.now(); // 记录请求开始时间
     final requestId =
@@ -86,9 +87,10 @@ class HttpUtil {
         uri: uri,
         method: method,
         headers: h,
+        body: body,
       ).timeout(const Duration(seconds: _timeoutSeconds));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 400) {
         final result = fromJson(utf8.decode(response.bodyBytes));
         _logRequestSuccess(
           requestId: requestId,

@@ -74,8 +74,31 @@ class ApiClient {
         fromJson: (json) => EntryResponseMapper.fromJson(json));
   }
 
+  //'unread' read removed
+  static Future<Either<Failure, Success>> putEntry(int entryId, String status) async {
+    return await httpUtil.safeRequest(
+        path: 'entries',
+        method: HttpMethod.put,
+        body: {
+          'entry_ids': [entryId],
+          'status': status
+        },
+        fromJson: (json) => Success.fromJson(json)
+    );
+  }
 
 
+
+
+}
+class Success {
+  final bool success;
+
+  Success(this.success);
+
+  factory Success.fromJson(String json) {
+    return Success(true);
+  }
 }
 
 // extension QueryParamConversion on dynamic {

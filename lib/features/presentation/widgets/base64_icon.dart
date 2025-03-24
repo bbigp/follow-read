@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:http/http.dart' show BaseClient, Client, StreamedResponse, BaseRequest;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -105,6 +106,7 @@ class Base64IconState  extends State<Base64Icon> {
       }
       final client = _AuthenticatedHttpClient(headers);
       final response = await client.get(Uri.parse(url));
+      logger.i('下载icon$url}');
       if (response.statusCode != 200) {
         await cache.putFile(
           cacheKey,

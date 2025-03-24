@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
+import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
 import 'package:follow_read/features/presentation/pages/profile_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -57,6 +58,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           return EntryDetailPage(entryId: int.parse(entryId));
         }
       ),
+      GoRoute(
+          path: '/image_gallery',
+        name: RouteNames.imageGallery,
+        builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>;
+            return ImageGalleryPage(imageUrls: data['imageUrls'], initialIndex: data['index'],);
+        }
+      ),
     ],
   );
 });
@@ -70,6 +79,7 @@ class RouteNames {
   static const login = 'login';
   static const entry = 'entry';
   static const entryDetail = 'entryDetail';
+  static const imageGallery = 'imageGallery';
 }
 
 

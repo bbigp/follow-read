@@ -16,6 +16,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:http/http.dart' as http;
 
+import '../../../routes/app_route.dart';
 import '../../domain/models/entry.dart';
 
 class EntryDetailPage extends ConsumerStatefulWidget {
@@ -42,14 +43,13 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(entryDetailProvider.notifier)
-          .fetchEntry(widget.entryId);
+      ref.watch(entryDetailProvider(widget.entryId));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(entryDetailProvider);
+    final state = ref.watch(entryDetailProvider(widget.entryId));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -63,7 +63,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
       body: Stack(
         children: [
           _buildScrollableContent(state.entry),
-          EntryDetailBottomBar(),
+          EntryDetailBottomBar(entryId: state.entry.id),
         ],
       ),
     );
@@ -109,6 +109,13 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
     );
   }
 
+  void openImageGallery(Entry entry, String currentImage){
+    final images = entry.allImageUrls;
+    ref.watch(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
+      "imageUrls": images, "index": images.indexOf(currentImage),
+    });
+  }
+
 
   Widget _buildContent(Entry entry) {
     return Padding(
@@ -123,13 +130,17 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
               final src = element.attributes['src'] ?? '';
               return GestureDetector(
                 onTap: () {
-                  logger.i('${src}');
-                  // await openNetworkImage(src);
+                  openImageGallery(entry, src);
                 },
-                child: Image.network(
-                  src,
+                child: CachedNetworkImage(
+                  imageUrl: src,
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => Icon(Icons.broken_image),
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(color: Colors.white,),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.broken_image),
                 ),
               );
             }
@@ -247,28 +258,33 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
             width: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
-              child: CachedNetworkImage(
-                imageUrl: entry.pic,
-                height: 241,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
+              child: GestureDetector(
+                onTap: () {
+                  openImageGallery(entry, entry.pic);
+                },
+                child: CachedNetworkImage(
+                  imageUrl: entry.pic,
+                  height: 241,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      // width: 18,
+                      height: 241,
+                      color: Colors.white,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
                     // width: 18,
                     height: 241,
-                    color: Colors.white,
+                    color: Colors.grey[300], // 错误时的背景颜色
+                    child: Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 10,
+                    ), // 错误图标
                   ),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  // width: 18,
-                  height: 241,
-                  color: Colors.grey[300], // 错误时的背景颜色
-                  child: Icon(
-                    Icons.error,
-                    color: Colors.red,
-                    size: 10,
-                  ), // 错误图标
                 ),
               ),
             ),

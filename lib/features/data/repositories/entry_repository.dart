@@ -58,6 +58,15 @@ class EntryRepository {
     }).toList();
   }
 
+  Future<bool> updateStatus(int entryId, String status) async {
+    final result = await ApiClient.putEntry(entryId, status);
+    return result.fold((_){
+      return false;
+    }, (_) {
+      return true;
+    });
+  }
+
 
   Future<Entry> getEntry(int entryId) async {
     final entry = await _dao.getEntry(entryId);

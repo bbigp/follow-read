@@ -1,16 +1,21 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../config/theme.dart';
+import '../../../core/utils/logger.dart';
+import '../providers/entry_detail_provider.dart';
 
-class EntryDetailBottomBar extends StatelessWidget{
+class EntryDetailBottomBar extends ConsumerWidget {
 
-  const EntryDetailBottomBar({super.key});
+  final int entryId;
+
+  const EntryDetailBottomBar({super.key, required this.entryId,});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Positioned(
       bottom: 0,
       left: 0,
@@ -66,13 +71,21 @@ class EntryDetailBottomBar extends StatelessWidget{
                                   ),
                                 ),
                                 SizedBox(width: eachSpacing),
-                                SizedBox(
-                                  width: 28,
-                                  height: 28,
-                                  child: SvgPicture.asset(
-                                    'assets/svg/queue.svg',
-                                    width: 24,
-                                    height: 24,
+                                GestureDetector(
+                                  onTap: () async {
+                                    final success = await ref.watch(entryDetailProvider(entryId).notifier).read();
+                                    if (!success) {
+                                      logger.e('read失败$entryId');
+                                    }
+                                  },
+                                  child: SizedBox(
+                                    width: 28,
+                                    height: 28,
+                                    child: SvgPicture.asset(
+                                      'assets/svg/mark_read.svg',
+                                      width: 24,
+                                      height: 24,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: eachSpacing),

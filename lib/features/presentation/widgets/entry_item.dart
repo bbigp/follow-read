@@ -150,26 +150,33 @@ class EntryItem extends ConsumerWidget {
                           padding: EdgeInsets.only(left: 12),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
-                            child: CachedNetworkImage(
-                              imageUrl: entry.pic,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
+                            child: GestureDetector(
+                              onTap: () {
+                                ref.watch(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
+                                  "imageUrls": [entry.pic], "index": 0,
+                                });
+                              },
+                              child: CachedNetworkImage(
+                                imageUrl: entry.pic,
                                 width: 80,
                                 height: 80,
-                                color: Colors.grey[300], // 错误时的背景颜色
-                                child:
-                                Icon(Icons.error, color: Colors.red), // 错误图标
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  width: 80,
+                                  height: 80,
+                                  color: Colors.grey[300], // 错误时的背景颜色
+                                  child:
+                                  Icon(Icons.error, color: Colors.red), // 错误图标
+                                ),
                               ),
                             ),
                           ),
