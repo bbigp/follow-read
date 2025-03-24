@@ -20,6 +20,10 @@ class FeedDetailNotifier extends StateNotifier<FeedDetailState> {
     final feed = await _repository.getFeedById(state.feedId);
     state = state.copyWith(isLoading: false, feed: feed);
   }
+
+  Future<void> updateFeed(v) async{
+    state = state.copyWith(onlyUnread: v);
+  }
 }
 
 
@@ -27,9 +31,10 @@ class FeedDetailState {
   final int feedId;
   final Feed feed;
   final bool isLoading;
+  final bool onlyUnread;
 
   const FeedDetailState({required this.feed, required this.isLoading,
-    required this.feedId,
+    required this.feedId, this.onlyUnread = false,
   });
 
   factory FeedDetailState.empty() =>
@@ -44,11 +49,13 @@ class FeedDetailState {
     Feed? feed,
     bool? isLoading,
     int? feedId,
+    bool? onlyUnread,
   }) {
     return FeedDetailState(
       feed: feed ?? this.feed,
       isLoading: isLoading ?? this.isLoading,
       feedId: feedId ?? this.feedId,
+        onlyUnread: onlyUnread ?? this.onlyUnread,
     );
   }
 }

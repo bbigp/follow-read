@@ -36,6 +36,20 @@ class EntryRepository {
     });
   }
 
+  Future<List<Entry>> getEntriesByFeedId(int feedId) async {
+    final entrys = await _dao.getEntriesByFeedId(feedId);
+    final feedIds = entrys.map((e) => int.parse(e.feedId.toString())).toSet().toList();
+    final feeds = await _feedDao.getFeedsByIds(feedIds);
+    final feedMap = {for (var feed in feeds) feed.id: feed};
+    return entrys.map((entry) {
+      final feed = feedMap[entry.feedId];
+      if (feed != null) {
+        return entry.toModel().copyWith(feed: feed.toModel());
+      }
+      return entry.toModel();
+    }).toList();
+  }
+
   Future<List<Entry>> saveAndReturnData(List<EntryResponse> list) async {
     if (list.isEmpty) {
       return [];

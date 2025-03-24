@@ -30,7 +30,8 @@ class EntriesLoadingNotifier extends StateNotifier<EntryListState> {
         page: 1, size: 10, feedId: feedId,
         hasMore: true, isLoadingMore: false, isInitializing: true,
       );
-      final list = await _entryRepository.getEntries(state.feedId, 1, state.size);
+      // final list = await _entryRepository.getEntries(state.feedId, 1, state.size);
+      final list = await _entryRepository.getEntriesByFeedId(state.feedId);
       state = state.copyWith(
           isInitializing: false,
           uiItems: list.map((item) => UiItem(type: ViewType.entryItem, content: item)).toList(),

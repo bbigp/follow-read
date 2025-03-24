@@ -26,6 +26,10 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     });
   }
 
+  Future<List<EntryEntity>> getEntriesByFeedId(int feedId) async {
+    return await (select(entriesTable)..where((r) => r.feedId.equals(BigInt.from(feedId)))).get();
+  }
+
   Future<List<EntryEntity>> getAllEntries() async {
     return await select(entriesTable).get();
   }

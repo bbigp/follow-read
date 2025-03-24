@@ -10,6 +10,7 @@ class Feed extends BaseUiItem {
   final int unread;
   final int read;
   final String iconUrl;
+  final bool onlyUnread;
 
   Feed({
     required this.id,
@@ -17,12 +18,35 @@ class Feed extends BaseUiItem {
     required this.feedUrl,
     required this.siteUrl,
     required this.title,
+    this.unread = 0,
+    this.read = 0 ,
+    this.iconUrl = "",
+    this.onlyUnread = false,
+  });
+
+  Feed copyWith({
+    int? id,
+    int? userId,
+    String? feedUrl,
+    String? siteUrl,
+    String? title,
     int? unread,
     int? read,
     String? iconUrl,
-  })  : unread = unread ?? 0,
-        read = read ?? 0,
-        iconUrl = iconUrl ?? "";
+    bool? onlyUnread,
+  }) {
+    return Feed(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      feedUrl: feedUrl ?? this.feedUrl,
+      siteUrl: siteUrl ?? this.siteUrl,
+      title: title ?? this.title,
+      unread: unread ?? this.unread,
+      read: read ?? this.read,
+      iconUrl: iconUrl ?? this.iconUrl,
+      onlyUnread: onlyUnread ?? this.onlyUnread,
+    );
+  }
 
   static Feed empty = Feed(id: 0, userId: 0, feedUrl: "", siteUrl: "", title: "");
 }
