@@ -15,9 +15,7 @@ class FeedDetailNotifier extends StateNotifier<FeedDetailState> {
   final FeedRepository repository;
   final int feedId;
   FeedDetailNotifier({required this.repository, required this.feedId,})
-      : super(FeedDetailState.empty()) {
-    fetchFeed();
-  }
+      : super(FeedDetailState.empty());
 
   Future<void> fetchFeed() async {
     logger.i('fetchFeed$feedId');

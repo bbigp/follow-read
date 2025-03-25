@@ -7,21 +7,22 @@ import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
 import 'package:follow_read/features/presentation/widgets/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
+import 'package:follow_read/features/presentation/widgets/svg_icon.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../config/svg_icons.dart';
 import '../../../config/theme.dart';
 import '../../../core/utils/logger.dart';
 import '../../domain/models/entry.dart';
+import '../../domain/models/feed.dart';
 import '../providers/entry_loading_provider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int feedId;
-  final bool onlyShowUnread;
 
   const EntryPage({
     super.key,
     required this.feedId,
-    this.onlyShowUnread = false,
   });
 
   @override
@@ -29,13 +30,16 @@ class EntryPage extends ConsumerStatefulWidget {
 }
 
 class _EntryPageState extends ConsumerState<EntryPage> {
+  // 添加订阅变量用于管理监听器
+  ProviderSubscription<FeedDetailState>? _feedSubscription;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(entriesLoadingProvider(widget.feedId).notifier)
-          .fetchEntries(reset: true);
-      ref.watch(feedDetailProvider(widget.feedId));
+      final state = ref.read(feedDetailProvider(widget.feedId));
+      ref.read(entriesLoadingProvider(widget.feedId).notifier)
+          .fetchEntries(reset: true, onlyShowUnread: state.feed.onlyShowUnread);
     });
     _scrollController.addListener(_scrollListener);
   }
@@ -43,6 +47,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<FeedDetailState>(feedDetailProvider(widget.feedId), (_, state){
+      logger.i('${state.feed.onlyShowUnread}');
+    });
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -50,18 +57,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         automaticallyImplyLeading: true,
         actions: [
           GestureDetector(
-            onTap: () {
-              _showFilterSheet(context);
-            },
-            child: Container(
-              padding: EdgeInsets.only(right: 4),
-              width: 28, height: 28,
-              child: SvgPicture.asset(
-                'assets/svg/more.svg',
-                width: 24,
-                height: 24,
-              ),
-            ),
+            onTap: () => _showFilterSheet(context),
+            child: Padding(padding: EdgeInsets.only(right: 4), child: SvgIcon(SvgIcons.more),),
           ),
           // _buildRefreshButton(ref, feedsState.isSyncing),
           const SizedBox(width: 12),
