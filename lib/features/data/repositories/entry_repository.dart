@@ -15,10 +15,11 @@ class EntryRepository {
   EntryRepository({required EntryDao dao, required FeedDao feedDao,})
       : _dao = dao, _feedDao = feedDao ;
 
-  Future<List<Entry>> getEntries(int feedId, int page, int size) async {
+  Future<List<Entry>> getEntries(int feedId, int page, int size, {bool onlyShowUnread = false}) async {
+    List<String> status = onlyShowUnread ? ["unread"] : ["unread", "read"];
     final stopwatch = Stopwatch();
     stopwatch.start();
-    final result = await ApiClient.getEntries(feedId, page: page, size: size);
+    final result = await ApiClient.getEntries(feedId, page: page, size: size, status: status);
     stopwatch.stop();
     final requestTime = stopwatch.elapsedMilliseconds;
     logger.i('🕒 网络请求耗时: ${requestTime}ms');

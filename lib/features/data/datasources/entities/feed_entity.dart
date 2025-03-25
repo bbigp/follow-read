@@ -19,6 +19,11 @@ class FeedsTable extends Table {
   TextColumn get iconUrl => text().named('icon_url')
     .withDefault(const Constant(""))();
 
+  BoolColumn get onlyShowUnread => boolean().named('only_show_unread')
+      .withDefault(const Constant(false))();
+  BoolColumn get showReadingTime => boolean().named('show_reading_time')
+      .withDefault(const Constant(false))();
+
   @override
   Set<Column> get primaryKey => {id};
 
@@ -35,6 +40,8 @@ extension FeedEntityConversion on FeedEntity {
       read: read,
       unread: unread,
       iconUrl: iconUrl,
+      onlyShowUnread: onlyShowUnread,
+      showReadingTime: showReadingTime,
     );
   }
 }

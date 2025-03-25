@@ -71,7 +71,9 @@ class _ImageGalleryPageState extends State<ImageGalleryPage> {
                 maxScale: PhotoViewComputedScale.covered * 2,
               );
             },
-            scrollPhysics: const BouncingScrollPhysics(),
+            scrollPhysics: widget.imageUrls.length > 1
+                ? const BouncingScrollPhysics()
+                : const NeverScrollableScrollPhysics(),
             onPageChanged: (index) {
               setState(() {
                 _currentVirtualIndex = index;

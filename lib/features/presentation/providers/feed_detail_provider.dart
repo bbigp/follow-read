@@ -1,45 +1,49 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/logger.dart';
 import '../../data/repositories/feed_repository.dart';
 import '../../domain/models/feed.dart';
 import 'app_container.dart';
 
-final feedDetailProvider = StateNotifierProvider<FeedDetailNotifier, FeedDetailState>((ref) {
-  return FeedDetailNotifier(repository: ref.watch(feedRepositoryProvider));
+final feedDetailProvider = StateNotifierProvider.autoDispose.family<FeedDetailNotifier, FeedDetailState, int>((ref, feedId) {
+  return FeedDetailNotifier(feedId: feedId, repository: ref.watch(feedRepositoryProvider));
 });
 
 class FeedDetailNotifier extends StateNotifier<FeedDetailState> {
 
-  final FeedRepository _repository;
-  FeedDetailNotifier({required FeedRepository repository})
-      : _repository = repository, super(FeedDetailState.empty());
+  final FeedRepository repository;
+  final int feedId;
+  FeedDetailNotifier({required this.repository, required this.feedId,})
+      : super(FeedDetailState.empty()) {
+    fetchFeed();
+  }
 
-  Future<void> fetchFeed(int feedId) async {
-    state = state.copyWith(isLoading: true, feedId: feedId);
-    final feed = await _repository.getFeedById(state.feedId);
+  Future<void> fetchFeed() async {
+    logger.i('fetchFeed$feedId');
+    state = state.copyWith(isLoading: true);
+    final feed = await repository.getFeedById(feedId);
     state = state.copyWith(isLoading: false, feed: feed);
   }
 
-  Future<void> updateFeed(v) async{
-    state = state.copyWith(onlyUnread: v);
+  Future<void> saveShow({bool? onlyShowUnread, bool? showReadingTime}) async{
+    final success = await repository.updateShow(feedId, onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime);
+    if (success) {
+      state = state.copyWith(feed: state.feed.copyWith(onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime));
+    }
   }
 }
 
 
 class FeedDetailState {
-  final int feedId;
   final Feed feed;
   final bool isLoading;
-  final bool onlyUnread;
 
   const FeedDetailState({required this.feed, required this.isLoading,
-    required this.feedId, this.onlyUnread = false,
   });
 
   factory FeedDetailState.empty() =>
       FeedDetailState(
-        feedId: 0,
         feed: Feed.empty,
         isLoading: false,
       );
@@ -48,14 +52,10 @@ class FeedDetailState {
   FeedDetailState copyWith({
     Feed? feed,
     bool? isLoading,
-    int? feedId,
-    bool? onlyUnread,
   }) {
     return FeedDetailState(
       feed: feed ?? this.feed,
       isLoading: isLoading ?? this.isLoading,
-      feedId: feedId ?? this.feedId,
-        onlyUnread: onlyUnread ?? this.onlyUnread,
     );
   }
 }

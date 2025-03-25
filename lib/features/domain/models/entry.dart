@@ -18,8 +18,6 @@ class Entry extends BaseUiItem {
   final Feed feed;
   final String summary;
 
-  final bool showReadingTime;
-
   Entry({
     required this.id,
     required this.title,
@@ -34,7 +32,6 @@ class Entry extends BaseUiItem {
     bool? starred,
     int? readingTime,
     Feed? feed,
-    bool? showReadingTime,
     String? summary,
   })  : userId = userId ?? 0,
         feedId = feedId ?? 0,
@@ -46,7 +43,6 @@ class Entry extends BaseUiItem {
         starred = starred ?? false,
         readingTime = readingTime ?? 0,
         feed = feed ?? Feed.empty,
-        showReadingTime = showReadingTime ?? false,
         summary = summary ?? "";
 
   String get pic {
@@ -62,6 +58,10 @@ class Entry extends BaseUiItem {
     } catch (e) {
       return "";
     }
+  }
+
+  bool get isUnread {
+    return status == 'unread';
   }
 
   List<String> get allImageUrls {
@@ -88,7 +88,7 @@ class Entry extends BaseUiItem {
     }
   }
 
-  int get tilteLines {
+  int getTilteLines(bool showReadingTime) {
     if (showReadingTime) {
       if (pic != '' && description == '') {
         return 2;
@@ -115,7 +115,6 @@ class Entry extends BaseUiItem {
     int? readingTime,
     String? pic,
     Feed? feed,
-    bool? showReadingTime,
     String? summary,
   }) {
     return Entry(
@@ -132,7 +131,6 @@ class Entry extends BaseUiItem {
       starred: starred ?? this.starred,
       readingTime: readingTime ?? this.readingTime,
       feed: feed ?? this.feed,
-      showReadingTime: showReadingTime ?? this.showReadingTime,
       summary: summary ?? this.summary,
     );
   }

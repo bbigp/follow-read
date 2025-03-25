@@ -43,6 +43,10 @@ class FeedRepository {
     return (await _feedDao.getFeedById(feedId)).toModel();
   }
 
+  Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime}) async {
+    return await _feedDao.updateShow(feedId, onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime);
+  }
+
   Future<List<Feed>> getFeeds() async {
     final feeds = await _feedDao.getAllFeeds();
     logger.i('查询到本地feeds: ${feeds.length}');

@@ -56,4 +56,20 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     });
   }
 
+  Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime}) async {
+    final affectedRows = await (update(feedsTable)
+      ..where((t) => t.id.equals(BigInt.from(feedId)))
+    ).write(
+      FeedsTableCompanion(
+        onlyShowUnread: onlyShowUnread != null
+            ? Value(onlyShowUnread)
+            : const Value.absent(),
+        showReadingTime: showReadingTime != null
+            ? Value(showReadingTime)
+            : const Value.absent(),
+      ),
+    );
+    return affectedRows > 0;
+  }
+
 }

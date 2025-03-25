@@ -69,11 +69,18 @@ class HttpUtil {
       final (baseUrl, token) = await _getAuthInfo();
       final isAbsolutePath = path.startsWith("http");
       var uri = isAbsolutePath ? Uri.parse(path) : Uri.parse(buildPath(baseUrl, path));
-      final encodedParams = _encodeQueryParams(queryParams);
-      uri = uri.replace(queryParameters: {
-        ...uri.queryParameters, // 保留路径中已有的参数
-        ...encodedParams,       // 添加新参数
-      });
+
+    final existingParams = _parseMultiParams(uri.query); // 解析已有参数
+    final newParams = _encodeMultiParams(queryParams);  // 编码新参数
+    final mergedParams = _mergeParams(existingParams, newParams); // 合并参数
+    uri = uri.replace(query: mergedParams.join('&')); // 重建查询字符串
+
+
+      // final encodedParams = _encodeQueryParams(queryParams);
+      // uri = uri.replace(queryParameters: {
+      //   ...uri.queryParameters, // 保留路径中已有的参数
+      //   ...encodedParams,       // 添加新参数
+      // });
 
       var h = defaultHeaders;
       if (headers != null) {
@@ -82,6 +89,7 @@ class HttpUtil {
       if (token != "") {
         h = buildHeaders(h, token);
       }
+      logger.i('$uri');
 
       final response = await FollowRequest.sendRequest(
         uri: uri,
@@ -143,6 +151,31 @@ class HttpUtil {
       );
       return Left(Failure(error.code, error.error));
     }
+  }
+
+  List<String> _parseMultiParams(String query) {
+    return query.split('&').where((s) => s.isNotEmpty).toList();
+  }
+
+  /// 合并新旧参数（保留所有同名参数）
+  List<String> _mergeParams(List<String> existing, List<String> newParams) {
+    return [...existing, ...newParams];
+  }
+
+  /// 将Map参数编码为多值字符串列表
+  List<String> _encodeMultiParams(Map<String, dynamic>? params) {
+    final List<String> result = [];
+    params?.forEach((key, value) {
+      final encodedKey = Uri.encodeQueryComponent(key);
+      if (value is Iterable) {
+        for (final item in value) {
+          result.add('$encodedKey=${Uri.encodeQueryComponent(item.toString())}');
+        }
+      } else {
+        result.add('$encodedKey=${Uri.encodeQueryComponent(value.toString())}');
+      }
+    });
+    return result;
   }
 
   Map<String, String> _encodeQueryParams(Map<String, dynamic>? params) {

@@ -49,14 +49,14 @@ class ApiClient {
   }
 
   static Future<Either<Failure, EntryPageResponse>> getEntries(int feedId, {
-    int page = 1, int size = 10,
+    int page = 1, int size = 10, List<String> status = const ["unread"],
   }) async {
     return await httpUtil.safeRequest(
-        path: 'feeds/$feedId/entries',
+        path: 'feeds/$feedId/entries' ,
         method: HttpMethod.get,
         queryParams: {
           'limit': size, 'offset': (page -1) * size,
-          'status': 'unread',
+          'status': status,
           'order': 'published_at',//"id", "status", "changed_at", "published_at", "created_at", "category_title", "category_id", "title", "author"
           'direction': 'desc', //desc asc
           // 'category_id': null,

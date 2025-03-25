@@ -10,7 +10,8 @@ class Feed extends BaseUiItem {
   final int unread;
   final int read;
   final String iconUrl;
-  final bool onlyUnread;
+  final bool onlyShowUnread;
+  final bool showReadingTime;
 
   Feed({
     required this.id,
@@ -21,7 +22,8 @@ class Feed extends BaseUiItem {
     this.unread = 0,
     this.read = 0 ,
     this.iconUrl = "",
-    this.onlyUnread = false,
+    this.onlyShowUnread = false,
+    this.showReadingTime = false,
   });
 
   Feed copyWith({
@@ -33,7 +35,8 @@ class Feed extends BaseUiItem {
     int? unread,
     int? read,
     String? iconUrl,
-    bool? onlyUnread,
+    bool? onlyShowUnread,
+    bool? showReadingTime,
   }) {
     return Feed(
       id: id ?? this.id,
@@ -44,7 +47,8 @@ class Feed extends BaseUiItem {
       unread: unread ?? this.unread,
       read: read ?? this.read,
       iconUrl: iconUrl ?? this.iconUrl,
-      onlyUnread: onlyUnread ?? this.onlyUnread,
+      onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+        showReadingTime: showReadingTime ?? this.showReadingTime,
     );
   }
 

@@ -3,25 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/svg_icon.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../config/svg_icons.dart';
 import '../../../config/theme.dart';
 import '../../domain/models/entry.dart';
+import '../../domain/models/feed.dart';
 
 class EntryItem extends ConsumerWidget {
   final Entry entry;
+  final Feed feed;
 
   const EntryItem({
-    required this.entry,
     super.key,
+    required this.entry,
+    required this.feed,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return _buildContent(ref);
+  }
+
+  Widget _buildContent(WidgetRef ref){
     return Column(
       children: [
-        Padding(
+        Container(
           padding: EdgeInsets.all(16),
           child: GestureDetector(
             onTap: () {
@@ -92,17 +101,17 @@ class EntryItem extends ConsumerWidget {
                               ),
                               child: Text(
                                 entry.title,
-                                maxLines: entry.tilteLines,
+                                maxLines: entry.getTilteLines(feed.showReadingTime),
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                   height: 1.33,
-                                  color: AppTheme.black95,
+                                  color: entry.isUnread ? AppTheme.black95 : AppTheme.black25,
                                 ),
                               ),
                             ),
-                            if (entry.showReadingTime)
+                            if (feed.showReadingTime)
                               Padding(
                                 padding: EdgeInsets.only(bottom: 4),
                                 child: SizedBox(
@@ -111,11 +120,7 @@ class EntryItem extends ConsumerWidget {
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.only(right: 4),
-                                        child: Icon(
-                                          Icons.access_time,
-                                          size: 14,
-                                          color: AppTheme.black50,
-                                        ),
+                                        child: SvgIcon(SvgIcons.reading_time, size: 14, iconSize: 14,),
                                       ),
                                       Text(
                                         '${entry.readingTime}',
