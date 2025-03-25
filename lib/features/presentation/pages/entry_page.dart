@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/features/presentation/providers/feed_detail_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
@@ -30,26 +29,28 @@ class EntryPage extends ConsumerStatefulWidget {
 }
 
 class _EntryPageState extends ConsumerState<EntryPage> {
-  // 添加订阅变量用于管理监听器
-  ProviderSubscription<FeedDetailState>? _feedSubscription;
+  bool? _lastUsedUnreadFlag;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final state = ref.read(feedDetailProvider(widget.feedId));
-      ref.read(entriesLoadingProvider(widget.feedId).notifier)
-          .fetchEntries(reset: true, onlyShowUnread: state.feed.onlyShowUnread);
-    });
     _scrollController.addListener(_scrollListener);
+    ref.listenManual(feedDetailProvider(widget.feedId), (previousState, state) {
+      state.whenData((feed) {
+        if (_lastUsedUnreadFlag != null && _lastUsedUnreadFlag != feed.onlyShowUnread) {
+          logger.i('listenManual$_lastUsedUnreadFlag');
+          _lastUsedUnreadFlag = feed.onlyShowUnread;
+          ref.read(entriesLoadingProvider(widget.feedId).notifier)
+              .fetchEntries(reset: true, onlyShowUnread: feed.onlyShowUnread);
+        }
+      });
+    });
   }
 
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<FeedDetailState>(feedDetailProvider(widget.feedId), (_, state){
-      logger.i('${state.feed.onlyShowUnread}');
-    });
+    final feedAsync = ref.watch(feedDetailProvider(widget.feedId));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -58,23 +59,38 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         actions: [
           GestureDetector(
             onTap: () => _showFilterSheet(context),
-            child: Padding(padding: EdgeInsets.only(right: 4), child: SvgIcon(SvgIcons.more),),
+            child: Padding(
+              padding: EdgeInsets.only(right: 4),
+              child: SvgIcon(SvgIcons.more),
+            ),
           ),
           // _buildRefreshButton(ref, feedsState.isSyncing),
           const SizedBox(width: 12),
         ],
       ),
-      body: ref.watch(entriesLoadingProvider(widget.feedId).select((state) => state.isInitializing))
-          ? _buildSmartSkeleton()
-          : _buildListView(),
+      body: feedAsync.when(
+          data: (feed) {
+            if (_lastUsedUnreadFlag == null) {
+              logger.i('build$_lastUsedUnreadFlag');
+              _lastUsedUnreadFlag = feed.onlyShowUnread;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ref.read(entriesLoadingProvider(widget.feedId).notifier)
+                      .fetchEntries(reset: true, onlyShowUnread: feed.onlyShowUnread);
+              });
+            }
+            return ref.watch(entriesLoadingProvider(widget.feedId).select((state) => state.isInitializing))
+                ? _buildSmartSkeleton() : _buildListView(feed);
+          },
+          error: (error, stack) => _noContentYet(),
+          loading: () => _buildSmartSkeleton()),
     );
   }
-
 
   void _showFilterSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,   // 允许内容高度超过屏幕70%
+      isScrollControlled: true,
+      // 允许内容高度超过屏幕70%
       backgroundColor: AppTheme.white85,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -100,8 +116,16 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                     // _buildSortOptions(setState),  RadioListTile
                     // 附加选项
                     // SizedBox(height: 16,),
-                    Padding(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16), child: FeedSwitch(feedId: widget.feedId,),),
-                    SizedBox(height: 21,)
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      child: FeedSwitch(
+                        feedId: widget.feedId,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 21,
+                    )
                   ],
                 ),
               );
@@ -150,10 +174,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
   final ScrollController _scrollController = ScrollController();
 
-
-  Widget _buildListView(){
+  Widget _buildListView(Feed feed) {
     final state = ref.watch(entriesLoadingProvider(widget.feedId));
-    final feed = ref.watch(feedDetailProvider(widget.feedId).select((state) => state.feed),);
     return RefreshIndicator(
         onRefresh: () async {
           ref.watch(entriesLoadingProvider(widget.feedId).notifier)
@@ -165,7 +187,10 @@ class _EntryPageState extends ConsumerState<EntryPage> {
             itemCount: state.uiItems.length + 2,
             itemBuilder: (context, index) {
               if (index == 0) {
-                return FeedHeader(title: feed.title, unread: feed.unread,);
+                return FeedHeader(
+                  title: feed.title,
+                  unread: feed.unread,
+                );
               }
               if (index - 1 >= state.uiItems.length) {
                 if (state.isInitializing) {
@@ -173,11 +198,10 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                 }
                 return state.hasMore ? LoadingMore() : NoMoreLoading();
               }
-              return EntryItem(entry: state.uiItems[index - 1].content as Entry, feed: feed);
+              return EntryItem(
+                  entry: state.uiItems[index - 1].content as Entry, feed: feed);
             }));
   }
-
-
 
   Widget _buildSmartSkeleton() {
     return Shimmer.fromColors(
@@ -192,7 +216,6 @@ class _EntryPageState extends ConsumerState<EntryPage> {
       ),
     );
   }
-
 
   Widget _noContentYet() {
     final screenHeight = MediaQuery.of(context).size.height;
