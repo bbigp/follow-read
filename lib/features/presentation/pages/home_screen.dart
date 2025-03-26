@@ -116,3 +116,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           );
   }
 }
+
+
+
+// // 在页面A的 State 类中添加
+// @override
+// void didChangeDependencies() {
+//   super.didChangeDependencies();
+//
+//   // 监听路由变化
+//   final route = ModalRoute.of(context);
+//   if (route != null) {
+//     routeObserver.subscribe(this, route);
+//   }
+// }
+//
+// @override
+// void didPopNext() {
+//   // 当从其他页面返回时验证数据
+//   ref.invalidate(itemListProvider); // 可选：强制刷新数据
+// }

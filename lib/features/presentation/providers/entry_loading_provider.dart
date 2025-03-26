@@ -3,6 +3,7 @@
 
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/models/ui_item.dart';
 
 import '../../data/repositories/entry_repository.dart';
@@ -50,6 +51,21 @@ class EntriesLoadingNotifier extends StateNotifier<AsyncValue<EntryListState>> {
           hasMore: list.length >= pageSize,
       ));
     }
+  }
+
+  Future<void> updateRead(int entryId, String status) async {
+    final index = state.value!.uiItems.indexWhere((item){
+      if (item.type != ViewType.entryItem) {
+        return false;
+      }
+      return (item.content as Entry).id == entryId;
+    });
+    if (index == -1) {
+      return;
+    }
+    final newList = List<UiItem>.from(state.value!.uiItems);
+    newList[index] = UiItem(type: ViewType.entryItem, content: (state.value!.uiItems[index].content as Entry).copyWith(status: status));
+    state = AsyncData(state.value!.copyWith(uiItems: newList));
   }
 
 

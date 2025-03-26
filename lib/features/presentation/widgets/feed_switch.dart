@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svg_icons.dart';
+import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../config/theme.dart';
@@ -61,6 +62,7 @@ class FeedSwitch extends ConsumerWidget {
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // 调整点击区域
                           onChanged: (v) {
                             ref.read(feedDetailProvider(feedId).notifier).saveShow(onlyShowUnread: v);
+                            ref.read(feedLoadingProvider.notifier).getFeeds();
                           },
                         ),
                       )

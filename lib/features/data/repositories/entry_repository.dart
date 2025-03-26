@@ -77,7 +77,8 @@ class EntryRepository {
     final result = await ApiClient.putEntry(entryId, status);
     return result.fold((_){
       return false;
-    }, (_) {
+    }, (_) async {
+      await _dao.updateStatus(entryId, status: status);
       return true;
     });
   }

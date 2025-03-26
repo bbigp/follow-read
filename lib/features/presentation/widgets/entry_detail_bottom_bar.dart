@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/features/presentation/providers/entry_loading_provider.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../config/theme.dart';
@@ -11,8 +12,9 @@ import '../providers/entry_detail_provider.dart';
 class EntryDetailBottomBar extends ConsumerWidget {
 
   final int entryId;
+  final int feedId;
 
-  const EntryDetailBottomBar({super.key, required this.entryId,});
+  const EntryDetailBottomBar({super.key, required this.entryId, required this.feedId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,7 +76,9 @@ class EntryDetailBottomBar extends ConsumerWidget {
                                 GestureDetector(
                                   onTap: () async {
                                     final success = await ref.watch(entryDetailProvider(entryId).notifier).read();
-                                    if (!success) {
+                                    if (success) {
+                                      ref.watch(entriesLoadingProvider(feedId).notifier).updateRead(entryId, 'read');
+                                    } else {
                                       logger.e('read失败$entryId');
                                     }
                                   },

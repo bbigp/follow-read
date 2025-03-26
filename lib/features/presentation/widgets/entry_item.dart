@@ -71,7 +71,6 @@ class EntryItem extends ConsumerWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 25,
                         child: Text(
                           entry.publishedAt.toShowTime(),
                           style: TextStyle(

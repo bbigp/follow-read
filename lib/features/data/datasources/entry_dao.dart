@@ -43,4 +43,15 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return await (select(entriesTable)..where((t) => t.id.equals(BigInt.from(entryId)))).getSingleOrNull();
   }
 
+  Future<bool> updateStatus(int entryId, {String? status}) async {
+    final affectedRows = await (update(entriesTable)
+      ..where((t) => t.id.equals(BigInt.from(entryId)))
+    ).write(
+      EntriesTableCompanion(
+        status: status != null ? Value(status) : const Value.absent(),
+      )
+    );
+    return affectedRows > 0;
+  }
+
 }
