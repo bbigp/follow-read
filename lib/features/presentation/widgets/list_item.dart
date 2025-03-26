@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
 import '../../../config/theme.dart';
 import '../../domain/models/listx.dart';
@@ -22,7 +23,7 @@ class ListItem extends ConsumerWidget {
             horizontalTitleGap: 12,
             // 图标与标题的水平间距（默认16）
             onTap: () {},
-            leading: Icon(list.iconData, size: 24, color: AppTheme.black50,),
+            leading: Svgicon(list.svgicon),
             title: Text(list.title,
                 maxLines: 1,
                 style: const TextStyle(

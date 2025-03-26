@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/listx.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
+import '../../../config/svgicons.dart';
 import '../../data/repositories/feed_repository.dart';
 import '../../domain/models/ui_item.dart';
 
@@ -39,19 +40,19 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
   }
 
   List<UiItem> firstPage(){
-    final all = Listx(title: '全部', unread: 90, iconData: Icons.ac_unit);
-    final read = Listx(title: '近期已读', iconData: Icons.history,);
-    final star = Listx(title: '星标', iconData: Icons.star_border,);
-    final unread = Listx(title: '未读', iconData: Icons.circle_outlined,);
-    final today = Listx(title: '今日', iconData: Icons.calendar_today_outlined,);
+    // final all = Listx(title: '全部', unread: 90, svgicon: Svgicons.ac_unit);
+    final read = Listx(title: '近期已读', svgicon: Svgicons.markRead,);
+    final star = Listx(title: '星标', svgicon: Svgicons.addCollection,);
+    final unread = Listx(title: '未读', svgicon: Svgicons.markUnread,);
+    // final today = Listx(title: '今日', svgicon: Svgicons.calendar_today_outlined,);
 
     return [
       UiItem(type: ViewType.groupTitleItem, content: TitleUiData(title: '智能视图')),
-      UiItem(type: ViewType.listItem, content: all),
+      // UiItem(type: ViewType.listItem, content: all),
       UiItem(type: ViewType.listItem, content: read),
       UiItem(type: ViewType.listItem, content: star),
       UiItem(type: ViewType.listItem, content: unread),
-      UiItem(type: ViewType.listItem, content: today),
+      // UiItem(type: ViewType.listItem, content: today),
       UiItem(type: ViewType.divider32, content: EmptyUiData()),
       UiItem(type: ViewType.groupTitleItem, content: TitleUiData(title: '订阅源')),
     ];
