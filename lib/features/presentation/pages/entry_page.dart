@@ -201,8 +201,11 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                 }
                 return state.value!.hasMore ? LoadingMore() : NoMoreLoading();
               }
-              return EntryItem(
-                  entry: state.value!.uiItems[index - 1].content as Entry, feed: feed);
+              final entry = state.value!.uiItems[index - 1].content as Entry;
+              return Opacity(
+                opacity: entry.isUnread ? 1.0 : 0.5,
+                child: EntryItem(entry: entry, feed: feed),
+              );
             }));
   }
 

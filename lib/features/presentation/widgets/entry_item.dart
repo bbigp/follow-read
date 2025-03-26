@@ -27,7 +27,7 @@ class EntryItem extends ConsumerWidget {
     return _buildContent(ref);
   }
 
-  Widget _buildContent(WidgetRef ref){
+  Widget _buildContent(WidgetRef ref) {
     return Column(
       children: [
         Container(
@@ -100,13 +100,14 @@ class EntryItem extends ConsumerWidget {
                               ),
                               child: Text(
                                 entry.title,
-                                maxLines: entry.getTilteLines(feed.showReadingTime),
+                                maxLines:
+                                    entry.getTilteLines(feed.showReadingTime),
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                   height: 1.33,
-                                  color: entry.isUnread ? AppTheme.black95 : AppTheme.black25,
+                                  color: AppTheme.black95,
                                 ),
                               ),
                             ),
@@ -119,7 +120,11 @@ class EntryItem extends ConsumerWidget {
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.only(right: 4),
-                                        child: SvgIcon(SvgIcons.readingTime, size: 14, iconSize: 14,),
+                                        child: SvgIcon(
+                                          SvgIcons.readingTime,
+                                          size: 14,
+                                          iconSize: 14,
+                                        ),
                                       ),
                                       Text(
                                         '${entry.readingTime}',
@@ -156,8 +161,11 @@ class EntryItem extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(8.0),
                             child: GestureDetector(
                               onTap: () {
-                                ref.watch(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
-                                  "imageUrls": [entry.pic], "index": 0,
+                                ref
+                                    .watch(routerProvider)
+                                    .pushNamed(RouteNames.imageGallery, extra: {
+                                  "imageUrls": [entry.pic],
+                                  "index": 0,
                                 });
                               },
                               child: CachedNetworkImage(
@@ -165,7 +173,8 @@ class EntryItem extends ConsumerWidget {
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => Shimmer.fromColors(
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
                                   baseColor: Colors.grey[300]!,
                                   highlightColor: Colors.grey[100]!,
                                   child: Container(
@@ -178,8 +187,8 @@ class EntryItem extends ConsumerWidget {
                                   width: 80,
                                   height: 80,
                                   color: Colors.grey[300], // 错误时的背景颜色
-                                  child:
-                                  Icon(Icons.error, color: Colors.red), // 错误图标
+                                  child: Icon(Icons.error,
+                                      color: Colors.red), // 错误图标
                                 ),
                               ),
                             ),
@@ -246,7 +255,9 @@ class SkeletonEntryItem extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: 0,),
+                            padding: EdgeInsets.only(
+                              top: 0,
+                            ),
                             child: Container(
                               width: 154,
                               height: 14,
@@ -262,7 +273,9 @@ class SkeletonEntryItem extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 6,),
+                            padding: EdgeInsets.only(
+                              top: 6,
+                            ),
                             child: Container(
                               width: 134,
                               height: 12,
