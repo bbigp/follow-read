@@ -9,4 +9,7 @@ class Svgicons {
   static const String markUnread = "assets/svg/mark_unread.svg";
   static const String addCollection = "assets/svg/add_collection.svg";
   static const String removeCollection = "assets/svg/remove_collection.svg";
+  static const String all = "assets/svg/all_entry.svg";
+  static const String today = "assets/svg/today.svg";
+
 }
