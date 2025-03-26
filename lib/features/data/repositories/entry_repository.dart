@@ -84,7 +84,7 @@ class EntryRepository {
   }
 
   Future<bool> starred(int entryId, bool starred) async {
-    final result = await ApiClient.starred(entryId, starred);
+    final result = await ApiClient.starred(entryId);
     return result.fold((_){
       return false;
     }, (_) async {
