@@ -89,7 +89,7 @@ class HttpUtil {
       if (token != "") {
         h = buildHeaders(h, token);
       }
-      logger.i('$uri');
+      // logger.i('$uri');
 
       final response = await FollowRequest.sendRequest(
         uri: uri,
@@ -178,26 +178,26 @@ class HttpUtil {
     return result;
   }
 
-  Map<String, String> _encodeQueryParams(Map<String, dynamic>? params) {
-    return params?.map((key, value) {
-      if (value == null) return MapEntry(key, '');
+  // Map<String, String> _encodeQueryParams(Map<String, dynamic>? params) {
+  //   return params?.map((key, value) {
+  //     if (value == null) return MapEntry(key, '');
+  //
+  //     // 处理列表类型参数 (根据API需求选择逗号分隔或多参数)
+  //     if (value is Iterable) {
+  //       return MapEntry(key, value.map((e) => _valueToString(e)).join(','));
+  //     }
+  //
+  //     return MapEntry(key, _valueToString(value));
+  //   }) ?? {};
+  // }
 
-      // 处理列表类型参数 (根据API需求选择逗号分隔或多参数)
-      if (value is Iterable) {
-        return MapEntry(key, value.map((e) => _valueToString(e)).join(','));
-      }
-
-      return MapEntry(key, _valueToString(value));
-    }) ?? {};
-  }
-
-  String _valueToString(dynamic value) {
-    if (value is String) return value;
-    if (value is bool) return value.toString();
-    if (value is num) return value.toString();
-    if (value is DateTime) return value.toIso8601String();
-    throw ArgumentError('Unsupported query parameter type: ${value.runtimeType}');
-  }
+  // String _valueToString(dynamic value) {
+  //   if (value is String) return value;
+  //   if (value is bool) return value.toString();
+  //   if (value is num) return value.toString();
+  //   if (value is DateTime) return value.toIso8601String();
+  //   throw ArgumentError('Unsupported query parameter type: ${value.runtimeType}');
+  // }
 
   static void Function(ApiException) handleGlobalError = (e) {
     // print('全局错误: ${e.message}');

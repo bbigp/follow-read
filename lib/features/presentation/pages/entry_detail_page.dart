@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,15 +5,12 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/features/presentation/providers/entry_detail_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_detail_bottom_bar.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
 import 'package:follow_read/features/presentation/widgets/view_website_button.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:http/http.dart' as http;
 
 import '../../../routes/app_route.dart';
 import '../../domain/models/entry.dart';
@@ -160,28 +156,6 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
         },
       ),
     );
-  }
-
-  Future<void> openNetworkImage(String imageUrl) async {
-    try {
-      // 1. 下载网络图片
-      final response = await http.get(Uri.parse(imageUrl));
-      if (response.statusCode != 200) {
-        throw Exception('下载失败: HTTP ${response.statusCode}');
-      }
-
-      // 2. 保存到临时文件
-      final tempDir = await getTemporaryDirectory();
-      final fileName = imageUrl.split('/').last; // 从URL提取文件名
-      final filePath = '${tempDir.path}/$fileName';
-      final file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes);
-
-      // 3. 用系统应用打开文件
-      // await OpenFile.open(filePath);
-    } catch (e) {
-      print('操作失败: $e');
-    }
   }
 
   Widget _buildTitle(Entry entry) {

@@ -11,17 +11,18 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../config/svg_icons.dart';
 import '../../../config/theme.dart';
-import '../../../core/utils/logger.dart';
 import '../../domain/models/entry.dart';
 import '../../domain/models/feed.dart';
 import '../providers/entry_loading_provider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int feedId;
+  final bool onlyShowUnread;
 
   const EntryPage({
     super.key,
     required this.feedId,
+    required this.onlyShowUnread,
   });
 
   @override
@@ -30,27 +31,33 @@ class EntryPage extends ConsumerStatefulWidget {
 
 class _EntryPageState extends ConsumerState<EntryPage> {
   bool? _lastUsedUnreadFlag;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener);
-    ref.listenManual(feedDetailProvider(widget.feedId), (previousState, state) {
-      state.whenData((feed) {
-        if (_lastUsedUnreadFlag != null && _lastUsedUnreadFlag != feed.onlyShowUnread) {
-          logger.i('listenManual$_lastUsedUnreadFlag');
-          _lastUsedUnreadFlag = feed.onlyShowUnread;
-          ref.read(entriesLoadingProvider(widget.feedId).notifier)
-              .fetchEntries(reset: true, onlyShowUnread: feed.onlyShowUnread);
-        }
+    if (_lastUsedUnreadFlag == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _lastUsedUnreadFlag = widget.onlyShowUnread;
+        ref.watch(entriesLoadingProvider(widget.feedId).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
+        ref.watch(feedDetailProvider(widget.feedId).notifier).fetchFeed();
       });
+    }
+    ref.listenManual(feedDetailProvider(widget.feedId), (_, current){
+      final currentUnread = current.value?.onlyShowUnread;
+      if (_lastUsedUnreadFlag != null && currentUnread != null && _lastUsedUnreadFlag != currentUnread) {
+        _lastUsedUnreadFlag = currentUnread;
+        ref.watch(entriesLoadingProvider(widget.feedId).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
+      }
     });
+    _scrollController.addListener(_scrollListener);
   }
 
 
   @override
   Widget build(BuildContext context) {
     final feedAsync = ref.watch(feedDetailProvider(widget.feedId));
+    final entriesAsync = ref.watch(entriesLoadingProvider(widget.feedId));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -69,20 +76,16 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         ],
       ),
       body: feedAsync.when(
-          data: (feed) {
-            if (_lastUsedUnreadFlag == null) {
-              logger.i('build$_lastUsedUnreadFlag');
-              _lastUsedUnreadFlag = feed.onlyShowUnread;
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ref.read(entriesLoadingProvider(widget.feedId).notifier)
-                      .fetchEntries(reset: true, onlyShowUnread: feed.onlyShowUnread);
-              });
-            }
-            return ref.watch(entriesLoadingProvider(widget.feedId).select((state) => state.isInitializing))
-                ? _buildSmartSkeleton() : _buildListView(feed);
-          },
-          error: (error, stack) => _noContentYet(),
-          loading: () => _buildSmartSkeleton()),
+        data: (feed) {
+          return entriesAsync.when(
+              data: (state) => state.isInitializing ? _buildSmartSkeleton() : _buildListView(feed),
+              error: (error, stack) => _noContentYet(),
+              loading: () => const SizedBox.shrink(),
+          );
+        },
+        error: (error, stack) => _noContentYet(),
+        loading: () => _buildSmartSkeleton(),
+      ),
     );
   }
 
@@ -157,11 +160,11 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     // 空列表或未加载完成时直接返回
     if (position.maxScrollExtent <= 0) return;
 
-    if (state.hasMore &&
-        !state.isLoadingMore &&
+    if (state.value!.hasMore && !state.value!.isLoadingMore &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200) {
-      ref.watch(entriesLoadingProvider(widget.feedId).notifier).fetchEntries();
+      ref.read(entriesLoadingProvider(widget.feedId).notifier)
+          .fetchEntries(onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
     }
   }
 
@@ -172,19 +175,19 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     super.dispose();
   }
 
-  final ScrollController _scrollController = ScrollController();
 
   Widget _buildListView(Feed feed) {
     final state = ref.watch(entriesLoadingProvider(widget.feedId));
+    final itemCount = state.value!.uiItems.length;
     return RefreshIndicator(
         onRefresh: () async {
-          ref.watch(entriesLoadingProvider(widget.feedId).notifier)
-              .fetchEntries(reset: true);
+          ref.read(entriesLoadingProvider(widget.feedId).notifier)
+              .fetchEntries(reset: true, onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
         },
         child: ListView.builder(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: state.uiItems.length + 2,
+            itemCount: itemCount + 2,
             itemBuilder: (context, index) {
               if (index == 0) {
                 return FeedHeader(
@@ -192,14 +195,14 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                   unread: feed.unread,
                 );
               }
-              if (index - 1 >= state.uiItems.length) {
-                if (state.isInitializing) {
+              if (index - 1 >= itemCount) {
+                if (state.value!.isInitializing) {
                   return NoMoreLoading();
                 }
-                return state.hasMore ? LoadingMore() : NoMoreLoading();
+                return state.value!.hasMore ? LoadingMore() : NoMoreLoading();
               }
               return EntryItem(
-                  entry: state.uiItems[index - 1].content as Entry, feed: feed);
+                  entry: state.value!.uiItems[index - 1].content as Entry, feed: feed);
             }));
   }
 

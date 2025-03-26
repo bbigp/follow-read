@@ -26,7 +26,8 @@ class FeedItem extends ConsumerWidget {
             onTap: () {
               ref.read(routerProvider).pushNamed(
                   RouteNames.entry,
-                  pathParameters: {'feedId': feed.id.toString()}
+                  pathParameters: {'feedId': feed.id.toString()},
+                  queryParameters: {'onlyShowUnread': feed.onlyShowUnread.toString()}
               );
             },
             leading: FeedIcon(

@@ -10,44 +10,45 @@ import 'app_container.dart';
 
 
 
-final entriesLoadingProvider = StateNotifierProvider.autoDispose.family<EntriesLoadingNotifier, EntryListState, int>((ref, feedId) {
-  return EntriesLoadingNotifier(feedId: feedId, repository: ref.watch(entryRepositoryProvider));
+final entriesLoadingProvider = StateNotifierProvider.autoDispose.family<
+    EntriesLoadingNotifier, AsyncValue<EntryListState>, int>((ref, feedId) {
+  return EntriesLoadingNotifier(
+      feedId: feedId, repository: ref.watch(entryRepositoryProvider),
+  );
 });
 
-class EntriesLoadingNotifier extends StateNotifier<EntryListState> {
+class EntriesLoadingNotifier extends StateNotifier<AsyncValue<EntryListState>> {
 
   final EntryRepository repository;
   final int feedId;
   EntriesLoadingNotifier({required this.repository, required this.feedId})
-      : super(EntryListState.empty()) {
-  }
+      : super(AsyncValue.data(EntryListState(uiItems: [], page: 1, size: 10,
+      isLoadingMore: false, isInitializing: false, hasMore: false)));
 
   Future<void> fetchEntries({bool reset = false, bool onlyShowUnread = false}) async {
+    final pageSize = state.value!.size;
     if (reset) {
-      if (state.isInitializing) return;
-      state = state.copyWith(
-        uiItems: [],
-        page: 1, size: 10,
-        hasMore: true, isLoadingMore: false, isInitializing: true,
-      );
-      final list = await repository.getEntries(feedId, 1, state.size, onlyShowUnread: onlyShowUnread,);
+      if (state.value!.isInitializing) return;
+      state = AsyncData(state.value!.copyWith(isInitializing: true));
+      final list = await repository.getEntries(feedId, 1, size: pageSize, onlyShowUnread: onlyShowUnread,);
       // final list = await repository.getEntriesByFeedId(feedId);
-      state = state.copyWith(
-          isInitializing: false,
-          uiItems: list.map((item) => UiItem(type: ViewType.entryItem, content: item)).toList(),
-          hasMore: list.length >= state.size
+      final value = state.value?.copyWith(
+        isInitializing: false, hasMore: list.length >= pageSize,
+        uiItems: list.map((item) => UiItem(type: ViewType.entryItem, content: item)).toList(),
       );
+      state = AsyncValue.data(value!);
     } else {
-      if (!state.hasMore || state.isLoadingMore) return;
-      state = state.copyWith(isLoadingMore: true);
-      final nextPage = state.page + 1;
-      final list = await repository.getEntries(feedId, nextPage, state.size, onlyShowUnread: onlyShowUnread,);
-      final allFeeds = [...state.uiItems, ...list.map((item) => UiItem(type: ViewType.entryItem, content: item))];
-      state = state.copyWith(
+      if (!state.value!.hasMore || state.value!.isLoadingMore) return;
+      state = AsyncData(state.value!.copyWith(isLoadingMore: true));
+      final nextPage = state.value!.page + 1;
+      final list = await repository.getEntries(feedId, nextPage, size: pageSize, onlyShowUnread: onlyShowUnread,);
+      final allFeeds = [...state.value!.uiItems, ...list.map((item) => UiItem(type: ViewType.entryItem, content: item))];
+      state = AsyncData(state.value!.copyWith(
           isLoadingMore: false,
           uiItems: allFeeds,
-          hasMore: list.length >= state.size, page: nextPage
-      );
+          page: nextPage,
+          hasMore: list.length >= pageSize,
+      ));
     }
   }
 
@@ -59,9 +60,9 @@ class EntryListState {
   final List<UiItem> uiItems;
   final int page;
   final int size;
-  final bool hasMore;
   final bool isLoadingMore;
   final bool isInitializing;
+  final bool hasMore;
 
   EntryListState({required this.uiItems, required this.page,
     required this.size, required this.hasMore,
@@ -70,8 +71,8 @@ class EntryListState {
 
   factory EntryListState.empty() => EntryListState(
       uiItems: [],
-      page: 1, size: 10,
-      hasMore: false, isLoadingMore: false, isInitializing: false,
+      page: 1, size: 10, hasMore: false,
+      isLoadingMore: false, isInitializing: false,
   );
 
 
@@ -79,17 +80,17 @@ class EntryListState {
     List<UiItem>? uiItems,
     int? page,
     int? size,
-    bool? hasMore,
     bool? isLoadingMore,
     bool? isInitializing,
+    bool? hasMore,
   }) {
     return EntryListState(
       uiItems: uiItems ?? this.uiItems,
       page: page ?? this.page,
       size: size ?? this.size,
-        hasMore: hasMore ?? this.hasMore,
         isLoadingMore: isLoadingMore ?? this.isLoadingMore,
         isInitializing: isInitializing ?? this.isInitializing,
+      hasMore: hasMore ?? this.hasMore,
     );
   }
 

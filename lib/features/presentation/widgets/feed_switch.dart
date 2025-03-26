@@ -1,13 +1,11 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svg_icons.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../config/theme.dart';
-import '../../domain/models/feed.dart';
 import '../providers/feed_detail_provider.dart';
 import 'svg_icon.dart';
 
@@ -34,7 +32,7 @@ class FeedSwitch extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  SvgIcon(SvgIcons.only_unread,),
+                  SvgIcon(SvgIcons.onlyUnread,),
                   Expanded(child: Padding(padding: EdgeInsets.only(left: 12, right: 12), child: Text(
                     '只显示未读', style: TextStyle(
                     fontSize: 15,
@@ -83,7 +81,7 @@ class FeedSwitch extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  SvgIcon(SvgIcons.reading_time),
+                  SvgIcon(SvgIcons.readingTime),
                   Expanded(child: Padding(padding: EdgeInsets.only(left: 12, right: 12), child: Text(
                     '阅读时间', style: TextStyle(
                     fontSize: 15,
@@ -122,7 +120,7 @@ class FeedSwitch extends ConsumerWidget {
           ],
         ),
       );
-    }, error: (_, stack) => Text(''), loading: () => Text('data'));
+    }, error: (_, stack) => const SizedBox.shrink(), loading: () => const SizedBox.shrink());
   }
 
 }

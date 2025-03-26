@@ -15,7 +15,7 @@ class EntryRepository {
   EntryRepository({required EntryDao dao, required FeedDao feedDao,})
       : _dao = dao, _feedDao = feedDao ;
 
-  Future<List<Entry>> getEntries(int feedId, int page, int size, {bool onlyShowUnread = false}) async {
+  Future<List<Entry>> getEntries(int feedId, int page, {int size = 10, bool onlyShowUnread = false}) async {
     List<String> status = onlyShowUnread ? ["unread"] : ["unread", "read"];
     final stopwatch = Stopwatch();
     stopwatch.start();

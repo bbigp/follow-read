@@ -120,7 +120,7 @@ class EntryItem extends ConsumerWidget {
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.only(right: 4),
-                                        child: SvgIcon(SvgIcons.reading_time, size: 14, iconSize: 14,),
+                                        child: SvgIcon(SvgIcons.readingTime, size: 14, iconSize: 14,),
                                       ),
                                       Text(
                                         '${entry.readingTime}',
