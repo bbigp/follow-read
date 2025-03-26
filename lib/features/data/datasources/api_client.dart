@@ -87,6 +87,17 @@ class ApiClient {
     );
   }
 
+  static Future<Either<Failure, Success>> starred(int entryId, bool starred) async {
+    return await httpUtil.safeRequest(
+        path: 'entries',
+        method: HttpMethod.put,
+        body: {
+          'entry_ids': [entryId],
+        },
+        fromJson: (json) => Success.fromJson(json)
+    );
+  }
+
 
 
 

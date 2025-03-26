@@ -6,10 +6,10 @@ import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
 import 'package:follow_read/features/presentation/widgets/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
-import 'package:follow_read/features/presentation/widgets/svg_icon.dart';
+import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../config/svg_icons.dart';
+import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../domain/models/entry.dart';
 import '../../domain/models/feed.dart';
@@ -68,7 +68,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
             onTap: () => _showFilterSheet(context),
             child: Padding(
               padding: EdgeInsets.only(right: 4),
-              child: SvgIcon(SvgIcons.more),
+              child: Svgicon(Svgicons.more),
             ),
           ),
           // _buildRefreshButton(ref, feedsState.isSyncing),

@@ -83,6 +83,16 @@ class EntryRepository {
     });
   }
 
+  Future<bool> starred(int entryId, bool starred) async {
+    final result = await ApiClient.starred(entryId, starred);
+    return result.fold((_){
+      return false;
+    }, (_) async {
+      await _dao.updateStatus(entryId, starred: starred);
+      return true;
+    });
+  }
+
 
   Future<Entry> getEntry(int entryId) async {
     final entry = await _dao.getEntry(entryId);

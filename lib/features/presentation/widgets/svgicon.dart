@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SvgIcon extends StatelessWidget {
+class Svgicon extends StatelessWidget {
 
   final String assetName;
   final double size;
   final double iconSize;
 
-  const SvgIcon(String assetName, {super.key, this.size = 28, this.iconSize = 24,})
+  const Svgicon(String assetName, {super.key, this.size = 28, this.iconSize = 24,})
       : this.assetName = assetName;
 
 

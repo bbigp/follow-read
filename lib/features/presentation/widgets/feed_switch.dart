@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/config/svg_icons.dart';
+import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../config/theme.dart';
 import '../providers/feed_detail_provider.dart';
-import 'svg_icon.dart';
+import 'svgicon.dart';
 
 class FeedSwitch extends ConsumerWidget {
 
@@ -33,7 +33,7 @@ class FeedSwitch extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  SvgIcon(SvgIcons.onlyUnread,),
+                  Svgicon(Svgicons.onlyUnread,),
                   Expanded(child: Padding(padding: EdgeInsets.only(left: 12, right: 12), child: Text(
                     '只显示未读', style: TextStyle(
                     fontSize: 15,
@@ -83,7 +83,7 @@ class FeedSwitch extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  SvgIcon(SvgIcons.readingTime),
+                  Svgicon(Svgicons.readingTime),
                   Expanded(child: Padding(padding: EdgeInsets.only(left: 12, right: 12), child: Text(
                     '阅读时间', style: TextStyle(
                     fontSize: 15,

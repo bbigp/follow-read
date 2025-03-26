@@ -4,17 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/features/presentation/providers/entry_loading_provider.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
+import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../../core/utils/logger.dart';
+import '../../domain/models/entry.dart';
 import '../providers/entry_detail_provider.dart';
 
 class EntryDetailBottomBar extends ConsumerWidget {
 
-  final int entryId;
-  final int feedId;
+  final Entry entry;
 
-  const EntryDetailBottomBar({super.key, required this.entryId, required this.feedId});
+  const EntryDetailBottomBar({super.key, required this.entry});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,32 +77,20 @@ class EntryDetailBottomBar extends ConsumerWidget {
                                 SizedBox(width: eachSpacing),
                                 GestureDetector(
                                   onTap: () async {
-                                    final success = await ref.watch(entryDetailProvider(entryId).notifier).read();
+                                    final status = entry.isUnread ? 'read' : 'unread';
+                                    final success = await ref.read(entryDetailProvider(entry.id).notifier).read(status);
                                     if (success) {
-                                      ref.watch(entriesLoadingProvider(feedId).notifier).updateRead(entryId, 'read');
-                                    } else {
-                                      logger.e('read失败$entryId');
+                                      ref.read(entriesLoadingProvider(entry.feedId).notifier).updateRead(entry.id, status);
                                     }
                                   },
-                                  child: SizedBox(
-                                    width: 28,
-                                    height: 28,
-                                    child: SvgPicture.asset(
-                                      'assets/svg/mark_read.svg',
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                  ),
+                                  child: entry.isUnread ? Svgicon(Svgicons.markRead) : Svgicon(Svgicons.markUnread),
                                 ),
                                 SizedBox(width: eachSpacing),
-                                SizedBox(
-                                  width: 28,
-                                  height: 28,
-                                  child: SvgPicture.asset(
-                                    'assets/svg/plus_o.svg',
-                                    width: 24,
-                                    height: 24,
-                                  ),
+                                GestureDetector(
+                                  onTap: () {
+                                    ref.read(entryDetailProvider(entry.id).notifier).starred(!entry.starred);
+                                  },
+                                  child: entry.starred ? Svgicon(Svgicons.removeCollection) : Svgicon(Svgicons.addCollection),
                                 ),
                                 SizedBox(width: eachSpacing),
                               ],

@@ -33,8 +33,23 @@ class EntryDetailNotifier extends StateNotifier<EntryDetailState> {
     state = state.copyWith(isLoading: false, entry: entry);
   }
 
-  Future<bool> read() async {
-    return entryRepository.updateStatus(entryId, 'read');
+  Future<bool> read(String status) async {
+    final success = await entryRepository.updateStatus(entryId, status);
+    if (success) {
+      state = state.copyWith(entry: state.entry.copyWith(status: status));
+    } else {
+      state = state.copyWith(errorMsg: "");
+    }
+    return success;
+  }
+
+  Future<void> starred(bool starred) async {
+    final success = await entryRepository.starred(entryId, starred);
+    if (success) {
+      state = state.copyWith(entry: state.entry.copyWith(starred: starred));
+      return;
+    }
+    state = state.copyWith(errorMsg: "");
   }
 
 }
@@ -43,22 +58,25 @@ class EntryDetailNotifier extends StateNotifier<EntryDetailState> {
 class EntryDetailState {
   final Entry entry;
   final bool isLoading;
+  final String errorMsg;
 
-  EntryDetailState({required this.entry, required this.isLoading,});
+  EntryDetailState({required this.entry, required this.isLoading, required this.errorMsg});
 
   factory EntryDetailState.empty() => EntryDetailState(
     entry: Entry(id: 0, title: '', hash: ''),
-    isLoading: false,
+    isLoading: false, errorMsg: "",
   );
 
 
   EntryDetailState copyWith({
     Entry? entry,
     bool? isLoading,
+    String? errorMsg,
   }) {
     return EntryDetailState(
       entry: entry ?? this.entry,
       isLoading: isLoading ?? this.isLoading,
+        errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 

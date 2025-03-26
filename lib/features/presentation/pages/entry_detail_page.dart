@@ -59,7 +59,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
       body: Stack(
         children: [
           _buildScrollableContent(state.entry),
-          EntryDetailBottomBar(entryId: state.entry.id, feedId: state.entry.feedId),
+          EntryDetailBottomBar(entry: state.entry),
         ],
       ),
     );
