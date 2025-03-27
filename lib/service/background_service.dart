@@ -5,12 +5,10 @@ import 'package:workmanager/workmanager.dart';
 
 import '../features/presentation/providers/app_container.dart';
 
-
-
-// 后台任务回调
-// @pragma('vm:entry-point')
+@pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
+
 
     final sharedPreferences = await SharedPreferences.getInstance();
     final backgroundContainer = ProviderContainer(
@@ -27,7 +25,7 @@ void callbackDispatcher() {
       }
       return true;
     } catch (e) {
-      print('任务失败: $e');
+      logger.e("❌ 任务失败", error: e);
       return false;
     }
   });
