@@ -12,6 +12,8 @@ class Feed extends BaseUiItem {
   final String iconUrl;
   final bool onlyShowUnread;
   final bool showReadingTime;
+  final int errorCount;
+  final String errorMsg;
 
   Feed({
     required this.id,
@@ -24,6 +26,8 @@ class Feed extends BaseUiItem {
     this.iconUrl = "",
     this.onlyShowUnread = false,
     this.showReadingTime = false,
+    this.errorCount = 0,
+    this.errorMsg = "",
   });
 
   Feed copyWith({
@@ -37,6 +41,8 @@ class Feed extends BaseUiItem {
     String? iconUrl,
     bool? onlyShowUnread,
     bool? showReadingTime,
+    int? errorCount,
+    String? errorMsg,
   }) {
     return Feed(
       id: id ?? this.id,
@@ -49,6 +55,8 @@ class Feed extends BaseUiItem {
       iconUrl: iconUrl ?? this.iconUrl,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
         showReadingTime: showReadingTime ?? this.showReadingTime,
+      errorCount: errorCount ?? this.errorCount,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 

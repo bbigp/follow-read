@@ -1,6 +1,5 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:follow_read/features/domain/models/ui_item.dart';
 
 class Listx extends BaseUiItem {

@@ -24,6 +24,11 @@ class FeedsTable extends Table {
   BoolColumn get showReadingTime => boolean().named('show_reading_time')
       .withDefault(const Constant(false))();
 
+  IntColumn get errorCount => integer().named("error_count")
+      .withDefault(const Constant(0))();
+  TextColumn get errorMsg => text().named("error_msg")
+      .withDefault(const Constant(""))();
+
   @override
   Set<Column> get primaryKey => {id};
 
@@ -42,6 +47,8 @@ extension FeedEntityConversion on FeedEntity {
       iconUrl: iconUrl,
       onlyShowUnread: onlyShowUnread,
       showReadingTime: showReadingTime,
+      errorMsg: errorMsg,
+      errorCount: errorCount,
     );
   }
 }

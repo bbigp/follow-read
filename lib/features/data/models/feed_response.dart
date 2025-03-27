@@ -26,9 +26,9 @@ class FeedResponse with FeedResponseMappable {
   @MappableField(key: 'last_modified_header')
   final String? lastModifiedHeader;
   @MappableField(key: 'parsing_error_message')
-  final String? parsingErrorMessage;
+  final String parsingErrorMessage;
   @MappableField(key: 'parsing_error_count')
-  final int? parsingErrorCount;
+  final int parsingErrorCount;
   @MappableField(key: 'scraper_rules')
   final String? scraperRules;
   @MappableField(key: 'rewrite_rules')
@@ -78,8 +78,8 @@ class FeedResponse with FeedResponseMappable {
     this.nextCheckAt,
     this.etagHeader,
     this.lastModifiedHeader,
-    this.parsingErrorMessage,
-    this.parsingErrorCount,
+    this.parsingErrorMessage = "",
+    this.parsingErrorCount = 0,
     this.scraperRules,
     this.rewriteRules,
     this.crawler,
@@ -121,6 +121,8 @@ extension FeedResponseConversion on FeedResponse {
       title: title,
       id: Value(BigInt.from(id)),
       iconUrl: Value(iconUrl),
+      errorCount: Value(parsingErrorCount),
+      errorMsg: Value(parsingErrorMessage),
     );
   }
 

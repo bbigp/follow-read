@@ -78,6 +78,22 @@ class $FeedsTableTable extends FeedsTable
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("show_reading_time" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _errorCountMeta =
+      const VerificationMeta('errorCount');
+  @override
+  late final GeneratedColumn<int> errorCount = GeneratedColumn<int>(
+      'error_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _errorMsgMeta =
+      const VerificationMeta('errorMsg');
+  @override
+  late final GeneratedColumn<String> errorMsg = GeneratedColumn<String>(
+      'error_msg', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -89,7 +105,9 @@ class $FeedsTableTable extends FeedsTable
         read,
         iconUrl,
         onlyShowUnread,
-        showReadingTime
+        showReadingTime,
+        errorCount,
+        errorMsg
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -152,6 +170,16 @@ class $FeedsTableTable extends FeedsTable
           showReadingTime.isAcceptableOrUnknown(
               data['show_reading_time']!, _showReadingTimeMeta));
     }
+    if (data.containsKey('error_count')) {
+      context.handle(
+          _errorCountMeta,
+          errorCount.isAcceptableOrUnknown(
+              data['error_count']!, _errorCountMeta));
+    }
+    if (data.containsKey('error_msg')) {
+      context.handle(_errorMsgMeta,
+          errorMsg.isAcceptableOrUnknown(data['error_msg']!, _errorMsgMeta));
+    }
     return context;
   }
 
@@ -181,6 +209,10 @@ class $FeedsTableTable extends FeedsTable
           .read(DriftSqlType.bool, data['${effectivePrefix}only_show_unread'])!,
       showReadingTime: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}show_reading_time'])!,
+      errorCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}error_count'])!,
+      errorMsg: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}error_msg'])!,
     );
   }
 
@@ -201,6 +233,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
   final String iconUrl;
   final bool onlyShowUnread;
   final bool showReadingTime;
+  final int errorCount;
+  final String errorMsg;
   const FeedEntity(
       {required this.id,
       required this.userId,
@@ -211,7 +245,9 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       required this.read,
       required this.iconUrl,
       required this.onlyShowUnread,
-      required this.showReadingTime});
+      required this.showReadingTime,
+      required this.errorCount,
+      required this.errorMsg});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -225,6 +261,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
     map['icon_url'] = Variable<String>(iconUrl);
     map['only_show_unread'] = Variable<bool>(onlyShowUnread);
     map['show_reading_time'] = Variable<bool>(showReadingTime);
+    map['error_count'] = Variable<int>(errorCount);
+    map['error_msg'] = Variable<String>(errorMsg);
     return map;
   }
 
@@ -240,6 +278,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       iconUrl: Value(iconUrl),
       onlyShowUnread: Value(onlyShowUnread),
       showReadingTime: Value(showReadingTime),
+      errorCount: Value(errorCount),
+      errorMsg: Value(errorMsg),
     );
   }
 
@@ -257,6 +297,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       iconUrl: serializer.fromJson<String>(json['iconUrl']),
       onlyShowUnread: serializer.fromJson<bool>(json['onlyShowUnread']),
       showReadingTime: serializer.fromJson<bool>(json['showReadingTime']),
+      errorCount: serializer.fromJson<int>(json['errorCount']),
+      errorMsg: serializer.fromJson<String>(json['errorMsg']),
     );
   }
   @override
@@ -273,6 +315,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       'iconUrl': serializer.toJson<String>(iconUrl),
       'onlyShowUnread': serializer.toJson<bool>(onlyShowUnread),
       'showReadingTime': serializer.toJson<bool>(showReadingTime),
+      'errorCount': serializer.toJson<int>(errorCount),
+      'errorMsg': serializer.toJson<String>(errorMsg),
     };
   }
 
@@ -286,7 +330,9 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           int? read,
           String? iconUrl,
           bool? onlyShowUnread,
-          bool? showReadingTime}) =>
+          bool? showReadingTime,
+          int? errorCount,
+          String? errorMsg}) =>
       FeedEntity(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -298,6 +344,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
         iconUrl: iconUrl ?? this.iconUrl,
         onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
         showReadingTime: showReadingTime ?? this.showReadingTime,
+        errorCount: errorCount ?? this.errorCount,
+        errorMsg: errorMsg ?? this.errorMsg,
       );
   FeedEntity copyWithCompanion(FeedsTableCompanion data) {
     return FeedEntity(
@@ -315,6 +363,9 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       showReadingTime: data.showReadingTime.present
           ? data.showReadingTime.value
           : this.showReadingTime,
+      errorCount:
+          data.errorCount.present ? data.errorCount.value : this.errorCount,
+      errorMsg: data.errorMsg.present ? data.errorMsg.value : this.errorMsg,
     );
   }
 
@@ -330,14 +381,16 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           ..write('read: $read, ')
           ..write('iconUrl: $iconUrl, ')
           ..write('onlyShowUnread: $onlyShowUnread, ')
-          ..write('showReadingTime: $showReadingTime')
+          ..write('showReadingTime: $showReadingTime, ')
+          ..write('errorCount: $errorCount, ')
+          ..write('errorMsg: $errorMsg')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, userId, feedUrl, siteUrl, title, unread,
-      read, iconUrl, onlyShowUnread, showReadingTime);
+      read, iconUrl, onlyShowUnread, showReadingTime, errorCount, errorMsg);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -351,7 +404,9 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           other.read == this.read &&
           other.iconUrl == this.iconUrl &&
           other.onlyShowUnread == this.onlyShowUnread &&
-          other.showReadingTime == this.showReadingTime);
+          other.showReadingTime == this.showReadingTime &&
+          other.errorCount == this.errorCount &&
+          other.errorMsg == this.errorMsg);
 }
 
 class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
@@ -365,6 +420,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
   final Value<String> iconUrl;
   final Value<bool> onlyShowUnread;
   final Value<bool> showReadingTime;
+  final Value<int> errorCount;
+  final Value<String> errorMsg;
   const FeedsTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -376,6 +433,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.iconUrl = const Value.absent(),
     this.onlyShowUnread = const Value.absent(),
     this.showReadingTime = const Value.absent(),
+    this.errorCount = const Value.absent(),
+    this.errorMsg = const Value.absent(),
   });
   FeedsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -388,6 +447,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.iconUrl = const Value.absent(),
     this.onlyShowUnread = const Value.absent(),
     this.showReadingTime = const Value.absent(),
+    this.errorCount = const Value.absent(),
+    this.errorMsg = const Value.absent(),
   })  : userId = Value(userId),
         feedUrl = Value(feedUrl),
         siteUrl = Value(siteUrl),
@@ -403,6 +464,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     Expression<String>? iconUrl,
     Expression<bool>? onlyShowUnread,
     Expression<bool>? showReadingTime,
+    Expression<int>? errorCount,
+    Expression<String>? errorMsg,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -415,6 +478,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       if (iconUrl != null) 'icon_url': iconUrl,
       if (onlyShowUnread != null) 'only_show_unread': onlyShowUnread,
       if (showReadingTime != null) 'show_reading_time': showReadingTime,
+      if (errorCount != null) 'error_count': errorCount,
+      if (errorMsg != null) 'error_msg': errorMsg,
     });
   }
 
@@ -428,7 +493,9 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       Value<int>? read,
       Value<String>? iconUrl,
       Value<bool>? onlyShowUnread,
-      Value<bool>? showReadingTime}) {
+      Value<bool>? showReadingTime,
+      Value<int>? errorCount,
+      Value<String>? errorMsg}) {
     return FeedsTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -440,6 +507,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       iconUrl: iconUrl ?? this.iconUrl,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       showReadingTime: showReadingTime ?? this.showReadingTime,
+      errorCount: errorCount ?? this.errorCount,
+      errorMsg: errorMsg ?? this.errorMsg,
     );
   }
 
@@ -476,6 +545,12 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     if (showReadingTime.present) {
       map['show_reading_time'] = Variable<bool>(showReadingTime.value);
     }
+    if (errorCount.present) {
+      map['error_count'] = Variable<int>(errorCount.value);
+    }
+    if (errorMsg.present) {
+      map['error_msg'] = Variable<String>(errorMsg.value);
+    }
     return map;
   }
 
@@ -491,7 +566,9 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
           ..write('read: $read, ')
           ..write('iconUrl: $iconUrl, ')
           ..write('onlyShowUnread: $onlyShowUnread, ')
-          ..write('showReadingTime: $showReadingTime')
+          ..write('showReadingTime: $showReadingTime, ')
+          ..write('errorCount: $errorCount, ')
+          ..write('errorMsg: $errorMsg')
           ..write(')'))
         .toString();
   }
@@ -1208,6 +1285,8 @@ typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
   Value<String> iconUrl,
   Value<bool> onlyShowUnread,
   Value<bool> showReadingTime,
+  Value<int> errorCount,
+  Value<String> errorMsg,
 });
 typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> id,
@@ -1220,6 +1299,8 @@ typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<String> iconUrl,
   Value<bool> onlyShowUnread,
   Value<bool> showReadingTime,
+  Value<int> errorCount,
+  Value<String> errorMsg,
 });
 
 class $$FeedsTableTableFilterComposer
@@ -1262,6 +1343,12 @@ class $$FeedsTableTableFilterComposer
   ColumnFilters<bool> get showReadingTime => $composableBuilder(
       column: $table.showReadingTime,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get errorCount => $composableBuilder(
+      column: $table.errorCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get errorMsg => $composableBuilder(
+      column: $table.errorMsg, builder: (column) => ColumnFilters(column));
 }
 
 class $$FeedsTableTableOrderingComposer
@@ -1304,6 +1391,12 @@ class $$FeedsTableTableOrderingComposer
   ColumnOrderings<bool> get showReadingTime => $composableBuilder(
       column: $table.showReadingTime,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get errorCount => $composableBuilder(
+      column: $table.errorCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get errorMsg => $composableBuilder(
+      column: $table.errorMsg, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FeedsTableTableAnnotationComposer
@@ -1344,6 +1437,12 @@ class $$FeedsTableTableAnnotationComposer
 
   GeneratedColumn<bool> get showReadingTime => $composableBuilder(
       column: $table.showReadingTime, builder: (column) => column);
+
+  GeneratedColumn<int> get errorCount => $composableBuilder(
+      column: $table.errorCount, builder: (column) => column);
+
+  GeneratedColumn<String> get errorMsg =>
+      $composableBuilder(column: $table.errorMsg, builder: (column) => column);
 }
 
 class $$FeedsTableTableTableManager extends RootTableManager<
@@ -1379,6 +1478,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<String> iconUrl = const Value.absent(),
             Value<bool> onlyShowUnread = const Value.absent(),
             Value<bool> showReadingTime = const Value.absent(),
+            Value<int> errorCount = const Value.absent(),
+            Value<String> errorMsg = const Value.absent(),
           }) =>
               FeedsTableCompanion(
             id: id,
@@ -1391,6 +1492,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             iconUrl: iconUrl,
             onlyShowUnread: onlyShowUnread,
             showReadingTime: showReadingTime,
+            errorCount: errorCount,
+            errorMsg: errorMsg,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -1403,6 +1506,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<String> iconUrl = const Value.absent(),
             Value<bool> onlyShowUnread = const Value.absent(),
             Value<bool> showReadingTime = const Value.absent(),
+            Value<int> errorCount = const Value.absent(),
+            Value<String> errorMsg = const Value.absent(),
           }) =>
               FeedsTableCompanion.insert(
             id: id,
@@ -1415,6 +1520,8 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             iconUrl: iconUrl,
             onlyShowUnread: onlyShowUnread,
             showReadingTime: showReadingTime,
+            errorCount: errorCount,
+            errorMsg: errorMsg,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

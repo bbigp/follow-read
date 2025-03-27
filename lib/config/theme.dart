@@ -17,4 +17,9 @@ class AppTheme {
   static const white0 = Colors.white;
   static const white15 = Color(0x26FFFFFF);
   static const white85 = Color(0xD9FFFFFF);
+
+  static const red10 = Color(0x1AFF3B30);
+  static const red = Color(0xFFFF3B30);
+
+
 }

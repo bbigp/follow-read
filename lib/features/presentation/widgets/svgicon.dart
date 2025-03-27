@@ -9,9 +9,7 @@ class Svgicon extends StatelessWidget {
   final double size;
   final double iconSize;
 
-  const Svgicon(String assetName, {super.key, this.size = 28, this.iconSize = 24,})
-      : this.assetName = assetName;
-
+  const Svgicon(this.assetName, {super.key, this.size = 28, this.iconSize = 24,});
 
   @override
   Widget build(BuildContext context) {

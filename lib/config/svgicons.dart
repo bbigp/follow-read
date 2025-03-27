@@ -11,5 +11,6 @@ class Svgicons {
   static const String removeCollection = "assets/svg/remove_collection.svg";
   static const String all = "assets/svg/all_entry.svg";
   static const String today = "assets/svg/today.svg";
+  static const String expired = "assets/svg/expired.svg";
 
 }
