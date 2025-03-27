@@ -20,7 +20,10 @@ void main() async {
     ],
   );
   await container.read(authProvider.notifier).initialize();
-  initializeWorkmanager(container);
+  Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: true,
+  );
   runApp(
     UncontrolledProviderScope(
       container: container,

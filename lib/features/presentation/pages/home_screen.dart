@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
@@ -34,8 +35,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final feedsState = ref.watch(feedLoadingProvider);
-    final progress = ref.watch(taskProgressProvider);
-    logger.i('$progress');
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -117,30 +116,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             onPressed: () async {
               scheduleTask();
-              ref.read(taskStatusProvider.notifier).start();
-
               // await ref.watch(feedLoadingProvider.notifier).refresh();
             },
           );
   }
 }
 
-
-
-// // 在页面A的 State 类中添加
-// @override
-// void didChangeDependencies() {
-//   super.didChangeDependencies();
-//
-//   // 监听路由变化
-//   final route = ModalRoute.of(context);
-//   if (route != null) {
-//     routeObserver.subscribe(this, route);
-//   }
-// }
-//
-// @override
-// void didPopNext() {
-//   // 当从其他页面返回时验证数据
-//   ref.invalidate(itemListProvider); // 可选：强制刷新数据
-// }
