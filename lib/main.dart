@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/providers/auth_provider.dart';
 import 'package:follow_read/routes/app_route.dart';
+import 'package:follow_read/service/background_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'core/utils/bigint_mapper.dart';
 import 'features/presentation/providers/app_container.dart';
@@ -18,6 +20,7 @@ void main() async {
     ],
   );
   await container.read(authProvider.notifier).initialize();
+  initializeWorkmanager(container);
   runApp(
     UncontrolledProviderScope(
       container: container,

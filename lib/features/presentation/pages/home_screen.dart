@@ -7,9 +7,12 @@ import 'package:follow_read/features/presentation/widgets/list_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/routes/app_route.dart';
 
+import '../../../core/utils/logger.dart';
+import '../../../service/background_service.dart';
 import '../../domain/models/feed.dart';
 import '../../domain/models/listx.dart';
 import '../../domain/models/ui_item.dart';
+import '../providers/sync_data_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -31,6 +34,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final feedsState = ref.watch(feedLoadingProvider);
+    final progress = ref.watch(taskProgressProvider);
+    logger.i('$progress');
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -111,7 +116,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               color: Colors.black,
             ),
             onPressed: () async {
-              await ref.watch(feedLoadingProvider.notifier).refresh();
+              scheduleTask();
+              ref.read(taskStatusProvider.notifier).start();
+
+              // await ref.watch(feedLoadingProvider.notifier).refresh();
             },
           );
   }
