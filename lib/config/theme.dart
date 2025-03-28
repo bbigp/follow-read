@@ -21,5 +21,8 @@ class AppTheme {
   static const red10 = Color(0x1AFF3B30);
   static const red = Color(0xFFFF3B30);
 
+  static const blue10 = Color(0x1A007AFF);
+  static const blue = Color(0xFF007AFF);
+
 
 }

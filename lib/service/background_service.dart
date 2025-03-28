@@ -8,17 +8,17 @@ import '../features/presentation/providers/app_container.dart';
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
-
-
     final sharedPreferences = await SharedPreferences.getInstance();
     final backgroundContainer = ProviderContainer(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       ],
     );
-
-    // 执行任务逻辑
     try {
+
+
+
+
       for (int i = 0; i <= 10; i++) {
         await Future.delayed(Duration(seconds: 1));
         logger.i('dsds');

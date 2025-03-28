@@ -53,6 +53,13 @@ class EntriesLoadingNotifier extends StateNotifier<AsyncValue<EntryListState>> {
     }
   }
 
+
+  Future<void> syncEntries(int feedId) async {
+
+
+
+  }
+
   Future<void> updateRead(int entryId, String status) async {
     final index = state.value!.uiItems.indexWhere((item){
       if (item.type != ViewType.entryItem) {

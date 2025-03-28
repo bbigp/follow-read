@@ -8,12 +8,10 @@ import 'package:follow_read/features/presentation/widgets/list_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/routes/app_route.dart';
 
-import '../../../core/utils/logger.dart';
-import '../../../service/background_service.dart';
+import '../../../config/svgicons.dart';
 import '../../domain/models/feed.dart';
 import '../../domain/models/listx.dart';
-import '../../domain/models/ui_item.dart';
-import '../providers/sync_data_provider.dart';
+import '../widgets/home_group.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -30,7 +28,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(feedLoadingProvider.notifier).getFeeds();
     });
+    _scrollController.addListener(_scrollListener);
   }
+  ScrollController _scrollController = ScrollController();
+  Future<void> _refreshData() async {
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,50 +66,73 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(width: 12),
           ],
         ),
-        body: ListView.builder(
-            itemCount: feedsState.items.length,
-            itemBuilder: (context, index) {
-              return _buildFeedItem(feedsState.items[index]);
-            })
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    SizedBox(width: 12,),
+                    Expanded(child: Container(
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: AppTheme.blue10,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      alignment: Alignment.centerLeft,
+                      child: Text('数据同步中(1/13)...', style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        height: 1.38,
+                        color: AppTheme.blue,
+                      ),),
+                    ),),
+                    SizedBox(width: 12,),
+                  ],
+                )
+              ),
+              SliverToBoxAdapter(
+                child: HomeGroup(title: '智能视图'),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  ListItem(list: Listx(title: '全部', unread: 90, svgicon: Svgicons.all)),
+                  ListItem(list: Listx(title: '近期已读', svgicon: Svgicons.markRead)),
+                  ListItem(list: Listx(title: '星标', svgicon: Svgicons.addCollection)),
+                  ListItem(list: Listx(title: '未读', svgicon: Svgicons.markUnread)),
+                  ListItem(list: Listx(title: '今日', svgicon: Svgicons.today)),
+                ]),
+              ),
+              // 分隔线
+              SliverToBoxAdapter(
+                child: SpacerDivider(
+                  thickness: 0.2,
+                  spacing: 32,
+                  color: AppTheme.black8,
+                ),
+              ),
+              // 订阅源标题
+              SliverToBoxAdapter(
+                child: HomeGroup(title: '订阅源'),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final feed = feedsState.items[index].content as Feed;
+                    return FeedItem(key: ValueKey(feed.id), feed: feed);
+                  },
+                  childCount: feedsState.items.length,
+                ),
+              )
+            ],
+          ),
+        ),
     );
   }
 
-  Widget _buildFeedItem(UiItem item) {
-    if (item.type == ViewType.feedItem) {
-      return FeedItem(feed: item.content as Feed);
-    } else if (item.type == ViewType.groupTitleItem) {
-      final title = item.content as TitleUiData;
-      return Container(
-        height: 40,
-        // color: Colors.blue,
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          child: Text(
-            title.title,
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w500,
-              height: 1.29,
-              color: AppTheme.black95,
-            ),
-          ),
-        ),
-      );
-    } else if (item.type == ViewType.listItem) {
-      return ListItem(list: item.content as Listx,);
-    } else if (item.type == ViewType.divider32) {
-      return SpacerDivider(
-        thickness: 0.2,
-        spacing: 32,
-        color: AppTheme.black8,
-      );
-    } else {
-      return Container(
-        height: 0,
-      );
-    }
-  }
 
   Widget _buildRefreshButton(WidgetRef ref, bool isLoading) {
     return isLoading
@@ -115,8 +153,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               color: Colors.black,
             ),
             onPressed: () async {
-              scheduleTask();
-              // await ref.watch(feedLoadingProvider.notifier).refresh();
+              // scheduleTask();
+              await ref.watch(feedLoadingProvider.notifier).refresh();
             },
           );
   }

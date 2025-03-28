@@ -50,6 +50,7 @@ class ApiClient {
 
   static Future<Either<Failure, EntryPageResponse>> getEntries(int feedId, {
     int page = 1, int size = 10, List<String> status = const ["unread"],
+    String order = "published_at", String direction = "desc",
   }) async {
     return await httpUtil.safeRequest(
         path: 'feeds/$feedId/entries' ,
@@ -57,8 +58,8 @@ class ApiClient {
         queryParams: {
           'limit': size, 'offset': (page -1) * size,
           'status': status,
-          'order': 'published_at',//"id", "status", "changed_at", "published_at", "created_at", "category_title", "category_id", "title", "author"
-          'direction': 'desc', //desc asc
+          'order': order,//"id", "status", "changed_at", "published_at", "created_at", "category_title", "category_id", "title", "author"
+          'direction': direction, //desc asc
           // 'category_id': null,
           // 'feed_id': feedId,
           // 'tags': null,

@@ -34,28 +34,10 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
 
   Future<void> getFeeds() async {
     final feeds = await _feedRepository.getFeeds();
-    final all = [...firstPage(), ...feeds.map((item) => UiItem(type: ViewType.feedItem, content: item))];
+    final all = [...feeds.map((item) => UiItem(type: ViewType.feedItem, content: item))];
     state = state.copyWith(items: all);
   }
 
-  List<UiItem> firstPage(){
-    final all = Listx(title: '全部', unread: 90, svgicon: Svgicons.all);
-    final read = Listx(title: '近期已读', svgicon: Svgicons.markRead,);
-    final star = Listx(title: '星标', svgicon: Svgicons.addCollection,);
-    final unread = Listx(title: '未读', svgicon: Svgicons.markUnread,);
-    final today = Listx(title: '今日', svgicon: Svgicons.today,);
-
-    return [
-      UiItem(type: ViewType.groupTitleItem, content: TitleUiData(title: '智能视图')),
-      UiItem(type: ViewType.listItem, content: all),
-      UiItem(type: ViewType.listItem, content: read),
-      UiItem(type: ViewType.listItem, content: star),
-      UiItem(type: ViewType.listItem, content: unread),
-      UiItem(type: ViewType.listItem, content: today),
-      UiItem(type: ViewType.divider32, content: EmptyUiData()),
-      UiItem(type: ViewType.groupTitleItem, content: TitleUiData(title: '订阅源')),
-    ];
-  }
 }
 
 class FeedsState {

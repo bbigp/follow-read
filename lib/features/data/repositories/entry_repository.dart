@@ -15,6 +15,17 @@ class EntryRepository {
   EntryRepository({required EntryDao dao, required FeedDao feedDao,})
       : _dao = dao, _feedDao = feedDao ;
 
+
+  Future<void> syncEntries(int feedId) async {
+
+    await ApiClient.getEntries(feedId, page: 1, size: 10, order: "changed_at", direction: "asc",
+        status: ["unread", "read", "removed"]);
+
+
+  }
+
+
+
   Future<List<Entry>> getEntries(int feedId, int page, {int size = 10, bool onlyShowUnread = false}) async {
     List<String> status = onlyShowUnread ? ["unread"] : ["unread", "read"];
     final stopwatch = Stopwatch();
