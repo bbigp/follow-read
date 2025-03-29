@@ -1,31 +1,49 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../features/presentation/providers/app_container.dart';
 
+
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((taskName, inputData) async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    final backgroundContainer = ProviderContainer(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      ],
-    );
     try {
-
-
-
-
-      for (int i = 0; i <= 10; i++) {
-        await Future.delayed(Duration(seconds: 1));
-        logger.i('dsds');
+      final sendPort = IsolateNameServer.lookupPortByName('main_port');
+      if (sendPort == null) {
+        logger.e('main_port 主端口未找到');
+        return false;
       }
-      return true;
+
+      final sharedPreferences = await SharedPreferences.getInstance();
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+        ],
+      );
+
+      final completer = Completer<bool>();
+      container.read(entryRepositoryProvider).syncEntries((status, progress) {
+        sendPort.send({
+          'status': status,
+          'progress': progress,
+        });
+        if (status == SyncTask.status || status == SyncTask.failed) {
+          completer.complete(true);
+        }
+      }).then((result){
+        if (!completer.isCompleted) {
+          completer.complete(true);
+        }
+      });
+      return await completer.future;
     } catch (e) {
-      logger.e("❌ 任务失败", error: e);
+      logger.e("❌ 后台服务执行失败", error: e);
       return false;
     }
   });

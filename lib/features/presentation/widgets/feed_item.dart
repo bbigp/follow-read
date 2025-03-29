@@ -49,11 +49,10 @@ class FeedItem extends ConsumerWidget {
                 ),
                 if (feed.errorCount > 0)
                   Container(
-                    height: 18,
                     padding: EdgeInsets.only(left: 12),
                     decoration: BoxDecoration(
                       color: AppTheme.red10,
-                      borderRadius: BorderRadius.circular(99),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -61,18 +60,13 @@ class FeedItem extends ConsumerWidget {
                         SvgPicture.asset(
                           Svgicons.expired,
                           width: 12,
-                          colorFilter: const ColorFilter.mode(
-                            AppTheme.red,
-                            BlendMode.srcIn,
-                          ),
-                          excludeFromSemantics: true,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 2, right: 14),
+                          padding: EdgeInsets.only(left: 2, right: 14, top: 4, bottom: 4,),
                           child: Text(
                             '错误',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
                               fontWeight: FontWeight.w500,
                               height: 1.18,
                               color: AppTheme.red,

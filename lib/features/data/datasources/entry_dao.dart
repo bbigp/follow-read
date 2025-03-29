@@ -1,4 +1,5 @@
 
+
 import 'package:drift/drift.dart';
 
 import 'database.dart';
@@ -30,6 +31,30 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return await (select(entriesTable)..where((r) => r.feedId.equals(BigInt.from(feedId)))).get();
   }
 
+  Future<List<EntryEntity>> paginateEntries(int feedId, {
+    int page = 1,
+    int size = 20, List<String> status = const ['unread'],
+    String order = "published_at", String direction = "desc",
+  }) async {
+    final query = select(entriesTable)
+      ..where((t) => t.feedId.equals(BigInt.from(feedId)))
+      ..where((t) => entriesTable.status.isIn(status));
+
+    final orderByColumn = switch(order) {
+      'changed_at' => entriesTable.changedAt,
+      _ => entriesTable.publishedAt,
+    };
+
+    final ordering = direction.toLowerCase() == 'asc'
+        ? OrderingMode.asc
+        : OrderingMode.desc;
+    
+    query..orderBy([(t) => OrderingTerm(expression: orderByColumn, mode: ordering)])
+    ..limit(size, offset: (page - 1) * size);
+
+    return await query.get();
+  }
+
   Future<List<EntryEntity>> getAllEntries() async {
     return await select(entriesTable).get();
   }
@@ -54,5 +79,22 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     );
     return affectedRows > 0;
   }
+
+  Future<DateTime?> getMaxChangedAt() async {
+    final query = selectOnly(entriesTable);
+    final maxChangedAt = entriesTable.changedAt.max();
+    query.addColumns([maxChangedAt]);
+    final result = await query.getSingleOrNull();
+    return result?.read(maxChangedAt);
+  }
+
+  Future<int> count() async {
+    final query = selectOnly(entriesTable);
+    final countExpr = countAll();
+    query.addColumns([countExpr]);
+    final result = await query.getSingle();
+    return result.read(countAll()) ?? 0;
+  }
+
 
 }

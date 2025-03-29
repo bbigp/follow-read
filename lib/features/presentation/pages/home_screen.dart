@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed_item.dart';
 import 'package:follow_read/features/presentation/widgets/list_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
 
 import '../../../config/svgicons.dart';
 import '../../domain/models/feed.dart';
 import '../../domain/models/listx.dart';
+import '../providers/sync_data_provider.dart';
 import '../widgets/home_group.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -21,6 +23,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+
+
   @override
   void initState() {
     super.initState();
@@ -29,8 +33,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ref.read(feedLoadingProvider.notifier).getFeeds();
     });
     _scrollController.addListener(_scrollListener);
+
   }
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   Future<void> _refreshData() async {
   }
 
@@ -50,6 +55,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final feedsState = ref.watch(feedLoadingProvider);
+    final syncState = ref.watch(syncProvider);
+    if (syncState.status == SyncTask.success && syncState.refreshUi) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(feedLoadingProvider.notifier).getFeeds();
+        ref.read(syncProvider.notifier).resetStatus();
+      });
+    }
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -62,7 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
               icon: const Icon(Icons.person)),
           actions: [
-            _buildRefreshButton(ref, feedsState.isSyncing),
+            _buildRefreshButton(ref),
             const SizedBox(width: 12),
           ],
         ),
@@ -71,29 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: CustomScrollView(
             controller: _scrollController,
             slivers: [
-              SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    SizedBox(width: 12,),
-                    Expanded(child: Container(
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: AppTheme.blue10,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      alignment: Alignment.centerLeft,
-                      child: Text('数据同步中(1/13)...', style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        height: 1.38,
-                        color: AppTheme.blue,
-                      ),),
-                    ),),
-                    SizedBox(width: 12,),
-                  ],
-                )
-              ),
+              SliverToBoxAdapter(child: SyncView(),),
               SliverToBoxAdapter(
                 child: HomeGroup(title: '智能视图'),
               ),
@@ -134,8 +124,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
 
-  Widget _buildRefreshButton(WidgetRef ref, bool isLoading) {
-    return isLoading
+  Widget _buildRefreshButton(WidgetRef ref) {
+    final status = ref.watch(syncProvider.select((s) => s.status));
+    return status == SyncTask.syncing
         ? Padding(
             padding: const EdgeInsets.all(16),
             child: SizedBox(
@@ -153,8 +144,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               color: Colors.black,
             ),
             onPressed: () async {
-              // scheduleTask();
-              await ref.watch(feedLoadingProvider.notifier).refresh();
+              ref.read(syncProvider.notifier).startSync();
             },
           );
   }

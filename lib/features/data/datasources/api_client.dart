@@ -48,7 +48,7 @@ class ApiClient {
     );
   }
 
-  static Future<Either<Failure, EntryPageResponse>> getEntries(int feedId, {
+  static Future<Either<Failure, EntryPageResponse>> getEntriesByFeedId(int feedId, {
     int page = 1, int size = 10, List<String> status = const ["unread"],
     String order = "published_at", String direction = "desc",
   }) async {
@@ -64,6 +64,20 @@ class ApiClient {
           // 'feed_id': feedId,
           // 'tags': null,
           'globally_visible': false,
+        },
+        fromJson: (json) => EntryPageResponseMapper.fromJson(json)
+    );
+  }
+
+
+  static Future<Either<Failure, EntryPageResponse>> getEntries({
+    int page = 1, int size = 10, List<String> status = const ["unread", "read", "removed"],
+    String order = "changed_at", String direction = "asc",
+  }) async {
+    return await httpUtil.safeRequest(path: 'entries', method: HttpMethod.get,
+        queryParams: {
+          'limit': size, 'offset': (page -1) * size, 'status': status, 'order': order,
+          'direction': direction, 'globally_visible': false,
         },
         fromJson: (json) => EntryPageResponseMapper.fromJson(json)
     );

@@ -12,5 +12,7 @@ class Svgicons {
   static const String all = "assets/svg/all_entry.svg";
   static const String today = "assets/svg/today.svg";
   static const String expired = "assets/svg/expired.svg";
-
+  static const String retry = "assets/svg/retry.svg";
+  static const String link = "assets/svg/link.svg";
+  static const String alertFill = "assets/svg/alert_fill.svg";
 }

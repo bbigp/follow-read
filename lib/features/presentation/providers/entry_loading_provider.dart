@@ -32,7 +32,6 @@ class EntriesLoadingNotifier extends StateNotifier<AsyncValue<EntryListState>> {
       if (state.value!.isInitializing) return;
       state = AsyncData(state.value!.copyWith(isInitializing: true));
       final list = await repository.getEntries(feedId, 1, size: pageSize, onlyShowUnread: onlyShowUnread,);
-      // final list = await repository.getEntriesByFeedId(feedId);
       final value = state.value?.copyWith(
         isInitializing: false, hasMore: list.length >= pageSize,
         uiItems: list.map((item) => UiItem(type: ViewType.entryItem, content: item)).toList(),
