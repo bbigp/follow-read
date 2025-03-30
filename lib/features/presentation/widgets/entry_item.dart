@@ -126,7 +126,7 @@ class EntryItem extends ConsumerWidget {
                                           iconSize: 14,
                                         ),
                                       ),
-                                      Text(
+                                      Expanded(child: Text(
                                         '${entry.readingTime}',
                                         style: TextStyle(
                                           fontSize: 13,
@@ -134,8 +134,7 @@ class EntryItem extends ConsumerWidget {
                                           height: 1.38,
                                           color: AppTheme.black50,
                                         ),
-                                      ),
-                                      Spacer(),
+                                      ),),
                                     ],
                                   ),
                                 ),

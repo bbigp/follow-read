@@ -29,6 +29,7 @@ void main() async {
     callbackDispatcher,
     isInDebugMode: true,
   );
+  // debugPaintSizeEnabled = true; // 开启调试布局
   runApp(
     UncontrolledProviderScope(
       container: container,

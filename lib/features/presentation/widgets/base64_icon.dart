@@ -9,7 +9,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 // 自定义缓存管理器（控制缓存策略）
 class Base64IconManager extends CacheManager {
-  static const key = 'base64IconCanche';
+  static const key = 'base64IconCache';
 
   Base64IconManager()
       : super(Config(key,
@@ -59,13 +59,16 @@ class Base64Icon extends StatefulWidget {
 }
 
 class Base64IconState  extends State<Base64Icon> {
-  final AsyncMemoizer<Uint8List?> _memoizer = AsyncMemoizer();
   late Future<Uint8List?> _imageFuture;
 
- @override
+  @override
   void initState() {
     super.initState();
-    _imageFuture = _memoizer.runOnce(() => _getImageBytes(widget.imageUrl, widget.headers));
+    _imageFuture = _ImageRequestCache.getImage(
+      widget.imageUrl,
+      widget.headers,
+      widget.cacheManager ?? Base64IconManager(),
+    );
   }
 
   @override
@@ -91,9 +94,73 @@ class Base64IconState  extends State<Base64Icon> {
     );
   }
 
+  Widget _defaultPlaceholder(){
+    return Container(
+      color: Colors.grey[200],
+      child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+    );
+  }
+  Widget _defaultErrorWidget(){
+    return Container(
+      color: Colors.grey[200],
+      child: Center(child: Icon(Icons.broken_image, color: Colors.grey)),
+    );
+  }
 
-  Future<Uint8List?> _getImageBytes(String url, Map<String, String> headers) async {
-    final cache = widget.cacheManager ?? Base64IconManager();
+}
+
+// 全局请求缓存（内存级）
+class _ImageRequestCache {
+  static final Map<String, Future<Uint8List?>> _pendingRequests = {};
+  static final Map<String, Uint8List> _memoryCache = {};
+
+  static Future<Uint8List?> getImage(
+      String url,
+      Map<String, String> headers,
+      BaseCacheManager cacheManager,
+      ) async {
+    final cacheKey = _normalizeUrl(url);
+
+    // 1. 检查内存缓存
+    if (_memoryCache.containsKey(cacheKey)) {
+      return _memoryCache[cacheKey];
+    }
+
+    // 2. 检查正在进行的请求
+    if (_pendingRequests.containsKey(cacheKey)) {
+      return _pendingRequests[cacheKey];
+    }
+
+    // 3. 创建新请求
+    final completer = Completer<Uint8List?>();
+    _pendingRequests[cacheKey] = completer.future;
+
+    try {
+      // 4. 实际下载逻辑
+      final bytes = await _downloadAndCache(url, headers, cacheManager);
+      _memoryCache[cacheKey] = bytes; // 写入内存缓存
+      completer.complete(bytes);
+    } catch (e) {
+      completer.completeError(e);
+    } finally {
+      _pendingRequests.remove(cacheKey);
+    }
+
+    return completer.future;
+  }
+
+  static String _normalizeUrl(String url) {
+    // 标准化URL格式（去除查询参数）
+    final uri = Uri.parse(url);
+    return Uri(
+      scheme: uri.scheme,
+      host: uri.host,
+      path: uri.path,
+    ).toString();
+  }
+
+  static Future<Uint8List> _downloadAndCache(
+      String url, Map<String, String> headers, BaseCacheManager cache) async {
     final cacheKey = url.toString();
     try {
       final cachedFile = await cache.getFileFromCache(cacheKey);
@@ -114,7 +181,8 @@ class Base64IconState  extends State<Base64Icon> {
         );
         throw Exception('HTTP ${response.statusCode}');
       }
-      final jsonData = jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      final jsonData =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       final base64WithHeader = jsonData['data'] as String;
       final parts = base64WithHeader.split(';base64,');
       if (parts.length != 2) {
@@ -127,18 +195,4 @@ class Base64IconState  extends State<Base64Icon> {
       throw Exception('图片加载失败: $e');
     }
   }
-
-  Widget _defaultPlaceholder(){
-    return Container(
-      color: Colors.grey[200],
-      child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-    );
-  }
-  Widget _defaultErrorWidget(){
-    return Container(
-      color: Colors.grey[200],
-      child: Center(child: Icon(Icons.broken_image, color: Colors.grey)),
-    );
-  }
-
 }

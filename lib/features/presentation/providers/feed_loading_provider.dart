@@ -1,19 +1,27 @@
 
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/data/models/entry_page_response.dart';
+import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
+import '../../data/datasources/entry_dao.dart';
 import '../../data/repositories/feed_repository.dart';
-import '../../domain/models/ui_item.dart';
+import '../../domain/models/feed.dart';
 
 final feedLoadingProvider = StateNotifierProvider<FeedLoadingNotifier, FeedsState>((ref) {
-  return FeedLoadingNotifier(feedRepository: ref.watch(feedRepositoryProvider));
+  return FeedLoadingNotifier(
+      feedRepository: ref.watch(feedRepositoryProvider),
+      entryRepository: ref.watch(entryDaoProvider),
+  );
 });
 
 class FeedLoadingNotifier extends StateNotifier<FeedsState> {
   final FeedRepository _feedRepository;
-  FeedLoadingNotifier({required FeedRepository feedRepository}) :
-        _feedRepository = feedRepository,
+  final EntryDao _entryRepository;
+  FeedLoadingNotifier({required FeedRepository feedRepository,
+  required EntryDao entryRepository}) :
+        _feedRepository = feedRepository, _entryRepository = entryRepository,
         super(FeedsState.empty);
 
 
@@ -32,34 +40,50 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
 
   Future<void> getFeeds() async {
     final feeds = await _feedRepository.getFeeds();
-    final all = [...feeds.map((item) => UiItem(type: ViewType.feedItem, content: item))];
-    state = state.copyWith(items: all);
+    final readCount = await _entryRepository.countRead("read");
+    final unreadCount = await _entryRepository.countRead("unread");
+    final totalCount = await _entryRepository.count();
+    state = state.copyWith(feeds: feeds, readCount: readCount, unreadCount: unreadCount,
+        totalCount: totalCount,
+    );
   }
 
 }
 
 class FeedsState {
   final bool isSyncing;
-  final List<UiItem> items;
+  final List<Feed> feeds;
+  final int readCount;
+  final int unreadCount;
+  final int totalCount;
 
   const FeedsState({
     required this.isSyncing,
-    required this.items,
+    required this.feeds,
+    this.readCount = 0,
+    this.unreadCount = 0,
+    this.totalCount = 0,
   });
 
   static const empty = FeedsState(
     isSyncing: false,
-    items: <UiItem>[],
+    feeds: <Feed>[],
   );
 
 
   FeedsState copyWith({
     bool? isSyncing,
-    List<UiItem>? items
+    List<Feed>? feeds,
+    int? readCount,
+    int? unreadCount,
+    int? totalCount,
   }) {
     return FeedsState(
       isSyncing: isSyncing ?? this.isSyncing,
-      items: items ?? this.items,
+      feeds: feeds ?? this.feeds,
+        readCount: readCount ?? this.readCount,
+        unreadCount: unreadCount ?? this.unreadCount,
+        totalCount: totalCount ?? this.totalCount,
     );
   }
 }

@@ -15,4 +15,8 @@ class Svgicons {
   static const String retry = "assets/svg/retry.svg";
   static const String link = "assets/svg/link.svg";
   static const String alertFill = "assets/svg/alert_fill.svg";
+
+  static const String folder = "assets/svg/folder.svg";
+  static const String plusWhite = "assets/svg/plus_white.svg";
+
 }

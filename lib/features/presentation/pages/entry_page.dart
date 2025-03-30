@@ -14,6 +14,7 @@ import '../../../config/theme.dart';
 import '../../domain/models/entry.dart';
 import '../../domain/models/feed.dart';
 import '../providers/entry_loading_provider.dart';
+import '../widgets/loading.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int feedId;
@@ -179,8 +180,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   Widget _buildListView(Feed feed) {
     final state = ref.watch(entriesLoadingProvider(widget.feedId));
     final itemCount = state.value!.uiItems.length;
-    return RefreshIndicator(
+    return CustomRefresh(
         onRefresh: () async {
+          await Future.delayed(Duration(seconds: 3));
           ref.read(entriesLoadingProvider(widget.feedId).notifier)
               .fetchEntries(reset: true, onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
         },

@@ -33,7 +33,7 @@ class ListItem extends ConsumerWidget {
                   color: AppTheme.black95,
                 )),
             trailing: Text(
-              '${list.unread > 0 ? list.unread : ''}',
+              '${list.count > 0 ? list.count : ''}',
               // 这里可以是你想显示的任何数字
               style: const TextStyle(
                 color: AppTheme.black25,
