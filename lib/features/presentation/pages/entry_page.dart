@@ -180,9 +180,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   Widget _buildListView(Feed feed) {
     final state = ref.watch(entriesLoadingProvider(widget.feedId));
     final itemCount = state.value!.uiItems.length;
-    return CustomRefresh(
+    return RefreshIndicator(
         onRefresh: () async {
-          await Future.delayed(Duration(seconds: 3));
           ref.read(entriesLoadingProvider(widget.feedId).notifier)
               .fetchEntries(reset: true, onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
         },
