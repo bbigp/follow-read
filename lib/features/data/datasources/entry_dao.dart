@@ -102,6 +102,21 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return await query.map((row) => row.read(entriesTable.id.count())).getSingle() ?? 0;
   }
 
+  Future<int> countStarred() async {
+    final query = selectOnly(entriesTable)..addColumns([entriesTable.id.count()]);
+    query..where(entriesTable.starred.equals(true));
+    return await query.map((row) => row.read(entriesTable.id.count())).getSingle() ?? 0;
+  }
+
+  Future<int> countToday() async {
+    final now = DateTime.now().toUtc();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    final tomorrowStart = todayStart.add(const Duration(days: 1));
+    final query = selectOnly(entriesTable)..addColumns([entriesTable.id.count()]);
+    query..where(entriesTable.publishedAt.isBiggerOrEqualValue(todayStart));
+    return await query.map((row) => row.read(entriesTable.id.count())).getSingle() ?? 0;
+  }
+
   // final query = selectOnly(entriesTable)
   //   ..addColumns([entriesTable.id.count()]);
   //

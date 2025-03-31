@@ -43,8 +43,10 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
     final readCount = await _entryRepository.countRead("read");
     final unreadCount = await _entryRepository.countRead("unread");
     final totalCount = await _entryRepository.count();
+    final starredCount = await _entryRepository.countStarred();
+    final todayCount = await _entryRepository.countToday();
     state = state.copyWith(feeds: feeds, readCount: readCount, unreadCount: unreadCount,
-        totalCount: totalCount,
+        totalCount: totalCount, starredCount: starredCount, todayCount: todayCount,
     );
   }
 
@@ -56,6 +58,8 @@ class FeedsState {
   final int readCount;
   final int unreadCount;
   final int totalCount;
+  final int starredCount;
+  final int todayCount;
 
   const FeedsState({
     required this.isSyncing,
@@ -63,6 +67,8 @@ class FeedsState {
     this.readCount = 0,
     this.unreadCount = 0,
     this.totalCount = 0,
+    this.starredCount = 0,
+    this.todayCount = 0,
   });
 
   static const empty = FeedsState(
@@ -77,6 +83,8 @@ class FeedsState {
     int? readCount,
     int? unreadCount,
     int? totalCount,
+    int? starredCount,
+    int? todayCount,
   }) {
     return FeedsState(
       isSyncing: isSyncing ?? this.isSyncing,
@@ -84,6 +92,8 @@ class FeedsState {
         readCount: readCount ?? this.readCount,
         unreadCount: unreadCount ?? this.unreadCount,
         totalCount: totalCount ?? this.totalCount,
+        starredCount: starredCount ?? this.starredCount,
+        todayCount: todayCount ?? this.todayCount,
     );
   }
 }

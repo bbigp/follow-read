@@ -89,9 +89,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               delegate: SliverChildListDelegate([
                 ListItem(list: Listx(title: '全部', svgicon: Svgicons.all, count: feedsState.totalCount)),
                 ListItem(list: Listx(title: '近期已读', svgicon: Svgicons.markRead, count: feedsState.readCount)),
-                ListItem(list: Listx(title: '星标', svgicon: Svgicons.addCollection)),
+                ListItem(list: Listx(title: '星标', svgicon: Svgicons.addCollection, count: feedsState.starredCount)),
                 ListItem(list: Listx(title: '未读', svgicon: Svgicons.markUnread, count: feedsState.unreadCount)),
-                ListItem(list: Listx(title: '今日', svgicon: Svgicons.today)),
+                ListItem(list: Listx(title: '今日', svgicon: Svgicons.today, count: feedsState.todayCount)),
               ]),
             ),
             // 分隔线
