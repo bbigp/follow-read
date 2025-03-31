@@ -38,6 +38,7 @@ dependencies:
   url_launcher: ^6.2.3
   photo_view: ^0.14.0
   workmanager: ^0.5.1
+  easy_refresh: ^3.4.0
 
 dev_dependencies:
   flutter_test:
