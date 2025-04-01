@@ -11,6 +11,7 @@ import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/utils/logger.dart';
+import '../../domain/models/listx.dart';
 import '../datasources/api_client.dart';
 
 class EntryRepository {
@@ -139,7 +140,30 @@ class EntryRepository {
 
   Future<List<Entry>> getEntries(int feedId, int page, {int size = 10, bool onlyShowUnread = false}) async {
     List<String> status = onlyShowUnread ? ["unread"] : ["unread", "read"];
-    final entrys = await _dao.paginateEntries(feedId, status: status, size: size, page: page);
+    bool? starred;
+    DateTime? startTime;
+    if (feedId < 0) {
+      if (feedId == Listx.read) {
+        status = ["read"];
+      }
+      if (feedId == Listx.unread) {
+        status = ["unread"];
+      }
+      if(feedId == Listx.starred) {
+        starred = true;
+      }
+      if (feedId == Listx.today) {
+        final now = DateTime.now().toUtc();
+        startTime = DateTime(now.year, now.month, now.day);
+      }
+      if (feedId == Listx.all) {
+        status = ["unread", "read"];
+      }
+    }
+    final entrys = await _dao.paginateEntries(
+        feedId: feedId, status: status, size: size,
+        page: page, starred: starred, startTime: startTime,
+    );
     final feedIds = entrys.map((e) => int.parse(e.feedId.toString())).toSet().toList();
     final feeds = await _feedDao.getFeedsByIds(feedIds);
     final feedMap = {for (var feed in feeds) feed.id: feed};

@@ -26,7 +26,7 @@ class ListItem extends ConsumerWidget {
             onTap: () {
               ref.read(routerProvider).pushNamed(
                   RouteNames.entry,
-                  pathParameters: {'feedId': '0'},
+                  pathParameters: {'feedId': list.id.toString()},
               );
             },
             leading: Svgicon(list.svgicon),

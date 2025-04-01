@@ -23,6 +23,10 @@ class FeedDetailNotifier extends StateNotifier<AsyncValue<Feed>> {
   }
 
   Future<void> fetchFeed() async {
+    if (feedId < 0) {
+      state = AsyncData(Feed.empty);
+      return;
+    }
     state = const AsyncValue.loading();
     final feed = await repository.getFeedById(feedId);
     state = AsyncValue.data(feed);

@@ -32,14 +32,23 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return await (select(entriesTable)..where((r) => r.feedId.equals(BigInt.from(feedId)))).get();
   }
 
-  Future<List<EntryEntity>> paginateEntries(int feedId, {
+  Future<List<EntryEntity>> paginateEntries({
+    int feedId = 0,
     int page = 1,
     int size = 20, List<String> status = const ['unread'],
     String order = "published_at", String direction = "desc",
+    bool? starred, DateTime? startTime,
   }) async {
-    final query = select(entriesTable)
-      ..where((t) => t.feedId.equals(BigInt.from(feedId)))
-      ..where((t) => entriesTable.status.isIn(status));
+    var query = select(entriesTable)..where((t) => entriesTable.status.isIn(status));
+    if (feedId > 0){
+      query = query..where((t) => t.feedId.equals(BigInt.from(feedId)));
+    }
+    if (starred != null) {
+      query = query..where((t) => t.starred.equals(starred));
+    }
+    if (startTime != null) {
+      query = query..where((t) => t.publishedAt.isBiggerOrEqualValue(startTime));
+    }
 
     final orderByColumn = switch(order) {
       'changed_at' => entriesTable.changedAt,
