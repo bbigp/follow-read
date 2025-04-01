@@ -32,6 +32,9 @@ class FeedsTable extends Table {
   @override
   Set<Column> get primaryKey => {id};
 
+  @override
+  String? get tableName => "feeds";
+
 }
 
 extension FeedEntityConversion on FeedEntity {
