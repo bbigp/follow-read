@@ -14,6 +14,7 @@ class Feed extends BaseUiItem {
   final bool showReadingTime;
   final int errorCount;
   final String errorMsg;
+  final int categoryId;
 
   Feed({
     required this.id,
@@ -28,6 +29,7 @@ class Feed extends BaseUiItem {
     this.showReadingTime = false,
     this.errorCount = 0,
     this.errorMsg = "",
+    this.categoryId = 0,
   });
 
   Feed copyWith({
@@ -43,6 +45,7 @@ class Feed extends BaseUiItem {
     bool? showReadingTime,
     int? errorCount,
     String? errorMsg,
+    int? categoryId,
   }) {
     return Feed(
       id: id ?? this.id,
@@ -57,6 +60,7 @@ class Feed extends BaseUiItem {
         showReadingTime: showReadingTime ?? this.showReadingTime,
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
+        categoryId: categoryId ?? this.categoryId,
     );
   }
 

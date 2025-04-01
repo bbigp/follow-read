@@ -1,5 +1,7 @@
 
 import 'package:drift/drift.dart';
+import 'package:follow_read/features/data/datasources/database.dart';
+import 'package:follow_read/features/domain/models/category.dart';
 
 @DataClassName("CategoryEntity")
 class CategoriesTable extends Table {
@@ -20,4 +22,16 @@ class CategoriesTable extends Table {
 
   @override
   String? get tableName => "categories";
+}
+
+
+extension CategoryEntityConversion on CategoryEntity {
+  Category toModel() {
+    return Category(
+      id: id.toInt(),
+      title: title,
+      userId: userId.toInt(),
+      hideGlobally: hideGlobally,
+    );
+  }
 }

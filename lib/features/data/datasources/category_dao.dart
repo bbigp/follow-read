@@ -27,5 +27,10 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
       });
     });
   }
+
+  Future<List<CategoryEntity>> getAll() async {
+    return await select(categoriesTable).get();
+  }
+
 }
 

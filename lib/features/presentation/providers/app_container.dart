@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/datasources/category_dao.dart';
 import '../../data/datasources/database.dart';
 import '../../data/datasources/feed_dao.dart';
+import '../../data/repositories/category_repository.dart';
 import '../../data/repositories/feed_repository.dart';
 import '../../data/repositories/user_repository.dart';
 import '../../domain/use_cases/get_current_user_use_case.dart';
@@ -74,5 +75,11 @@ final entryRepositoryProvider = Provider<EntryRepository>((ref) {
       feedDao: ref.watch(feedDaoProvider),
       sharedPreferences: ref.watch(sharedPreferencesProvider),
     feedRepository: ref.watch(feedRepositoryProvider),
+  );
+});
+
+final categoryRepository = Provider<CategoryRepository>((ref){
+  return CategoryRepository(
+    dao: ref.watch(categoryDaoProvider),
   );
 });

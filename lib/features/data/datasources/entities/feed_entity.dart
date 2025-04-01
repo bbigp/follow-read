@@ -54,6 +54,7 @@ extension FeedEntityConversion on FeedEntity {
       showReadingTime: showReadingTime,
       errorMsg: errorMsg,
       errorCount: errorCount,
+      categoryId: categoryId.toInt(),
     );
   }
 }
