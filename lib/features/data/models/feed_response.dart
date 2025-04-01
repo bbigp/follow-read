@@ -1,6 +1,8 @@
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
+import 'package:follow_read/features/data/datasources/entities/category_entity.dart';
 
 import '../datasources/database.dart';
 
@@ -64,7 +66,7 @@ class FeedResponse with FeedResponseMappable {
   final bool? ntfyEnabled;
   @MappableField(key: 'ntfy_priority')
   final int? ntfyPriority;
-  final CategoryResponse? category;
+  final CategoryResponse category;
   final FeedIconResponse? icon;
 
   FeedResponse({
@@ -73,6 +75,7 @@ class FeedResponse with FeedResponseMappable {
     required this.feedUrl,
     required this.siteUrl,
     required this.title,
+    required this.category,
     this.description,
     this.checkedAt,
     this.nextCheckAt,
@@ -100,7 +103,6 @@ class FeedResponse with FeedResponseMappable {
     this.appriseServiceUrls,
     this.ntfyEnabled,
     this.ntfyPriority,
-    this.category,
     this.icon,
   });
 
@@ -123,27 +125,50 @@ extension FeedResponseConversion on FeedResponse {
       iconUrl: Value(iconUrl),
       errorCount: Value(parsingErrorCount),
       errorMsg: Value(parsingErrorMessage),
+      categoryId: Value(BigInt.from(category.id)),
     );
   }
 
-  // Feed toModel() {
-  //   return Feed(
-  //     id: id,
-  //     userId: userId,
-  //     feedUrl: feedUrl,
-  //     siteUrl: siteUrl,
-  //     title: title,
-  //     unread: 0,
-  //     read: 0,
-  //   );
-  // }
 }
 
 
 @MappableClass()
 class CategoryResponse with CategoryResponseMappable {
+  final int id;
+  final String title;
+  @MappableField(key: 'user_id')
+  final int userId;
+  @MappableField(key: 'hide_globally')
+  final bool hideGlobally;
   // 根据实际数据结构补充字段
-  CategoryResponse();
+  CategoryResponse({
+    required this.id,
+    required this.title,
+    this.userId = 0,
+    this.hideGlobally = false,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is CategoryResponse &&
+              runtimeType == other.runtimeType &&
+              id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+}
+
+extension CategoryResponseConversion on CategoryResponse {
+
+  CategoriesTableCompanion toCompanion(){
+    return CategoriesTableCompanion.insert(
+      id: Value(BigInt.from(id)),
+      title: title,
+      userId: BigInt.from(userId),
+      hideGlobally: Value(hideGlobally),
+    );
+  }
 }
 
 @MappableClass()

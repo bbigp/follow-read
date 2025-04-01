@@ -35,6 +35,9 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
       Field('siteUrl', _$siteUrl, key: r'site_url');
   static String _$title(FeedResponse v) => v.title;
   static const Field<FeedResponse, String> _f$title = Field('title', _$title);
+  static CategoryResponse _$category(FeedResponse v) => v.category;
+  static const Field<FeedResponse, CategoryResponse> _f$category =
+      Field('category', _$category);
   static String? _$description(FeedResponse v) => v.description;
   static const Field<FeedResponse, String> _f$description =
       Field('description', _$description, opt: true);
@@ -128,9 +131,6 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
   static int? _$ntfyPriority(FeedResponse v) => v.ntfyPriority;
   static const Field<FeedResponse, int> _f$ntfyPriority =
       Field('ntfyPriority', _$ntfyPriority, key: r'ntfy_priority', opt: true);
-  static CategoryResponse? _$category(FeedResponse v) => v.category;
-  static const Field<FeedResponse, CategoryResponse> _f$category =
-      Field('category', _$category, opt: true);
   static FeedIconResponse? _$icon(FeedResponse v) => v.icon;
   static const Field<FeedResponse, FeedIconResponse> _f$icon =
       Field('icon', _$icon, opt: true);
@@ -142,6 +142,7 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
     #feedUrl: _f$feedUrl,
     #siteUrl: _f$siteUrl,
     #title: _f$title,
+    #category: _f$category,
     #description: _f$description,
     #checkedAt: _f$checkedAt,
     #nextCheckAt: _f$nextCheckAt,
@@ -169,7 +170,6 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
     #appriseServiceUrls: _f$appriseServiceUrls,
     #ntfyEnabled: _f$ntfyEnabled,
     #ntfyPriority: _f$ntfyPriority,
-    #category: _f$category,
     #icon: _f$icon,
   };
 
@@ -180,6 +180,7 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
         feedUrl: data.dec(_f$feedUrl),
         siteUrl: data.dec(_f$siteUrl),
         title: data.dec(_f$title),
+        category: data.dec(_f$category),
         description: data.dec(_f$description),
         checkedAt: data.dec(_f$checkedAt),
         nextCheckAt: data.dec(_f$nextCheckAt),
@@ -207,7 +208,6 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
         appriseServiceUrls: data.dec(_f$appriseServiceUrls),
         ntfyEnabled: data.dec(_f$ntfyEnabled),
         ntfyPriority: data.dec(_f$ntfyPriority),
-        category: data.dec(_f$category),
         icon: data.dec(_f$icon));
   }
 
@@ -264,8 +264,7 @@ extension FeedResponseValueCopy<$R, $Out>
 
 abstract class FeedResponseCopyWith<$R, $In extends FeedResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  CategoryResponseCopyWith<$R, CategoryResponse, CategoryResponse>?
-      get category;
+  CategoryResponseCopyWith<$R, CategoryResponse, CategoryResponse> get category;
   FeedIconResponseCopyWith<$R, FeedIconResponse, FeedIconResponse>? get icon;
   $R call(
       {int? id,
@@ -273,6 +272,7 @@ abstract class FeedResponseCopyWith<$R, $In extends FeedResponse, $Out>
       String? feedUrl,
       String? siteUrl,
       String? title,
+      CategoryResponse? category,
       String? description,
       DateTime? checkedAt,
       DateTime? nextCheckAt,
@@ -300,7 +300,6 @@ abstract class FeedResponseCopyWith<$R, $In extends FeedResponse, $Out>
       String? appriseServiceUrls,
       bool? ntfyEnabled,
       int? ntfyPriority,
-      CategoryResponse? category,
       FeedIconResponse? icon});
   FeedResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -314,9 +313,8 @@ class _FeedResponseCopyWithImpl<$R, $Out>
   late final ClassMapperBase<FeedResponse> $mapper =
       FeedResponseMapper.ensureInitialized();
   @override
-  CategoryResponseCopyWith<$R, CategoryResponse, CategoryResponse>?
-      get category =>
-          $value.category?.copyWith.$chain((v) => call(category: v));
+  CategoryResponseCopyWith<$R, CategoryResponse, CategoryResponse>
+      get category => $value.category.copyWith.$chain((v) => call(category: v));
   @override
   FeedIconResponseCopyWith<$R, FeedIconResponse, FeedIconResponse>? get icon =>
       $value.icon?.copyWith.$chain((v) => call(icon: v));
@@ -327,6 +325,7 @@ class _FeedResponseCopyWithImpl<$R, $Out>
           String? feedUrl,
           String? siteUrl,
           String? title,
+          CategoryResponse? category,
           Object? description = $none,
           Object? checkedAt = $none,
           Object? nextCheckAt = $none,
@@ -354,7 +353,6 @@ class _FeedResponseCopyWithImpl<$R, $Out>
           Object? appriseServiceUrls = $none,
           Object? ntfyEnabled = $none,
           Object? ntfyPriority = $none,
-          Object? category = $none,
           Object? icon = $none}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,
@@ -362,6 +360,7 @@ class _FeedResponseCopyWithImpl<$R, $Out>
         if (feedUrl != null) #feedUrl: feedUrl,
         if (siteUrl != null) #siteUrl: siteUrl,
         if (title != null) #title: title,
+        if (category != null) #category: category,
         if (description != $none) #description: description,
         if (checkedAt != $none) #checkedAt: checkedAt,
         if (nextCheckAt != $none) #nextCheckAt: nextCheckAt,
@@ -393,7 +392,6 @@ class _FeedResponseCopyWithImpl<$R, $Out>
           #appriseServiceUrls: appriseServiceUrls,
         if (ntfyEnabled != $none) #ntfyEnabled: ntfyEnabled,
         if (ntfyPriority != $none) #ntfyPriority: ntfyPriority,
-        if (category != $none) #category: category,
         if (icon != $none) #icon: icon
       }));
   @override
@@ -403,6 +401,7 @@ class _FeedResponseCopyWithImpl<$R, $Out>
       feedUrl: data.get(#feedUrl, or: $value.feedUrl),
       siteUrl: data.get(#siteUrl, or: $value.siteUrl),
       title: data.get(#title, or: $value.title),
+      category: data.get(#category, or: $value.category),
       description: data.get(#description, or: $value.description),
       checkedAt: data.get(#checkedAt, or: $value.checkedAt),
       nextCheckAt: data.get(#nextCheckAt, or: $value.nextCheckAt),
@@ -435,7 +434,6 @@ class _FeedResponseCopyWithImpl<$R, $Out>
           data.get(#appriseServiceUrls, or: $value.appriseServiceUrls),
       ntfyEnabled: data.get(#ntfyEnabled, or: $value.ntfyEnabled),
       ntfyPriority: data.get(#ntfyPriority, or: $value.ntfyPriority),
-      category: data.get(#category, or: $value.category),
       icon: data.get(#icon, or: $value.icon));
 
   @override
@@ -458,11 +456,33 @@ class CategoryResponseMapper extends ClassMapperBase<CategoryResponse> {
   @override
   final String id = 'CategoryResponse';
 
+  static int _$id(CategoryResponse v) => v.id;
+  static const Field<CategoryResponse, int> _f$id = Field('id', _$id);
+  static String _$title(CategoryResponse v) => v.title;
+  static const Field<CategoryResponse, String> _f$title =
+      Field('title', _$title);
+  static int _$userId(CategoryResponse v) => v.userId;
+  static const Field<CategoryResponse, int> _f$userId =
+      Field('userId', _$userId, key: r'user_id', opt: true, def: 0);
+  static bool _$hideGlobally(CategoryResponse v) => v.hideGlobally;
+  static const Field<CategoryResponse, bool> _f$hideGlobally = Field(
+      'hideGlobally', _$hideGlobally,
+      key: r'hide_globally', opt: true, def: false);
+
   @override
-  final MappableFields<CategoryResponse> fields = const {};
+  final MappableFields<CategoryResponse> fields = const {
+    #id: _f$id,
+    #title: _f$title,
+    #userId: _f$userId,
+    #hideGlobally: _f$hideGlobally,
+  };
 
   static CategoryResponse _instantiate(DecodingData data) {
-    return CategoryResponse();
+    return CategoryResponse(
+        id: data.dec(_f$id),
+        title: data.dec(_f$title),
+        userId: data.dec(_f$userId),
+        hideGlobally: data.dec(_f$hideGlobally));
   }
 
   @override
@@ -520,7 +540,7 @@ extension CategoryResponseValueCopy<$R, $Out>
 
 abstract class CategoryResponseCopyWith<$R, $In extends CategoryResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call();
+  $R call({int? id, String? title, int? userId, bool? hideGlobally});
   CategoryResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -534,9 +554,19 @@ class _CategoryResponseCopyWithImpl<$R, $Out>
   late final ClassMapperBase<CategoryResponse> $mapper =
       CategoryResponseMapper.ensureInitialized();
   @override
-  $R call() => $apply(FieldCopyWithData({}));
+  $R call({int? id, String? title, int? userId, bool? hideGlobally}) =>
+      $apply(FieldCopyWithData({
+        if (id != null) #id: id,
+        if (title != null) #title: title,
+        if (userId != null) #userId: userId,
+        if (hideGlobally != null) #hideGlobally: hideGlobally
+      }));
   @override
-  CategoryResponse $make(CopyWithData data) => CategoryResponse();
+  CategoryResponse $make(CopyWithData data) => CategoryResponse(
+      id: data.get(#id, or: $value.id),
+      title: data.get(#title, or: $value.title),
+      userId: data.get(#userId, or: $value.userId),
+      hideGlobally: data.get(#hideGlobally, or: $value.hideGlobally));
 
   @override
   CategoryResponseCopyWith<$R2, CategoryResponse, $Out2> $chain<$R2, $Out2>(

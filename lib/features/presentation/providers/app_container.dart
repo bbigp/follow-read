@@ -4,6 +4,7 @@ import 'package:follow_read/features/data/datasources/local_data.dart';
 import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/datasources/category_dao.dart';
 import '../../data/datasources/database.dart';
 import '../../data/datasources/feed_dao.dart';
 import '../../data/repositories/feed_repository.dart';
@@ -48,6 +49,9 @@ final feedDaoProvider = Provider<FeedDao>((ref) {
 final entryDaoProvider = Provider<EntryDao>((ref) {
   return EntryDao(ref.watch(appDatabaseProvider));
 });
+final categoryDaoProvider = Provider<CategoryDao>((ref){
+  return CategoryDao(ref.watch(appDatabaseProvider));
+});
 
 
 
@@ -56,6 +60,7 @@ final feedRepositoryProvider = Provider<FeedRepository>((ref) {
   return FeedRepository(
       feedDao: ref.watch(feedDaoProvider),
       localData: ref.watch(localDataSourceProvider),
+    categoryDao: ref.watch(categoryDaoProvider),
   );
 });
 

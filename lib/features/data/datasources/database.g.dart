@@ -94,6 +94,14 @@ class $FeedsTableTable extends FeedsTable
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: const Constant(""));
+  static const VerificationMeta _categoryIdMeta =
+      const VerificationMeta('categoryId');
+  @override
+  late final GeneratedColumn<BigInt> categoryId = GeneratedColumn<BigInt>(
+      'category_id', aliasedName, false,
+      type: DriftSqlType.bigInt,
+      requiredDuringInsert: false,
+      defaultValue: Constant(BigInt.zero));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -107,7 +115,8 @@ class $FeedsTableTable extends FeedsTable
         onlyShowUnread,
         showReadingTime,
         errorCount,
-        errorMsg
+        errorMsg,
+        categoryId
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -180,6 +189,12 @@ class $FeedsTableTable extends FeedsTable
       context.handle(_errorMsgMeta,
           errorMsg.isAcceptableOrUnknown(data['error_msg']!, _errorMsgMeta));
     }
+    if (data.containsKey('category_id')) {
+      context.handle(
+          _categoryIdMeta,
+          categoryId.isAcceptableOrUnknown(
+              data['category_id']!, _categoryIdMeta));
+    }
     return context;
   }
 
@@ -213,6 +228,8 @@ class $FeedsTableTable extends FeedsTable
           .read(DriftSqlType.int, data['${effectivePrefix}error_count'])!,
       errorMsg: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}error_msg'])!,
+      categoryId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}category_id'])!,
     );
   }
 
@@ -235,6 +252,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
   final bool showReadingTime;
   final int errorCount;
   final String errorMsg;
+  final BigInt categoryId;
   const FeedEntity(
       {required this.id,
       required this.userId,
@@ -247,7 +265,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       required this.onlyShowUnread,
       required this.showReadingTime,
       required this.errorCount,
-      required this.errorMsg});
+      required this.errorMsg,
+      required this.categoryId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -263,6 +282,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
     map['show_reading_time'] = Variable<bool>(showReadingTime);
     map['error_count'] = Variable<int>(errorCount);
     map['error_msg'] = Variable<String>(errorMsg);
+    map['category_id'] = Variable<BigInt>(categoryId);
     return map;
   }
 
@@ -280,6 +300,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       showReadingTime: Value(showReadingTime),
       errorCount: Value(errorCount),
       errorMsg: Value(errorMsg),
+      categoryId: Value(categoryId),
     );
   }
 
@@ -299,6 +320,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       showReadingTime: serializer.fromJson<bool>(json['showReadingTime']),
       errorCount: serializer.fromJson<int>(json['errorCount']),
       errorMsg: serializer.fromJson<String>(json['errorMsg']),
+      categoryId: serializer.fromJson<BigInt>(json['categoryId']),
     );
   }
   @override
@@ -317,6 +339,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       'showReadingTime': serializer.toJson<bool>(showReadingTime),
       'errorCount': serializer.toJson<int>(errorCount),
       'errorMsg': serializer.toJson<String>(errorMsg),
+      'categoryId': serializer.toJson<BigInt>(categoryId),
     };
   }
 
@@ -332,7 +355,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           bool? onlyShowUnread,
           bool? showReadingTime,
           int? errorCount,
-          String? errorMsg}) =>
+          String? errorMsg,
+          BigInt? categoryId}) =>
       FeedEntity(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -346,6 +370,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
         showReadingTime: showReadingTime ?? this.showReadingTime,
         errorCount: errorCount ?? this.errorCount,
         errorMsg: errorMsg ?? this.errorMsg,
+        categoryId: categoryId ?? this.categoryId,
       );
   FeedEntity copyWithCompanion(FeedsTableCompanion data) {
     return FeedEntity(
@@ -366,6 +391,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       errorCount:
           data.errorCount.present ? data.errorCount.value : this.errorCount,
       errorMsg: data.errorMsg.present ? data.errorMsg.value : this.errorMsg,
+      categoryId:
+          data.categoryId.present ? data.categoryId.value : this.categoryId,
     );
   }
 
@@ -383,14 +410,27 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           ..write('onlyShowUnread: $onlyShowUnread, ')
           ..write('showReadingTime: $showReadingTime, ')
           ..write('errorCount: $errorCount, ')
-          ..write('errorMsg: $errorMsg')
+          ..write('errorMsg: $errorMsg, ')
+          ..write('categoryId: $categoryId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, userId, feedUrl, siteUrl, title, unread,
-      read, iconUrl, onlyShowUnread, showReadingTime, errorCount, errorMsg);
+  int get hashCode => Object.hash(
+      id,
+      userId,
+      feedUrl,
+      siteUrl,
+      title,
+      unread,
+      read,
+      iconUrl,
+      onlyShowUnread,
+      showReadingTime,
+      errorCount,
+      errorMsg,
+      categoryId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -406,7 +446,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           other.onlyShowUnread == this.onlyShowUnread &&
           other.showReadingTime == this.showReadingTime &&
           other.errorCount == this.errorCount &&
-          other.errorMsg == this.errorMsg);
+          other.errorMsg == this.errorMsg &&
+          other.categoryId == this.categoryId);
 }
 
 class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
@@ -422,6 +463,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
   final Value<bool> showReadingTime;
   final Value<int> errorCount;
   final Value<String> errorMsg;
+  final Value<BigInt> categoryId;
   const FeedsTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -435,6 +477,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.showReadingTime = const Value.absent(),
     this.errorCount = const Value.absent(),
     this.errorMsg = const Value.absent(),
+    this.categoryId = const Value.absent(),
   });
   FeedsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -449,6 +492,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.showReadingTime = const Value.absent(),
     this.errorCount = const Value.absent(),
     this.errorMsg = const Value.absent(),
+    this.categoryId = const Value.absent(),
   })  : userId = Value(userId),
         feedUrl = Value(feedUrl),
         siteUrl = Value(siteUrl),
@@ -466,6 +510,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     Expression<bool>? showReadingTime,
     Expression<int>? errorCount,
     Expression<String>? errorMsg,
+    Expression<BigInt>? categoryId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -480,6 +525,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       if (showReadingTime != null) 'show_reading_time': showReadingTime,
       if (errorCount != null) 'error_count': errorCount,
       if (errorMsg != null) 'error_msg': errorMsg,
+      if (categoryId != null) 'category_id': categoryId,
     });
   }
 
@@ -495,7 +541,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       Value<bool>? onlyShowUnread,
       Value<bool>? showReadingTime,
       Value<int>? errorCount,
-      Value<String>? errorMsg}) {
+      Value<String>? errorMsg,
+      Value<BigInt>? categoryId}) {
     return FeedsTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -509,6 +556,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       showReadingTime: showReadingTime ?? this.showReadingTime,
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
+      categoryId: categoryId ?? this.categoryId,
     );
   }
 
@@ -551,6 +599,9 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     if (errorMsg.present) {
       map['error_msg'] = Variable<String>(errorMsg.value);
     }
+    if (categoryId.present) {
+      map['category_id'] = Variable<BigInt>(categoryId.value);
+    }
     return map;
   }
 
@@ -568,7 +619,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
           ..write('onlyShowUnread: $onlyShowUnread, ')
           ..write('showReadingTime: $showReadingTime, ')
           ..write('errorCount: $errorCount, ')
-          ..write('errorMsg: $errorMsg')
+          ..write('errorMsg: $errorMsg, ')
+          ..write('categoryId: $categoryId')
           ..write(')'))
         .toString();
   }
@@ -1261,17 +1313,276 @@ class EntriesTableCompanion extends UpdateCompanion<EntryEntity> {
   }
 }
 
+class $CategoriesTableTable extends CategoriesTable
+    with TableInfo<$CategoriesTableTable, CategoryEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CategoriesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<BigInt> id = GeneratedColumn<BigInt>(
+      'id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: false);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<BigInt> userId = GeneratedColumn<BigInt>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  static const VerificationMeta _hideGloballyMeta =
+      const VerificationMeta('hideGlobally');
+  @override
+  late final GeneratedColumn<bool> hideGlobally = GeneratedColumn<bool>(
+      'hide_globally', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("hide_globally" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [id, title, userId, hideGlobally];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'categories';
+  @override
+  VerificationContext validateIntegrity(Insertable<CategoryEntity> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('hide_globally')) {
+      context.handle(
+          _hideGloballyMeta,
+          hideGlobally.isAcceptableOrUnknown(
+              data['hide_globally']!, _hideGloballyMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CategoryEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CategoryEntity(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
+      hideGlobally: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}hide_globally'])!,
+    );
+  }
+
+  @override
+  $CategoriesTableTable createAlias(String alias) {
+    return $CategoriesTableTable(attachedDatabase, alias);
+  }
+}
+
+class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
+  final BigInt id;
+  final String title;
+  final BigInt userId;
+  final bool hideGlobally;
+  const CategoryEntity(
+      {required this.id,
+      required this.title,
+      required this.userId,
+      required this.hideGlobally});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<BigInt>(id);
+    map['title'] = Variable<String>(title);
+    map['user_id'] = Variable<BigInt>(userId);
+    map['hide_globally'] = Variable<bool>(hideGlobally);
+    return map;
+  }
+
+  CategoriesTableCompanion toCompanion(bool nullToAbsent) {
+    return CategoriesTableCompanion(
+      id: Value(id),
+      title: Value(title),
+      userId: Value(userId),
+      hideGlobally: Value(hideGlobally),
+    );
+  }
+
+  factory CategoryEntity.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CategoryEntity(
+      id: serializer.fromJson<BigInt>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      userId: serializer.fromJson<BigInt>(json['userId']),
+      hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<BigInt>(id),
+      'title': serializer.toJson<String>(title),
+      'userId': serializer.toJson<BigInt>(userId),
+      'hideGlobally': serializer.toJson<bool>(hideGlobally),
+    };
+  }
+
+  CategoryEntity copyWith(
+          {BigInt? id, String? title, BigInt? userId, bool? hideGlobally}) =>
+      CategoryEntity(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        userId: userId ?? this.userId,
+        hideGlobally: hideGlobally ?? this.hideGlobally,
+      );
+  CategoryEntity copyWithCompanion(CategoriesTableCompanion data) {
+    return CategoryEntity(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      hideGlobally: data.hideGlobally.present
+          ? data.hideGlobally.value
+          : this.hideGlobally,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryEntity(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('userId: $userId, ')
+          ..write('hideGlobally: $hideGlobally')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, title, userId, hideGlobally);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CategoryEntity &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.userId == this.userId &&
+          other.hideGlobally == this.hideGlobally);
+}
+
+class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
+  final Value<BigInt> id;
+  final Value<String> title;
+  final Value<BigInt> userId;
+  final Value<bool> hideGlobally;
+  const CategoriesTableCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.hideGlobally = const Value.absent(),
+  });
+  CategoriesTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    required BigInt userId,
+    this.hideGlobally = const Value.absent(),
+  })  : title = Value(title),
+        userId = Value(userId);
+  static Insertable<CategoryEntity> custom({
+    Expression<BigInt>? id,
+    Expression<String>? title,
+    Expression<BigInt>? userId,
+    Expression<bool>? hideGlobally,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (userId != null) 'user_id': userId,
+      if (hideGlobally != null) 'hide_globally': hideGlobally,
+    });
+  }
+
+  CategoriesTableCompanion copyWith(
+      {Value<BigInt>? id,
+      Value<String>? title,
+      Value<BigInt>? userId,
+      Value<bool>? hideGlobally}) {
+    return CategoriesTableCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      userId: userId ?? this.userId,
+      hideGlobally: hideGlobally ?? this.hideGlobally,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<BigInt>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<BigInt>(userId.value);
+    }
+    if (hideGlobally.present) {
+      map['hide_globally'] = Variable<bool>(hideGlobally.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoriesTableCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('userId: $userId, ')
+          ..write('hideGlobally: $hideGlobally')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $FeedsTableTable feedsTable = $FeedsTableTable(this);
   late final $EntriesTableTable entriesTable = $EntriesTableTable(this);
+  late final $CategoriesTableTable categoriesTable =
+      $CategoriesTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [feedsTable, entriesTable];
+      [feedsTable, entriesTable, categoriesTable];
 }
 
 typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
@@ -1287,6 +1598,7 @@ typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
   Value<bool> showReadingTime,
   Value<int> errorCount,
   Value<String> errorMsg,
+  Value<BigInt> categoryId,
 });
 typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> id,
@@ -1301,6 +1613,7 @@ typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<bool> showReadingTime,
   Value<int> errorCount,
   Value<String> errorMsg,
+  Value<BigInt> categoryId,
 });
 
 class $$FeedsTableTableFilterComposer
@@ -1349,6 +1662,9 @@ class $$FeedsTableTableFilterComposer
 
   ColumnFilters<String> get errorMsg => $composableBuilder(
       column: $table.errorMsg, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get categoryId => $composableBuilder(
+      column: $table.categoryId, builder: (column) => ColumnFilters(column));
 }
 
 class $$FeedsTableTableOrderingComposer
@@ -1397,6 +1713,9 @@ class $$FeedsTableTableOrderingComposer
 
   ColumnOrderings<String> get errorMsg => $composableBuilder(
       column: $table.errorMsg, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get categoryId => $composableBuilder(
+      column: $table.categoryId, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FeedsTableTableAnnotationComposer
@@ -1443,6 +1762,9 @@ class $$FeedsTableTableAnnotationComposer
 
   GeneratedColumn<String> get errorMsg =>
       $composableBuilder(column: $table.errorMsg, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get categoryId => $composableBuilder(
+      column: $table.categoryId, builder: (column) => column);
 }
 
 class $$FeedsTableTableTableManager extends RootTableManager<
@@ -1480,6 +1802,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<bool> showReadingTime = const Value.absent(),
             Value<int> errorCount = const Value.absent(),
             Value<String> errorMsg = const Value.absent(),
+            Value<BigInt> categoryId = const Value.absent(),
           }) =>
               FeedsTableCompanion(
             id: id,
@@ -1494,6 +1817,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             showReadingTime: showReadingTime,
             errorCount: errorCount,
             errorMsg: errorMsg,
+            categoryId: categoryId,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -1508,6 +1832,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<bool> showReadingTime = const Value.absent(),
             Value<int> errorCount = const Value.absent(),
             Value<String> errorMsg = const Value.absent(),
+            Value<BigInt> categoryId = const Value.absent(),
           }) =>
               FeedsTableCompanion.insert(
             id: id,
@@ -1522,6 +1847,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             showReadingTime: showReadingTime,
             errorCount: errorCount,
             errorMsg: errorMsg,
+            categoryId: categoryId,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1859,6 +2185,160 @@ typedef $$EntriesTableTableProcessedTableManager = ProcessedTableManager<
     ),
     EntryEntity,
     PrefetchHooks Function()>;
+typedef $$CategoriesTableTableCreateCompanionBuilder = CategoriesTableCompanion
+    Function({
+  Value<BigInt> id,
+  required String title,
+  required BigInt userId,
+  Value<bool> hideGlobally,
+});
+typedef $$CategoriesTableTableUpdateCompanionBuilder = CategoriesTableCompanion
+    Function({
+  Value<BigInt> id,
+  Value<String> title,
+  Value<BigInt> userId,
+  Value<bool> hideGlobally,
+});
+
+class $$CategoriesTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CategoriesTableTable> {
+  $$CategoriesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => ColumnFilters(column));
+}
+
+class $$CategoriesTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CategoriesTableTable> {
+  $$CategoriesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$CategoriesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CategoriesTableTable> {
+  $$CategoriesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<BigInt> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => column);
+}
+
+class $$CategoriesTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CategoriesTableTable,
+    CategoryEntity,
+    $$CategoriesTableTableFilterComposer,
+    $$CategoriesTableTableOrderingComposer,
+    $$CategoriesTableTableAnnotationComposer,
+    $$CategoriesTableTableCreateCompanionBuilder,
+    $$CategoriesTableTableUpdateCompanionBuilder,
+    (
+      CategoryEntity,
+      BaseReferences<_$AppDatabase, $CategoriesTableTable, CategoryEntity>
+    ),
+    CategoryEntity,
+    PrefetchHooks Function()> {
+  $$CategoriesTableTableTableManager(
+      _$AppDatabase db, $CategoriesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CategoriesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CategoriesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CategoriesTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<BigInt> userId = const Value.absent(),
+            Value<bool> hideGlobally = const Value.absent(),
+          }) =>
+              CategoriesTableCompanion(
+            id: id,
+            title: title,
+            userId: userId,
+            hideGlobally: hideGlobally,
+          ),
+          createCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            required String title,
+            required BigInt userId,
+            Value<bool> hideGlobally = const Value.absent(),
+          }) =>
+              CategoriesTableCompanion.insert(
+            id: id,
+            title: title,
+            userId: userId,
+            hideGlobally: hideGlobally,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CategoriesTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CategoriesTableTable,
+    CategoryEntity,
+    $$CategoriesTableTableFilterComposer,
+    $$CategoriesTableTableOrderingComposer,
+    $$CategoriesTableTableAnnotationComposer,
+    $$CategoriesTableTableCreateCompanionBuilder,
+    $$CategoriesTableTableUpdateCompanionBuilder,
+    (
+      CategoryEntity,
+      BaseReferences<_$AppDatabase, $CategoriesTableTable, CategoryEntity>
+    ),
+    CategoryEntity,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1867,4 +2347,6 @@ class $AppDatabaseManager {
       $$FeedsTableTableTableManager(_db, _db.feedsTable);
   $$EntriesTableTableTableManager get entriesTable =>
       $$EntriesTableTableTableManager(_db, _db.entriesTable);
+  $$CategoriesTableTableTableManager get categoriesTable =>
+      $$CategoriesTableTableTableManager(_db, _db.categoriesTable);
 }

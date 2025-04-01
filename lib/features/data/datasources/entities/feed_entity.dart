@@ -28,6 +28,8 @@ class FeedsTable extends Table {
       .withDefault(const Constant(0))();
   TextColumn get errorMsg => text().named("error_msg")
       .withDefault(const Constant(""))();
+  Int64Column get categoryId => int64().named("category_id")
+      .withDefault(Constant(BigInt.zero))();
 
   @override
   Set<Column> get primaryKey => {id};

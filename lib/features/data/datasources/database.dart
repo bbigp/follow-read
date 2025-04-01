@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:follow_read/features/data/datasources/entities/category_entity.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -10,7 +11,7 @@ import 'entities/feed_entity.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [FeedsTable, EntriesTable])
+@DriftDatabase(tables: [FeedsTable, EntriesTable, CategoriesTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
