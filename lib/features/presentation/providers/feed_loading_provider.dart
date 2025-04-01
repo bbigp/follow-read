@@ -3,6 +3,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/models/entry_page_response.dart';
 import 'package:follow_read/features/data/repositories/entry_repository.dart';
+import 'package:follow_read/features/domain/models/smart_list_count.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
 import '../../data/datasources/entry_dao.dart';
@@ -40,14 +41,8 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
 
   Future<void> getFeeds() async {
     final feeds = await _feedRepository.getFeeds();
-    final readCount = await _entryRepository.countRead("read");
-    final unreadCount = await _entryRepository.countRead("unread");
-    final totalCount = await _entryRepository.count();
-    final starredCount = await _entryRepository.countStarred();
-    final todayCount = await _entryRepository.countToday();
-    state = state.copyWith(feeds: feeds, readCount: readCount, unreadCount: unreadCount,
-        totalCount: totalCount, starredCount: starredCount, todayCount: todayCount,
-    );
+    final smartCount = await _entryRepository.countSmartList();
+    state = state.copyWith(feeds: feeds, smartCount: smartCount,);
   }
 
 }
@@ -55,20 +50,12 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
 class FeedsState {
   final bool isSyncing;
   final List<Feed> feeds;
-  final int readCount;
-  final int unreadCount;
-  final int totalCount;
-  final int starredCount;
-  final int todayCount;
+  final SmartListCount smartCount;
 
   const FeedsState({
     required this.isSyncing,
     required this.feeds,
-    this.readCount = 0,
-    this.unreadCount = 0,
-    this.totalCount = 0,
-    this.starredCount = 0,
-    this.todayCount = 0,
+    this.smartCount = const SmartListCount(),
   });
 
   static const empty = FeedsState(
@@ -80,20 +67,12 @@ class FeedsState {
   FeedsState copyWith({
     bool? isSyncing,
     List<Feed>? feeds,
-    int? readCount,
-    int? unreadCount,
-    int? totalCount,
-    int? starredCount,
-    int? todayCount,
+    SmartListCount? smartCount,
   }) {
     return FeedsState(
       isSyncing: isSyncing ?? this.isSyncing,
       feeds: feeds ?? this.feeds,
-        readCount: readCount ?? this.readCount,
-        unreadCount: unreadCount ?? this.unreadCount,
-        totalCount: totalCount ?? this.totalCount,
-        starredCount: starredCount ?? this.starredCount,
-        todayCount: todayCount ?? this.todayCount,
+      smartCount: smartCount ?? this.smartCount,
     );
   }
 }

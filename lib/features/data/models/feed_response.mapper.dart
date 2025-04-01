@@ -51,14 +51,14 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
   static const Field<FeedResponse, String> _f$lastModifiedHeader = Field(
       'lastModifiedHeader', _$lastModifiedHeader,
       key: r'last_modified_header', opt: true);
-  static String? _$parsingErrorMessage(FeedResponse v) => v.parsingErrorMessage;
+  static String _$parsingErrorMessage(FeedResponse v) => v.parsingErrorMessage;
   static const Field<FeedResponse, String> _f$parsingErrorMessage = Field(
       'parsingErrorMessage', _$parsingErrorMessage,
-      key: r'parsing_error_message', opt: true);
-  static int? _$parsingErrorCount(FeedResponse v) => v.parsingErrorCount;
+      key: r'parsing_error_message', opt: true, def: "");
+  static int _$parsingErrorCount(FeedResponse v) => v.parsingErrorCount;
   static const Field<FeedResponse, int> _f$parsingErrorCount = Field(
       'parsingErrorCount', _$parsingErrorCount,
-      key: r'parsing_error_count', opt: true);
+      key: r'parsing_error_count', opt: true, def: 0);
   static String? _$scraperRules(FeedResponse v) => v.scraperRules;
   static const Field<FeedResponse, String> _f$scraperRules =
       Field('scraperRules', _$scraperRules, key: r'scraper_rules', opt: true);
@@ -332,8 +332,8 @@ class _FeedResponseCopyWithImpl<$R, $Out>
           Object? nextCheckAt = $none,
           Object? etagHeader = $none,
           Object? lastModifiedHeader = $none,
-          Object? parsingErrorMessage = $none,
-          Object? parsingErrorCount = $none,
+          String? parsingErrorMessage,
+          int? parsingErrorCount,
           Object? scraperRules = $none,
           Object? rewriteRules = $none,
           Object? crawler = $none,
@@ -368,9 +368,9 @@ class _FeedResponseCopyWithImpl<$R, $Out>
         if (etagHeader != $none) #etagHeader: etagHeader,
         if (lastModifiedHeader != $none)
           #lastModifiedHeader: lastModifiedHeader,
-        if (parsingErrorMessage != $none)
+        if (parsingErrorMessage != null)
           #parsingErrorMessage: parsingErrorMessage,
-        if (parsingErrorCount != $none) #parsingErrorCount: parsingErrorCount,
+        if (parsingErrorCount != null) #parsingErrorCount: parsingErrorCount,
         if (scraperRules != $none) #scraperRules: scraperRules,
         if (rewriteRules != $none) #rewriteRules: rewriteRules,
         if (crawler != $none) #crawler: crawler,

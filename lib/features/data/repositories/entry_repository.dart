@@ -25,9 +25,21 @@ class EntryRepository {
         _feedRepository = feedRepository;
 
   Future<int> syncProcess() async{
-    final cacheTotal = await _dao.count();
-    final total = await getTotal();
-    return total - cacheTotal;
+    try {
+      final cacheTotal = await _dao.count();
+      final total = await getTotal();
+      final needSyncSize = total - cacheTotal;
+      if (needSyncSize > 0) {
+        return needSyncSize;
+      }
+      _preferences.setString(SyncTask.status, SyncTask.success);
+      return 0;
+    }catch (e) {
+      _preferences.setString(SyncTask.status, SyncTask.failed);
+    } finally {
+      _preferences.setString(SyncTask.executeTime, DateTime.now().toString());
+    }
+    return -1;
   }
 
 

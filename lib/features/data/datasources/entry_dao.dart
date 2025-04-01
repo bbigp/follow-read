@@ -1,6 +1,7 @@
 
 
 import 'package:drift/drift.dart';
+import 'package:follow_read/features/domain/models/smart_list_count.dart';
 
 import 'database.dart';
 import 'entities/entry_entity.dart';
@@ -115,6 +116,34 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     final query = selectOnly(entriesTable)..addColumns([entriesTable.id.count()]);
     query..where(entriesTable.publishedAt.isBiggerOrEqualValue(todayStart));
     return await query.map((row) => row.read(entriesTable.id.count())).getSingle() ?? 0;
+  }
+
+
+  Future<SmartListCount> countSmartList() async {
+    final now = DateTime.now().toUtc();
+    final todayStart = DateTime(now.year, now.month, now.day);
+
+    final query = '''
+    SELECT 
+      COUNT(*) AS total,
+      ifnull(SUM(CASE WHEN status = 'read' THEN 1 ELSE 0 END), 0) AS read_count,
+      ifnull(SUM(CASE WHEN status = 'unread' THEN 1 ELSE 0 END), 0) AS unread_count,
+      ifnull(SUM(CASE WHEN starred THEN 1 ELSE 0 END), 0) AS starred_count,
+      ifnull(SUM(CASE WHEN published_at >= ? THEN 1 ELSE 0 END), 0) AS today_count
+    FROM entries;
+  ''';
+    final result = await db.customSelect(
+      query,
+      variables: [Variable(todayStart)],
+    ).getSingle();
+
+    return SmartListCount(
+      total: result.read<int>('total'),
+      read: result.read<int>('read_count'),
+      unread: result.read<int>('unread_count'),
+      starred: result.read<int>('starred_count'),
+      today: result.read<int>('today_count'),
+    );
   }
 
   // final query = selectOnly(entriesTable)

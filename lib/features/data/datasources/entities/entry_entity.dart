@@ -40,6 +40,9 @@ class EntriesTable extends Table {
   @override
   Set<Column> get primaryKey => {id};
 
+  @override
+  String? get tableName => "entries";
+
 }
 
 extension EntryEntityConversion on EntryEntity {

@@ -113,7 +113,7 @@ class $FeedsTableTable extends FeedsTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'feeds_table';
+  static const String $name = 'feeds';
   @override
   VerificationContext validateIntegrity(Insertable<FeedEntity> instance,
       {bool isInserting = false}) {
@@ -704,7 +704,7 @@ class $EntriesTableTable extends EntriesTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'entries_table';
+  static const String $name = 'entries';
   @override
   VerificationContext validateIntegrity(Insertable<EntryEntity> instance,
       {bool isInserting = false}) {

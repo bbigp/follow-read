@@ -52,6 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final feedsState = ref.watch(feedLoadingProvider);
     final syncState = ref.watch(syncProvider);
+    final smartCount = ref.watch(feedLoadingProvider.select((s) => s.smartCount));
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(feedLoadingProvider.notifier).getFeeds();
@@ -87,11 +88,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             SliverList(
               delegate: SliverChildListDelegate([
-                ListItem(list: Listx(title: '全部', svgicon: Svgicons.all, count: feedsState.totalCount)),
-                ListItem(list: Listx(title: '近期已读', svgicon: Svgicons.markRead, count: feedsState.readCount)),
-                ListItem(list: Listx(title: '星标', svgicon: Svgicons.addCollection, count: feedsState.starredCount)),
-                ListItem(list: Listx(title: '未读', svgicon: Svgicons.markUnread, count: feedsState.unreadCount)),
-                ListItem(list: Listx(title: '今日', svgicon: Svgicons.today, count: feedsState.todayCount)),
+                ListItem(list: Listx(title: '全部', svgicon: Svgicons.all, count: smartCount.total)),
+                ListItem(list: Listx(title: '近期已读', svgicon: Svgicons.markRead, count: smartCount.read)),
+                ListItem(list: Listx(title: '星标', svgicon: Svgicons.addCollection, count: smartCount.starred)),
+                ListItem(list: Listx(title: '未读', svgicon: Svgicons.markUnread, count: smartCount.unread)),
+                ListItem(list: Listx(title: '今日', svgicon: Svgicons.today, count: smartCount.today)),
               ]),
             ),
             // 分隔线
