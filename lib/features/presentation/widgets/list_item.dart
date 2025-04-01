@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
+import 'package:follow_read/routes/app_route.dart';
 
 import '../../../config/theme.dart';
 import '../../domain/models/listx.dart';
@@ -22,7 +23,12 @@ class ListItem extends ConsumerWidget {
             dense: true,
             horizontalTitleGap: 12,
             // 图标与标题的水平间距（默认16）
-            onTap: () {},
+            onTap: () {
+              ref.read(routerProvider).pushNamed(
+                  RouteNames.entry,
+                  pathParameters: {'feedId': '0'},
+              );
+            },
             leading: Svgicon(list.svgicon),
             title: Text(list.title,
                 maxLines: 1,

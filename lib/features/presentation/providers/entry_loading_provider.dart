@@ -12,9 +12,10 @@ import 'app_container.dart';
 
 
 final entriesLoadingProvider = StateNotifierProvider.autoDispose.family<
-    EntriesLoadingNotifier, AsyncValue<EntryListState>, int>((ref, feedId) {
+    EntriesLoadingNotifier, AsyncValue<EntryListState>, int
+>((ref, feedId) {
   return EntriesLoadingNotifier(
-      feedId: feedId, repository: ref.watch(entryRepositoryProvider),
+    feedId: feedId, repository: ref.watch(entryRepositoryProvider),
   );
 });
 

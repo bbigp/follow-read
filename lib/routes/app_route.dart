@@ -48,7 +48,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final feedId = state.pathParameters['feedId']!;
           final onlyShowUnread = state.uri.queryParameters['onlyShowUnread'] ?? 'false';
-          return EntryPage(feedId: int.parse(feedId), onlyShowUnread: bool.parse(onlyShowUnread),);
+          return EntryPage(feedId: int.parse(feedId),
+            onlyShowUnread: bool.parse(onlyShowUnread),
+          );
         }
       ),
       GoRoute(

@@ -97,31 +97,11 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return result.read(countAll()) ?? 0;
   }
 
-  Future<int> countRead(String status) async {
-    final query = selectOnly(entriesTable)..addColumns([entriesTable.id.count()]);
-    query..where(entriesTable.status.equals(status));
-    return await query.map((row) => row.read(entriesTable.id.count())).getSingle() ?? 0;
-  }
-
-  Future<int> countStarred() async {
-    final query = selectOnly(entriesTable)..addColumns([entriesTable.id.count()]);
-    query..where(entriesTable.starred.equals(true));
-    return await query.map((row) => row.read(entriesTable.id.count())).getSingle() ?? 0;
-  }
-
-  Future<int> countToday() async {
-    final now = DateTime.now().toUtc();
-    final todayStart = DateTime(now.year, now.month, now.day);
-    final tomorrowStart = todayStart.add(const Duration(days: 1));
-    final query = selectOnly(entriesTable)..addColumns([entriesTable.id.count()]);
-    query..where(entriesTable.publishedAt.isBiggerOrEqualValue(todayStart));
-    return await query.map((row) => row.read(entriesTable.id.count())).getSingle() ?? 0;
-  }
-
 
   Future<SmartListCount> countSmartList() async {
     final now = DateTime.now().toUtc();
     final todayStart = DateTime(now.year, now.month, now.day);
+    final tomorrowStart = todayStart.add(const Duration(days: 1));
 
     final query = '''
     SELECT 
@@ -145,17 +125,5 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
       today: result.read<int>('today_count'),
     );
   }
-
-  // final query = selectOnly(entriesTable)
-  //   ..addColumns([entriesTable.id.count()]);
-  //
-  // // 过滤条件
-  // query
-  // ..where(entriesTable.feedId.equals(BigInt.from(feedId)))
-  // ..where(entriesTable.status.isIn(status));
-  //
-  // // 获取总数
-  // final totalResult = await query.map((row) => row.read(entriesTable.id.count())).getSingle();
-  // final total = totalResult ?? 0;
 
 }
