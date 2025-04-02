@@ -4,6 +4,7 @@ import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
 import 'package:follow_read/features/presentation/pages/profile_page.dart';
+import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/utils/logger.dart';
@@ -43,13 +44,16 @@ final routerProvider = Provider<GoRouter>((ref) {
           builder: (context, state) => const ProfilePage()
       ),
       GoRoute(
-        path: '/entry/:feedId',
+        path: '/entry/:type/:id',
         name: RouteNames.entry,
         builder: (context, state) {
-          final feedId = state.pathParameters['feedId']!;
+          final id = state.pathParameters['id']!;
+          final type = state.pathParameters['type']!;
           final onlyShowUnread = state.uri.queryParameters['onlyShowUnread'] ?? 'false';
-          return EntryPage(feedId: int.parse(feedId),
+          return EntryPage(
+            id: int.parse(id),
             onlyShowUnread: bool.parse(onlyShowUnread),
+            type: TileType.fromString(type),
           );
         }
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/providers/feed_detail_provider.dart';
+import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
@@ -14,16 +15,17 @@ import '../../../config/theme.dart';
 import '../../domain/models/entry.dart';
 import '../../domain/models/feed.dart';
 import '../providers/entry_loading_provider.dart';
-import '../widgets/loading.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
-  final int feedId;
+  final int id;
   final bool onlyShowUnread;
+  final TileType type;
 
   const EntryPage({
     super.key,
-    required this.feedId,
+    required this.id,
     required this.onlyShowUnread,
+    required this.type,
   });
 
   @override
@@ -40,15 +42,15 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     if (_lastUsedUnreadFlag == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _lastUsedUnreadFlag = widget.onlyShowUnread;
-        ref.watch(entriesLoadingProvider(widget.feedId).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
-        ref.watch(feedDetailProvider(widget.feedId).notifier).fetchFeed();
+        ref.watch(entriesLoadingProvider(widget.id).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
+        ref.watch(feedDetailProvider(widget.id).notifier).fetchFeed();
       });
     }
-    ref.listenManual(feedDetailProvider(widget.feedId), (_, current){
+    ref.listenManual(feedDetailProvider(widget.id), (_, current){
       final currentUnread = current.value?.onlyShowUnread;
       if (_lastUsedUnreadFlag != null && currentUnread != null && _lastUsedUnreadFlag != currentUnread) {
         _lastUsedUnreadFlag = currentUnread;
-        ref.watch(entriesLoadingProvider(widget.feedId).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
+        ref.watch(entriesLoadingProvider(widget.id).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
       }
     });
     _scrollController.addListener(_scrollListener);
@@ -57,8 +59,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final feedAsync = ref.watch(feedDetailProvider(widget.feedId));
-    final entriesAsync = ref.watch(entriesLoadingProvider(widget.feedId));
+    final feedAsync = ref.watch(feedDetailProvider(widget.id));
+    final entriesAsync = ref.watch(entriesLoadingProvider(widget.id));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -124,7 +126,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                       padding:
                           EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       child: FeedSwitch(
-                        feedId: widget.feedId,
+                        feedId: widget.id,
                       ),
                     ),
                     SizedBox(
@@ -155,7 +157,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
   void _scrollListener() {
-    final state = ref.read(entriesLoadingProvider(widget.feedId));
+    final state = ref.read(entriesLoadingProvider(widget.id));
     final position = _scrollController.position;
 
     // 空列表或未加载完成时直接返回
@@ -164,7 +166,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     if (state.value!.hasMore && !state.value!.isLoadingMore &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200) {
-      ref.read(entriesLoadingProvider(widget.feedId).notifier)
+      ref.read(entriesLoadingProvider(widget.id).notifier)
           .fetchEntries(onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
     }
   }
@@ -178,11 +180,11 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
 
   Widget _buildListView(Feed feed) {
-    final state = ref.watch(entriesLoadingProvider(widget.feedId));
+    final state = ref.watch(entriesLoadingProvider(widget.id));
     final itemCount = state.value!.uiItems.length;
     return RefreshIndicator(
         onRefresh: () async {
-          ref.read(entriesLoadingProvider(widget.feedId).notifier)
+          ref.read(entriesLoadingProvider(widget.id).notifier)
               .fetchEntries(reset: true, onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
         },
         child: ListView.builder(

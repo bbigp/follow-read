@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:follow_read/routes/app_route.dart';
 
@@ -26,7 +27,7 @@ class ListItem extends ConsumerWidget {
             onTap: () {
               ref.read(routerProvider).pushNamed(
                   RouteNames.entry,
-                  pathParameters: {'feedId': list.id.toString()},
+                  pathParameters: {'id': list.id.toString(), 'type': TileType.list.toString()},
               );
             },
             leading: Svgicon(list.svgicon),

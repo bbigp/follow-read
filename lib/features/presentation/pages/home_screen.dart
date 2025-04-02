@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
+import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed_item.dart';
 import 'package:follow_read/features/presentation/widgets/list_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // 页面初始化时触发数据加载
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(feedLoadingProvider.notifier).getFeeds();
+      ref.read(homeLoadingProvider.notifier).loadingData();
     });
     _scrollController.addListener(_scrollListener);
   }
@@ -50,12 +52,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final feedsState = ref.watch(feedLoadingProvider);
     final syncState = ref.watch(syncProvider);
+    final homeLoading = ref.watch(homeLoadingProvider);
     final smartCount = ref.watch(feedLoadingProvider.select((s) => s.smartCount));
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(feedLoadingProvider.notifier).getFeeds();
+        ref.read(homeLoadingProvider.notifier).loadingData();
         ref.read(syncProvider.notifier).resetStatus();
       });
     }
@@ -107,14 +110,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             SliverToBoxAdapter(
               child: HomeGroup(title: '订阅源'),
             ),
-            feedsState.feeds.isNotEmpty
+            homeLoading.tiles.isNotEmpty
                 ? SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        final feed = feedsState.feeds[index];
-                        return FeedItem(key: ValueKey(feed.id), feed: feed);
+                        final tile = homeLoading.tiles[index];
+                        return FeedItem(key: ValueKey(tile.id.toString() + tile.type.toString()), tile: tile);
                       },
-                      childCount: feedsState.feeds.length,
+                      childCount: homeLoading.tiles.length,
                     ),
                   )
                 : SliverToBoxAdapter(

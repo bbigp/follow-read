@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/utils/logger.dart';

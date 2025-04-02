@@ -18,5 +18,9 @@ class Svgicons {
 
   static const String folder = "assets/svg/folder.svg";
   static const String plusWhite = "assets/svg/plus_white.svg";
+  static const String dot = "assets/svg/dot.svg";
+  static const String triangleRight = "assets/svg/triangle_right.svg";
+  static const String triangleDown = "assets/svg/triangle_down.svg";
+  static const String group = "assets/svg/group.svg";
 
 }

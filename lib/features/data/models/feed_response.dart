@@ -1,8 +1,6 @@
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter/foundation.dart';
-import 'package:follow_read/features/data/datasources/entities/category_entity.dart';
 
 import '../datasources/database.dart';
 

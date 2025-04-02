@@ -1,8 +1,6 @@
 
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/data/models/entry_page_response.dart';
-import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:follow_read/features/domain/models/smart_list_count.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
@@ -40,9 +38,9 @@ class FeedLoadingNotifier extends StateNotifier<FeedsState> {
   }
 
   Future<void> getFeeds() async {
-    final feeds = await _feedRepository.getFeeds();
+    // final feeds = await _feedRepository.getFeeds();
     final smartCount = await _entryRepository.countSmartList();
-    state = state.copyWith(feeds: feeds, smartCount: smartCount,);
+    state = state.copyWith(feeds: [], smartCount: smartCount,);
   }
 
 }
