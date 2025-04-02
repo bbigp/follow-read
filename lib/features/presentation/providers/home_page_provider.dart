@@ -27,24 +27,25 @@ class HomePageNotifier extends StateNotifier<HomePageState> {
 
   Future<void> loadingData() async{
     final feeds = await feedRepository.getFeeds();
-    final Map<int, List<Feed>> feedsByCid = feeds.fold<Map<int, List<Feed>>>(
-      {}, // 初始空Map
-          (map, feed) {
-        // 获取当前feed的cid
+    final Map<int, List<Feed>> feedsMap = feeds.fold<Map<int, List<Feed>>>(
+      {}, (map, feed) {
         final cid = feed.categoryId;
-
-        // 若map中不存在该cid，初始化空列表
         map.putIfAbsent(cid, () => []);
-
-        // 将feed添加到对应cid的列表中
         map[cid]!.add(feed);
-
         return map;
       },
     );
-
-
     final categories = await categoryRepository.getCategories();
+    List<Tile> tiles = [];
+    for (final category in categories) {
+      if (category.title != "all") {
+        tiles.add(Tile(type: TileType.folder, id: category.id, title: category.title, feeds: feedsMap[category.id] ?? []));
+      }
+    }
+    final all = categories.firstWhere((c) => c.title == "all");
+    for (final feed in feedsMap[all.id] ?? []) {
+      tiles.add(Tile(type: TileType.feed, id: feed.id, title: feed.title, feeds: [feed]));
+    }
   }
 
 }
@@ -52,13 +53,33 @@ class HomePageNotifier extends StateNotifier<HomePageState> {
 class HomePageState {
 
   final List<Listx> listx;
-  final List<Feed> feeds;
+  final List<Tile> tiles;
 
   const HomePageState({
-    this.listx = const <Listx>[],  this.feeds = const<Feed>[],
+    this.tiles = const [],
+    this.listx = const <Listx>[],
   });
   static const empty = HomePageState();
 
+
+}
+
+enum TileType {
+  list, feed, folder,
+}
+
+class Tile {
+  final TileType type;
+  final int id;
+  final String title;
+  final List<Feed> feeds;
+
+  Tile({
+    required this.type,
+    required this.id,
+    this.title = "",
+    this.feeds = const [],
+  });
 
 }
 
