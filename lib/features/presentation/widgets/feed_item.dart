@@ -8,6 +8,7 @@ import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../../routes/app_route.dart';
+import '../../domain/models/category.dart';
 import '../../domain/models/feed.dart';
 import 'feed_icon.dart';
 
@@ -22,18 +23,18 @@ class FeedItem extends ConsumerWidget {
     return Column(
       children: [
         if (tile.type == TileType.feed)
-          _feedItem(feed: tile.feeds[0])
+          _feedItem(feed: tile.feed)
         else if (tile.type == TileType.folder)
-          _folderItem(tile: tile)
+          _folderItem(category: tile.category)
       ],
     );
   }
 }
 
 class _folderItem extends ConsumerWidget {
-  final Tile tile;
+  final Category category;
 
-  const _folderItem({required this.tile});
+  const _folderItem({required this.category});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,10 +45,10 @@ class _folderItem extends ConsumerWidget {
             ref
                 .read(routerProvider)
                 .pushNamed(RouteNames.entry, pathParameters: {
-              'id': tile.id.toString(),
-              'type': tile.type.toString()
+              'id': category.id.toString(),
+              'type': TileType.folder.toString(),
             }, queryParameters: {
-              // 'onlyShowUnread': feed.onlyShowUnread.toString(),
+              'onlyShowUnread': category.onlyShowUnread.toString(),
             });
           },
           child: Container(
@@ -57,10 +58,10 @@ class _folderItem extends ConsumerWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ref.read(homeLoadingProvider.notifier).expanded(tile.id);
+                    ref.read(homeLoadingProvider.notifier).expanded(category.id);
                   },
                   child: Svgicon(
-                    tile.expanded ? Svgicons.triangleDown : Svgicons.triangleRight,
+                    category.expanded ? Svgicons.triangleDown : Svgicons.triangleRight,
                     size: 24,
                     iconSize: 20,
                   ),
@@ -78,7 +79,7 @@ class _folderItem extends ConsumerWidget {
                 ),
                 Expanded(
                   child: Text(
-                    tile.title,
+                    category.title,
                     maxLines: 1,
                     style: const TextStyle(
                       fontSize: 15,
@@ -87,7 +88,7 @@ class _folderItem extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (tile.errorCount > 0)
+                if (category.errorCount > 0)
                   Container(
                     padding: EdgeInsets.only(left: 12),
                     decoration: BoxDecoration(
@@ -125,7 +126,7 @@ class _folderItem extends ConsumerWidget {
                   width: 12,
                 ),
                 Text(
-                  '${tile.unread > 0 ? tile.unread : ''}',
+                  '${category.unread > 0 ? category.unread : ''}',
                   style: const TextStyle(
                     color: AppTheme.black25,
                     fontSize: 13,
@@ -144,13 +145,13 @@ class _folderItem extends ConsumerWidget {
           spacing: 1,
           thickness: 0.5,
         ),
-        if (tile.expanded)
+        if (category.expanded)
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: tile.feeds.length,
+            itemCount: category.feeds.length,
             separatorBuilder: (_, __) => const SizedBox.shrink(),
-            itemBuilder: (context, index) => _feedItem(feed: tile.feeds[index], hasDot: false,),
+            itemBuilder: (context, index) => _feedItem(feed: category.feeds[index], hasDot: false,),
           ),
       ],
     );

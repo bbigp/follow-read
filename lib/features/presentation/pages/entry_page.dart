@@ -36,13 +36,15 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   bool? _lastUsedUnreadFlag;
   final ScrollController _scrollController = ScrollController();
 
+  String get pid => '${widget.type}-${widget.id}';
+
   @override
   void initState() {
     super.initState();
     if (_lastUsedUnreadFlag == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _lastUsedUnreadFlag = widget.onlyShowUnread;
-        ref.watch(entriesLoadingProvider(widget.id).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
+        ref.watch(entriesLoadingProvider(pid).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
         ref.watch(feedDetailProvider(widget.id).notifier).fetchFeed();
       });
     }
@@ -50,7 +52,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
       final currentUnread = current.value?.onlyShowUnread;
       if (_lastUsedUnreadFlag != null && currentUnread != null && _lastUsedUnreadFlag != currentUnread) {
         _lastUsedUnreadFlag = currentUnread;
-        ref.watch(entriesLoadingProvider(widget.id).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
+        ref.watch(entriesLoadingProvider(pid).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
       }
     });
     _scrollController.addListener(_scrollListener);
@@ -60,7 +62,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   @override
   Widget build(BuildContext context) {
     final feedAsync = ref.watch(feedDetailProvider(widget.id));
-    final entriesAsync = ref.watch(entriesLoadingProvider(widget.id));
+    final entriesAsync = ref.watch(entriesLoadingProvider(pid));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -157,7 +159,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
   void _scrollListener() {
-    final state = ref.read(entriesLoadingProvider(widget.id));
+    final state = ref.read(entriesLoadingProvider(pid));
     final position = _scrollController.position;
 
     // 空列表或未加载完成时直接返回
@@ -166,7 +168,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     if (state.value!.hasMore && !state.value!.isLoadingMore &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200) {
-      ref.read(entriesLoadingProvider(widget.id).notifier)
+      ref.read(entriesLoadingProvider(pid).notifier)
           .fetchEntries(onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
     }
   }
@@ -180,11 +182,11 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
 
   Widget _buildListView(Feed feed) {
-    final state = ref.watch(entriesLoadingProvider(widget.id));
+    final state = ref.watch(entriesLoadingProvider(pid));
     final itemCount = state.value!.uiItems.length;
     return RefreshIndicator(
         onRefresh: () async {
-          ref.read(entriesLoadingProvider(widget.id).notifier)
+          ref.read(entriesLoadingProvider(pid).notifier)
               .fetchEntries(reset: true, onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
         },
         child: ListView.builder(

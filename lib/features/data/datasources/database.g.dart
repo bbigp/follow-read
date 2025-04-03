@@ -1344,8 +1344,29 @@ class $CategoriesTableTable extends CategoriesTable
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("hide_globally" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _onlyShowUnreadMeta =
+      const VerificationMeta('onlyShowUnread');
   @override
-  List<GeneratedColumn> get $columns => [id, title, userId, hideGlobally];
+  late final GeneratedColumn<bool> onlyShowUnread = GeneratedColumn<bool>(
+      'only_show_unread', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("only_show_unread" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _showReadingTimeMeta =
+      const VerificationMeta('showReadingTime');
+  @override
+  late final GeneratedColumn<bool> showReadingTime = GeneratedColumn<bool>(
+      'show_reading_time', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("show_reading_time" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, title, userId, hideGlobally, onlyShowUnread, showReadingTime];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1377,6 +1398,18 @@ class $CategoriesTableTable extends CategoriesTable
           hideGlobally.isAcceptableOrUnknown(
               data['hide_globally']!, _hideGloballyMeta));
     }
+    if (data.containsKey('only_show_unread')) {
+      context.handle(
+          _onlyShowUnreadMeta,
+          onlyShowUnread.isAcceptableOrUnknown(
+              data['only_show_unread']!, _onlyShowUnreadMeta));
+    }
+    if (data.containsKey('show_reading_time')) {
+      context.handle(
+          _showReadingTimeMeta,
+          showReadingTime.isAcceptableOrUnknown(
+              data['show_reading_time']!, _showReadingTimeMeta));
+    }
     return context;
   }
 
@@ -1394,6 +1427,10 @@ class $CategoriesTableTable extends CategoriesTable
           .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
       hideGlobally: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}hide_globally'])!,
+      onlyShowUnread: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}only_show_unread'])!,
+      showReadingTime: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}show_reading_time'])!,
     );
   }
 
@@ -1408,11 +1445,15 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
   final String title;
   final BigInt userId;
   final bool hideGlobally;
+  final bool onlyShowUnread;
+  final bool showReadingTime;
   const CategoryEntity(
       {required this.id,
       required this.title,
       required this.userId,
-      required this.hideGlobally});
+      required this.hideGlobally,
+      required this.onlyShowUnread,
+      required this.showReadingTime});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1420,6 +1461,8 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
     map['title'] = Variable<String>(title);
     map['user_id'] = Variable<BigInt>(userId);
     map['hide_globally'] = Variable<bool>(hideGlobally);
+    map['only_show_unread'] = Variable<bool>(onlyShowUnread);
+    map['show_reading_time'] = Variable<bool>(showReadingTime);
     return map;
   }
 
@@ -1429,6 +1472,8 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       title: Value(title),
       userId: Value(userId),
       hideGlobally: Value(hideGlobally),
+      onlyShowUnread: Value(onlyShowUnread),
+      showReadingTime: Value(showReadingTime),
     );
   }
 
@@ -1440,6 +1485,8 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       title: serializer.fromJson<String>(json['title']),
       userId: serializer.fromJson<BigInt>(json['userId']),
       hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
+      onlyShowUnread: serializer.fromJson<bool>(json['onlyShowUnread']),
+      showReadingTime: serializer.fromJson<bool>(json['showReadingTime']),
     );
   }
   @override
@@ -1450,16 +1497,25 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       'title': serializer.toJson<String>(title),
       'userId': serializer.toJson<BigInt>(userId),
       'hideGlobally': serializer.toJson<bool>(hideGlobally),
+      'onlyShowUnread': serializer.toJson<bool>(onlyShowUnread),
+      'showReadingTime': serializer.toJson<bool>(showReadingTime),
     };
   }
 
   CategoryEntity copyWith(
-          {BigInt? id, String? title, BigInt? userId, bool? hideGlobally}) =>
+          {BigInt? id,
+          String? title,
+          BigInt? userId,
+          bool? hideGlobally,
+          bool? onlyShowUnread,
+          bool? showReadingTime}) =>
       CategoryEntity(
         id: id ?? this.id,
         title: title ?? this.title,
         userId: userId ?? this.userId,
         hideGlobally: hideGlobally ?? this.hideGlobally,
+        onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+        showReadingTime: showReadingTime ?? this.showReadingTime,
       );
   CategoryEntity copyWithCompanion(CategoriesTableCompanion data) {
     return CategoryEntity(
@@ -1469,6 +1525,12 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       hideGlobally: data.hideGlobally.present
           ? data.hideGlobally.value
           : this.hideGlobally,
+      onlyShowUnread: data.onlyShowUnread.present
+          ? data.onlyShowUnread.value
+          : this.onlyShowUnread,
+      showReadingTime: data.showReadingTime.present
+          ? data.showReadingTime.value
+          : this.showReadingTime,
     );
   }
 
@@ -1478,13 +1540,16 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('userId: $userId, ')
-          ..write('hideGlobally: $hideGlobally')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('onlyShowUnread: $onlyShowUnread, ')
+          ..write('showReadingTime: $showReadingTime')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, userId, hideGlobally);
+  int get hashCode => Object.hash(
+      id, title, userId, hideGlobally, onlyShowUnread, showReadingTime);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1492,7 +1557,9 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
           other.id == this.id &&
           other.title == this.title &&
           other.userId == this.userId &&
-          other.hideGlobally == this.hideGlobally);
+          other.hideGlobally == this.hideGlobally &&
+          other.onlyShowUnread == this.onlyShowUnread &&
+          other.showReadingTime == this.showReadingTime);
 }
 
 class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
@@ -1500,17 +1567,23 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
   final Value<String> title;
   final Value<BigInt> userId;
   final Value<bool> hideGlobally;
+  final Value<bool> onlyShowUnread;
+  final Value<bool> showReadingTime;
   const CategoriesTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.userId = const Value.absent(),
     this.hideGlobally = const Value.absent(),
+    this.onlyShowUnread = const Value.absent(),
+    this.showReadingTime = const Value.absent(),
   });
   CategoriesTableCompanion.insert({
     this.id = const Value.absent(),
     required String title,
     required BigInt userId,
     this.hideGlobally = const Value.absent(),
+    this.onlyShowUnread = const Value.absent(),
+    this.showReadingTime = const Value.absent(),
   })  : title = Value(title),
         userId = Value(userId);
   static Insertable<CategoryEntity> custom({
@@ -1518,12 +1591,16 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
     Expression<String>? title,
     Expression<BigInt>? userId,
     Expression<bool>? hideGlobally,
+    Expression<bool>? onlyShowUnread,
+    Expression<bool>? showReadingTime,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (userId != null) 'user_id': userId,
       if (hideGlobally != null) 'hide_globally': hideGlobally,
+      if (onlyShowUnread != null) 'only_show_unread': onlyShowUnread,
+      if (showReadingTime != null) 'show_reading_time': showReadingTime,
     });
   }
 
@@ -1531,12 +1608,16 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
       {Value<BigInt>? id,
       Value<String>? title,
       Value<BigInt>? userId,
-      Value<bool>? hideGlobally}) {
+      Value<bool>? hideGlobally,
+      Value<bool>? onlyShowUnread,
+      Value<bool>? showReadingTime}) {
     return CategoriesTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       userId: userId ?? this.userId,
       hideGlobally: hideGlobally ?? this.hideGlobally,
+      onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+      showReadingTime: showReadingTime ?? this.showReadingTime,
     );
   }
 
@@ -1555,6 +1636,12 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
     if (hideGlobally.present) {
       map['hide_globally'] = Variable<bool>(hideGlobally.value);
     }
+    if (onlyShowUnread.present) {
+      map['only_show_unread'] = Variable<bool>(onlyShowUnread.value);
+    }
+    if (showReadingTime.present) {
+      map['show_reading_time'] = Variable<bool>(showReadingTime.value);
+    }
     return map;
   }
 
@@ -1564,7 +1651,9 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('userId: $userId, ')
-          ..write('hideGlobally: $hideGlobally')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('onlyShowUnread: $onlyShowUnread, ')
+          ..write('showReadingTime: $showReadingTime')
           ..write(')'))
         .toString();
   }
@@ -2191,6 +2280,8 @@ typedef $$CategoriesTableTableCreateCompanionBuilder = CategoriesTableCompanion
   required String title,
   required BigInt userId,
   Value<bool> hideGlobally,
+  Value<bool> onlyShowUnread,
+  Value<bool> showReadingTime,
 });
 typedef $$CategoriesTableTableUpdateCompanionBuilder = CategoriesTableCompanion
     Function({
@@ -2198,6 +2289,8 @@ typedef $$CategoriesTableTableUpdateCompanionBuilder = CategoriesTableCompanion
   Value<String> title,
   Value<BigInt> userId,
   Value<bool> hideGlobally,
+  Value<bool> onlyShowUnread,
+  Value<bool> showReadingTime,
 });
 
 class $$CategoriesTableTableFilterComposer
@@ -2220,6 +2313,14 @@ class $$CategoriesTableTableFilterComposer
 
   ColumnFilters<bool> get hideGlobally => $composableBuilder(
       column: $table.hideGlobally, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showReadingTime => $composableBuilder(
+      column: $table.showReadingTime,
+      builder: (column) => ColumnFilters(column));
 }
 
 class $$CategoriesTableTableOrderingComposer
@@ -2243,6 +2344,14 @@ class $$CategoriesTableTableOrderingComposer
   ColumnOrderings<bool> get hideGlobally => $composableBuilder(
       column: $table.hideGlobally,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get showReadingTime => $composableBuilder(
+      column: $table.showReadingTime,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$CategoriesTableTableAnnotationComposer
@@ -2265,6 +2374,12 @@ class $$CategoriesTableTableAnnotationComposer
 
   GeneratedColumn<bool> get hideGlobally => $composableBuilder(
       column: $table.hideGlobally, builder: (column) => column);
+
+  GeneratedColumn<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread, builder: (column) => column);
+
+  GeneratedColumn<bool> get showReadingTime => $composableBuilder(
+      column: $table.showReadingTime, builder: (column) => column);
 }
 
 class $$CategoriesTableTableTableManager extends RootTableManager<
@@ -2298,24 +2413,32 @@ class $$CategoriesTableTableTableManager extends RootTableManager<
             Value<String> title = const Value.absent(),
             Value<BigInt> userId = const Value.absent(),
             Value<bool> hideGlobally = const Value.absent(),
+            Value<bool> onlyShowUnread = const Value.absent(),
+            Value<bool> showReadingTime = const Value.absent(),
           }) =>
               CategoriesTableCompanion(
             id: id,
             title: title,
             userId: userId,
             hideGlobally: hideGlobally,
+            onlyShowUnread: onlyShowUnread,
+            showReadingTime: showReadingTime,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
             required String title,
             required BigInt userId,
             Value<bool> hideGlobally = const Value.absent(),
+            Value<bool> onlyShowUnread = const Value.absent(),
+            Value<bool> showReadingTime = const Value.absent(),
           }) =>
               CategoriesTableCompanion.insert(
             id: id,
             title: title,
             userId: userId,
             hideGlobally: hideGlobally,
+            onlyShowUnread: onlyShowUnread,
+            showReadingTime: showReadingTime,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

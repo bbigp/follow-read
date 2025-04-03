@@ -79,7 +79,7 @@ class EntryDetailBottomBar extends ConsumerWidget {
                                     final status = entry.isUnread ? 'read' : 'unread';
                                     final success = await ref.read(entryDetailProvider(entry.id).notifier).read(status);
                                     if (success) {
-                                      ref.read(entriesLoadingProvider(entry.feedId).notifier).updateRead(entry.id, status);
+                                      // ref.read(entriesLoadingProvider(entry.feedId).notifier).updateRead(entry.id, status);
                                     }
                                   },
                                   child: entry.isUnread ? Svgicon(Svgicons.markRead) : Svgicon(Svgicons.markUnread),

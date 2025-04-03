@@ -12,6 +12,11 @@ class CategoriesTable extends Table {
   BoolColumn get hideGlobally => boolean().named('hide_globally')
       .withDefault(const Constant(false))();
 
+  BoolColumn get onlyShowUnread => boolean().named('only_show_unread')
+      .withDefault(const Constant(false))();
+  BoolColumn get showReadingTime => boolean().named('show_reading_time')
+      .withDefault(const Constant(false))();
+
 
   List<Index> get indexes => [
     Index('unique_userid_title', 'UNIQUE(user_id, title)')
@@ -32,6 +37,8 @@ extension CategoryEntityConversion on CategoryEntity {
       title: title,
       userId: userId.toInt(),
       hideGlobally: hideGlobally,
+      onlyShowUnread: onlyShowUnread,
+      showReadingTime: showReadingTime,
     );
   }
 }

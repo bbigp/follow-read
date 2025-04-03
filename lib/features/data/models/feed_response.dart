@@ -124,6 +124,8 @@ extension FeedResponseConversion on FeedResponse {
       errorCount: Value(parsingErrorCount),
       errorMsg: Value(parsingErrorMessage),
       categoryId: Value(BigInt.from(category.id)),
+      onlyShowUnread: Value.absent(),
+      showReadingTime: Value.absent(),
     );
   }
 
@@ -165,6 +167,8 @@ extension CategoryResponseConversion on CategoryResponse {
       title: title,
       userId: BigInt.from(userId),
       hideGlobally: Value(hideGlobally),
+      onlyShowUnread: Value.absent(),
+      showReadingTime: Value.absent(),
     );
   }
 }

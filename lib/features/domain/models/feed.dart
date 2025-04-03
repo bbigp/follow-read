@@ -16,7 +16,7 @@ class Feed extends BaseUiItem {
   final String errorMsg;
   final int categoryId;
 
-  Feed({
+  const Feed({
     required this.id,
     required this.userId,
     required this.feedUrl,

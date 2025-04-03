@@ -5,6 +5,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/models/ui_item.dart';
+import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 
 import '../../data/repositories/entry_repository.dart';
 import 'app_container.dart';
@@ -12,37 +13,58 @@ import 'app_container.dart';
 
 
 final entriesLoadingProvider = StateNotifierProvider.autoDispose.family<
-    EntriesLoadingNotifier, AsyncValue<EntryListState>, int
->((ref, feedId) {
+    EntriesLoadingNotifier, AsyncValue<EntryListState>, String
+>((ref, tid) {
   return EntriesLoadingNotifier(
-    feedId: feedId, repository: ref.watch(entryRepositoryProvider),
+    tid: tid, repository: ref.watch(entryRepositoryProvider),
   );
 });
 
 class EntriesLoadingNotifier extends StateNotifier<AsyncValue<EntryListState>> {
 
   final EntryRepository repository;
-  final int feedId;
-  EntriesLoadingNotifier({required this.repository, required this.feedId})
-      : super(AsyncValue.data(EntryListState(uiItems: [], page: 1, size: 10,
-      isLoadingMore: false, isInitializing: false, hasMore: false)));
+  final int id;
+  final TileType type;
+  EntriesLoadingNotifier({required this.repository, required String tid})
+      : id = _parse(tid).id,
+        type = _parse(tid).type,
+        super(AsyncValue.data(EntryListState(uiItems: [], page: 1, size: 10, isLoadingMore: false, isInitializing: false, hasMore: false))) {
+
+
+  }
+
+  Future<void> load() async {
+
+  }
+
+  static Tile _parse(String id) {
+    final parts = id.split('-');
+    if (parts.length != 2) {
+      throw FormatException('Invalid ID format: $id');
+    }
+    return Tile(type: TileType.fromString(parts[0]), id: int.parse(parts[1]));
+  }
 
   Future<void> fetchEntries({bool reset = false, bool onlyShowUnread = false}) async {
     final pageSize = state.value!.size;
     if (reset) {
       if (state.value!.isInitializing) return;
       state = AsyncData(state.value!.copyWith(isInitializing: true));
-      final list = await repository.getEntries(feedId, 1, size: pageSize, onlyShowUnread: onlyShowUnread,);
-      final value = state.value?.copyWith(
-        isInitializing: false, hasMore: list.length >= pageSize,
-        uiItems: list.map((item) => UiItem(type: ViewType.entryItem, content: item)).toList(),
-      );
-      state = AsyncValue.data(value!);
+      if (type == TileType.feed) {
+        final list = await repository.getEntries(id, 1, size: pageSize, onlyShowUnread: onlyShowUnread,);
+        final value = state.value?.copyWith(
+          isInitializing: false, hasMore: list.length >= pageSize,
+          uiItems: list.map((item) => UiItem(type: ViewType.entryItem, content: item)).toList(),
+        );
+        state = AsyncValue.data(value!);
+      }
+
+
     } else {
       if (!state.value!.hasMore || state.value!.isLoadingMore) return;
       state = AsyncData(state.value!.copyWith(isLoadingMore: true));
       final nextPage = state.value!.page + 1;
-      final list = await repository.getEntries(feedId, nextPage, size: pageSize, onlyShowUnread: onlyShowUnread,);
+      final list = await repository.getEntries(id, nextPage, size: pageSize, onlyShowUnread: onlyShowUnread,);
       final allFeeds = [...state.value!.uiItems, ...list.map((item) => UiItem(type: ViewType.entryItem, content: item))];
       state = AsyncData(state.value!.copyWith(
           isLoadingMore: false,
