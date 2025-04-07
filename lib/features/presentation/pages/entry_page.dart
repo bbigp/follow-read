@@ -156,7 +156,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color: AppTheme.black4,
+                              color: AppTheme.black8,
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                             child: SvgPicture.asset(
@@ -177,14 +177,13 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                     SizedBox(height: 6,),
                     Padding(padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Container(
-                        margin: EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
-                          color: AppTheme.black4,
+                          color: AppTheme.black8,
                         ),
-                        height: 40,
+                        height: 48,
                         child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-                          final width = (constraints.maxWidth - 2) / 2;
+                          final width = (constraints.maxWidth - 8) / 2;
                           return Row(
                             children: [
                               Container(
@@ -192,13 +191,13 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                 ),
+                                margin: EdgeInsets.all(4),
                                 width: width,
                                 alignment: Alignment.center,
                                 child: Text('发布时间', style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black95,
                                 ),),
                               ),
-                              SizedBox(width: 2,),
                               Container(
                                 width: width,
                                 alignment: Alignment.center,
