@@ -3,7 +3,6 @@
 import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 
-import '../../presentation/providers/home_page_provider.dart';
 
 class Tile {
 

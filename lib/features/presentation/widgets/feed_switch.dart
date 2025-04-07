@@ -1,19 +1,14 @@
 
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
-import 'package:follow_read/features/presentation/providers/entry_page_provider.dart';
-import 'package:follow_read/features/presentation/providers/feed_loading_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../config/theme.dart';
 import '../../domain/models/tile.dart';
-import '../providers/feed_detail_provider.dart';
 import '../providers/home_page_provider.dart';
 import 'svgicon.dart';
 

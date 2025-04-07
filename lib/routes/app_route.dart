@@ -4,7 +4,6 @@ import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
 import 'package:follow_read/features/presentation/pages/profile_page.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/utils/logger.dart';

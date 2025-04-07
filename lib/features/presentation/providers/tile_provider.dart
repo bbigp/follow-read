@@ -1,15 +1,11 @@
 
 
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/data/repositories/category_repository.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
-import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 
-import '../../domain/models/feed.dart';
 import '../../domain/models/tile.dart';
 
 final tileProvider = StateNotifierProvider.autoDispose.family<

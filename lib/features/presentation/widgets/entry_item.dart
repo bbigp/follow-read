@@ -1,17 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:follow_read/routes/app_route.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../domain/models/entry.dart';
 import '../../domain/models/tile.dart';
-import '../pages/cccccc.dart';
+import 'lazy_image.dart';
 
 class EntryItem extends ConsumerWidget {
   final Entry entry;

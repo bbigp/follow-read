@@ -1,6 +1,4 @@
 
-import 'package:follow_read/features/domain/models/feed.dart';
-
 class Category {
 
   final int id;

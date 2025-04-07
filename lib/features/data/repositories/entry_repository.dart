@@ -11,7 +11,6 @@ import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/utils/logger.dart';
-import '../../domain/models/listx.dart';
 import '../datasources/api_client.dart';
 
 class EntryRepository {

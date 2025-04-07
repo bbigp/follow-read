@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/features/presentation/widgets/no_media.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -11,19 +12,18 @@ class LazyImage extends StatefulWidget {
   final Duration debounceTime;
 
   const LazyImage({
+    super.key,
     required this.url,
     this.loadThreshold = 0.2,
     this.debounceTime = const Duration(milliseconds: 300),
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
-  _LazyImageState createState() => _LazyImageState();
+  LazyImageState createState() => LazyImageState();
 }
 
-class _LazyImageState extends State<LazyImage> {
+class LazyImageState extends State<LazyImage> {
   bool _shouldLoad = false;
-  bool _hasLoaded = false;
 
 
   @override
@@ -45,10 +45,9 @@ class _LazyImageState extends State<LazyImage> {
 
     if (!mounted) return;
 
-    if (isVisible && !_hasLoaded) {
+    if (isVisible && !_shouldLoad) {
       setState(() {
         _shouldLoad = true;
-        _hasLoaded = true;
       });
     }
   }
@@ -59,11 +58,12 @@ class _LazyImageState extends State<LazyImage> {
     }
 
     return CachedNetworkImage(
+      cacheManager: CustomCacheManager(),
       imageUrl: widget.url,
       width: 80, height: 80,
       placeholder: (_, __) => _buildPlaceholder(),
-      errorWidget: (_, __, ___) => NoMedia(width: 80, height: 80,),
-      fadeInDuration: const Duration(milliseconds: 200),
+      errorWidget: (_, __, ___) => _buildPlaceholder(),
+      // imageBuilder: (_, __) => _buildPlaceholder(),
       fit: BoxFit.cover,
     );
   }
@@ -73,3 +73,23 @@ class _LazyImageState extends State<LazyImage> {
   }
 }
 
+class CustomCacheManager extends CacheManager {
+  static const String key = 'customCache';
+
+  CustomCacheManager()
+      : super(Config(
+    key,
+    stalePeriod: Duration(days: 7),
+    maxNrOfCacheObjects: 500, // 最大缓存文件数
+    repo: JsonCacheInfoRepository(databaseName: key),
+    fileService: CustomHttpFileService(),
+  ));
+}
+
+class CustomHttpFileService extends HttpFileService {
+  @override
+  Future<FileServiceResponse> get(String url, {Map<String, String>? headers}) async {
+    logger.i('dio request $url');
+    return super.get(url);
+  }
+}

@@ -8,7 +8,6 @@ import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../../routes/app_route.dart';
-import '../../domain/models/category.dart';
 import '../../domain/models/feed.dart';
 import '../../domain/models/tile.dart';
 import 'feed_icon.dart';
