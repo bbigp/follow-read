@@ -22,5 +22,6 @@ class Svgicons {
   static const String triangleRight = "assets/svg/triangle_right.svg";
   static const String triangleDown = "assets/svg/triangle_down.svg";
   static const String group = "assets/svg/group.svg";
+  static const String noMedia = "assets/svg/no_media.svg";
 
 }

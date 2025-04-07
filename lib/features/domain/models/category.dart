@@ -11,8 +11,8 @@ class Category {
   final bool showReadingTime;
 
 
-  final List<Feed> feeds;
-  final bool expanded;
+  // final List<Feed> feeds;
+  // final bool expanded;
 
   const Category({
     required this.id,
@@ -21,17 +21,17 @@ class Category {
     this.hideGlobally = false,
     this.onlyShowUnread = false,
     this.showReadingTime = false,
-    this.feeds = const [],
-    this.expanded = false,
+    // this.feeds = const [],
+    // this.expanded = false,
   });
 
-  int get unread {
-    return feeds.fold<int>(0, (sum, feed) => sum + feed.unread);
-  }
-
-  int get errorCount {
-    return feeds.fold<int>(0, (sum, feed) => sum + feed.errorCount);
-  }
+  // int get unread {
+  //   return feeds.fold<int>(0, (sum, feed) => sum + feed.unread);
+  // }
+  //
+  // int get errorCount {
+  //   return feeds.fold<int>(0, (sum, feed) => sum + feed.errorCount);
+  // }
 
 
   Category copyWith({
@@ -41,8 +41,8 @@ class Category {
     bool? hideGlobally,
     bool? onlyShowUnread,
     bool? showReadingTime,
-    List<Feed>? feeds,
-    bool? expanded,
+    // List<Feed>? feeds,
+    // bool? expanded,
   }) {
     return Category(
       id: id ?? this.id,
@@ -51,8 +51,8 @@ class Category {
       hideGlobally: hideGlobally ?? this.hideGlobally,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       showReadingTime: showReadingTime ?? this.showReadingTime,
-      feeds: feeds ?? this.feeds,
-      expanded: expanded ?? this.expanded,
+      // feeds: feeds ?? this.feeds,
+      // expanded: expanded ?? this.expanded,
     );
   }
 

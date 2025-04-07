@@ -16,4 +16,13 @@ class CategoryRepository {
     return list.map((item) => item.toModel()).toList();
   }
 
+
+  Future<Category> getCategoryById(int id) async {
+    return (await dao.getCategoryById(id)).toModel();
+  }
+
+  Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime}) async {
+    return await dao.updateShow(id, onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime);
+  }
+
 }

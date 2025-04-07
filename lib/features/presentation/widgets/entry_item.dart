@@ -10,16 +10,17 @@ import 'package:shimmer/shimmer.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../domain/models/entry.dart';
-import '../../domain/models/feed.dart';
+import '../../domain/models/tile.dart';
+import '../pages/cccccc.dart';
 
 class EntryItem extends ConsumerWidget {
   final Entry entry;
-  final Feed feed;
+  final Tile tile;
 
   const EntryItem({
     super.key,
     required this.entry,
-    required this.feed,
+    required this.tile,
   });
 
   @override
@@ -28,184 +29,152 @@ class EntryItem extends ConsumerWidget {
   }
 
   Widget _buildContent(WidgetRef ref) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(16),
-          child: GestureDetector(
-            onTap: () {
-              ref.read(routerProvider).pushNamed(RouteNames.entryDetail, pathParameters: {
-                'entryId': entry.id.toString(),
-              });
-            },
-            child: Column(
+    return GestureDetector(
+      onTap: (){
+        ref.read(routerProvider).pushNamed(RouteNames.entryDetail, pathParameters: {
+          'entryId': entry.id.toString(),
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
               children: [
-                SizedBox(
-                  height: 18,
-                  child: Row(
-                    children: [
-                      FeedIcon(
-                        title: entry.feed.title,
-                        iconUrl: entry.feed.iconUrl,
-                        size: 18,
-                        radius: 4,
-                        textStyle: TextStyle(
-                          fontSize: 11,
-                          height: 1.33,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 6),
-                          child: Text(
-                            entry.feed.title,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              height: 1.38,
-                              color: AppTheme.black95,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        child: Text(
-                          entry.publishedAt.toShowTime(),
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            height: 1.38,
-                            color: AppTheme.black25,
-                          ),
-                        ),
-                      ),
-                    ],
+                FeedIcon(
+                  key: ValueKey(entry.feed.iconUrl + entry.feed.title),
+                  title: entry.feed.title,
+                  iconUrl: entry.feed.iconUrl,
+                  size: 18,
+                  radius: 4,
+                  textStyle: TextStyle(
+                    fontSize: 11,
+                    height: 1.33,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                bottom: 4,
-                              ),
-                              child: Text(
-                                entry.title,
-                                maxLines:
-                                    entry.getTilteLines(feed.showReadingTime),
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.33,
-                                  color: AppTheme.black95,
-                                ),
-                              ),
-                            ),
-                            if (feed.showReadingTime)
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 4),
-                                child: SizedBox(
-                                  height: 18,
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(right: 4),
-                                        child: Svgicon(
-                                          Svgicons.readingTime,
-                                          size: 14,
-                                          iconSize: 14,
-                                        ),
-                                      ),
-                                      Expanded(child: Text(
-                                        '${entry.readingTime}',
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.38,
-                                          color: AppTheme.black50,
-                                        ),
-                                      ),),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            if (entry.description != "")
-                              Text(
-                                entry.description,
-                                maxLines: 2,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.38,
-                                  color: AppTheme.black50,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      if (entry.pic != "")
-                        Padding(
-                          padding: EdgeInsets.only(left: 12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                ref
-                                    .watch(routerProvider)
-                                    .pushNamed(RouteNames.imageGallery, extra: {
-                                  "imageUrls": [entry.pic],
-                                  "index": 0,
-                                });
-                              },
-                              child: CachedNetworkImage(
-                                imageUrl: entry.pic,
-                                width: 80,
-                                height: 80,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                  baseColor: Colors.grey[300]!,
-                                  highlightColor: Colors.grey[100]!,
-                                  child: Container(
-                                    width: 24,
-                                    height: 24,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) => Container(
-                                  width: 80,
-                                  height: 80,
-                                  color: Colors.grey[300], // 错误时的背景颜色
-                                  child: Icon(Icons.error,
-                                      color: Colors.red), // 错误图标
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
+                SizedBox(width: 6,),
+                Expanded(
+                  child: Text(
+                    entry.feed.title,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      height: 1.38,
+                      color: AppTheme.black95,
+                    ),
                   ),
                 ),
+                Text(
+                  entry.publishedAt.toShowTime(),
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    height: 1.38,
+                    color: AppTheme.black25,
+                  ),
+                )
               ],
             ),
-          ),
+            SizedBox(height: 8,),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        entry.title,
+                        maxLines:
+                        entry.getTilteLines(tile.showReadingTime),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          height: 1.33,
+                          color: AppTheme.black95,
+                        ),
+                      ),
+                      SizedBox(height: 4,),
+                      if (tile.showReadingTime)
+                        Row(
+                          children: [
+                            Svgicon(
+                              Svgicons.readingTime,
+                              size: 14,
+                              iconSize: 14,
+                            ),
+                            SizedBox(width: 4,),
+                            Expanded(child: Text(
+                              '${entry.readingTime}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                height: 1.38,
+                                color: AppTheme.black50,
+                              ),
+                            ),),
+                          ],
+                        ),
+                        SizedBox(height: 4,),
+                      if (entry.description != "")
+                        Text(
+                          entry.description,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            height: 1.38,
+                            color: AppTheme.black50,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 12,),
+                if (entry.pic != "")
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        ref.watch(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
+                          "imageUrls": [entry.pic],
+                          "index": 0,
+                        });
+                      },
+                      child: LazyImage(url: entry.pic,),
+                      // child: CachedNetworkImage(
+                      //   imageUrl: entry.pic,
+                      //   width: 80,
+                      //   height: 80,
+                      //   fit: BoxFit.cover,
+                      //   placeholder: (context, url) =>
+                      //       Shimmer.fromColors(
+                      //         baseColor: Colors.grey[300]!,
+                      //         highlightColor: Colors.grey[100]!,
+                      //         child: Container(
+                      //           width: 24,
+                      //           height: 24,
+                      //           color: Colors.white,
+                      //         ),
+                      //       ),
+                      //   errorWidget: (context, url, error) => Container(
+                      //     width: 80,
+                      //     height: 80,
+                      //     color: Colors.grey[300], // 错误时的背景颜色
+                      //     child: Icon(Icons.error,
+                      //         color: Colors.red), // 错误图标
+                      //   ),
+                      // ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
         ),
-        SpacerDivider(
-          indent: 16,
-          spacing: 1,
-          thickness: 0.5,
-        ),
-      ],
+      ),
     );
   }
 }

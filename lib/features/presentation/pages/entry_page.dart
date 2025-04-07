@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/presentation/providers/feed_detail_provider.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
@@ -12,9 +13,9 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
-import '../../domain/models/entry.dart';
-import '../../domain/models/feed.dart';
-import '../providers/entry_loading_provider.dart';
+import '../../domain/models/tile.dart';
+import '../providers/entry_page_provider.dart';
+import '../widgets/spacer_divider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int id;
@@ -36,7 +37,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   bool? _lastUsedUnreadFlag;
   final ScrollController _scrollController = ScrollController();
 
-  String get pid => '${widget.type}-${widget.id}';
+  String get pid => PageUtils.pid(widget.type, widget.id);
 
   @override
   void initState() {
@@ -44,15 +45,15 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     if (_lastUsedUnreadFlag == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _lastUsedUnreadFlag = widget.onlyShowUnread;
-        ref.watch(entriesLoadingProvider(pid).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
-        ref.watch(feedDetailProvider(widget.id).notifier).fetchFeed();
+        ref.watch(entriesProvier(pid).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
+        ref.watch(tileProvider(pid).notifier).loadData();
       });
     }
-    ref.listenManual(feedDetailProvider(widget.id), (_, current){
+    ref.listenManual(tileProvider(pid), (_, current){
       final currentUnread = current.value?.onlyShowUnread;
       if (_lastUsedUnreadFlag != null && currentUnread != null && _lastUsedUnreadFlag != currentUnread) {
         _lastUsedUnreadFlag = currentUnread;
-        ref.watch(entriesLoadingProvider(pid).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
+        ref.watch(entriesProvier(pid).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
       }
     });
     _scrollController.addListener(_scrollListener);
@@ -61,8 +62,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final feedAsync = ref.watch(feedDetailProvider(widget.id));
-    final entriesAsync = ref.watch(entriesLoadingProvider(pid));
+    final tileState = ref.watch(entryPageProvider(pid).select((s) => s.tileState));
+    final isInitializing = ref.watch(entryPageProvider(pid).select((s) => s.entriesState.value.isInitializing));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -80,17 +81,20 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           const SizedBox(width: 12),
         ],
       ),
-      body: feedAsync.when(
-        data: (feed) {
-          return entriesAsync.when(
-              data: (state) => state.isInitializing ? _buildSmartSkeleton() : _buildListView(feed),
-              error: (error, stack) => _noContentYet(),
-              loading: () => const SizedBox.shrink(),
-          );
-        },
-        error: (error, stack) => _noContentYet(),
-        loading: () => _buildSmartSkeleton(),
-      ),
+      body: tileState.isLoading || isInitializing
+          ? _buildSmartSkeleton()
+          : _buildListView(),
+      // body: feedAsync.when(
+      //   data: (feed) {
+      //     return entriesAsync.when(
+      //         data: (state) => state.isInitializing ? _buildSmartSkeleton() : _buildListView(feed),
+      //         error: (error, stack) => _noContentYet(),
+      //         loading: () => const SizedBox.shrink(),
+      //     );
+      //   },
+      //   error: (error, stack) => _noContentYet(),
+      //   loading: () => _buildSmartSkeleton(),
+      // ),
     );
   }
 
@@ -127,9 +131,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      child: FeedSwitch(
-                        feedId: widget.id,
-                      ),
+                      child: FeedSwitch(id: widget.id, type: widget.type,),
                     ),
                     SizedBox(
                       height: 21,
@@ -159,16 +161,16 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
   void _scrollListener() {
-    final state = ref.read(entriesLoadingProvider(pid));
+    final state = ref.read(entriesProvier(pid).select((s) => s.value));
     final position = _scrollController.position;
 
     // 空列表或未加载完成时直接返回
     if (position.maxScrollExtent <= 0) return;
 
-    if (state.value!.hasMore && !state.value!.isLoadingMore &&
+    if (state.hasMore && !state.isLoadingMore &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200) {
-      ref.read(entriesLoadingProvider(pid).notifier)
+      ref.read(entriesProvier(pid).notifier)
           .fetchEntries(onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
     }
   }
@@ -181,36 +183,41 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
 
-  Widget _buildListView(Feed feed) {
-    final state = ref.watch(entriesLoadingProvider(pid));
-    final itemCount = state.value!.uiItems.length;
+  Widget _buildListView() {
+    final pageValue = ref.watch(entryPageProvider(pid));
+    final entriesState = pageValue.entriesState.value;
+    final tile = pageValue.tileState.value!;
     return RefreshIndicator(
         onRefresh: () async {
-          ref.read(entriesLoadingProvider(pid).notifier)
-              .fetchEntries(reset: true, onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
+          ref.watch(entriesProvier(pid).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
+          ref.watch(tileProvider(pid).notifier).loadData();
         },
-        child: ListView.builder(
+        child: ListView.separated(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: itemCount + 2,
+            itemCount: entriesState.entries.length + 2,
+            separatorBuilder: (_, index) => index == 0
+                ? const SizedBox.shrink()
+                : SpacerDivider(indent: 16, spacing: 1, thickness: 0.5,),
             itemBuilder: (context, index) {
               if (index == 0) {
                 return FeedHeader(
-                  title: feed.title,
-                  unread: feed.unread,
+                  title: tile.title,
+                  unread: tile.unread,
                 );
               }
-              if (index - 1 >= itemCount) {
-                if (state.value!.isInitializing) {
+              if (index - 1 >= entriesState.entries.length) {
+                if (entriesState.isInitializing) {
                   return NoMoreLoading();
                 }
-                return state.value!.hasMore ? LoadingMore() : NoMoreLoading();
+                return entriesState.hasMore ? LoadingMore() : NoMoreLoading();
               }
-              final entry = state.value!.uiItems[index - 1].content as Entry;
-              return Opacity(
-                opacity: entry.isUnread ? 1.0 : 0.5,
-                child: EntryItem(entry: entry, feed: feed),
-              );
+              final entry = entriesState.entries[index - 1];
+              return entry.isUnread
+                  ? EntryItem(entry: entry, tile: tile)
+                  : Opacity(opacity: 0.5,
+                      child: EntryItem(entry: entry, tile: tile),
+                    );
             }));
   }
 

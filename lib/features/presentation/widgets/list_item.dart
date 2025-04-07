@@ -7,6 +7,7 @@ import 'package:follow_read/routes/app_route.dart';
 
 import '../../../config/theme.dart';
 import '../../domain/models/listx.dart';
+import '../../domain/models/tile.dart';
 
 class ListItem extends ConsumerWidget {
   

@@ -8,6 +8,7 @@ import 'package:follow_read/features/presentation/providers/home_page_provider.d
 import 'package:go_router/go_router.dart';
 
 import '../core/utils/logger.dart';
+import '../features/domain/models/tile.dart';
 import '../features/presentation/pages/home_screen.dart';
 import '../features/presentation/pages/login_screen.dart';
 import '../features/presentation/providers/auth_provider.dart';

@@ -46,6 +46,10 @@ class FeedRepository {
     return (await feedDao.getFeedById(feedId)).toModel();
   }
 
+  Future<List<Feed>> getFeedsByCategoryId(int categoryId) async {
+    return (await feedDao.getFeedsByCategoryId(categoryId)).map((item) => item.toModel()).toList();
+  }
+
   Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime}) async {
     return await feedDao.updateShow(feedId, onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime);
   }

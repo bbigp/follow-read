@@ -10,6 +10,7 @@ import '../../../config/theme.dart';
 import '../../../routes/app_route.dart';
 import '../../domain/models/category.dart';
 import '../../domain/models/feed.dart';
+import '../../domain/models/tile.dart';
 import 'feed_icon.dart';
 
 class FeedItem extends ConsumerWidget {
@@ -25,16 +26,16 @@ class FeedItem extends ConsumerWidget {
         if (tile.type == TileType.feed)
           _feedItem(feed: tile.feed)
         else if (tile.type == TileType.folder)
-          _folderItem(category: tile.category)
+          _folderItem(tile: tile)
       ],
     );
   }
 }
 
 class _folderItem extends ConsumerWidget {
-  final Category category;
+  final Tile tile;
 
-  const _folderItem({required this.category});
+  const _folderItem({required this.tile});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,13 +43,11 @@ class _folderItem extends ConsumerWidget {
       children: [
         GestureDetector(
           onTap: () {
-            ref
-                .read(routerProvider)
-                .pushNamed(RouteNames.entry, pathParameters: {
-              'id': category.id.toString(),
-              'type': TileType.folder.toString(),
+            ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
+              'id': tile.id.toString(),
+              'type': tile.type.toString(),
             }, queryParameters: {
-              'onlyShowUnread': category.onlyShowUnread.toString(),
+              'onlyShowUnread': tile.onlyShowUnread.toString(),
             });
           },
           child: Container(
@@ -58,10 +57,10 @@ class _folderItem extends ConsumerWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ref.read(homeLoadingProvider.notifier).expanded(category.id);
+                    ref.read(homePageProvider.notifier).expanded(tile.id);
                   },
                   child: Svgicon(
-                    category.expanded ? Svgicons.triangleDown : Svgicons.triangleRight,
+                    tile.expanded ? Svgicons.triangleDown : Svgicons.triangleRight,
                     size: 24,
                     iconSize: 20,
                   ),
@@ -79,7 +78,7 @@ class _folderItem extends ConsumerWidget {
                 ),
                 Expanded(
                   child: Text(
-                    category.title,
+                    tile.title,
                     maxLines: 1,
                     style: const TextStyle(
                       fontSize: 15,
@@ -88,7 +87,7 @@ class _folderItem extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (category.errorCount > 0)
+                if (tile.errorCount > 0)
                   Container(
                     padding: EdgeInsets.only(left: 12),
                     decoration: BoxDecoration(
@@ -126,7 +125,7 @@ class _folderItem extends ConsumerWidget {
                   width: 12,
                 ),
                 Text(
-                  '${category.unread > 0 ? category.unread : ''}',
+                  '${tile.unread > 0 ? tile.unread : ''}',
                   style: const TextStyle(
                     color: AppTheme.black25,
                     fontSize: 13,
@@ -145,13 +144,13 @@ class _folderItem extends ConsumerWidget {
           spacing: 1,
           thickness: 0.5,
         ),
-        if (category.expanded)
+        if (tile.expanded)
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: category.feeds.length,
+            itemCount: tile.feeds.length,
             separatorBuilder: (_, __) => const SizedBox.shrink(),
-            itemBuilder: (context, index) => _feedItem(feed: category.feeds[index], hasDot: false,),
+            itemBuilder: (context, index) => _feedItem(feed: tile.feeds[index], hasDot: false,),
           ),
       ],
     );
@@ -170,9 +169,7 @@ class _feedItem extends ConsumerWidget {
       children: [
         GestureDetector(
           onTap: () {
-            ref
-                .read(routerProvider)
-                .pushNamed(RouteNames.entry, pathParameters: {
+            ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
               'id': feed.id.toString(),
               'type': TileType.feed.toString()
             }, queryParameters: {

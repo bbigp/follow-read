@@ -33,15 +33,15 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
   }
 
   Future<List<EntryEntity>> paginateEntries({
-    int feedId = 0,
+    List<int> feedIds = const[],
     int page = 1,
     int size = 20, List<String> status = const ['unread'],
     String order = "published_at", String direction = "desc",
     bool? starred, DateTime? startTime,
   }) async {
     var query = select(entriesTable)..where((t) => entriesTable.status.isIn(status));
-    if (feedId > 0){
-      query = query..where((t) => t.feedId.equals(BigInt.from(feedId)));
+    if (feedIds.isNotEmpty){
+      query = query..where((t) => t.feedId.isIn(feedIds.map((i) => BigInt.from(i)).toList()));
     }
     if (starred != null) {
       query = query..where((t) => t.starred.equals(starred));
