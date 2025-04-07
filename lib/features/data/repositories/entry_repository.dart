@@ -134,30 +134,12 @@ class EntryRepository {
       return data.total;
     });
   }
-// if (feedId < 0) {
-  //   if (feedId == Listx.read) {
-  //     status = ["read"];
-  //   }
-  //   if (feedId == Listx.unread) {
-  //     status = ["unread"];
-  //   }
-  //   if(feedId == Listx.starred) {
-  //     starred = true;
-  //   }
-  //   if (feedId == Listx.today) {
-  //     final now = DateTime.now().toUtc();
-  //     startTime = DateTime(now.year, now.month, now.day);
-  //   }
-  //   if (feedId == Listx.all) {
-  //     status = ["unread", "read"];
-  //   }
-  // }
 
 
-  Future<List<Entry>> getEntries(int page, { List<int> feedIds = const [],  int size = 10, bool onlyShowUnread = false}) async {
-    List<String> status = onlyShowUnread ? ["unread"] : ["unread", "read"];
-    bool? starred;
-    DateTime? startTime;
+  Future<List<Entry>> getEntries(int page, { List<int> feedIds = const [],
+    int size = 10, List<String> status = const ["unread", "read"],
+    bool? starred, DateTime? startTime
+  }) async {
     final entrys = await _dao.paginateEntries(feedIds: feedIds,
         status: status, size: size,
         page: page, starred: starred, startTime: startTime,

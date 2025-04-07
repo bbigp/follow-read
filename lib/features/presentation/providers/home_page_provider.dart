@@ -1,9 +1,12 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/listx.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
+import '../../../config/svgicons.dart';
+import '../../data/datasources/entry_dao.dart';
 import '../../data/repositories/category_repository.dart';
 import '../../domain/models/feed.dart';
 import '../../domain/models/tile.dart';
@@ -17,11 +20,13 @@ class HomePageNotifier extends StateNotifier<AsyncValue<HomePageValue>> {
 
   final FeedRepository _feedRepository;
   final CategoryRepository _categoryRepository;
+  final EntryDao _entryDao;
   final Ref ref;
 
   HomePageNotifier({required this.ref,})
       : _feedRepository = ref.watch(feedRepositoryProvider),
         _categoryRepository = ref.watch(categoryRepository),
+        _entryDao = ref.watch(entryDaoProvider),
         super(AsyncValue.loading());
 
   Future<void> loadingData() async{
@@ -45,7 +50,19 @@ class HomePageNotifier extends StateNotifier<AsyncValue<HomePageValue>> {
     for (final feed in feedsMap[all.id] ?? []) {
       tiles.add(Tile(type: TileType.feed, feed: feed));
     }
-    state = AsyncData(HomePageValue(tiles: tiles));
+    final listxs = await list();
+    state = AsyncData(HomePageValue(tiles: tiles, listx: listxs));
+  }
+
+  Future<List<Listx>> list() async {
+    final smartCount = await _entryDao.countSmartList();
+    return [
+      Listx.allListx.copyWith(count: smartCount.total),
+      Listx.readListx.copyWith(count: smartCount.read),
+      Listx.starredListx.copyWith(count: smartCount.starred),
+      Listx.unreadListx.copyWith(count: smartCount.unread),
+      Listx.todayListx.copyWith(count: smartCount.today),
+    ];
   }
 
   void expanded(int id){
@@ -73,10 +90,12 @@ class HomePageValue {
   static const empty = HomePageValue();
 
   HomePageValue copyWith({
-    List<Tile>? tiles
+    List<Tile>? tiles,
+    List<Listx>? listx,
   }) {
     return HomePageValue(
       tiles: tiles ?? this.tiles,
+        listx: listx ?? this.listx,
     );
   }
 

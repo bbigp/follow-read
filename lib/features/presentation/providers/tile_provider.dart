@@ -6,6 +6,7 @@ import 'package:follow_read/features/data/repositories/category_repository.dart'
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
+import '../../domain/models/listx.dart';
 import '../../domain/models/tile.dart';
 
 final tileProvider = StateNotifierProvider.autoDispose.family<
@@ -42,6 +43,11 @@ class TileNotifier extends StateNotifier<AsyncValue<Tile>> {
         final category = await _categoryRepository.getCategoryById(id);
         final feeds = await _feedRepository.getFeedsByCategoryId(id);
         state = AsyncData(Tile(type: type, feeds: feeds, category: category));
+        return;
+      }
+      if (type == TileType.list) {
+        final listx = Listx.pageAll.firstWhere((item) => item.id == id);
+        state = AsyncData(Tile(type: type, listx: listx));
         return;
       }
     } catch (e, stackTrace) {

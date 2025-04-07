@@ -8,6 +8,7 @@ import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 
+import '../../domain/models/listx.dart';
 import '../../domain/models/tile.dart';
 
 
@@ -52,6 +53,7 @@ class EntriesNotifier extends StateNotifier<AsyncData<EntriesState>> {
         super(AsyncData(EntriesState()));
 
   Future<void> fetchEntries({bool reset = false, bool onlyShowUnread = false}) async {
+    List<String> status = onlyShowUnread ? ["unread"] : ["unread", "read"];
     final pageSize = state.value.size;
     if (reset) {
       if (state.value.isInitializing) return;
@@ -59,12 +61,15 @@ class EntriesNotifier extends StateNotifier<AsyncData<EntriesState>> {
       List<Entry> list = <Entry>[];
       List<int> feedIds = [];
       if (type == TileType.feed) {
-        list = await _entryRepository.getEntries(1, feedIds: [id], size: pageSize, onlyShowUnread: onlyShowUnread,);
+        list = await _entryRepository.getEntries(1, feedIds: [id], size: pageSize, status: status,);
       }
       if (type == TileType.folder) {
         List<Feed> feeds = await _feedRepository.getFeedsByCategoryId(id);
         feedIds = feeds.map((item) => item.id).toList();
-        list = await _entryRepository.getEntries(1, feedIds: feedIds, size: pageSize, onlyShowUnread: onlyShowUnread,);
+        list = await _entryRepository.getEntries(1, feedIds: feedIds, size: pageSize, status: status,);
+      }
+      if (type == TileType.list) {
+        list = await _getListx(1, pageSize);
       }
       final value = state.value.copyWith(
         isInitializing: false, hasMore: list.length >= pageSize,
@@ -79,16 +84,45 @@ class EntriesNotifier extends StateNotifier<AsyncData<EntriesState>> {
 
     List<Entry> list = <Entry>[];
     if (type == TileType.feed) {
-      list = await _entryRepository.getEntries(nextPage, feedIds: [id], size: pageSize, onlyShowUnread: onlyShowUnread,);
+      list = await _entryRepository.getEntries(nextPage, feedIds: [id], size: pageSize, status: status,);
     }
     if (type == TileType.folder) {
-      list = await _entryRepository.getEntries(nextPage, feedIds: state.value.feedIds, size: pageSize, onlyShowUnread: onlyShowUnread,);
+      list = await _entryRepository.getEntries(nextPage, feedIds: state.value.feedIds, size: pageSize, status: status,);
+    }
+    if (type == TileType.list) {
+      list = await _getListx(nextPage, pageSize);
     }
     final value = state.value.copyWith(
       isLoadingMore: false, hasMore: list.length >= pageSize,
       entries: [...state.value.entries, ...list], page: nextPage,
     );
     state = AsyncData(value);
+  }
+
+  Future<List<Entry>>  _getListx(int page, int pageSize) async {
+    List<String> status = [];
+    bool? starred;
+    DateTime? startTime;
+    if (id == Listx.all) {
+      status = ["unread", "read"];
+    }
+    if (id == Listx.read) {
+      status = ["read"];
+    }
+    if (id == Listx.unread) {
+      status = ["unread"];
+    }
+    if(id == Listx.starred) {
+      starred = true;
+      status = ["unread", "read"];
+    }
+    if (id == Listx.today) {
+      final now = DateTime.now().toUtc();
+      startTime = DateTime(now.year, now.month, now.day);
+      status = ["unread", "read"];
+    }
+    return await _entryRepository.getEntries(page, size: pageSize,
+        status: status, starred: starred, startTime: startTime);
   }
 
 
