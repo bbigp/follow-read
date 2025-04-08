@@ -45,8 +45,6 @@ class _folderItem extends ConsumerWidget {
             ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
               'id': tile.id.toString(),
               'type': tile.type.toString(),
-            }, queryParameters: {
-              'onlyShowUnread': tile.onlyShowUnread.toString(),
             });
           },
           child: Container(
@@ -171,8 +169,6 @@ class _feedItem extends ConsumerWidget {
             ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
               'id': feed.id.toString(),
               'type': TileType.feed.toString()
-            }, queryParameters: {
-              'onlyShowUnread': feed.onlyShowUnread.toString(),
             });
           },
           child: Container(

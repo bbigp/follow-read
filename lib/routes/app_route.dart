@@ -49,10 +49,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           final type = state.pathParameters['type']!;
-          final onlyShowUnread = state.uri.queryParameters['onlyShowUnread'] ?? 'false';
           return EntryPage(
             id: int.parse(id),
-            onlyShowUnread: bool.parse(onlyShowUnread),
             type: TileType.fromString(type),
           );
         }

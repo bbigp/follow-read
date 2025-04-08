@@ -5,7 +5,6 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
-import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
 import 'package:follow_read/features/presentation/widgets/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
@@ -16,17 +15,16 @@ import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../domain/models/tile.dart';
 import '../providers/entry_page_provider.dart';
+import '../widgets/feed_icon.dart';
 import '../widgets/spacer_divider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int id;
-  final bool onlyShowUnread;
   final TileType type;
 
   const EntryPage({
     super.key,
     required this.id,
-    required this.onlyShowUnread,
     required this.type,
   });
 
@@ -35,7 +33,6 @@ class EntryPage extends ConsumerStatefulWidget {
 }
 
 class _EntryPageState extends ConsumerState<EntryPage> {
-  bool? _lastUsedUnreadFlag;
   final ScrollController _scrollController = ScrollController();
 
   String get pid => PageUtils.pid(widget.type, widget.id);
@@ -43,28 +40,13 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   @override
   void initState() {
     super.initState();
-    if (_lastUsedUnreadFlag == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _lastUsedUnreadFlag = widget.onlyShowUnread;
-        ref.watch(entriesProvier(pid).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
-        ref.watch(tileProvider(pid).notifier).loadData();
-      });
-    }
-    ref.listenManual(tileProvider(pid), (_, current){
-      final currentUnread = current.value?.onlyShowUnread;
-      if (_lastUsedUnreadFlag != null && currentUnread != null && _lastUsedUnreadFlag != currentUnread) {
-        _lastUsedUnreadFlag = currentUnread;
-        ref.watch(entriesProvier(pid).notifier).fetchEntries(reset: true, onlyShowUnread: currentUnread);
-      }
-    });
     _scrollController.addListener(_scrollListener);
   }
 
 
   @override
   Widget build(BuildContext context) {
-    final tileState = ref.watch(entryPageProvider(pid).select((s) => s.tileState));
-    final isInitializing = ref.watch(entryPageProvider(pid).select((s) => s.entriesState.value.isInitializing));
+    final entriesAsync = ref.watch(entriesProvier(pid));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -82,20 +64,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           const SizedBox(width: 12),
         ],
       ),
-      body: tileState.isLoading || isInitializing
+      body: entriesAsync.isLoading
           ? _buildSmartSkeleton()
           : _buildListView(),
-      // body: feedAsync.when(
-      //   data: (feed) {
-      //     return entriesAsync.when(
-      //         data: (state) => state.isInitializing ? _buildSmartSkeleton() : _buildListView(feed),
-      //         error: (error, stack) => _noContentYet(),
-      //         loading: () => const SizedBox.shrink(),
-      //     );
-      //   },
-      //   error: (error, stack) => _noContentYet(),
-      //   loading: () => _buildSmartSkeleton(),
-      // ),
     );
   }
 
@@ -112,9 +83,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         return Consumer(builder: (context, ref, _) {
           return StatefulBuilder(
             builder: (context, setState) {
-              final tileState = ref.watch(entryPageProvider(pid).select((s) => s.tileState));
+              final tileAsync = ref.watch(tileProvider(pid));
+              final tile = tileAsync.requireValue;
               return Container(
-                // padding: const EdgeInsets.symmetric(horizontal: 16),
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.85,
                 ),
@@ -139,15 +110,20 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                       child: Row(
                         children: [
                           SizedBox(width: 6,),
-                          FeedIcon(title: tileState.value!.title, iconUrl: tileState.value!.iconUrl, size: 36,),
+                          FeedIcon(title: tile.title, iconUrl: tile.iconUrl, size: 36,),
                           SizedBox(width: 12,),
                           Expanded(child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(tileState.value!.title, style: TextStyle(
+                              Text(tile.title,
+                                maxLines: 1, overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black95,
                               ),),
-                              Text(tileState.value!.feedUrl, style: TextStyle(
+                              Text(tile.feedUrl,
+                                maxLines: 1, overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
                                 fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.black50,
                               ),),
                             ],
@@ -244,17 +220,16 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
   void _scrollListener() {
-    final state = ref.read(entriesProvier(pid).select((s) => s.value));
+    final entriesAsync = ref.watch(entriesProvier(pid));
     final position = _scrollController.position;
 
     // 空列表或未加载完成时直接返回
     if (position.maxScrollExtent <= 0) return;
 
-    if (state.hasMore && !state.isLoadingMore &&
-        _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 200) {
-      ref.read(entriesProvier(pid).notifier)
-          .fetchEntries(onlyShowUnread: _lastUsedUnreadFlag ?? widget.onlyShowUnread);
+    if (!entriesAsync.isLoading && entriesAsync.requireValue.hasMore
+        && !entriesAsync.requireValue.isLoadingMore
+        && _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      ref.read(entriesProvier(pid).notifier).loadMore();
     }
   }
 
@@ -267,13 +242,14 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
 
   Widget _buildListView() {
-    final pageValue = ref.watch(entryPageProvider(pid));
-    final entriesState = pageValue.entriesState.value;
-    final tile = pageValue.tileState.value!;
+    final entriesAsync = ref.watch(entriesProvier(pid));
+    final tileAsync = ref.watch(tileProvider(pid));
+    final entriesState = entriesAsync.requireValue;
+    final tile = tileAsync.requireValue;
     return RefreshIndicator(
         onRefresh: () async {
-          ref.watch(entriesProvier(pid).notifier).fetchEntries(reset: true, onlyShowUnread: widget.onlyShowUnread);
-          ref.watch(tileProvider(pid).notifier).loadData();
+          ref.invalidate(entriesProvier(pid));
+          await ref.read(entriesProvier(pid).future);
         },
         child: ListView.separated(
             controller: _scrollController,
@@ -290,9 +266,6 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                 );
               }
               if (index - 1 >= entriesState.entries.length) {
-                if (entriesState.isInitializing) {
-                  return NoMoreLoading();
-                }
                 return entriesState.hasMore ? LoadingMore() : NoMoreLoading();
               }
               final entry = entriesState.entries[index - 1];

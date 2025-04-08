@@ -1,5 +1,7 @@
 
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/data/repositories/category_repository.dart';
@@ -9,49 +11,46 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import '../../domain/models/listx.dart';
 import '../../domain/models/tile.dart';
 
-final tileProvider = StateNotifierProvider.autoDispose.family<
-    TileNotifier, AsyncValue<Tile>, String>((ref, pid) {
-  return TileNotifier(pid: pid, ref: ref,);
-});
 
-class TileNotifier extends StateNotifier<AsyncValue<Tile>> {
 
-  final int id;
-  final TileType type;
-  final CategoryRepository _categoryRepository;
-  final FeedRepository _feedRepository;
-  final Ref ref;
+final tileProvider = AsyncNotifierProvider.family.autoDispose<TileNotifier, Tile, String>(
+    TileNotifier.new
+);
 
-  TileNotifier({
-    required String pid,
-    required this.ref,
-  })
-      : id = PageUtils.parsePid(pid).id,
-        type = PageUtils.parsePid(pid).type,
-        _categoryRepository = ref.read(categoryRepository),
-        _feedRepository = ref.read(feedRepositoryProvider),
-      super(AsyncValue.loading());
 
-  Future<void> loadData() async {
+class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
+
+  late final CategoryRepository _categoryRepository = ref.watch(categoryRepository);
+  late final FeedRepository _feedRepository = ref.watch(feedRepositoryProvider);
+  late final TileType type;
+  late final int id;
+
+  @override
+  FutureOr<Tile> build(arg) async {
+    return load(arg);
+  }
+
+  Future<Tile> load(String pid) async {
+    final pageId = PageUtils.parsePid(pid);
+    type = pageId.type;
+    id = pageId.id;
     try {
       if (type == TileType.feed) {
         final feed = await _feedRepository.getFeedById(id);
-        state = AsyncData(Tile(type: type, feed: feed));
-        return;
+        return Tile(type: type, feed: feed);
       }
       if (type == TileType.folder) {
         final category = await _categoryRepository.getCategoryById(id);
         final feeds = await _feedRepository.getFeedsByCategoryId(id);
-        state = AsyncData(Tile(type: type, feeds: feeds, category: category));
-        return;
+        return Tile(type: type, feeds: feeds, category: category);
       }
       if (type == TileType.list) {
         final listx = Listx.pageAll.firstWhere((item) => item.id == id);
-        state = AsyncData(Tile(type: type, listx: listx));
-        return;
+        return Tile(type: type, listx: listx);
       }
+      return Future.error("error type");
     } catch (e, stackTrace) {
-      state = AsyncError(e, stackTrace);
+      return Future.error(e, stackTrace);
     }
   }
 
