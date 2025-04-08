@@ -17,6 +17,7 @@ class Entry extends BaseUiItem {
   final int readingTime;
   final Feed feed;
   final String summary;
+  final DateTime createdAt;
 
   Entry({
     required this.id,
@@ -33,6 +34,7 @@ class Entry extends BaseUiItem {
     int? readingTime,
     Feed? feed,
     String? summary,
+    DateTime? createdAt,
   })  : userId = userId ?? 0,
         feedId = feedId ?? 0,
         status = status ?? "unread",
@@ -43,7 +45,8 @@ class Entry extends BaseUiItem {
         starred = starred ?? false,
         readingTime = readingTime ?? 0,
         feed = feed ?? Feed.empty,
-        summary = summary ?? "";
+        summary = summary ?? "",
+        createdAt = createdAt ?? DateTime.now();
 
   String get pic {
     try {
@@ -116,6 +119,7 @@ class Entry extends BaseUiItem {
     String? pic,
     Feed? feed,
     String? summary,
+    DateTime? createdAt,
   }) {
     return Entry(
       id: id ?? this.id,
@@ -132,6 +136,7 @@ class Entry extends BaseUiItem {
       readingTime: readingTime ?? this.readingTime,
       feed: feed ?? this.feed,
       summary: summary ?? this.summary,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }

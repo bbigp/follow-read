@@ -173,49 +173,40 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
               color: AppTheme.black95,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: Row(
-              children: [
-                Text(
-                  entry.author,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    height: 1.18,
-                    color: AppTheme.black50,
-                  ),
+          SizedBox(height: 8,),
+          Row(
+            children: [
+              Text(
+                entry.author,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  height: 1.18,
+                  color: AppTheme.black50,
                 ),
-                if (entry.author != "" && entry.feed.title != "")
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: SvgPicture.asset(
-                        'assets/svg/vector.svg',
-                        width: 2,
-                        height: 6,
-                      )),
-                Text(
-                  entry.feed.title,
+              ),
+              if (entry.author != "" && entry.feed.title != "")
+                SizedBox(width: 8,),
+                SvgPicture.asset('assets/svg/vector.svg', width: 2, height: 6,),
+                SizedBox(width: 8,),
+                Expanded(child: Text(entry.feed.title,
+                  maxLines: 1, overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
                     height: 1.18,
                     color: AppTheme.black50,
-                  ),
-                )
-              ],
-            ),
+                  ),)),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: Text(
-              entry.publishedAt.toShowTime(),
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w500,
-                height: 1.18,
-                color: AppTheme.black50,
-              ),
+          SizedBox(height: 8,),
+          Text(
+            entry.publishedAt.toShowTime(),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              height: 1.18,
+              color: AppTheme.black50,
             ),
           )
         ],

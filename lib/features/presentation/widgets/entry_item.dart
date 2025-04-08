@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
@@ -65,7 +66,9 @@ class EntryItem extends ConsumerWidget {
                   ),
                 ),
                 Text(
-                  entry.publishedAt.toShowTime(),
+                  tile.orderx == Frc.orderxCreatedAt
+                      ? entry.createdAt.toShowTime()
+                      : entry.publishedAt.toShowTime(),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,

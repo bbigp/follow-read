@@ -78,7 +78,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
       context: context,
       isScrollControlled: true,
       // 允许内容高度超过屏幕70%
-      backgroundColor: AppTheme.white85,
+      backgroundColor: AppTheme.white95,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -124,11 +124,12 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                                 style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black95,
                               ),),
-                              Text(tile.feedUrl,
-                                maxLines: 1, overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.black50,
-                              ),),
+                              if (tile.type == TileType.feed)
+                                Text(tile.feedUrl,
+                                  maxLines: 1, overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.black50,
+                                ),),
                             ],
                           )),
                           SizedBox(width: 8,),
@@ -158,7 +159,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
-                          color: AppTheme.black8,
+                          color: AppTheme.black4,
                         ),
                         height: 48,
                         child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {

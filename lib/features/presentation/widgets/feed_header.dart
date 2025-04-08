@@ -27,7 +27,7 @@ class FeedHeader extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    Expanded(child: Text(
                       title,
                       style: TextStyle(
                         fontSize: 28,
@@ -35,7 +35,7 @@ class FeedHeader extends StatelessWidget {
                         height: 1.21,
                         color: AppTheme.black95,
                       ),
-                    )
+                    )),
                   ],
                 ),
                 if (unread > 0)

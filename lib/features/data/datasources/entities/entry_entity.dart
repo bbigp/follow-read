@@ -61,6 +61,7 @@ extension EntryEntityConversion on EntryEntity {
       starred: starred,
       readingTime: readingTime,
       summary: summary,
+      createdAt: createdAt,
     );
   }
 }
