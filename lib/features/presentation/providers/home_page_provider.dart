@@ -1,7 +1,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
+import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/domain/models/listx.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
@@ -46,7 +46,7 @@ class HomePageNotifier extends StateNotifier<AsyncValue<HomePageValue>> {
         tiles.add(Tile(type: TileType.folder, category: category, feeds: feedsMap[category.id] ?? []));
       }
     }
-    final all = categories.firstWhere((c) => c.title == "All");
+    final all = categories.firstWhere((c) => c.title == "All", orElse: () => Category.empty);
     for (final feed in feedsMap[all.id] ?? []) {
       tiles.add(Tile(type: TileType.feed, feed: feed));
     }

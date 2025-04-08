@@ -54,22 +54,32 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
     }
   }
 
-  Future<void> saveShow({bool? onlyShowUnread, bool? showReadingTime}) async{
+  Future<void> saveShow({bool? onlyShowUnread, bool? showReadingTime, String? orderx}) async{
     if (type == TileType.feed) {
       final success = await _feedRepository.updateShow(id,
         onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime,
+        orderx: orderx,
       );
       if (success) {
-        final newFeed = state.value!.feed.copyWith(onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime);
+        final newFeed = state.value!.feed.copyWith(
+            onlyShowUnread: onlyShowUnread,
+            showReadingTime: showReadingTime,
+          orderx: orderx,
+        );
         state = AsyncData(state.value!.copyWith(feed: newFeed));
       }
     }
     if (type == TileType.folder) {
       final success = await _categoryRepository.updateShow(id,
         onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime,
+        orderx: orderx,
       );
       if (success) {
-        final newValue = state.value!.category.copyWith(onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime);
+        final newValue = state.value!.category.copyWith(
+            onlyShowUnread: onlyShowUnread,
+            showReadingTime: showReadingTime,
+          orderx: orderx,
+        );
         state = AsyncData(state.value!.copyWith(category: newValue));
       }
     }

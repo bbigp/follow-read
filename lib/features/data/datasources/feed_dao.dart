@@ -60,7 +60,8 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     });
   }
 
-  Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime}) async {
+  Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime,
+    String? orderx}) async {
     final affectedRows = await (update(feedsTable)
       ..where((t) => t.id.equals(BigInt.from(feedId)))
     ).write(
@@ -71,6 +72,7 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
         showReadingTime: showReadingTime != null
             ? Value(showReadingTime)
             : const Value.absent(),
+        orderx: orderx != null && orderx != "" ? Value(orderx) : const Value.absent(),
       ),
     );
     return affectedRows > 0;

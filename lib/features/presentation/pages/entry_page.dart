@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
@@ -162,24 +165,43 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                           final width = (constraints.maxWidth - 8) / 2;
                           return Row(
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
+                              GestureDetector(
+                                onTap: (){
+                                  if (tile.orderx == Frc.orderxPublishedAt) return;
+                                  ref.read(tileProvider(pid).notifier).saveShow(orderx: Frc.orderxPublishedAt);
+                                },
+                                child: Container(
+                                  decoration: tile.orderx == Frc.orderxPublishedAt ? BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ) : null,
+                                  margin: tile.orderx == Frc.orderxPublishedAt ? EdgeInsets.all(4) : null,
+                                  width: width,
+                                  alignment: Alignment.center,
+                                  child: Text('发布时间', style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
+                                    color: tile.orderx == Frc.orderxPublishedAt ? AppTheme.black95: AppTheme.black50,
+                                  ),),
                                 ),
-                                margin: EdgeInsets.all(4),
-                                width: width,
-                                alignment: Alignment.center,
-                                child: Text('发布时间', style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black95,
-                                ),),
                               ),
-                              Container(
-                                width: width,
-                                alignment: Alignment.center,
-                                child: Text('同步时间', style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black50,
-                                ),),
+                              GestureDetector(
+                                onTap: (){
+                                  if (tile.orderx == Frc.orderxCreatedAt) return;
+                                  ref.read(tileProvider(pid).notifier).saveShow(orderx: Frc.orderxCreatedAt);
+                                },
+                                child: Container(
+                                  decoration: tile.orderx == Frc.orderxCreatedAt ? BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ) : null,
+                                  margin: tile.orderx == Frc.orderxCreatedAt ? EdgeInsets.all(4) : null,
+                                  width: width,
+                                  alignment: Alignment.center,
+                                  child: Text('添加时间', style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
+                                    color: tile.orderx == Frc.orderxCreatedAt ? AppTheme.black95: AppTheme.black50,
+                                  ),),
+                                ),
                               ),
                             ],
                           );

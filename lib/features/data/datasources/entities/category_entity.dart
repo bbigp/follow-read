@@ -17,6 +17,9 @@ class CategoriesTable extends Table {
   BoolColumn get showReadingTime => boolean().named('show_reading_time')
       .withDefault(const Constant(false))();
 
+  TextColumn get orderx => text().named("orderx")
+      .withDefault(Constant("published_at"))();
+
 
   List<Index> get indexes => [
     Index('unique_userid_title', 'UNIQUE(user_id, title)')
@@ -39,6 +42,7 @@ extension CategoryEntityConversion on CategoryEntity {
       hideGlobally: hideGlobally,
       onlyShowUnread: onlyShowUnread,
       showReadingTime: showReadingTime,
+      orderx: orderx,
     );
   }
 }

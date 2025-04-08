@@ -53,15 +53,18 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
     List<String> status = tile.onlyShowUnread ? ["unread"] : ["unread", "read"];
     final page = reset ? 1 : state.value!.page + 1;
     final pageSize = reset ? 10 : state.value!.size;
+    final orderx = tile.orderx;
 
     List<Entry> list = <Entry>[];
     if (type == TileType.feed) {
       list = await _entryRepository.getEntries(
         page, feedIds: [id], size: pageSize, status: status,
+        orderx: orderx,
       );
     } else if (type == TileType.folder) {
       list = await _entryRepository.getEntries(
         page, feedIds: tile.feeds.map((i) => i.id).toList(), size: pageSize, status: status,
+        orderx: orderx,
       );
     } else if (type == TileType.list) {
       list = await _getListx(tile.id, page, pageSize);

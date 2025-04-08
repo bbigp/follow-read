@@ -21,8 +21,12 @@ class CategoryRepository {
     return (await dao.getCategoryById(id)).toModel();
   }
 
-  Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime}) async {
-    return await dao.updateShow(id, onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime);
+  Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
+    String? orderx}) async {
+    return await dao.updateShow(id, onlyShowUnread: onlyShowUnread,
+        showReadingTime: showReadingTime,
+      orderx: orderx,
+    );
   }
 
 }

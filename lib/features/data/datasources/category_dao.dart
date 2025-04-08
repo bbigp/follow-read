@@ -36,7 +36,8 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
     return await (select(categoriesTable)..where((t) => t.id.equals(BigInt.from(id)))).getSingle();
   }
 
-  Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime}) async {
+  Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
+  String? orderx}) async {
     final affectedRows = await (update(categoriesTable)
       ..where((t) => t.id.equals(BigInt.from(id)))
     ).write(
@@ -47,6 +48,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
         showReadingTime: showReadingTime != null
             ? Value(showReadingTime)
             : const Value.absent(),
+        orderx: orderx != null && orderx != "" ? Value(orderx) : const Value.absent(),
       ),
     );
     return affectedRows > 0;

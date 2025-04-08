@@ -3,6 +3,7 @@
 import 'package:drift/drift.dart';
 import 'package:follow_read/features/domain/models/smart_list_count.dart';
 
+import '../../domain/models/constants.dart';
 import 'database.dart';
 import 'entities/entry_entity.dart';
 
@@ -36,7 +37,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     List<int> feedIds = const[],
     int page = 1,
     int size = 20, List<String> status = const ['unread'],
-    String order = "published_at", String direction = "desc",
+    String? orderx, String direction = "desc",
     bool? starred, DateTime? startTime,
   }) async {
     var query = select(entriesTable)..where((t) => entriesTable.status.isIn(status));
@@ -50,8 +51,8 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
       query = query..where((t) => t.publishedAt.isBiggerOrEqualValue(startTime));
     }
 
-    final orderByColumn = switch(order) {
-      'changed_at' => entriesTable.changedAt,
+    final orderByColumn = switch(orderx) {
+      Frc.orderxCreatedAt => entriesTable.createdAt,
       _ => entriesTable.publishedAt,
     };
 

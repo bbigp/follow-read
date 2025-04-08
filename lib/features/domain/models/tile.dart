@@ -4,6 +4,8 @@ import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/listx.dart';
 
+import 'constants.dart';
+
 
 class Tile {
 
@@ -55,6 +57,12 @@ class Tile {
     if (type == TileType.folder) return category.title;
     if (type == TileType.list) return listx.title;
     return "";
+  }
+
+  String get orderx {
+    if (type == TileType.feed) return feed.orderx;
+    if (type == TileType.folder) return category.orderx;
+    return Frc.orderxPublishedAt;
   }
 
   String get feedUrl {

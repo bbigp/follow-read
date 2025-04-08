@@ -1,5 +1,7 @@
 import 'package:follow_read/features/domain/models/ui_item.dart';
 
+import 'constants.dart';
+
 
 class Feed extends BaseUiItem {
   final int id;
@@ -15,6 +17,7 @@ class Feed extends BaseUiItem {
   final int errorCount;
   final String errorMsg;
   final int categoryId;
+  final String orderx;
 
   const Feed({
     required this.id,
@@ -30,6 +33,7 @@ class Feed extends BaseUiItem {
     this.errorCount = 0,
     this.errorMsg = "",
     this.categoryId = 0,
+    this.orderx = Frc.orderxPublishedAt,
   });
 
   Feed copyWith({
@@ -46,6 +50,7 @@ class Feed extends BaseUiItem {
     int? errorCount,
     String? errorMsg,
     int? categoryId,
+    String? orderx,
   }) {
     return Feed(
       id: id ?? this.id,
@@ -61,6 +66,7 @@ class Feed extends BaseUiItem {
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
         categoryId: categoryId ?? this.categoryId,
+      orderx: orderx ?? this.orderx,
     );
   }
 

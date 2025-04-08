@@ -30,6 +30,8 @@ class FeedsTable extends Table {
       .withDefault(const Constant(""))();
   Int64Column get categoryId => int64().named("category_id")
       .withDefault(Constant(BigInt.zero))();
+  TextColumn get orderx => text().named("orderx")
+      .withDefault(Constant("published_at"))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -55,6 +57,7 @@ extension FeedEntityConversion on FeedEntity {
       errorMsg: errorMsg,
       errorCount: errorCount,
       categoryId: categoryId.toInt(),
+      orderx: orderx,
     );
   }
 }

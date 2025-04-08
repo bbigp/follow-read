@@ -102,6 +102,13 @@ class $FeedsTableTable extends FeedsTable
       type: DriftSqlType.bigInt,
       requiredDuringInsert: false,
       defaultValue: Constant(BigInt.zero));
+  static const VerificationMeta _orderxMeta = const VerificationMeta('orderx');
+  @override
+  late final GeneratedColumn<String> orderx = GeneratedColumn<String>(
+      'orderx', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant("published_at"));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -116,7 +123,8 @@ class $FeedsTableTable extends FeedsTable
         showReadingTime,
         errorCount,
         errorMsg,
-        categoryId
+        categoryId,
+        orderx
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -195,6 +203,10 @@ class $FeedsTableTable extends FeedsTable
           categoryId.isAcceptableOrUnknown(
               data['category_id']!, _categoryIdMeta));
     }
+    if (data.containsKey('orderx')) {
+      context.handle(_orderxMeta,
+          orderx.isAcceptableOrUnknown(data['orderx']!, _orderxMeta));
+    }
     return context;
   }
 
@@ -230,6 +242,8 @@ class $FeedsTableTable extends FeedsTable
           .read(DriftSqlType.string, data['${effectivePrefix}error_msg'])!,
       categoryId: attachedDatabase.typeMapping
           .read(DriftSqlType.bigInt, data['${effectivePrefix}category_id'])!,
+      orderx: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}orderx'])!,
     );
   }
 
@@ -253,6 +267,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
   final int errorCount;
   final String errorMsg;
   final BigInt categoryId;
+  final String orderx;
   const FeedEntity(
       {required this.id,
       required this.userId,
@@ -266,7 +281,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       required this.showReadingTime,
       required this.errorCount,
       required this.errorMsg,
-      required this.categoryId});
+      required this.categoryId,
+      required this.orderx});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -283,6 +299,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
     map['error_count'] = Variable<int>(errorCount);
     map['error_msg'] = Variable<String>(errorMsg);
     map['category_id'] = Variable<BigInt>(categoryId);
+    map['orderx'] = Variable<String>(orderx);
     return map;
   }
 
@@ -301,6 +318,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       errorCount: Value(errorCount),
       errorMsg: Value(errorMsg),
       categoryId: Value(categoryId),
+      orderx: Value(orderx),
     );
   }
 
@@ -321,6 +339,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       errorCount: serializer.fromJson<int>(json['errorCount']),
       errorMsg: serializer.fromJson<String>(json['errorMsg']),
       categoryId: serializer.fromJson<BigInt>(json['categoryId']),
+      orderx: serializer.fromJson<String>(json['orderx']),
     );
   }
   @override
@@ -340,6 +359,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       'errorCount': serializer.toJson<int>(errorCount),
       'errorMsg': serializer.toJson<String>(errorMsg),
       'categoryId': serializer.toJson<BigInt>(categoryId),
+      'orderx': serializer.toJson<String>(orderx),
     };
   }
 
@@ -356,7 +376,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           bool? showReadingTime,
           int? errorCount,
           String? errorMsg,
-          BigInt? categoryId}) =>
+          BigInt? categoryId,
+          String? orderx}) =>
       FeedEntity(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -371,6 +392,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
         errorCount: errorCount ?? this.errorCount,
         errorMsg: errorMsg ?? this.errorMsg,
         categoryId: categoryId ?? this.categoryId,
+        orderx: orderx ?? this.orderx,
       );
   FeedEntity copyWithCompanion(FeedsTableCompanion data) {
     return FeedEntity(
@@ -393,6 +415,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       errorMsg: data.errorMsg.present ? data.errorMsg.value : this.errorMsg,
       categoryId:
           data.categoryId.present ? data.categoryId.value : this.categoryId,
+      orderx: data.orderx.present ? data.orderx.value : this.orderx,
     );
   }
 
@@ -411,7 +434,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           ..write('showReadingTime: $showReadingTime, ')
           ..write('errorCount: $errorCount, ')
           ..write('errorMsg: $errorMsg, ')
-          ..write('categoryId: $categoryId')
+          ..write('categoryId: $categoryId, ')
+          ..write('orderx: $orderx')
           ..write(')'))
         .toString();
   }
@@ -430,7 +454,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       showReadingTime,
       errorCount,
       errorMsg,
-      categoryId);
+      categoryId,
+      orderx);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -447,7 +472,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           other.showReadingTime == this.showReadingTime &&
           other.errorCount == this.errorCount &&
           other.errorMsg == this.errorMsg &&
-          other.categoryId == this.categoryId);
+          other.categoryId == this.categoryId &&
+          other.orderx == this.orderx);
 }
 
 class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
@@ -464,6 +490,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
   final Value<int> errorCount;
   final Value<String> errorMsg;
   final Value<BigInt> categoryId;
+  final Value<String> orderx;
   const FeedsTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -478,6 +505,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.errorCount = const Value.absent(),
     this.errorMsg = const Value.absent(),
     this.categoryId = const Value.absent(),
+    this.orderx = const Value.absent(),
   });
   FeedsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -493,6 +521,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.errorCount = const Value.absent(),
     this.errorMsg = const Value.absent(),
     this.categoryId = const Value.absent(),
+    this.orderx = const Value.absent(),
   })  : userId = Value(userId),
         feedUrl = Value(feedUrl),
         siteUrl = Value(siteUrl),
@@ -511,6 +540,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     Expression<int>? errorCount,
     Expression<String>? errorMsg,
     Expression<BigInt>? categoryId,
+    Expression<String>? orderx,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -526,6 +556,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       if (errorCount != null) 'error_count': errorCount,
       if (errorMsg != null) 'error_msg': errorMsg,
       if (categoryId != null) 'category_id': categoryId,
+      if (orderx != null) 'orderx': orderx,
     });
   }
 
@@ -542,7 +573,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       Value<bool>? showReadingTime,
       Value<int>? errorCount,
       Value<String>? errorMsg,
-      Value<BigInt>? categoryId}) {
+      Value<BigInt>? categoryId,
+      Value<String>? orderx}) {
     return FeedsTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -557,6 +589,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
       categoryId: categoryId ?? this.categoryId,
+      orderx: orderx ?? this.orderx,
     );
   }
 
@@ -602,6 +635,9 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     if (categoryId.present) {
       map['category_id'] = Variable<BigInt>(categoryId.value);
     }
+    if (orderx.present) {
+      map['orderx'] = Variable<String>(orderx.value);
+    }
     return map;
   }
 
@@ -620,7 +656,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
           ..write('showReadingTime: $showReadingTime, ')
           ..write('errorCount: $errorCount, ')
           ..write('errorMsg: $errorMsg, ')
-          ..write('categoryId: $categoryId')
+          ..write('categoryId: $categoryId, ')
+          ..write('orderx: $orderx')
           ..write(')'))
         .toString();
   }
@@ -1364,9 +1401,23 @@ class $CategoriesTableTable extends CategoriesTable
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("show_reading_time" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _orderxMeta = const VerificationMeta('orderx');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, userId, hideGlobally, onlyShowUnread, showReadingTime];
+  late final GeneratedColumn<String> orderx = GeneratedColumn<String>(
+      'orderx', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant("published_at"));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        title,
+        userId,
+        hideGlobally,
+        onlyShowUnread,
+        showReadingTime,
+        orderx
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1410,6 +1461,10 @@ class $CategoriesTableTable extends CategoriesTable
           showReadingTime.isAcceptableOrUnknown(
               data['show_reading_time']!, _showReadingTimeMeta));
     }
+    if (data.containsKey('orderx')) {
+      context.handle(_orderxMeta,
+          orderx.isAcceptableOrUnknown(data['orderx']!, _orderxMeta));
+    }
     return context;
   }
 
@@ -1431,6 +1486,8 @@ class $CategoriesTableTable extends CategoriesTable
           .read(DriftSqlType.bool, data['${effectivePrefix}only_show_unread'])!,
       showReadingTime: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}show_reading_time'])!,
+      orderx: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}orderx'])!,
     );
   }
 
@@ -1447,13 +1504,15 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
   final bool hideGlobally;
   final bool onlyShowUnread;
   final bool showReadingTime;
+  final String orderx;
   const CategoryEntity(
       {required this.id,
       required this.title,
       required this.userId,
       required this.hideGlobally,
       required this.onlyShowUnread,
-      required this.showReadingTime});
+      required this.showReadingTime,
+      required this.orderx});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1463,6 +1522,7 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
     map['hide_globally'] = Variable<bool>(hideGlobally);
     map['only_show_unread'] = Variable<bool>(onlyShowUnread);
     map['show_reading_time'] = Variable<bool>(showReadingTime);
+    map['orderx'] = Variable<String>(orderx);
     return map;
   }
 
@@ -1474,6 +1534,7 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       hideGlobally: Value(hideGlobally),
       onlyShowUnread: Value(onlyShowUnread),
       showReadingTime: Value(showReadingTime),
+      orderx: Value(orderx),
     );
   }
 
@@ -1487,6 +1548,7 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
       onlyShowUnread: serializer.fromJson<bool>(json['onlyShowUnread']),
       showReadingTime: serializer.fromJson<bool>(json['showReadingTime']),
+      orderx: serializer.fromJson<String>(json['orderx']),
     );
   }
   @override
@@ -1499,6 +1561,7 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       'hideGlobally': serializer.toJson<bool>(hideGlobally),
       'onlyShowUnread': serializer.toJson<bool>(onlyShowUnread),
       'showReadingTime': serializer.toJson<bool>(showReadingTime),
+      'orderx': serializer.toJson<String>(orderx),
     };
   }
 
@@ -1508,7 +1571,8 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
           BigInt? userId,
           bool? hideGlobally,
           bool? onlyShowUnread,
-          bool? showReadingTime}) =>
+          bool? showReadingTime,
+          String? orderx}) =>
       CategoryEntity(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -1516,6 +1580,7 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
         hideGlobally: hideGlobally ?? this.hideGlobally,
         onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
         showReadingTime: showReadingTime ?? this.showReadingTime,
+        orderx: orderx ?? this.orderx,
       );
   CategoryEntity copyWithCompanion(CategoriesTableCompanion data) {
     return CategoryEntity(
@@ -1531,6 +1596,7 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
       showReadingTime: data.showReadingTime.present
           ? data.showReadingTime.value
           : this.showReadingTime,
+      orderx: data.orderx.present ? data.orderx.value : this.orderx,
     );
   }
 
@@ -1542,14 +1608,15 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
           ..write('userId: $userId, ')
           ..write('hideGlobally: $hideGlobally, ')
           ..write('onlyShowUnread: $onlyShowUnread, ')
-          ..write('showReadingTime: $showReadingTime')
+          ..write('showReadingTime: $showReadingTime, ')
+          ..write('orderx: $orderx')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(
-      id, title, userId, hideGlobally, onlyShowUnread, showReadingTime);
+      id, title, userId, hideGlobally, onlyShowUnread, showReadingTime, orderx);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1559,7 +1626,8 @@ class CategoryEntity extends DataClass implements Insertable<CategoryEntity> {
           other.userId == this.userId &&
           other.hideGlobally == this.hideGlobally &&
           other.onlyShowUnread == this.onlyShowUnread &&
-          other.showReadingTime == this.showReadingTime);
+          other.showReadingTime == this.showReadingTime &&
+          other.orderx == this.orderx);
 }
 
 class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
@@ -1569,6 +1637,7 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
   final Value<bool> hideGlobally;
   final Value<bool> onlyShowUnread;
   final Value<bool> showReadingTime;
+  final Value<String> orderx;
   const CategoriesTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -1576,6 +1645,7 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
     this.hideGlobally = const Value.absent(),
     this.onlyShowUnread = const Value.absent(),
     this.showReadingTime = const Value.absent(),
+    this.orderx = const Value.absent(),
   });
   CategoriesTableCompanion.insert({
     this.id = const Value.absent(),
@@ -1584,6 +1654,7 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
     this.hideGlobally = const Value.absent(),
     this.onlyShowUnread = const Value.absent(),
     this.showReadingTime = const Value.absent(),
+    this.orderx = const Value.absent(),
   })  : title = Value(title),
         userId = Value(userId);
   static Insertable<CategoryEntity> custom({
@@ -1593,6 +1664,7 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
     Expression<bool>? hideGlobally,
     Expression<bool>? onlyShowUnread,
     Expression<bool>? showReadingTime,
+    Expression<String>? orderx,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1601,6 +1673,7 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
       if (hideGlobally != null) 'hide_globally': hideGlobally,
       if (onlyShowUnread != null) 'only_show_unread': onlyShowUnread,
       if (showReadingTime != null) 'show_reading_time': showReadingTime,
+      if (orderx != null) 'orderx': orderx,
     });
   }
 
@@ -1610,7 +1683,8 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
       Value<BigInt>? userId,
       Value<bool>? hideGlobally,
       Value<bool>? onlyShowUnread,
-      Value<bool>? showReadingTime}) {
+      Value<bool>? showReadingTime,
+      Value<String>? orderx}) {
     return CategoriesTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -1618,6 +1692,7 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
       hideGlobally: hideGlobally ?? this.hideGlobally,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       showReadingTime: showReadingTime ?? this.showReadingTime,
+      orderx: orderx ?? this.orderx,
     );
   }
 
@@ -1642,6 +1717,9 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
     if (showReadingTime.present) {
       map['show_reading_time'] = Variable<bool>(showReadingTime.value);
     }
+    if (orderx.present) {
+      map['orderx'] = Variable<String>(orderx.value);
+    }
     return map;
   }
 
@@ -1653,7 +1731,8 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
           ..write('userId: $userId, ')
           ..write('hideGlobally: $hideGlobally, ')
           ..write('onlyShowUnread: $onlyShowUnread, ')
-          ..write('showReadingTime: $showReadingTime')
+          ..write('showReadingTime: $showReadingTime, ')
+          ..write('orderx: $orderx')
           ..write(')'))
         .toString();
   }
@@ -1688,6 +1767,7 @@ typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
   Value<int> errorCount,
   Value<String> errorMsg,
   Value<BigInt> categoryId,
+  Value<String> orderx,
 });
 typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> id,
@@ -1703,6 +1783,7 @@ typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<int> errorCount,
   Value<String> errorMsg,
   Value<BigInt> categoryId,
+  Value<String> orderx,
 });
 
 class $$FeedsTableTableFilterComposer
@@ -1754,6 +1835,9 @@ class $$FeedsTableTableFilterComposer
 
   ColumnFilters<BigInt> get categoryId => $composableBuilder(
       column: $table.categoryId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnFilters(column));
 }
 
 class $$FeedsTableTableOrderingComposer
@@ -1805,6 +1889,9 @@ class $$FeedsTableTableOrderingComposer
 
   ColumnOrderings<BigInt> get categoryId => $composableBuilder(
       column: $table.categoryId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FeedsTableTableAnnotationComposer
@@ -1854,6 +1941,9 @@ class $$FeedsTableTableAnnotationComposer
 
   GeneratedColumn<BigInt> get categoryId => $composableBuilder(
       column: $table.categoryId, builder: (column) => column);
+
+  GeneratedColumn<String> get orderx =>
+      $composableBuilder(column: $table.orderx, builder: (column) => column);
 }
 
 class $$FeedsTableTableTableManager extends RootTableManager<
@@ -1892,6 +1982,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<int> errorCount = const Value.absent(),
             Value<String> errorMsg = const Value.absent(),
             Value<BigInt> categoryId = const Value.absent(),
+            Value<String> orderx = const Value.absent(),
           }) =>
               FeedsTableCompanion(
             id: id,
@@ -1907,6 +1998,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             errorCount: errorCount,
             errorMsg: errorMsg,
             categoryId: categoryId,
+            orderx: orderx,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -1922,6 +2014,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<int> errorCount = const Value.absent(),
             Value<String> errorMsg = const Value.absent(),
             Value<BigInt> categoryId = const Value.absent(),
+            Value<String> orderx = const Value.absent(),
           }) =>
               FeedsTableCompanion.insert(
             id: id,
@@ -1937,6 +2030,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             errorCount: errorCount,
             errorMsg: errorMsg,
             categoryId: categoryId,
+            orderx: orderx,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -2282,6 +2376,7 @@ typedef $$CategoriesTableTableCreateCompanionBuilder = CategoriesTableCompanion
   Value<bool> hideGlobally,
   Value<bool> onlyShowUnread,
   Value<bool> showReadingTime,
+  Value<String> orderx,
 });
 typedef $$CategoriesTableTableUpdateCompanionBuilder = CategoriesTableCompanion
     Function({
@@ -2291,6 +2386,7 @@ typedef $$CategoriesTableTableUpdateCompanionBuilder = CategoriesTableCompanion
   Value<bool> hideGlobally,
   Value<bool> onlyShowUnread,
   Value<bool> showReadingTime,
+  Value<String> orderx,
 });
 
 class $$CategoriesTableTableFilterComposer
@@ -2321,6 +2417,9 @@ class $$CategoriesTableTableFilterComposer
   ColumnFilters<bool> get showReadingTime => $composableBuilder(
       column: $table.showReadingTime,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnFilters(column));
 }
 
 class $$CategoriesTableTableOrderingComposer
@@ -2352,6 +2451,9 @@ class $$CategoriesTableTableOrderingComposer
   ColumnOrderings<bool> get showReadingTime => $composableBuilder(
       column: $table.showReadingTime,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnOrderings(column));
 }
 
 class $$CategoriesTableTableAnnotationComposer
@@ -2380,6 +2482,9 @@ class $$CategoriesTableTableAnnotationComposer
 
   GeneratedColumn<bool> get showReadingTime => $composableBuilder(
       column: $table.showReadingTime, builder: (column) => column);
+
+  GeneratedColumn<String> get orderx =>
+      $composableBuilder(column: $table.orderx, builder: (column) => column);
 }
 
 class $$CategoriesTableTableTableManager extends RootTableManager<
@@ -2415,6 +2520,7 @@ class $$CategoriesTableTableTableManager extends RootTableManager<
             Value<bool> hideGlobally = const Value.absent(),
             Value<bool> onlyShowUnread = const Value.absent(),
             Value<bool> showReadingTime = const Value.absent(),
+            Value<String> orderx = const Value.absent(),
           }) =>
               CategoriesTableCompanion(
             id: id,
@@ -2423,6 +2529,7 @@ class $$CategoriesTableTableTableManager extends RootTableManager<
             hideGlobally: hideGlobally,
             onlyShowUnread: onlyShowUnread,
             showReadingTime: showReadingTime,
+            orderx: orderx,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -2431,6 +2538,7 @@ class $$CategoriesTableTableTableManager extends RootTableManager<
             Value<bool> hideGlobally = const Value.absent(),
             Value<bool> onlyShowUnread = const Value.absent(),
             Value<bool> showReadingTime = const Value.absent(),
+            Value<String> orderx = const Value.absent(),
           }) =>
               CategoriesTableCompanion.insert(
             id: id,
@@ -2439,6 +2547,7 @@ class $$CategoriesTableTableTableManager extends RootTableManager<
             hideGlobally: hideGlobally,
             onlyShowUnread: onlyShowUnread,
             showReadingTime: showReadingTime,
+            orderx: orderx,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

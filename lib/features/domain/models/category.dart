@@ -1,4 +1,6 @@
 
+import 'constants.dart';
+
 class Category {
 
   final int id;
@@ -7,6 +9,7 @@ class Category {
   final bool hideGlobally;
   final bool onlyShowUnread;
   final bool showReadingTime;
+  final String orderx;
 
 
   // final List<Feed> feeds;
@@ -19,9 +22,16 @@ class Category {
     this.hideGlobally = false,
     this.onlyShowUnread = false,
     this.showReadingTime = false,
+    this.orderx = Frc.orderxPublishedAt,
     // this.feeds = const [],
     // this.expanded = false,
   });
+
+  static Category empty = Category(id: 0, title: "",);
+
+  bool get isEmpty {
+    return id == 0;
+  }
 
   // int get unread {
   //   return feeds.fold<int>(0, (sum, feed) => sum + feed.unread);
@@ -39,6 +49,7 @@ class Category {
     bool? hideGlobally,
     bool? onlyShowUnread,
     bool? showReadingTime,
+    String? orderx,
     // List<Feed>? feeds,
     // bool? expanded,
   }) {
@@ -49,6 +60,7 @@ class Category {
       hideGlobally: hideGlobally ?? this.hideGlobally,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       showReadingTime: showReadingTime ?? this.showReadingTime,
+      orderx: orderx ?? this.orderx,
       // feeds: feeds ?? this.feeds,
       // expanded: expanded ?? this.expanded,
     );
