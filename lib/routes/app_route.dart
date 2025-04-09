@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../core/utils/logger.dart';
 import '../features/domain/models/tile.dart';
+import '../features/presentation/pages/general_page.dart';
 import '../features/presentation/pages/home_screen.dart';
 import '../features/presentation/pages/login_screen.dart';
 import '../features/presentation/providers/auth_provider.dart';
@@ -41,7 +42,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
           path: '/profile',
           name: RouteNames.profile,
-          builder: (context, state) => const ProfilePage()
+          builder: (context, state) => const GeneralPage()
       ),
       GoRoute(
         path: '/entry/:type/:id',

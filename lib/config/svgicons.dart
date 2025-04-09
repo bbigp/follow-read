@@ -24,5 +24,11 @@ class Svgicons {
   static const String group = "assets/svg/group.svg";
   static const String noMedia = "assets/svg/no_media.svg";
   static const String edit = "assets/svg/edit.svg";
+  static const String chevronRight = "assets/svg/chevron_right.svg";
+  static const String chevronUpDown = "assets/svg/chevron_up_down.svg";
+  static const String ban = "assets/svg/ban.svg";
+  static const String book = "assets/svg/book.svg";
+
+
 
 }
