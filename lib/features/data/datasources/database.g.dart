@@ -1738,6 +1738,258 @@ class CategoriesTableCompanion extends UpdateCompanion<CategoryEntity> {
   }
 }
 
+class $ConfTableTable extends ConfTable
+    with TableInfo<$ConfTableTable, ConfEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ConfTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String> value = GeneratedColumn<String>(
+      'value', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<BigInt> userId = GeneratedColumn<BigInt>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, name, value, userId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'conf';
+  @override
+  VerificationContext validateIntegrity(Insertable<ConfEntity> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ConfEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ConfEntity(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      value: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}value'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
+    );
+  }
+
+  @override
+  $ConfTableTable createAlias(String alias) {
+    return $ConfTableTable(attachedDatabase, alias);
+  }
+}
+
+class ConfEntity extends DataClass implements Insertable<ConfEntity> {
+  final int id;
+  final String name;
+  final String value;
+  final BigInt userId;
+  const ConfEntity(
+      {required this.id,
+      required this.name,
+      required this.value,
+      required this.userId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['value'] = Variable<String>(value);
+    map['user_id'] = Variable<BigInt>(userId);
+    return map;
+  }
+
+  ConfTableCompanion toCompanion(bool nullToAbsent) {
+    return ConfTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      value: Value(value),
+      userId: Value(userId),
+    );
+  }
+
+  factory ConfEntity.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ConfEntity(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      value: serializer.fromJson<String>(json['value']),
+      userId: serializer.fromJson<BigInt>(json['userId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'value': serializer.toJson<String>(value),
+      'userId': serializer.toJson<BigInt>(userId),
+    };
+  }
+
+  ConfEntity copyWith({int? id, String? name, String? value, BigInt? userId}) =>
+      ConfEntity(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        value: value ?? this.value,
+        userId: userId ?? this.userId,
+      );
+  ConfEntity copyWithCompanion(ConfTableCompanion data) {
+    return ConfEntity(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      value: data.value.present ? data.value.value : this.value,
+      userId: data.userId.present ? data.userId.value : this.userId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ConfEntity(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('value: $value, ')
+          ..write('userId: $userId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, value, userId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ConfEntity &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.value == this.value &&
+          other.userId == this.userId);
+}
+
+class ConfTableCompanion extends UpdateCompanion<ConfEntity> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> value;
+  final Value<BigInt> userId;
+  const ConfTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.value = const Value.absent(),
+    this.userId = const Value.absent(),
+  });
+  ConfTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.value = const Value.absent(),
+    required BigInt userId,
+  }) : userId = Value(userId);
+  static Insertable<ConfEntity> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? value,
+    Expression<BigInt>? userId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (value != null) 'value': value,
+      if (userId != null) 'user_id': userId,
+    });
+  }
+
+  ConfTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String>? value,
+      Value<BigInt>? userId}) {
+    return ConfTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      value: value ?? this.value,
+      userId: userId ?? this.userId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<BigInt>(userId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ConfTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('value: $value, ')
+          ..write('userId: $userId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1745,12 +1997,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $EntriesTableTable entriesTable = $EntriesTableTable(this);
   late final $CategoriesTableTable categoriesTable =
       $CategoriesTableTable(this);
+  late final $ConfTableTable confTable = $ConfTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [feedsTable, entriesTable, categoriesTable];
+      [feedsTable, entriesTable, categoriesTable, confTable];
 }
 
 typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
@@ -2571,6 +2824,150 @@ typedef $$CategoriesTableTableProcessedTableManager = ProcessedTableManager<
     ),
     CategoryEntity,
     PrefetchHooks Function()>;
+typedef $$ConfTableTableCreateCompanionBuilder = ConfTableCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String> value,
+  required BigInt userId,
+});
+typedef $$ConfTableTableUpdateCompanionBuilder = ConfTableCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String> value,
+  Value<BigInt> userId,
+});
+
+class $$ConfTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ConfTableTable> {
+  $$ConfTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+}
+
+class $$ConfTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ConfTableTable> {
+  $$ConfTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ConfTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ConfTableTable> {
+  $$ConfTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+}
+
+class $$ConfTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ConfTableTable,
+    ConfEntity,
+    $$ConfTableTableFilterComposer,
+    $$ConfTableTableOrderingComposer,
+    $$ConfTableTableAnnotationComposer,
+    $$ConfTableTableCreateCompanionBuilder,
+    $$ConfTableTableUpdateCompanionBuilder,
+    (ConfEntity, BaseReferences<_$AppDatabase, $ConfTableTable, ConfEntity>),
+    ConfEntity,
+    PrefetchHooks Function()> {
+  $$ConfTableTableTableManager(_$AppDatabase db, $ConfTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ConfTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ConfTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ConfTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<BigInt> userId = const Value.absent(),
+          }) =>
+              ConfTableCompanion(
+            id: id,
+            name: name,
+            value: value,
+            userId: userId,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            required BigInt userId,
+          }) =>
+              ConfTableCompanion.insert(
+            id: id,
+            name: name,
+            value: value,
+            userId: userId,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ConfTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ConfTableTable,
+    ConfEntity,
+    $$ConfTableTableFilterComposer,
+    $$ConfTableTableOrderingComposer,
+    $$ConfTableTableAnnotationComposer,
+    $$ConfTableTableCreateCompanionBuilder,
+    $$ConfTableTableUpdateCompanionBuilder,
+    (ConfEntity, BaseReferences<_$AppDatabase, $ConfTableTable, ConfEntity>),
+    ConfEntity,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2581,4 +2978,6 @@ class $AppDatabaseManager {
       $$EntriesTableTableTableManager(_db, _db.entriesTable);
   $$CategoriesTableTableTableManager get categoriesTable =>
       $$CategoriesTableTableTableManager(_db, _db.categoriesTable);
+  $$ConfTableTableTableManager get confTable =>
+      $$ConfTableTableTableManager(_db, _db.confTable);
 }

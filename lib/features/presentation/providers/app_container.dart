@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/data/datasources/conf_dao.dart';
 import 'package:follow_read/features/data/datasources/entry_dao.dart';
 import 'package:follow_read/features/data/datasources/local_data.dart';
 import 'package:follow_read/features/data/repositories/entry_repository.dart';
@@ -53,7 +54,9 @@ final entryDaoProvider = Provider<EntryDao>((ref) {
 final categoryDaoProvider = Provider<CategoryDao>((ref){
   return CategoryDao(ref.watch(appDatabaseProvider));
 });
-
+final confDaoProvider = Provider<ConfDao>((ref){
+  return ConfDao(ref.watch(appDatabaseProvider));
+});
 
 
 

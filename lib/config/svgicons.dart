@@ -28,6 +28,7 @@ class Svgicons {
   static const String chevronUpDown = "assets/svg/chevron_up_down.svg";
   static const String ban = "assets/svg/ban.svg";
   static const String book = "assets/svg/book.svg";
+  static const String x = "assets/svg/x.svg";
 
 
 

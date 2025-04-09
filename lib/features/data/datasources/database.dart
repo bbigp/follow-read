@@ -6,12 +6,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 import '../../../core/utils/logger.dart';
+import 'entities/conf_entity.dart';
 import 'entities/entry_entity.dart';
 import 'entities/feed_entity.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [FeedsTable, EntriesTable, CategoriesTable])
+@DriftDatabase(tables: [FeedsTable, EntriesTable, CategoriesTable, ConfTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

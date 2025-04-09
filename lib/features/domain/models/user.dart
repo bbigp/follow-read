@@ -20,7 +20,7 @@ class User with UserMappable {
   final String baseUrl;
 
 
-  User({
+  const User({
     required this.id,
     required this.username,
     required this.isAdmin,
@@ -32,5 +32,7 @@ class User with UserMappable {
     this.lastLoginAt = "",
     this.baseUrl = "",
   });
+
+  static final empty = User(id: 0, username: "", isAdmin: false);
 
 }
