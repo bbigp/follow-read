@@ -31,8 +31,9 @@ class UserNotifier extends AutoDisposeAsyncNotifier<OneUser> {
     User user = await localData.getCachedUser() ?? User.empty;
     final cfs = await confDao.getByUserId(user.id);
 
-    bool showHide = false;
-    bool autoRead = false;
+    bool? showHide;
+    bool? autoRead;
+    List<String>? urls;
     for (var conf in cfs) {
       if (conf.name == "showHide") {
         showHide = bool.parse(conf.value);
@@ -40,8 +41,12 @@ class UserNotifier extends AutoDisposeAsyncNotifier<OneUser> {
       if (conf.name == "autoRead") {
         autoRead = bool.parse(conf.value);
       }
+      if (conf.name == "baseUrls") {
+        urls = conf.value.split(",");
+      }
     }
-    return OneUser(user: user).copyWith(showHide: showHide, autoRead: autoRead);
+    return OneUser(user: user).copyWith(showHide: showHide, autoRead: autoRead,
+      urls: urls);
   }
 
   Future<void> saveConf({bool? autoRead, bool? showHide}) async {
@@ -59,11 +64,13 @@ class OneUser {
   final User user;
   final bool showHide;
   final bool autoRead;
+  final List<String> urls;
 
   OneUser({
     this.user = const User(id: 0, username: "", isAdmin: false),
     this.showHide = false,
     this.autoRead = false,
+    this.urls = const ['2222', '3333'],
   });
 
 
@@ -71,11 +78,13 @@ class OneUser {
     User? user,
     bool? showHide,
     bool? autoRead,
+    List<String>? urls,
   }) {
     return OneUser(
       user: user ?? this.user,
       showHide: showHide ?? this.showHide,
       autoRead: autoRead ?? this.autoRead,
+        urls: urls ?? this.urls,
     );
   }
 }

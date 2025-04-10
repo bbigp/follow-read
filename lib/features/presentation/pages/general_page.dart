@@ -12,7 +12,10 @@ import 'package:follow_read/features/presentation/widgets/switch_tile.dart';
 import 'package:path/path.dart';
 
 import '../../../config/svgicons.dart';
+import '../../../core/utils/logger.dart';
 import '../providers/user_provider.dart';
+import '../widgets/circle_radio.dart';
+import '../widgets/circle_radio_tile.dart';
 import '../widgets/open_modal.dart';
 
 class GeneralPage extends ConsumerStatefulWidget {
@@ -102,6 +105,8 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
   }
 
   Widget _buildSelectUrl(BuildContext context){
+    final userAsync = ref.watch(userProvider);
+    final user = userAsync.requireValue;
     return Column(
       children: [
         Row(
@@ -129,6 +134,22 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
           ],
         ),
         SizedBox(height: 12,),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppTheme.white0,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+            child: ListView(
+              children: List.generate(
+                user.urls.length - 1, (index) => CircleRadioTile(value: user.urls[index], choose: true, onChanged: (v){
+                logger.i('选中了: ${user.urls[index]}');
+              },),),
+            ),
+          ),
+        ),
+
         SizedBox(height: 8,),
         SizedBox(height: 24,),
         TextButton(
