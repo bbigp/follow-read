@@ -70,7 +70,7 @@ class OneUser {
     this.user = const User(id: 0, username: "", isAdmin: false),
     this.showHide = false,
     this.autoRead = false,
-    this.urls = const ['2222', '3333'],
+    this.urls = const ['https://mflux.coolbet.cn/v1/', '2222', '3333'],
   });
 
 
