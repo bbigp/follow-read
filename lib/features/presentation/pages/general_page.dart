@@ -134,19 +134,18 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
           ],
         ),
         SizedBox(height: 12,),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppTheme.white0,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            margin: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-            child: ListView(
-              children: List.generate(
-                user.urls.length - 1, (index) => CircleRadioTile(value: user.urls[index], choose: true, onChanged: (v){
-                logger.i('选中了: ${user.urls[index]}');
-              },),),
-            ),
+        Container(
+          decoration: BoxDecoration(
+            color: AppTheme.white0,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          height: 180,
+          margin: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+          child: ListView(
+            children: List.generate(
+              user.urls.length, (index) => CircleRadioTile(value: user.urls[index], choose: true, onChanged: (v){
+              logger.i('选中了: ${user.urls[index]}');
+            },),),
           ),
         ),
 
