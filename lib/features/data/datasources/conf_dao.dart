@@ -22,7 +22,7 @@ class ConfDao extends DatabaseAccessor<AppDatabase> with _$ConfMixin {
   }
 
 
-  Future<void> saveConf(int userId, {bool? autoRead, bool? showHide, List<String>? baseUrls}) async {
+  Future<void> saveConf(int userId, {bool? autoRead, bool? showAll, List<String>? baseUrls}) async {
     List<ConfTableCompanion> list = [];
     if (autoRead != null) {
       list.add(ConfTableCompanion(
@@ -31,10 +31,10 @@ class ConfDao extends DatabaseAccessor<AppDatabase> with _$ConfMixin {
         userId: Value(BigInt.from(userId)),
       ));
     }
-    if (showHide != null) {
+    if (showAll != null) {
       list.add(ConfTableCompanion(
-        name: Value(Conf.keyShowHide),
-        value: Value(showHide.toString()),
+        name: Value(Conf.keyShowAll),
+        value: Value(showAll.toString()),
         userId: Value(BigInt.from(userId)),
       ));
     }

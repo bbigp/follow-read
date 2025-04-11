@@ -50,15 +50,16 @@ class FeedRepository {
     return (await feedDao.getFeedsByCategoryId(categoryId)).map((item) => item.toModel()).toList();
   }
 
-  Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime, String? orderx}) async {
+  Future<bool> updateShow(int feedId, {bool? onlyShowUnread,
+    bool? showReadingTime, String? orderx, bool? hideGlobally, }) async {
     return await feedDao.updateShow(feedId, onlyShowUnread: onlyShowUnread,
         showReadingTime: showReadingTime,
-        orderx: orderx,
+        orderx: orderx, hideGlobally: hideGlobally,
     );
   }
 
-  Future<List<Feed>> getFeeds() async {
-    final feeds = await feedDao.getAllFeeds();
+  Future<List<Feed>> getFeeds({bool? hideGlobally}) async {
+    final feeds = await feedDao.getAllFeeds(hideGlobally: hideGlobally);
     logger.i('查询到本地feeds: ${feeds.length}');
     return feeds.map((e) => e.toModel()).toList();
   }

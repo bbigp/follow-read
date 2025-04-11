@@ -21,7 +21,7 @@ class SwitchTile extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(width: 16, height: 36,),
+        SizedBox(width: 16, height: 40,),
         SvgPicture.asset(assetName, width: 24, height: 24,),
         SizedBox(width: 12,),
         Expanded(child: Text(title, style: TextStyle(

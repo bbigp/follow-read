@@ -23,18 +23,18 @@ class FeedItem extends ConsumerWidget {
     return Column(
       children: [
         if (tile.type == TileType.feed)
-          _feedItem(feed: tile.feed)
+          _FeedItem(feed: tile.feed)
         else if (tile.type == TileType.folder)
-          _folderItem(tile: tile)
+          _FolderItem(tile: tile)
       ],
     );
   }
 }
 
-class _folderItem extends ConsumerWidget {
+class _FolderItem extends ConsumerWidget {
   final Tile tile;
 
-  const _folderItem({required this.tile});
+  const _FolderItem({required this.tile});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -147,18 +147,18 @@ class _folderItem extends ConsumerWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: tile.feeds.length,
             separatorBuilder: (_, __) => const SizedBox.shrink(),
-            itemBuilder: (context, index) => _feedItem(feed: tile.feeds[index], hasDot: false,),
+            itemBuilder: (context, index) => _FeedItem(feed: tile.feeds[index], hasDot: false,),
           ),
       ],
     );
   }
 }
 
-class _feedItem extends ConsumerWidget {
+class _FeedItem extends ConsumerWidget {
   final Feed feed;
   final bool hasDot;
 
-  const _feedItem({required this.feed, this.hasDot = true});
+  const _FeedItem({required this.feed, this.hasDot = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

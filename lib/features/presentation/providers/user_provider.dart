@@ -6,12 +6,22 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/datasources/conf_dao.dart';
-import 'package:follow_read/features/data/datasources/entities/conf_entity.dart';
 import 'package:follow_read/features/domain/models/conf.dart';
 import 'package:follow_read/features/domain/models/user.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 
 import '../../data/datasources/local_data.dart';
+
+
+final showAllProvider = Provider.autoDispose<bool>((ref) {
+  final asyncUser = ref.watch(userProvider);
+  return asyncUser.when(
+    data: (user) => user.showAll,
+    loading: () => false,
+    error: (_, __) => false,
+  );
+});
+
 
 final userProvider = AsyncNotifierProvider.autoDispose<UserNotifier, OneUser>(
     UserNotifier.new
@@ -31,12 +41,12 @@ class UserNotifier extends AutoDisposeAsyncNotifier<OneUser> {
     User user = await localData.getCachedUser() ?? User.empty;
     final cfs = await confDao.getByUserId(user.id);
 
-    bool? showHide;
+    bool? showAll;
     bool? autoRead;
     List<String>? urls;
     for (var conf in cfs) {
-      if (conf.name == Conf.keyShowHide) {
-        showHide = bool.parse(conf.value);
+      if (conf.name == Conf.keyShowAll) {
+        showAll = bool.parse(conf.value);
       }
       if (conf.name == Conf.keyAutoRead) {
         autoRead = bool.parse(conf.value);
@@ -45,15 +55,15 @@ class UserNotifier extends AutoDisposeAsyncNotifier<OneUser> {
         urls = conf.value.split(",");
       }
     }
-    return OneUser(user: user).copyWith(showHide: showHide, autoRead: autoRead,
+    return OneUser(user: user).copyWith(showAll: showAll, autoRead: autoRead,
       urls: urls);
   }
 
-  Future<void> saveConf({bool? autoRead, bool? showHide}) async {
+  Future<void> saveConf({bool? autoRead, bool? showAll}) async {
     final userId = state.value?.user.id;
-    await confDao.saveConf(userId!, autoRead: autoRead, showHide: showHide);
+    await confDao.saveConf(userId!, autoRead: autoRead, showAll: showAll);
     state = AsyncData(state.value!.copyWith(
-      autoRead: autoRead, showHide: showHide,
+      autoRead: autoRead, showAll: showAll,
     ));
   }
 
@@ -80,13 +90,13 @@ class UserNotifier extends AutoDisposeAsyncNotifier<OneUser> {
 class OneUser {
 
   final User user;
-  final bool showHide;
+  final bool showAll;
   final bool autoRead;
   final List<String> urls;
 
   OneUser({
     this.user = const User(id: 0, username: "", isAdmin: false),
-    this.showHide = false,
+    this.showAll = false,
     this.autoRead = false,
     this.urls = const [],
   });
@@ -94,13 +104,13 @@ class OneUser {
 
   OneUser copyWith({
     User? user,
-    bool? showHide,
+    bool? showAll,
     bool? autoRead,
     List<String>? urls,
   }) {
     return OneUser(
       user: user ?? this.user,
-      showHide: showHide ?? this.showHide,
+      showAll: showAll ?? this.showAll,
       autoRead: autoRead ?? this.autoRead,
         urls: urls ?? this.urls,
     );

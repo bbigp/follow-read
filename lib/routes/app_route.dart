@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
-import 'package:follow_read/features/presentation/pages/profile_page.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/utils/logger.dart';

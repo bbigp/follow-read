@@ -27,10 +27,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // 页面初始化时触发数据加载
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(homePageProvider.notifier).loadingData();
-    });
     _scrollController.addListener(_scrollListener);
   }
 
@@ -55,7 +51,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final pageValue = ref.watch(homePageProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(homePageProvider.notifier).loadingData();
+        final _ = ref.refresh(homePageProvider);
         ref.read(syncProvider.notifier).resetStatus();
       });
     }

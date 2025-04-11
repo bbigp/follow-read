@@ -28,8 +28,12 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
     });
   }
 
-  Future<List<CategoryEntity>> getAll() async {
-    return await select(categoriesTable).get();
+  Future<List<CategoryEntity>> getAll({bool? hideGlobally}) async {
+    var query = select(categoriesTable);
+    if (hideGlobally != null) {
+      query = query..where((t) => t.hideGlobally.equals(hideGlobally));
+    }
+    return await query.get();
   }
 
   Future<CategoryEntity> getCategoryById(int id) async {
@@ -37,7 +41,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
   }
 
   Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
-  String? orderx}) async {
+  String? orderx, bool? hideGlobally, }) async {
     final affectedRows = await (update(categoriesTable)
       ..where((t) => t.id.equals(BigInt.from(id)))
     ).write(
@@ -49,6 +53,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
             ? Value(showReadingTime)
             : const Value.absent(),
         orderx: orderx != null && orderx != "" ? Value(orderx) : const Value.absent(),
+        hideGlobally: hideGlobally != null ? Value(hideGlobally) : const Value.absent(),
       ),
     );
     return affectedRows > 0;

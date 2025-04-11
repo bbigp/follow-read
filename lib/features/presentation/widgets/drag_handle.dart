@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import '../../../config/theme.dart';
 
 class DragHandle extends StatelessWidget {
+
+  const DragHandle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(

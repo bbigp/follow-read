@@ -52,6 +52,13 @@ class Tile {
     return 0;
   }
 
+  bool get hideGlobally {
+    if (type == TileType.feed) return feed.hideGlobally;
+    if (type == TileType.folder) return category.hideGlobally;
+    // if (type == TileType.list) return listx.title;
+    return false;
+  }
+
   String get title {
     if (type == TileType.feed) return feed.title;
     if (type == TileType.folder) return category.title;

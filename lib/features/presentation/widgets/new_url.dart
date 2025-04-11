@@ -76,6 +76,7 @@ class NewUrl extends ConsumerWidget  {
         const SizedBox(height: 16),
         DoneButton(onPressed: () async {
           if (await ref.read(userProvider.notifier).saveUrl(urlText)) {
+            if (!context.mounted) return;
             _close(context);
           }
         }, height: 54, enabled: enabled,),

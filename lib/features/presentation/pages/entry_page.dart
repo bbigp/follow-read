@@ -160,7 +160,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                           borderRadius: BorderRadius.circular(14),
                           color: AppTheme.black4,
                         ),
-                        height: 48,
+                        height: 40,
                         child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
                           final width = (constraints.maxWidth - 8) / 2;
                           return Row(
@@ -209,11 +209,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                       ),
                     ),
                     SizedBox(height: 16,),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      child: FeedSwitch(id: widget.id, type: widget.type,),
-                    ),
+                    SizedBox(height: 8,),
+                    FeedSwitch(id: widget.id, type: widget.type,),
+                    SizedBox(height: 8,),
                     SizedBox(
                       height: 21,
                     )

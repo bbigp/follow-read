@@ -11,8 +11,8 @@ class CategoryRepository {
 
   CategoryRepository({required this.dao});
 
-  Future<List<Category>> getCategories() async {
-    final list = await dao.getAll();
+  Future<List<Category>> getCategories({bool? hideGlobally}) async {
+    final list = await dao.getAll(hideGlobally: hideGlobally);
     return list.map((item) => item.toModel()).toList();
   }
 
@@ -22,10 +22,11 @@ class CategoryRepository {
   }
 
   Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
-    String? orderx}) async {
+    String? orderx, bool? hideGlobally, }) async {
     return await dao.updateShow(id, onlyShowUnread: onlyShowUnread,
         showReadingTime: showReadingTime,
       orderx: orderx,
+      hideGlobally: hideGlobally,
     );
   }
 

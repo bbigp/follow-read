@@ -111,7 +111,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
   Future<SmartListCount> countSmartList() async {
     final now = DateTime.now().toUtc();
     final todayStart = DateTime(now.year, now.month, now.day);
-    final tomorrowStart = todayStart.add(const Duration(days: 1));
+    // final tomorrowStart = todayStart.add(const Duration(days: 1));
 
     final query = '''
     SELECT 

@@ -12,7 +12,7 @@ class Conf {
   });
 
   static final String keyAutoRead = "autoRead";
-  static final String keyShowHide = "showHide";
+  static final String keyShowAll = "showAll";
   static final String keyBaseUrls = "baseUrls";
 
 }

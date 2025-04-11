@@ -31,8 +31,12 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     return await (select(feedsTable)..where((t) => t.id.equals(BigInt.from(feedId)))).getSingle();
   }
 
-  Future<List<FeedEntity>> getAllFeeds() async {
-    return await select(feedsTable).get();
+  Future<List<FeedEntity>> getAllFeeds({bool? hideGlobally}) async {
+    var query = select(feedsTable);
+    if (hideGlobally != null) {
+      query = query..where((t) => t.hideGlobally.equals(hideGlobally));
+    }
+    return await query.get();
   }
 
   Future<List<FeedEntity>> getFeedsByIds(List<int> ids) async {
@@ -61,7 +65,7 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
   }
 
   Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime,
-    String? orderx}) async {
+    String? orderx, bool? hideGlobally, }) async {
     final affectedRows = await (update(feedsTable)
       ..where((t) => t.id.equals(BigInt.from(feedId)))
     ).write(
@@ -73,6 +77,7 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
             ? Value(showReadingTime)
             : const Value.absent(),
         orderx: orderx != null && orderx != "" ? Value(orderx) : const Value.absent(),
+        hideGlobally: hideGlobally != null ? Value(hideGlobally) : const Value.absent(),
       ),
     );
     return affectedRows > 0;

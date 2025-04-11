@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/domain/models/listx.dart';
@@ -26,19 +27,17 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
 
   @override
   FutureOr<HomePageValue> build() async {
-    final oneUser = await ref.watch(userProvider.future);
-    if (oneUser.showHide) {
+    logger.i('初始化home notifier');
+    bool showAll = await ref.watch(showAllProvider);
+    bool? hideGlobally = showAll ? null : false;
 
-    }
-
+    var tiles = await loadingTiles(hideGlobally);
+    var listx = await list();
+    return HomePageValue(tiles: tiles, listx: listx);
   }
 
-
-
-
-
-  Future<void> loadingData() async{
-    final feeds = await _feedRepository.getFeeds();
+  Future<List<Tile>> loadingTiles(bool? hideGlobally) async{
+    final feeds = await _feedRepository.getFeeds(hideGlobally: hideGlobally);
     final Map<int, List<Feed>> feedsMap = feeds.fold<Map<int, List<Feed>>>(
       {}, (map, feed) {
         final cid = feed.categoryId;
@@ -47,7 +46,7 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
         return map;
       },
     );
-    final categories = await _categoryRepository.getCategories();
+    final categories = await _categoryRepository.getCategories(hideGlobally: hideGlobally);
     List<Tile> tiles = [];
     for (final category in categories) {
       if (category.title != "All") {
@@ -58,8 +57,7 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
     for (final feed in feedsMap[all.id] ?? []) {
       tiles.add(Tile(type: TileType.feed, feed: feed));
     }
-    final listxs = await list();
-    state = AsyncData(HomePageValue(tiles: tiles, listx: listxs));
+    return tiles;
   }
 
   Future<List<Listx>> list() async {
