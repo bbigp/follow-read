@@ -18,6 +18,7 @@ class Feed extends BaseUiItem {
   final String errorMsg;
   final int categoryId;
   final String orderx;
+  final bool hideGlobally;
 
   const Feed({
     required this.id,
@@ -34,6 +35,7 @@ class Feed extends BaseUiItem {
     this.errorMsg = "",
     this.categoryId = 0,
     this.orderx = Frc.orderxPublishedAt,
+    this.hideGlobally = false,
   });
 
   Feed copyWith({
@@ -51,6 +53,7 @@ class Feed extends BaseUiItem {
     String? errorMsg,
     int? categoryId,
     String? orderx,
+    bool? hideGlobally,
   }) {
     return Feed(
       id: id ?? this.id,
@@ -67,6 +70,7 @@ class Feed extends BaseUiItem {
       errorMsg: errorMsg ?? this.errorMsg,
         categoryId: categoryId ?? this.categoryId,
       orderx: orderx ?? this.orderx,
+        hideGlobally: hideGlobally ?? this.hideGlobally,
     );
   }
 

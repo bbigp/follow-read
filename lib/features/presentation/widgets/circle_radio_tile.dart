@@ -1,21 +1,20 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
-import 'circle_radio.dart';
 
 class CircleRadioTile extends StatelessWidget {
 
   final String value;
   final bool choose;
-  final ValueChanged<bool> onChanged;
 
   const CircleRadioTile({super.key,
     required this.value, this.choose = false,
-    required this.onChanged,});
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +27,10 @@ class CircleRadioTile extends StatelessWidget {
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
         ),)),
         SizedBox(width: 12,),
-        CircleRadio(
-          onChanged: onChanged,
-          choose: choose,
+        SvgPicture.asset(
+          choose ? Svgicons.selection : Svgicons.circular,
+          height: 28,
+          width: 28,
         ),
         SizedBox(width: 12,),
       ],

@@ -30,9 +30,10 @@ class Svgicons {
   static const String ban = "assets/svg/ban.svg";
   static const String book = "assets/svg/book.svg";
   static const String x = "assets/svg/x.svg";
+  static const String xFill = "assets/svg/x_fill.svg";
   static const String selection = "assets/svg/selection.svg";
   static const String circular = "assets/svg/circular.svg";
-
+  static const String arrowLeft = "assets/svg/arrow_left.svg";
 
 
 

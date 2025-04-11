@@ -126,6 +126,7 @@ extension FeedResponseConversion on FeedResponse {
       categoryId: Value(BigInt.from(category.id)),
       onlyShowUnread: Value.absent(),
       showReadingTime: Value.absent(),
+      hideGlobally: Value(hideGlobally ?? false),
     );
   }
 

@@ -1,33 +1,41 @@
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/domain/models/listx.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
+import 'package:follow_read/features/presentation/providers/user_provider.dart';
 
-import '../../../config/svgicons.dart';
 import '../../data/datasources/entry_dao.dart';
 import '../../data/repositories/category_repository.dart';
 import '../../domain/models/feed.dart';
 import '../../domain/models/tile.dart';
 
-final homePageProvider = StateNotifierProvider.autoDispose<
-    HomePageNotifier, AsyncValue<HomePageValue>>((ref) {
-  return HomePageNotifier(ref: ref,);
-});
 
-class HomePageNotifier extends StateNotifier<AsyncValue<HomePageValue>> {
+final homePageProvider = AsyncNotifierProvider.autoDispose<HomeNotifier, HomePageValue>(
+  HomeNotifier.new,
+);
 
-  final FeedRepository _feedRepository;
-  final CategoryRepository _categoryRepository;
-  final EntryDao _entryDao;
-  final Ref ref;
+class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
 
-  HomePageNotifier({required this.ref,})
-      : _feedRepository = ref.watch(feedRepositoryProvider),
-        _categoryRepository = ref.watch(categoryRepository),
-        _entryDao = ref.watch(entryDaoProvider),
-        super(AsyncValue.loading());
+  late final FeedRepository _feedRepository = ref.watch(feedRepositoryProvider);
+  late final CategoryRepository _categoryRepository = ref.watch(categoryRepository);
+  late final EntryDao _entryDao = ref.watch(entryDaoProvider);
+
+  @override
+  FutureOr<HomePageValue> build() async {
+    final oneUser = await ref.watch(userProvider.future);
+    if (oneUser.showHide) {
+
+    }
+
+  }
+
+
+
+
 
   Future<void> loadingData() async{
     final feeds = await _feedRepository.getFeeds();

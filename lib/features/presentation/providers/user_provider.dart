@@ -35,13 +35,13 @@ class UserNotifier extends AutoDisposeAsyncNotifier<OneUser> {
     bool? autoRead;
     List<String>? urls;
     for (var conf in cfs) {
-      if (conf.name == "showHide") {
+      if (conf.name == Conf.keyShowHide) {
         showHide = bool.parse(conf.value);
       }
-      if (conf.name == "autoRead") {
+      if (conf.name == Conf.keyAutoRead) {
         autoRead = bool.parse(conf.value);
       }
-      if (conf.name == "baseUrls") {
+      if (conf.name == Conf.keyBaseUrls) {
         urls = conf.value.split(",");
       }
     }
@@ -57,6 +57,24 @@ class UserNotifier extends AutoDisposeAsyncNotifier<OneUser> {
     ));
   }
 
+  Future<bool> saveUrl(String url) async {
+    final userId = state.value?.user.id;
+    final newValues = [...state.value!.urls, url];
+    await confDao.saveConf(userId!, baseUrls: newValues);
+    state = AsyncData(state.value!.copyWith(
+      urls: newValues,
+    ));
+    return true;
+  }
+
+  Future<void> chooseUrl(String url) async {
+    if (!state.value!.urls.contains(url)) {
+      return;
+    }
+    final newUser = state.value!.user.copyWith(baseUrl: url);
+    await localData.cacheUser(newUser);
+    state = AsyncData(state.value!.copyWith(user: newUser));
+  }
 }
 
 class OneUser {
@@ -70,7 +88,7 @@ class OneUser {
     this.user = const User(id: 0, username: "", isAdmin: false),
     this.showHide = false,
     this.autoRead = false,
-    this.urls = const ['https://mflux.coolbet.cn/v1/', '2222', '3333'],
+    this.urls = const [],
   });
 
 

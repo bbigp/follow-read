@@ -11,4 +11,8 @@ class Conf {
     this.value = "",
   });
 
+  static final String keyAutoRead = "autoRead";
+  static final String keyShowHide = "showHide";
+  static final String keyBaseUrls = "baseUrls";
+
 }

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/theme.dart';
+import 'drag_handle.dart';
 
 class OpenModal {
 
@@ -16,39 +17,33 @@ class OpenModal {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Container(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.85,
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,//确保点击空白区域也能触发
+          onTap: (){
+            FocusScope.of(context).unfocus();//仅取消键盘，不关闭 modal
+          },
+          child: Padding(padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+            child: SingleChildScrollView(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.85,
+                ),
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    DragHandle(),
+                    view,
+                  ],
+                ),
               ),
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildDragHandle(),
-                  view,
-                ],
-              ),
-            );
-          }
+            ),
+          ),
         );
       },
-    );
-  }
-
-  static Widget _buildDragHandle() {
-    return Center(
-      child: Container(
-        width: 36,
-        height: 3.5,
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: AppTheme.black8,
-          borderRadius: BorderRadius.circular(99),
-        ),
-      ),
     );
   }
 }

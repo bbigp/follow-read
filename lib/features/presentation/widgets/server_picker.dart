@@ -4,20 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/features/presentation/widgets/new_url.dart';
+import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
-import '../../../core/utils/logger.dart';
 import '../providers/user_provider.dart';
 import 'add_text.dart';
 import 'circle_radio_tile.dart';
 import 'done_button.dart';
 
-class UrlChoose extends ConsumerWidget {
+class ServerPicker extends ConsumerWidget {
+
+  ServerPicker({super.key});
+
+  final _tempSelectedUrlProvider = StateProvider.autoDispose<String?>((ref) => null);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsync = ref.watch(userProvider);
     final user = userAsync.requireValue;
+
+    final tempSelected = ref.watch(_tempSelectedUrlProvider);
+    final selectedUrl = tempSelected ?? user.user.baseUrl;
     return Column(
       children: [
         Row(
@@ -57,12 +66,11 @@ class UrlChoose extends ConsumerWidget {
                   itemCount: user.urls.length,
                   itemBuilder: (context, index) {
                     final url = user.urls[index];
-                    return CircleRadioTile(
-                      value: url,
-                      choose: url == user.user.baseUrl,
-                      onChanged: (v) {
-                        logger.i('选中了: ${url}');
+                    return GestureDetector(
+                      onTap: (){
+                        ref.read(_tempSelectedUrlProvider.notifier).state = url;
                       },
+                      child: CircleRadioTile(value: url, choose: url == selectedUrl,),
                     );
                   }),
             )),
@@ -71,11 +79,15 @@ class UrlChoose extends ConsumerWidget {
         Row(
           children: [
             AddText('添加URL', onTap: (){
-
+              SmartModal.openSmartModal(context, NewUrl());
             }),
             Spacer(),
             DoneButton(onPressed: () {
-
+              final temp = ref.read(_tempSelectedUrlProvider);
+              if (temp != null && temp != user.user.baseUrl) {
+                ref.read(userProvider.notifier).chooseUrl(temp);
+              }
+              Navigator.pop(context);
             }, width: 128,),
           ],
         ),

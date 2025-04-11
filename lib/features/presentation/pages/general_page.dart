@@ -7,18 +7,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/widgets/modal_tile.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
-import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:follow_read/features/presentation/widgets/switch_tile.dart';
-import 'package:follow_read/features/presentation/widgets/url_choose.dart';
-import 'package:path/path.dart';
+import 'package:follow_read/features/presentation/widgets/server_picker.dart';
 
 import '../../../config/svgicons.dart';
-import '../../../core/utils/logger.dart';
 import '../providers/user_provider.dart';
-import '../widgets/add_text.dart';
-import '../widgets/circle_radio.dart';
-import '../widgets/circle_radio_tile.dart';
-import '../widgets/done_button.dart';
 import '../widgets/open_modal.dart';
 
 class GeneralPage extends ConsumerStatefulWidget {
@@ -60,7 +53,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                 ),
                 child: Column(children: [
                   ModalTile(Svgicons.book, '服务器URL', onTap: () {
-                    OpenModal.open(context, UrlChoose());
+                    OpenModal.open(context, ServerPicker());
                   }),
                   Container(
                     padding: EdgeInsets.only(left: 16 + 24 + 12, right: 12),
@@ -105,7 +98,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                     child: SpacerDivider(
                       thickness: 0.5, spacing: 1, indent: 0,),
                   ),
-                  SwitchTile(Svgicons.ban, '显示隐藏',
+                  SwitchTile(Svgicons.ban, '显示隐藏Feed',
                       open: userAsync.requireValue.showHide,
                       onChanged: (v) {
                         ref.read(userProvider.notifier).saveConf(showHide: v);

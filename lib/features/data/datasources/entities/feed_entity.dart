@@ -32,6 +32,8 @@ class FeedsTable extends Table {
       .withDefault(Constant(BigInt.zero))();
   TextColumn get orderx => text().named("orderx")
       .withDefault(Constant("published_at"))();
+  BoolColumn get hideGlobally => boolean().named("hide_globally")
+    .withDefault(Constant(false))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -58,6 +60,7 @@ extension FeedEntityConversion on FeedEntity {
       errorCount: errorCount,
       categoryId: categoryId.toInt(),
       orderx: orderx,
+      hideGlobally: hideGlobally,
     );
   }
 }

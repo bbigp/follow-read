@@ -3,6 +3,7 @@
 
 import 'package:drift/drift.dart';
 
+import '../../domain/models/conf.dart';
 import 'database.dart';
 import 'entities/conf_entity.dart';
 
@@ -21,19 +22,26 @@ class ConfDao extends DatabaseAccessor<AppDatabase> with _$ConfMixin {
   }
 
 
-  Future<void> saveConf(int userId, {bool? autoRead, bool? showHide}) async {
+  Future<void> saveConf(int userId, {bool? autoRead, bool? showHide, List<String>? baseUrls}) async {
     List<ConfTableCompanion> list = [];
     if (autoRead != null) {
       list.add(ConfTableCompanion(
-        name: Value("autoRead"),
+        name: Value(Conf.keyAutoRead),
         value: Value(autoRead.toString()),
         userId: Value(BigInt.from(userId)),
       ));
     }
     if (showHide != null) {
       list.add(ConfTableCompanion(
-        name: Value("showHide"),
+        name: Value(Conf.keyShowHide),
         value: Value(showHide.toString()),
+        userId: Value(BigInt.from(userId)),
+      ));
+    }
+    if (baseUrls != null && baseUrls.isNotEmpty) {
+      list.add(ConfTableCompanion(
+        name: Value(Conf.keyBaseUrls),
+        value: Value(baseUrls.join(",")),
         userId: Value(BigInt.from(userId)),
       ));
     }
