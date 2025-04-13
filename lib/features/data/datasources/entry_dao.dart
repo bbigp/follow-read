@@ -38,7 +38,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     int page = 1,
     int size = 20, List<String> status = const ['unread'],
     String? orderx, String direction = "desc",
-    bool? starred, DateTime? startTime,
+    bool? starred, DateTime? startTime, String? word,
   }) async {
     var query = select(entriesTable)..where((t) => entriesTable.status.isIn(status));
     if (feedIds.isNotEmpty){
@@ -49,6 +49,10 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     }
     if (startTime != null) {
       query = query..where((t) => t.publishedAt.isBiggerOrEqualValue(startTime));
+    }
+    if (word != null && word != "") {
+      final keyword = '%$word%';
+      query = query..where((t) => t.title.like(keyword) | t.content.like(keyword) | t.summary.like(keyword));
     }
 
     final orderByColumn = switch(orderx) {

@@ -59,6 +59,7 @@ flutter:
   assets:
     - assets/svg/
     - assets/png/
+    - assets/icons/
 
 flutter_icons:
   android: true

@@ -5,6 +5,8 @@ class Svgicons {
   static const String readingTime = "assets/svg/time.svg";
   static const String onlyUnread = "assets/svg/eyes.svg";
   static const String more = "assets/svg/more.svg";
+  static const String search = "assets/svg/search.svg";
+  static const String searchInput = "assets/svg/search_input.svg";
   static const String markRead = "assets/svg/mark_read.svg";
   static const String markUnread = "assets/svg/mark_unread.svg";
   static const String addCollection = "assets/svg/add_collection.svg";
@@ -34,7 +36,11 @@ class Svgicons {
   static const String selection = "assets/svg/selection.svg";
   static const String circular = "assets/svg/circular.svg";
   static const String arrowLeft = "assets/svg/arrow_left.svg";
+  static const String trash = "assets/svg/trash.svg";
 
+  static const String squareRss = "assets/svg/square_rss.svg";
+  static const String calendarToday = "assets/svg/calendar_today.svg";
+  static const String check = "assets/svg/check.svg";
 
 
 }

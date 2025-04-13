@@ -107,7 +107,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
 
   void openImageGallery(Entry entry, String currentImage){
     final images = entry.allImageUrls;
-    ref.watch(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
+    ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
       "imageUrls": images, "index": images.indexOf(currentImage),
     });
   }

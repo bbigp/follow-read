@@ -7,13 +7,10 @@ import '../../domain/models/conf.dart';
 import 'database.dart';
 import 'entities/conf_entity.dart';
 
-mixin _$ConfMixin on DatabaseAccessor<AppDatabase> {
-  $ConfTableTable get confTable => attachedDatabase.confTable;
-  $CategoriesTableTable get categoriesTable => attachedDatabase.categoriesTable;
-}
-
 @DriftAccessor(tables: [ConfTable])
-class ConfDao extends DatabaseAccessor<AppDatabase> with _$ConfMixin {
+class ConfDao extends DatabaseAccessor<AppDatabase> {
+
+  $ConfTableTable get confTable => attachedDatabase.confTable;
 
   ConfDao(super.db);
 

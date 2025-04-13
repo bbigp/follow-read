@@ -43,6 +43,13 @@ class Tile {
     );
   }
 
+  List<int> get feedIds {
+    List<int> ids = [];
+    if (feed.id != 0) ids.add(feed.id);
+    if (feeds.isNotEmpty) ids.addAll(feeds.map((item) => item.id).toList());
+    return ids;
+  }
+
   static Tile empty = Tile();
 
   int get id {
@@ -93,6 +100,39 @@ class Tile {
     if (type == TileType.feed) return feed.errorCount;
     if (type == TileType.folder) return feeds.fold<int>(0, (sum, feed) => sum + feed.errorCount);
     return 0;
+  }
+
+  List<String> get status {
+    if (type == TileType.feed || type == TileType.folder) return onlyShowUnread ? ["unread"] : ["unread", "read"];
+    if (id == Listx.all) {
+      return ["unread", "read"];
+    }
+    if (id == Listx.read) {
+      return ["read"];
+    }
+    if (id == Listx.unread) {
+      return ["unread"];
+    }
+    if(id == Listx.starred) {
+      return ["unread", "read"];
+    }
+    if (id == Listx.today) {
+      return ["unread", "read"];
+    }
+    return [];
+  }
+
+  bool? get starred {
+    if (type == TileType.list && id == Listx.starred) return true;
+    return null;
+  }
+
+  DateTime? get time {
+    if (type == TileType.list && id == Listx.today) {
+      final now = DateTime.now().toUtc();
+      return DateTime(now.year, now.month, now.day);
+    }
+    return null;
   }
 
   bool get onlyShowUnread {

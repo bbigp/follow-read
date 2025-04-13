@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
+import 'package:follow_read/features/presentation/widgets/drag_handle.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
@@ -15,6 +16,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
+import '../../../routes/app_route.dart';
 import '../../domain/models/tile.dart';
 import '../providers/entry_page_provider.dart';
 import '../widgets/feed_icon.dart';
@@ -55,15 +57,21 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: true,
         actions: [
+          SizedBox(width: 16,),
+          GestureDetector(
+            onTap: () => ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
+              'id': widget.id.toString(),
+              'type': widget.type.toString(),
+            }),
+            child: Svgicon(Svgicons.search, size: 28, iconSize: 24,),
+          ),
+          SizedBox(width: 16,),
           GestureDetector(
             onTap: () => _showFilterSheet(context),
-            child: Padding(
-              padding: EdgeInsets.only(right: 4),
-              child: Svgicon(Svgicons.more),
-            ),
+            child: Svgicon(Svgicons.more, size: 28, iconSize: 24,)
           ),
           // _buildRefreshButton(ref, feedsState.isSyncing),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
         ],
       ),
       body: entriesAsync.isLoading
@@ -96,8 +104,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // 顶部拖拽指示条
-                    _buildDragHandle(),
-
+                    DragHandle(),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       padding: EdgeInsets.all(6),
@@ -225,19 +232,6 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     );
   }
 
-  Widget _buildDragHandle() {
-    return Center(
-      child: Container(
-        width: 36,
-        height: 3.5,
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: AppTheme.black8,
-          borderRadius: BorderRadius.circular(99),
-        ),
-      ),
-    );
-  }
 
   void _scrollListener() {
     final entriesAsync = ref.watch(entriesProvier(pid));

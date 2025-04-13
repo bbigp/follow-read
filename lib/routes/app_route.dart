@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
+import 'package:follow_read/features/presentation/pages/listx_page.dart';
+import 'package:follow_read/features/presentation/pages/search_page.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/utils/logger.dart';
@@ -71,6 +73,24 @@ final routerProvider = Provider<GoRouter>((ref) {
             return ImageGalleryPage(imageUrls: data['imageUrls'], initialIndex: data['index'],);
         }
       ),
+      GoRoute(path: '/search/:type/:id',
+      name: RouteNames.search,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final type = state.pathParameters['type']!;
+          return SearchPage(
+            id: int.parse(id),
+            type: TileType.fromString(type),
+          );
+        }
+      ),
+      GoRoute(
+        path: '/listx',
+        name: RouteNames.listx,
+        builder: (context, state) {
+          return ListxPage();
+        }
+      )
     ],
   );
 });
@@ -85,6 +105,8 @@ class RouteNames {
   static const entry = 'entry';
   static const entryDetail = 'entryDetail';
   static const imageGallery = 'imageGallery';
+  static const search = 'search';
+  static const listx = 'listx';
 }
 
 

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/datasources/conf_dao.dart';
 import 'package:follow_read/features/data/datasources/entry_dao.dart';
 import 'package:follow_read/features/data/datasources/local_data.dart';
+import 'package:follow_read/features/data/datasources/search_dao.dart';
 import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,7 +58,9 @@ final categoryDaoProvider = Provider<CategoryDao>((ref){
 final confDaoProvider = Provider<ConfDao>((ref){
   return ConfDao(ref.watch(appDatabaseProvider));
 });
-
+final searchDaoProvider = Provider<SearchDao>((ref){
+  return SearchDao(ref.watch(appDatabaseProvider));
+});
 
 
 final feedRepositoryProvider = Provider<FeedRepository>((ref) {

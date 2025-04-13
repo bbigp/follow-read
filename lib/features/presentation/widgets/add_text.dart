@@ -20,7 +20,7 @@ class AddText extends StatelessWidget {
           SizedBox(width: 8,),
           SvgPicture.asset(
             Svgicons.plusO,
-            height: 20, width: 20,
+            height: 24, width: 20,
           ),
           SizedBox(width: 8,),
           Text(data, style: TextStyle(

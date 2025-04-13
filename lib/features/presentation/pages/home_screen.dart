@@ -28,6 +28,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).unfocus(); // 收起键盘
+    });
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -80,7 +83,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: SyncView(),
             ),
             SliverToBoxAdapter(
-              child: HomeGroup(title: '智能视图'),
+              child: HomeGroup(title: '智能视图', rightIcon: Svgicons.plusO, onTap: (){
+                  ref.read(routerProvider).pushNamed(RouteNames.listx);
+              },),
             ),
             if (!pageValue.isLoading)
               SliverList(
@@ -103,7 +108,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: HomeGroup(title: '订阅源'),
+              child: HomeGroup(title: '订阅源', ),
             ),
             !pageValue.isLoading && pageValue.value!.tiles.isNotEmpty
                 ? SliverList(

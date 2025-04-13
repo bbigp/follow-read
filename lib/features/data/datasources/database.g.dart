@@ -2034,6 +2034,673 @@ class ConfTableCompanion extends UpdateCompanion<ConfEntity> {
   }
 }
 
+class $SearchTableTable extends SearchTable
+    with TableInfo<$SearchTableTable, SearchEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SearchTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _wordMeta = const VerificationMeta('word');
+  @override
+  late final GeneratedColumn<String> word = GeneratedColumn<String>(
+      'word', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: Constant(DateTime.now()));
+  @override
+  List<GeneratedColumn> get $columns => [id, word, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'search';
+  @override
+  VerificationContext validateIntegrity(Insertable<SearchEntity> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('word')) {
+      context.handle(
+          _wordMeta, word.isAcceptableOrUnknown(data['word']!, _wordMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SearchEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SearchEntity(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      word: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}word'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $SearchTableTable createAlias(String alias) {
+    return $SearchTableTable(attachedDatabase, alias);
+  }
+}
+
+class SearchEntity extends DataClass implements Insertable<SearchEntity> {
+  final int id;
+  final String word;
+  final DateTime createdAt;
+  const SearchEntity(
+      {required this.id, required this.word, required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['word'] = Variable<String>(word);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  SearchTableCompanion toCompanion(bool nullToAbsent) {
+    return SearchTableCompanion(
+      id: Value(id),
+      word: Value(word),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory SearchEntity.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SearchEntity(
+      id: serializer.fromJson<int>(json['id']),
+      word: serializer.fromJson<String>(json['word']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'word': serializer.toJson<String>(word),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  SearchEntity copyWith({int? id, String? word, DateTime? createdAt}) =>
+      SearchEntity(
+        id: id ?? this.id,
+        word: word ?? this.word,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  SearchEntity copyWithCompanion(SearchTableCompanion data) {
+    return SearchEntity(
+      id: data.id.present ? data.id.value : this.id,
+      word: data.word.present ? data.word.value : this.word,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchEntity(')
+          ..write('id: $id, ')
+          ..write('word: $word, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, word, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SearchEntity &&
+          other.id == this.id &&
+          other.word == this.word &&
+          other.createdAt == this.createdAt);
+}
+
+class SearchTableCompanion extends UpdateCompanion<SearchEntity> {
+  final Value<int> id;
+  final Value<String> word;
+  final Value<DateTime> createdAt;
+  const SearchTableCompanion({
+    this.id = const Value.absent(),
+    this.word = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  SearchTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.word = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  static Insertable<SearchEntity> custom({
+    Expression<int>? id,
+    Expression<String>? word,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (word != null) 'word': word,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  SearchTableCompanion copyWith(
+      {Value<int>? id, Value<String>? word, Value<DateTime>? createdAt}) {
+    return SearchTableCompanion(
+      id: id ?? this.id,
+      word: word ?? this.word,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (word.present) {
+      map['word'] = Variable<String>(word.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchTableCompanion(')
+          ..write('id: $id, ')
+          ..write('word: $word, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ClustersTableTable extends ClustersTable
+    with TableInfo<$ClustersTableTable, ClusterEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ClustersTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _feedIdsMeta =
+      const VerificationMeta('feedIds');
+  @override
+  late final GeneratedColumn<String> feedIds = GeneratedColumn<String>(
+      'feed_ids', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _recentTimeMeta =
+      const VerificationMeta('recentTime');
+  @override
+  late final GeneratedColumn<int> recentTime = GeneratedColumn<int>(
+      'recent_time', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+      'status', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant(""));
+  static const VerificationMeta _deletedMeta =
+      const VerificationMeta('deleted');
+  @override
+  late final GeneratedColumn<int> deleted = GeneratedColumn<int>(
+      'deleted', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _changedAtMeta =
+      const VerificationMeta('changedAt');
+  @override
+  late final GeneratedColumn<DateTime> changedAt = GeneratedColumn<DateTime>(
+      'changed_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: Constant(DateTime.now()));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        icon,
+        feedIds,
+        recentTime,
+        status,
+        deleted,
+        createdAt,
+        changedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'clusters';
+  @override
+  VerificationContext validateIntegrity(Insertable<ClusterEntity> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    } else if (isInserting) {
+      context.missing(_iconMeta);
+    }
+    if (data.containsKey('feed_ids')) {
+      context.handle(_feedIdsMeta,
+          feedIds.isAcceptableOrUnknown(data['feed_ids']!, _feedIdsMeta));
+    } else if (isInserting) {
+      context.missing(_feedIdsMeta);
+    }
+    if (data.containsKey('recent_time')) {
+      context.handle(
+          _recentTimeMeta,
+          recentTime.isAcceptableOrUnknown(
+              data['recent_time']!, _recentTimeMeta));
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    }
+    if (data.containsKey('deleted')) {
+      context.handle(_deletedMeta,
+          deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('changed_at')) {
+      context.handle(_changedAtMeta,
+          changedAt.isAcceptableOrUnknown(data['changed_at']!, _changedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ClusterEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ClusterEntity(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon'])!,
+      feedIds: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}feed_ids'])!,
+      recentTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}recent_time'])!,
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      deleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}deleted'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      changedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}changed_at'])!,
+    );
+  }
+
+  @override
+  $ClustersTableTable createAlias(String alias) {
+    return $ClustersTableTable(attachedDatabase, alias);
+  }
+}
+
+class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
+  final int id;
+  final String name;
+  final String icon;
+  final String feedIds;
+  final int recentTime;
+  final String status;
+  final int deleted;
+  final DateTime createdAt;
+  final DateTime changedAt;
+  const ClusterEntity(
+      {required this.id,
+      required this.name,
+      required this.icon,
+      required this.feedIds,
+      required this.recentTime,
+      required this.status,
+      required this.deleted,
+      required this.createdAt,
+      required this.changedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['icon'] = Variable<String>(icon);
+    map['feed_ids'] = Variable<String>(feedIds);
+    map['recent_time'] = Variable<int>(recentTime);
+    map['status'] = Variable<String>(status);
+    map['deleted'] = Variable<int>(deleted);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['changed_at'] = Variable<DateTime>(changedAt);
+    return map;
+  }
+
+  ClustersTableCompanion toCompanion(bool nullToAbsent) {
+    return ClustersTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      icon: Value(icon),
+      feedIds: Value(feedIds),
+      recentTime: Value(recentTime),
+      status: Value(status),
+      deleted: Value(deleted),
+      createdAt: Value(createdAt),
+      changedAt: Value(changedAt),
+    );
+  }
+
+  factory ClusterEntity.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ClusterEntity(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      icon: serializer.fromJson<String>(json['icon']),
+      feedIds: serializer.fromJson<String>(json['feedIds']),
+      recentTime: serializer.fromJson<int>(json['recentTime']),
+      status: serializer.fromJson<String>(json['status']),
+      deleted: serializer.fromJson<int>(json['deleted']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      changedAt: serializer.fromJson<DateTime>(json['changedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'icon': serializer.toJson<String>(icon),
+      'feedIds': serializer.toJson<String>(feedIds),
+      'recentTime': serializer.toJson<int>(recentTime),
+      'status': serializer.toJson<String>(status),
+      'deleted': serializer.toJson<int>(deleted),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'changedAt': serializer.toJson<DateTime>(changedAt),
+    };
+  }
+
+  ClusterEntity copyWith(
+          {int? id,
+          String? name,
+          String? icon,
+          String? feedIds,
+          int? recentTime,
+          String? status,
+          int? deleted,
+          DateTime? createdAt,
+          DateTime? changedAt}) =>
+      ClusterEntity(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        icon: icon ?? this.icon,
+        feedIds: feedIds ?? this.feedIds,
+        recentTime: recentTime ?? this.recentTime,
+        status: status ?? this.status,
+        deleted: deleted ?? this.deleted,
+        createdAt: createdAt ?? this.createdAt,
+        changedAt: changedAt ?? this.changedAt,
+      );
+  ClusterEntity copyWithCompanion(ClustersTableCompanion data) {
+    return ClusterEntity(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      feedIds: data.feedIds.present ? data.feedIds.value : this.feedIds,
+      recentTime:
+          data.recentTime.present ? data.recentTime.value : this.recentTime,
+      status: data.status.present ? data.status.value : this.status,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      changedAt: data.changedAt.present ? data.changedAt.value : this.changedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClusterEntity(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('feedIds: $feedIds, ')
+          ..write('recentTime: $recentTime, ')
+          ..write('status: $status, ')
+          ..write('deleted: $deleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('changedAt: $changedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, icon, feedIds, recentTime, status,
+      deleted, createdAt, changedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ClusterEntity &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.icon == this.icon &&
+          other.feedIds == this.feedIds &&
+          other.recentTime == this.recentTime &&
+          other.status == this.status &&
+          other.deleted == this.deleted &&
+          other.createdAt == this.createdAt &&
+          other.changedAt == this.changedAt);
+}
+
+class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> icon;
+  final Value<String> feedIds;
+  final Value<int> recentTime;
+  final Value<String> status;
+  final Value<int> deleted;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> changedAt;
+  const ClustersTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.feedIds = const Value.absent(),
+    this.recentTime = const Value.absent(),
+    this.status = const Value.absent(),
+    this.deleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.changedAt = const Value.absent(),
+  });
+  ClustersTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String icon,
+    required String feedIds,
+    this.recentTime = const Value.absent(),
+    this.status = const Value.absent(),
+    this.deleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.changedAt = const Value.absent(),
+  })  : name = Value(name),
+        icon = Value(icon),
+        feedIds = Value(feedIds);
+  static Insertable<ClusterEntity> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? icon,
+    Expression<String>? feedIds,
+    Expression<int>? recentTime,
+    Expression<String>? status,
+    Expression<int>? deleted,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? changedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (icon != null) 'icon': icon,
+      if (feedIds != null) 'feed_ids': feedIds,
+      if (recentTime != null) 'recent_time': recentTime,
+      if (status != null) 'status': status,
+      if (deleted != null) 'deleted': deleted,
+      if (createdAt != null) 'created_at': createdAt,
+      if (changedAt != null) 'changed_at': changedAt,
+    });
+  }
+
+  ClustersTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String>? icon,
+      Value<String>? feedIds,
+      Value<int>? recentTime,
+      Value<String>? status,
+      Value<int>? deleted,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? changedAt}) {
+    return ClustersTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      feedIds: feedIds ?? this.feedIds,
+      recentTime: recentTime ?? this.recentTime,
+      status: status ?? this.status,
+      deleted: deleted ?? this.deleted,
+      createdAt: createdAt ?? this.createdAt,
+      changedAt: changedAt ?? this.changedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (feedIds.present) {
+      map['feed_ids'] = Variable<String>(feedIds.value);
+    }
+    if (recentTime.present) {
+      map['recent_time'] = Variable<int>(recentTime.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (deleted.present) {
+      map['deleted'] = Variable<int>(deleted.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (changedAt.present) {
+      map['changed_at'] = Variable<DateTime>(changedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClustersTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('feedIds: $feedIds, ')
+          ..write('recentTime: $recentTime, ')
+          ..write('status: $status, ')
+          ..write('deleted: $deleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('changedAt: $changedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2042,12 +2709,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CategoriesTableTable categoriesTable =
       $CategoriesTableTable(this);
   late final $ConfTableTable confTable = $ConfTableTable(this);
+  late final $SearchTableTable searchTable = $SearchTableTable(this);
+  late final $ClustersTableTable clustersTable = $ClustersTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [feedsTable, entriesTable, categoriesTable, confTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        feedsTable,
+        entriesTable,
+        categoriesTable,
+        confTable,
+        searchTable,
+        clustersTable
+      ];
 }
 
 typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
@@ -3028,6 +3703,370 @@ typedef $$ConfTableTableProcessedTableManager = ProcessedTableManager<
     (ConfEntity, BaseReferences<_$AppDatabase, $ConfTableTable, ConfEntity>),
     ConfEntity,
     PrefetchHooks Function()>;
+typedef $$SearchTableTableCreateCompanionBuilder = SearchTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> word,
+  Value<DateTime> createdAt,
+});
+typedef $$SearchTableTableUpdateCompanionBuilder = SearchTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> word,
+  Value<DateTime> createdAt,
+});
+
+class $$SearchTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SearchTableTable> {
+  $$SearchTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get word => $composableBuilder(
+      column: $table.word, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$SearchTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SearchTableTable> {
+  $$SearchTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get word => $composableBuilder(
+      column: $table.word, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SearchTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SearchTableTable> {
+  $$SearchTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get word =>
+      $composableBuilder(column: $table.word, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$SearchTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SearchTableTable,
+    SearchEntity,
+    $$SearchTableTableFilterComposer,
+    $$SearchTableTableOrderingComposer,
+    $$SearchTableTableAnnotationComposer,
+    $$SearchTableTableCreateCompanionBuilder,
+    $$SearchTableTableUpdateCompanionBuilder,
+    (
+      SearchEntity,
+      BaseReferences<_$AppDatabase, $SearchTableTable, SearchEntity>
+    ),
+    SearchEntity,
+    PrefetchHooks Function()> {
+  $$SearchTableTableTableManager(_$AppDatabase db, $SearchTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SearchTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SearchTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SearchTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> word = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              SearchTableCompanion(
+            id: id,
+            word: word,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> word = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              SearchTableCompanion.insert(
+            id: id,
+            word: word,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SearchTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SearchTableTable,
+    SearchEntity,
+    $$SearchTableTableFilterComposer,
+    $$SearchTableTableOrderingComposer,
+    $$SearchTableTableAnnotationComposer,
+    $$SearchTableTableCreateCompanionBuilder,
+    $$SearchTableTableUpdateCompanionBuilder,
+    (
+      SearchEntity,
+      BaseReferences<_$AppDatabase, $SearchTableTable, SearchEntity>
+    ),
+    SearchEntity,
+    PrefetchHooks Function()>;
+typedef $$ClustersTableTableCreateCompanionBuilder = ClustersTableCompanion
+    Function({
+  Value<int> id,
+  required String name,
+  required String icon,
+  required String feedIds,
+  Value<int> recentTime,
+  Value<String> status,
+  Value<int> deleted,
+  Value<DateTime> createdAt,
+  Value<DateTime> changedAt,
+});
+typedef $$ClustersTableTableUpdateCompanionBuilder = ClustersTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String> icon,
+  Value<String> feedIds,
+  Value<int> recentTime,
+  Value<String> status,
+  Value<int> deleted,
+  Value<DateTime> createdAt,
+  Value<DateTime> changedAt,
+});
+
+class $$ClustersTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ClustersTableTable> {
+  $$ClustersTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get feedIds => $composableBuilder(
+      column: $table.feedIds, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get recentTime => $composableBuilder(
+      column: $table.recentTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get deleted => $composableBuilder(
+      column: $table.deleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get changedAt => $composableBuilder(
+      column: $table.changedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$ClustersTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ClustersTableTable> {
+  $$ClustersTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get feedIds => $composableBuilder(
+      column: $table.feedIds, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get recentTime => $composableBuilder(
+      column: $table.recentTime, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get deleted => $composableBuilder(
+      column: $table.deleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get changedAt => $composableBuilder(
+      column: $table.changedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ClustersTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ClustersTableTable> {
+  $$ClustersTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get feedIds =>
+      $composableBuilder(column: $table.feedIds, builder: (column) => column);
+
+  GeneratedColumn<int> get recentTime => $composableBuilder(
+      column: $table.recentTime, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<int> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get changedAt =>
+      $composableBuilder(column: $table.changedAt, builder: (column) => column);
+}
+
+class $$ClustersTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ClustersTableTable,
+    ClusterEntity,
+    $$ClustersTableTableFilterComposer,
+    $$ClustersTableTableOrderingComposer,
+    $$ClustersTableTableAnnotationComposer,
+    $$ClustersTableTableCreateCompanionBuilder,
+    $$ClustersTableTableUpdateCompanionBuilder,
+    (
+      ClusterEntity,
+      BaseReferences<_$AppDatabase, $ClustersTableTable, ClusterEntity>
+    ),
+    ClusterEntity,
+    PrefetchHooks Function()> {
+  $$ClustersTableTableTableManager(_$AppDatabase db, $ClustersTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ClustersTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ClustersTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ClustersTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> icon = const Value.absent(),
+            Value<String> feedIds = const Value.absent(),
+            Value<int> recentTime = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<int> deleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> changedAt = const Value.absent(),
+          }) =>
+              ClustersTableCompanion(
+            id: id,
+            name: name,
+            icon: icon,
+            feedIds: feedIds,
+            recentTime: recentTime,
+            status: status,
+            deleted: deleted,
+            createdAt: createdAt,
+            changedAt: changedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            required String icon,
+            required String feedIds,
+            Value<int> recentTime = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<int> deleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> changedAt = const Value.absent(),
+          }) =>
+              ClustersTableCompanion.insert(
+            id: id,
+            name: name,
+            icon: icon,
+            feedIds: feedIds,
+            recentTime: recentTime,
+            status: status,
+            deleted: deleted,
+            createdAt: createdAt,
+            changedAt: changedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ClustersTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ClustersTableTable,
+    ClusterEntity,
+    $$ClustersTableTableFilterComposer,
+    $$ClustersTableTableOrderingComposer,
+    $$ClustersTableTableAnnotationComposer,
+    $$ClustersTableTableCreateCompanionBuilder,
+    $$ClustersTableTableUpdateCompanionBuilder,
+    (
+      ClusterEntity,
+      BaseReferences<_$AppDatabase, $ClustersTableTable, ClusterEntity>
+    ),
+    ClusterEntity,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3040,4 +4079,8 @@ class $AppDatabaseManager {
       $$CategoriesTableTableTableManager(_db, _db.categoriesTable);
   $$ConfTableTableTableManager get confTable =>
       $$ConfTableTableTableManager(_db, _db.confTable);
+  $$SearchTableTableTableManager get searchTable =>
+      $$SearchTableTableTableManager(_db, _db.searchTable);
+  $$ClustersTableTableTableManager get clustersTable =>
+      $$ClustersTableTableTableManager(_db, _db.clustersTable);
 }

@@ -8,13 +8,16 @@ import '../../../config/theme.dart';
 class PreferencePanel extends StatelessWidget {
 
   final List<SwitchItem> items;
+  final EdgeInsets margin;
 
-  const PreferencePanel({super.key, required this.items,});
+  const PreferencePanel({super.key, required this.items,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16,),
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16,),
+      margin: margin,
       padding: EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -22,6 +25,7 @@ class PreferencePanel extends StatelessWidget {
       ),
       child: ListView.separated(
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         separatorBuilder: (_, __) => _buildDivider(),
         itemCount: items.length,
