@@ -10,8 +10,8 @@ class ClusterRepository {
 
   ClusterRepository({required this.dao});
 
-  Future<List<Cluster>> getAll() async {
-    final list = await dao.getAll();
+  Future<List<Cluster>> getAll({bool? hideGlobally}) async {
+    final list = await dao.getAll(hideGlobally: hideGlobally);
     return list.map((item) => item.toModel()).toList();
   }
 

@@ -34,7 +34,7 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
     bool? hideGlobally = showAll ? null : false;
 
     var tiles = await loadingTiles(hideGlobally);
-    var clusters = await _clusterRepository.getAll();
+    var clusters = await _clusterRepository.getAll(hideGlobally: hideGlobally);
     return HomePageValue(tiles: tiles, clusters: clusters);
   }
 

@@ -25,9 +25,12 @@ class ClusterDao extends DatabaseAccessor<AppDatabase> {
     ));
   }
   
-  Future<List<ClusterEntity>> getAll() async {
+  Future<List<ClusterEntity>> getAll({bool? hideGlobally}) async {
     var query = select(clusterTable)
       ..orderBy([(t) => OrderingTerm(expression: clusterTable.id, mode: OrderingMode.asc)]);
+    if (hideGlobally != null) {
+      query = query..where((t) => t.hideGlobally.equals(hideGlobally));
+    }
     return await query.get();
   }
 

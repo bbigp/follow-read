@@ -29,6 +29,7 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
     _isBuilding = true;
     logger.i('entries notify build');
     try {
+      Future.delayed(Duration(seconds: 3));
       return _fetchEntries(arg, reset: true);
     } catch (e) {
       return state.value?.copyWith(errorMsg: "error") ??
