@@ -42,7 +42,7 @@ extension CategoryEntityConversion on CategoryEntity {
       hideGlobally: hideGlobally,
       onlyShowUnread: onlyShowUnread,
       showReadingTime: showReadingTime,
-      orderx: orderx,
+      order: orderx,
     );
   }
 }

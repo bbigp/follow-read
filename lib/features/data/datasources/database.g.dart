@@ -2320,6 +2320,43 @@ class $ClustersTableTable extends ClustersTable
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _hideGloballyMeta =
+      const VerificationMeta('hideGlobally');
+  @override
+  late final GeneratedColumn<bool> hideGlobally = GeneratedColumn<bool>(
+      'hide_globally', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("hide_globally" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _onlyShowUnreadMeta =
+      const VerificationMeta('onlyShowUnread');
+  @override
+  late final GeneratedColumn<bool> onlyShowUnread = GeneratedColumn<bool>(
+      'only_show_unread', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("only_show_unread" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _showReadingTimeMeta =
+      const VerificationMeta('showReadingTime');
+  @override
+  late final GeneratedColumn<bool> showReadingTime = GeneratedColumn<bool>(
+      'show_reading_time', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("show_reading_time" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _orderxMeta = const VerificationMeta('orderx');
+  @override
+  late final GeneratedColumn<String> orderx = GeneratedColumn<String>(
+      'orderx', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant("published_at"));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2330,7 +2367,11 @@ class $ClustersTableTable extends ClustersTable
         statuses,
         deleted,
         createdAt,
-        changedAt
+        changedAt,
+        hideGlobally,
+        onlyShowUnread,
+        showReadingTime,
+        orderx
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2385,6 +2426,28 @@ class $ClustersTableTable extends ClustersTable
       context.handle(_changedAtMeta,
           changedAt.isAcceptableOrUnknown(data['changed_at']!, _changedAtMeta));
     }
+    if (data.containsKey('hide_globally')) {
+      context.handle(
+          _hideGloballyMeta,
+          hideGlobally.isAcceptableOrUnknown(
+              data['hide_globally']!, _hideGloballyMeta));
+    }
+    if (data.containsKey('only_show_unread')) {
+      context.handle(
+          _onlyShowUnreadMeta,
+          onlyShowUnread.isAcceptableOrUnknown(
+              data['only_show_unread']!, _onlyShowUnreadMeta));
+    }
+    if (data.containsKey('show_reading_time')) {
+      context.handle(
+          _showReadingTimeMeta,
+          showReadingTime.isAcceptableOrUnknown(
+              data['show_reading_time']!, _showReadingTimeMeta));
+    }
+    if (data.containsKey('orderx')) {
+      context.handle(_orderxMeta,
+          orderx.isAcceptableOrUnknown(data['orderx']!, _orderxMeta));
+    }
     return context;
   }
 
@@ -2412,6 +2475,14 @@ class $ClustersTableTable extends ClustersTable
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       changedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}changed_at'])!,
+      hideGlobally: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}hide_globally'])!,
+      onlyShowUnread: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}only_show_unread'])!,
+      showReadingTime: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}show_reading_time'])!,
+      orderx: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}orderx'])!,
     );
   }
 
@@ -2431,6 +2502,10 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
   final int deleted;
   final DateTime createdAt;
   final DateTime changedAt;
+  final bool hideGlobally;
+  final bool onlyShowUnread;
+  final bool showReadingTime;
+  final String orderx;
   const ClusterEntity(
       {required this.id,
       required this.name,
@@ -2440,7 +2515,11 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       required this.statuses,
       required this.deleted,
       required this.createdAt,
-      required this.changedAt});
+      required this.changedAt,
+      required this.hideGlobally,
+      required this.onlyShowUnread,
+      required this.showReadingTime,
+      required this.orderx});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2453,6 +2532,10 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
     map['deleted'] = Variable<int>(deleted);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['changed_at'] = Variable<DateTime>(changedAt);
+    map['hide_globally'] = Variable<bool>(hideGlobally);
+    map['only_show_unread'] = Variable<bool>(onlyShowUnread);
+    map['show_reading_time'] = Variable<bool>(showReadingTime);
+    map['orderx'] = Variable<String>(orderx);
     return map;
   }
 
@@ -2467,6 +2550,10 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       deleted: Value(deleted),
       createdAt: Value(createdAt),
       changedAt: Value(changedAt),
+      hideGlobally: Value(hideGlobally),
+      onlyShowUnread: Value(onlyShowUnread),
+      showReadingTime: Value(showReadingTime),
+      orderx: Value(orderx),
     );
   }
 
@@ -2483,6 +2570,10 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       deleted: serializer.fromJson<int>(json['deleted']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       changedAt: serializer.fromJson<DateTime>(json['changedAt']),
+      hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
+      onlyShowUnread: serializer.fromJson<bool>(json['onlyShowUnread']),
+      showReadingTime: serializer.fromJson<bool>(json['showReadingTime']),
+      orderx: serializer.fromJson<String>(json['orderx']),
     );
   }
   @override
@@ -2498,6 +2589,10 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       'deleted': serializer.toJson<int>(deleted),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'changedAt': serializer.toJson<DateTime>(changedAt),
+      'hideGlobally': serializer.toJson<bool>(hideGlobally),
+      'onlyShowUnread': serializer.toJson<bool>(onlyShowUnread),
+      'showReadingTime': serializer.toJson<bool>(showReadingTime),
+      'orderx': serializer.toJson<String>(orderx),
     };
   }
 
@@ -2510,7 +2605,11 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
           String? statuses,
           int? deleted,
           DateTime? createdAt,
-          DateTime? changedAt}) =>
+          DateTime? changedAt,
+          bool? hideGlobally,
+          bool? onlyShowUnread,
+          bool? showReadingTime,
+          String? orderx}) =>
       ClusterEntity(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -2521,6 +2620,10 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
         deleted: deleted ?? this.deleted,
         createdAt: createdAt ?? this.createdAt,
         changedAt: changedAt ?? this.changedAt,
+        hideGlobally: hideGlobally ?? this.hideGlobally,
+        onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+        showReadingTime: showReadingTime ?? this.showReadingTime,
+        orderx: orderx ?? this.orderx,
       );
   ClusterEntity copyWithCompanion(ClustersTableCompanion data) {
     return ClusterEntity(
@@ -2534,6 +2637,16 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       deleted: data.deleted.present ? data.deleted.value : this.deleted,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       changedAt: data.changedAt.present ? data.changedAt.value : this.changedAt,
+      hideGlobally: data.hideGlobally.present
+          ? data.hideGlobally.value
+          : this.hideGlobally,
+      onlyShowUnread: data.onlyShowUnread.present
+          ? data.onlyShowUnread.value
+          : this.onlyShowUnread,
+      showReadingTime: data.showReadingTime.present
+          ? data.showReadingTime.value
+          : this.showReadingTime,
+      orderx: data.orderx.present ? data.orderx.value : this.orderx,
     );
   }
 
@@ -2548,14 +2661,30 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
           ..write('statuses: $statuses, ')
           ..write('deleted: $deleted, ')
           ..write('createdAt: $createdAt, ')
-          ..write('changedAt: $changedAt')
+          ..write('changedAt: $changedAt, ')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('onlyShowUnread: $onlyShowUnread, ')
+          ..write('showReadingTime: $showReadingTime, ')
+          ..write('orderx: $orderx')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, icon, feedIds, recentTime, statuses,
-      deleted, createdAt, changedAt);
+  int get hashCode => Object.hash(
+      id,
+      name,
+      icon,
+      feedIds,
+      recentTime,
+      statuses,
+      deleted,
+      createdAt,
+      changedAt,
+      hideGlobally,
+      onlyShowUnread,
+      showReadingTime,
+      orderx);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2568,7 +2697,11 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
           other.statuses == this.statuses &&
           other.deleted == this.deleted &&
           other.createdAt == this.createdAt &&
-          other.changedAt == this.changedAt);
+          other.changedAt == this.changedAt &&
+          other.hideGlobally == this.hideGlobally &&
+          other.onlyShowUnread == this.onlyShowUnread &&
+          other.showReadingTime == this.showReadingTime &&
+          other.orderx == this.orderx);
 }
 
 class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
@@ -2581,6 +2714,10 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
   final Value<int> deleted;
   final Value<DateTime> createdAt;
   final Value<DateTime> changedAt;
+  final Value<bool> hideGlobally;
+  final Value<bool> onlyShowUnread;
+  final Value<bool> showReadingTime;
+  final Value<String> orderx;
   const ClustersTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -2591,6 +2728,10 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     this.deleted = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
+    this.hideGlobally = const Value.absent(),
+    this.onlyShowUnread = const Value.absent(),
+    this.showReadingTime = const Value.absent(),
+    this.orderx = const Value.absent(),
   });
   ClustersTableCompanion.insert({
     this.id = const Value.absent(),
@@ -2602,6 +2743,10 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     this.deleted = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
+    this.hideGlobally = const Value.absent(),
+    this.onlyShowUnread = const Value.absent(),
+    this.showReadingTime = const Value.absent(),
+    this.orderx = const Value.absent(),
   })  : name = Value(name),
         icon = Value(icon),
         feedIds = Value(feedIds);
@@ -2615,6 +2760,10 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     Expression<int>? deleted,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? changedAt,
+    Expression<bool>? hideGlobally,
+    Expression<bool>? onlyShowUnread,
+    Expression<bool>? showReadingTime,
+    Expression<String>? orderx,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2626,6 +2775,10 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
       if (deleted != null) 'deleted': deleted,
       if (createdAt != null) 'created_at': createdAt,
       if (changedAt != null) 'changed_at': changedAt,
+      if (hideGlobally != null) 'hide_globally': hideGlobally,
+      if (onlyShowUnread != null) 'only_show_unread': onlyShowUnread,
+      if (showReadingTime != null) 'show_reading_time': showReadingTime,
+      if (orderx != null) 'orderx': orderx,
     });
   }
 
@@ -2638,7 +2791,11 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
       Value<String>? statuses,
       Value<int>? deleted,
       Value<DateTime>? createdAt,
-      Value<DateTime>? changedAt}) {
+      Value<DateTime>? changedAt,
+      Value<bool>? hideGlobally,
+      Value<bool>? onlyShowUnread,
+      Value<bool>? showReadingTime,
+      Value<String>? orderx}) {
     return ClustersTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -2649,6 +2806,10 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
       deleted: deleted ?? this.deleted,
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
+      hideGlobally: hideGlobally ?? this.hideGlobally,
+      onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+      showReadingTime: showReadingTime ?? this.showReadingTime,
+      orderx: orderx ?? this.orderx,
     );
   }
 
@@ -2682,6 +2843,18 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     if (changedAt.present) {
       map['changed_at'] = Variable<DateTime>(changedAt.value);
     }
+    if (hideGlobally.present) {
+      map['hide_globally'] = Variable<bool>(hideGlobally.value);
+    }
+    if (onlyShowUnread.present) {
+      map['only_show_unread'] = Variable<bool>(onlyShowUnread.value);
+    }
+    if (showReadingTime.present) {
+      map['show_reading_time'] = Variable<bool>(showReadingTime.value);
+    }
+    if (orderx.present) {
+      map['orderx'] = Variable<String>(orderx.value);
+    }
     return map;
   }
 
@@ -2696,7 +2869,11 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
           ..write('statuses: $statuses, ')
           ..write('deleted: $deleted, ')
           ..write('createdAt: $createdAt, ')
-          ..write('changedAt: $changedAt')
+          ..write('changedAt: $changedAt, ')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('onlyShowUnread: $onlyShowUnread, ')
+          ..write('showReadingTime: $showReadingTime, ')
+          ..write('orderx: $orderx')
           ..write(')'))
         .toString();
   }
@@ -3852,6 +4029,10 @@ typedef $$ClustersTableTableCreateCompanionBuilder = ClustersTableCompanion
   Value<int> deleted,
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
+  Value<bool> hideGlobally,
+  Value<bool> onlyShowUnread,
+  Value<bool> showReadingTime,
+  Value<String> orderx,
 });
 typedef $$ClustersTableTableUpdateCompanionBuilder = ClustersTableCompanion
     Function({
@@ -3864,6 +4045,10 @@ typedef $$ClustersTableTableUpdateCompanionBuilder = ClustersTableCompanion
   Value<int> deleted,
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
+  Value<bool> hideGlobally,
+  Value<bool> onlyShowUnread,
+  Value<bool> showReadingTime,
+  Value<String> orderx,
 });
 
 class $$ClustersTableTableFilterComposer
@@ -3901,6 +4086,20 @@ class $$ClustersTableTableFilterComposer
 
   ColumnFilters<DateTime> get changedAt => $composableBuilder(
       column: $table.changedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get showReadingTime => $composableBuilder(
+      column: $table.showReadingTime,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnFilters(column));
 }
 
 class $$ClustersTableTableOrderingComposer
@@ -3938,6 +4137,21 @@ class $$ClustersTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get changedAt => $composableBuilder(
       column: $table.changedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get showReadingTime => $composableBuilder(
+      column: $table.showReadingTime,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnOrderings(column));
 }
 
 class $$ClustersTableTableAnnotationComposer
@@ -3975,6 +4189,18 @@ class $$ClustersTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get changedAt =>
       $composableBuilder(column: $table.changedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => column);
+
+  GeneratedColumn<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread, builder: (column) => column);
+
+  GeneratedColumn<bool> get showReadingTime => $composableBuilder(
+      column: $table.showReadingTime, builder: (column) => column);
+
+  GeneratedColumn<String> get orderx =>
+      $composableBuilder(column: $table.orderx, builder: (column) => column);
 }
 
 class $$ClustersTableTableTableManager extends RootTableManager<
@@ -4012,6 +4238,10 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             Value<int> deleted = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
+            Value<bool> hideGlobally = const Value.absent(),
+            Value<bool> onlyShowUnread = const Value.absent(),
+            Value<bool> showReadingTime = const Value.absent(),
+            Value<String> orderx = const Value.absent(),
           }) =>
               ClustersTableCompanion(
             id: id,
@@ -4023,6 +4253,10 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             deleted: deleted,
             createdAt: createdAt,
             changedAt: changedAt,
+            hideGlobally: hideGlobally,
+            onlyShowUnread: onlyShowUnread,
+            showReadingTime: showReadingTime,
+            orderx: orderx,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -4034,6 +4268,10 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             Value<int> deleted = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
+            Value<bool> hideGlobally = const Value.absent(),
+            Value<bool> onlyShowUnread = const Value.absent(),
+            Value<bool> showReadingTime = const Value.absent(),
+            Value<String> orderx = const Value.absent(),
           }) =>
               ClustersTableCompanion.insert(
             id: id,
@@ -4045,6 +4283,10 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             deleted: deleted,
             createdAt: createdAt,
             changedAt: changedAt,
+            hideGlobally: hideGlobally,
+            onlyShowUnread: onlyShowUnread,
+            showReadingTime: showReadingTime,
+            orderx: orderx,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

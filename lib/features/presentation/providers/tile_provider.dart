@@ -71,7 +71,7 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
         }
 
         final Map<int, List<Feed>> feedsMap = feeds
-            .where((item) => !item.hideGlobally)
+            .where((item) => !item.hideGlobally) //过滤掉 hide的feed
             .toList()
             .fold<Map<int, List<Feed>>>(
           {},
@@ -82,14 +82,15 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
             return map;
           },
         );
+        //判断分类是否是hide的
         final categories = await _categoryRepository.getCategories();
-        List<Feed> nfeeds = [];
+        List<Feed> needs = [];
         for (final category in categories) {
           if (!category.hideGlobally) {
-            nfeeds.addAll(feedsMap[category.id] ?? []);
+            needs.addAll(feedsMap[category.id] ?? []);
           }
         }
-        return Tile(type: type, cluster: cluster, feeds: nfeeds);
+        return Tile(type: type, cluster: cluster, feeds: needs);
       }
       return Future.error("error type");
     } catch (e, stackTrace) {
@@ -98,7 +99,7 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
   }
 
   Future<void> saveShow({bool? onlyShowUnread, bool? showReadingTime,
-    String? orderx, bool? hideGlobally, }) async{
+    String? orderx, bool? hideGlobally, }) async {
     if (type == TileType.feed) {
       final success = await _feedRepository.updateShow(id,
         onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime,
@@ -108,7 +109,7 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
         final newFeed = state.value!.feed.copyWith(
             onlyShowUnread: onlyShowUnread,
             showReadingTime: showReadingTime,
-          orderx: orderx,
+          order: orderx,
           hideGlobally: hideGlobally,
         );
         state = AsyncData(state.value!.copyWith(feed: newFeed));
@@ -122,12 +123,28 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
       );
       if (success) {
         final newValue = state.value!.category.copyWith(
-            onlyShowUnread: onlyShowUnread,
-            showReadingTime: showReadingTime,
-          orderx: orderx,
+          onlyShowUnread: onlyShowUnread,
+          showReadingTime: showReadingTime,
+          order: orderx,
           hideGlobally: hideGlobally,
         );
         state = AsyncData(state.value!.copyWith(category: newValue));
+      }
+    }
+    if (type == TileType.cluster) {
+      final success = await _clusterRepository.updateShow(id,
+        onlyShowUnread: onlyShowUnread, showReadingTime: showReadingTime,
+        orderx: orderx,
+        hideGlobally: hideGlobally,
+      );
+      if (success) {
+        final newValue = state.value!.cluster.copyWith(
+          onlyShowUnread: onlyShowUnread,
+          showReadingTime: showReadingTime,
+          order: orderx,
+          hideGlobally: hideGlobally,
+        );
+        state = AsyncData(state.value!.copyWith(cluster: newValue));
       }
     }
   }

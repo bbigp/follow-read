@@ -20,4 +20,13 @@ class ClusterRepository {
     return (await dao.getById(id)).toModel();
   }
 
+  Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
+    String? orderx, bool? hideGlobally, }) async {
+    return await dao.updateShow(id, onlyShowUnread: onlyShowUnread,
+      showReadingTime: showReadingTime,
+      orderx: orderx,
+      hideGlobally: hideGlobally,
+    );
+  }
+
 }

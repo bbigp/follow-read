@@ -34,13 +34,13 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
     int page = 1;
     int size = 10;
     List<String> status = ["unread", "read"];
-    final orderx = tile.orderx;
+    final order = tile.orderx;
     bool? starred;
     DateTime? time;
 
     final list = await _entryRepository.getEntries(
       page, feedIds: feedIds, size: size, status: status,
-      orderx: orderx, starred: starred, startTime: time,
+      order: order, starred: starred, startTime: time,
       word: word,
     );
 
@@ -60,14 +60,14 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
     int page = state.value!.page + 1;
     int size = state.value!.size;
     List<String> status = ["unread", "read"];
-    final orderx = tile.orderx;
+    final order = tile.orderx;
     bool? starred;
     DateTime? time;
     String word = state.value!.word;
 
     final list = await _entryRepository.getEntries(
       page, feedIds: feedIds, size: size, status: status,
-      orderx: orderx, starred: starred, startTime: time,
+      order: order, starred: starred, startTime: time,
       word: word,
     );
 

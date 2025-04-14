@@ -18,7 +18,7 @@ class Cluster {
   final int count;
 
   final bool hideGlobally;
-  final String orderx;
+  final String order;
   final bool showReadingTime;
   final bool onlyShowUnread;
 
@@ -37,7 +37,7 @@ class Cluster {
     this.changedAt,
     this.count = 0,
     this.hideGlobally = false,
-    this.orderx = Frc.orderxPublishedAt,
+    this.order = Frc.orderxPublishedAt,
     this.showReadingTime = false,
     this.onlyShowUnread = false,
   });
@@ -52,6 +52,11 @@ class Cluster {
     int? deleted,
     DateTime? createdAt,
     DateTime? changedAt,
+    int? count,
+    bool? hideGlobally,
+    String? order,
+    bool? showReadingTime,
+    bool? onlyShowUnread,
   }) {
     return Cluster(
       id: id ?? this.id,
@@ -63,6 +68,11 @@ class Cluster {
       deleted: deleted ?? this.deleted,
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
+      count: count ?? this.count,
+      hideGlobally: hideGlobally ?? this.hideGlobally,
+      order: order ?? this.order,
+      showReadingTime: showReadingTime ?? this.showReadingTime,
+      onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
     );
   }
 

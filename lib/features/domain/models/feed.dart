@@ -17,7 +17,7 @@ class Feed extends BaseUiItem {
   final int errorCount;
   final String errorMsg;
   final int categoryId;
-  final String orderx;
+  final String order;
   final bool hideGlobally;
 
   const Feed({
@@ -34,7 +34,7 @@ class Feed extends BaseUiItem {
     this.errorCount = 0,
     this.errorMsg = "",
     this.categoryId = 0,
-    this.orderx = Frc.orderxPublishedAt,
+    this.order = Frc.orderxPublishedAt,
     this.hideGlobally = false,
   });
 
@@ -52,7 +52,7 @@ class Feed extends BaseUiItem {
     int? errorCount,
     String? errorMsg,
     int? categoryId,
-    String? orderx,
+    String? order,
     bool? hideGlobally,
   }) {
     return Feed(
@@ -69,7 +69,7 @@ class Feed extends BaseUiItem {
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
         categoryId: categoryId ?? this.categoryId,
-      orderx: orderx ?? this.orderx,
+      order: order ?? this.order,
         hideGlobally: hideGlobally ?? this.hideGlobally,
     );
   }

@@ -26,6 +26,17 @@ class ClustersTable extends Table {
   DateTimeColumn get changedAt => dateTime().named('changed_at')
       .withDefault(Constant(DateTime.now()))();
 
+  BoolColumn get hideGlobally => boolean().named('hide_globally')
+      .withDefault(const Constant(false))();
+  BoolColumn get onlyShowUnread => boolean().named('only_show_unread')
+      .withDefault(const Constant(false))();
+  BoolColumn get showReadingTime => boolean().named('show_reading_time')
+      .withDefault(const Constant(false))();
+  TextColumn get orderx => text().named("orderx")
+      .withDefault(Constant("published_at"))();
+  // BoolColumn get starred => boolean().named('starred')
+  //     .withDefault(const Constant(false))();
+
   @override
   String? get tableName => "clusters";
 
@@ -37,6 +48,8 @@ extension ClusterEntityConversion on ClusterEntity {
       id: id, icon: icon, name: name, feedIds: parseFeedIds(feedIds),
       recentTime: recentTime, statuses: parseStatuses(statuses), deleted: deleted,
       createdAt: createdAt, changedAt: changedAt,
+      hideGlobally: hideGlobally, onlyShowUnread: onlyShowUnread,
+      showReadingTime: showReadingTime, order: orderx,
     );
   }
 

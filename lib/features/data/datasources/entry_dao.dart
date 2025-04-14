@@ -37,7 +37,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     List<int> feedIds = const[],
     int page = 1,
     int size = 20, List<String> status = const ['unread'],
-    String? orderx, String direction = "desc",
+    String? order, String direction = "desc",
     bool? starred, DateTime? startTime, String? word,
   }) async {
     var query = select(entriesTable)..where((t) => entriesTable.status.isIn(status));
@@ -55,7 +55,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
       query = query..where((t) => t.title.like(keyword) | t.content.like(keyword) | t.summary.like(keyword));
     }
 
-    final orderByColumn = switch(orderx) {
+    final orderByColumn = switch(order) {
       Frc.orderxCreatedAt => entriesTable.createdAt,
       _ => entriesTable.publishedAt,
     };

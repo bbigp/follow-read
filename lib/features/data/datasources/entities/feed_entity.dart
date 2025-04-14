@@ -59,7 +59,7 @@ extension FeedEntityConversion on FeedEntity {
       errorMsg: errorMsg,
       errorCount: errorCount,
       categoryId: categoryId.toInt(),
-      orderx: orderx,
+      order: orderx,
       hideGlobally: hideGlobally,
     );
   }

@@ -9,7 +9,7 @@ class Category {
   final bool hideGlobally;
   final bool onlyShowUnread;
   final bool showReadingTime;
-  final String orderx;
+  final String order;
 
 
   // final List<Feed> feeds;
@@ -22,7 +22,7 @@ class Category {
     this.hideGlobally = false,
     this.onlyShowUnread = false,
     this.showReadingTime = false,
-    this.orderx = Frc.orderxPublishedAt,
+    this.order = Frc.orderxPublishedAt,
     // this.feeds = const [],
     // this.expanded = false,
   });
@@ -49,7 +49,7 @@ class Category {
     bool? hideGlobally,
     bool? onlyShowUnread,
     bool? showReadingTime,
-    String? orderx,
+    String? order,
     // List<Feed>? feeds,
     // bool? expanded,
   }) {
@@ -60,7 +60,7 @@ class Category {
       hideGlobally: hideGlobally ?? this.hideGlobally,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       showReadingTime: showReadingTime ?? this.showReadingTime,
-      orderx: orderx ?? this.orderx,
+      order: order ?? this.order,
       // feeds: feeds ?? this.feeds,
       // expanded: expanded ?? this.expanded,
     );

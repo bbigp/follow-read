@@ -37,5 +37,24 @@ class ClusterDao extends DatabaseAccessor<AppDatabase> {
   }
 
 
+  Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
+    String? orderx, bool? hideGlobally, }) async {
+    final affectedRows = await (update(clusterTable)
+      ..where((t) => t.id.equals(id))
+    ).write(
+      ClustersTableCompanion(
+        onlyShowUnread: onlyShowUnread != null
+            ? Value(onlyShowUnread)
+            : const Value.absent(),
+        showReadingTime: showReadingTime != null
+            ? Value(showReadingTime)
+            : const Value.absent(),
+        orderx: orderx != null && orderx != "" ? Value(orderx) : const Value.absent(),
+        hideGlobally: hideGlobally != null ? Value(hideGlobally) : const Value.absent(),
+      ),
+    );
+    return affectedRows > 0;
+  }
+
 
 }

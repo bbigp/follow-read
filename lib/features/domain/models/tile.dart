@@ -66,9 +66,9 @@ class Tile {
   }
 
   String get orderx {
-    if (type == TileType.feed) return feed.orderx;
-    if (type == TileType.folder) return category.orderx;
-    if (type == TileType.cluster) return cluster.orderx;
+    if (type == TileType.feed) return feed.order;
+    if (type == TileType.folder) return category.order;
+    if (type == TileType.cluster) return cluster.order;
     return "";
   }
 

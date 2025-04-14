@@ -139,17 +139,17 @@ class EntryRepository {
   Future<List<Entry>> getEntries(int page, { List<int> feedIds = const [],
     int size = 10, List<String> status = const ["unread", "read"],
     bool? starred, DateTime? startTime, String? word,
-    String? orderx,
+    String? order,
   }) async {
-    final entrys = await _dao.paginateEntries(feedIds: feedIds,
+    final entries = await _dao.paginateEntries(feedIds: feedIds,
         status: status, size: size,
         page: page, starred: starred, startTime: startTime,
-        orderx: orderx, word: word,
+        order: order, word: word,
     );
-    if (feedIds.isEmpty) feedIds = entrys.map((item) => int.parse(item.feedId.toString())).toSet().toList();
+    if (feedIds.isEmpty) feedIds = entries.map((item) => int.parse(item.feedId.toString())).toSet().toList();
     final feeds = await _feedDao.getFeedsByIds(feedIds);
     final feedMap = {for (var feed in feeds) feed.id: feed};
-    return entrys.map((entry) {
+    return entries.map((entry) {
       final feed = feedMap[entry.feedId];
       if (feed != null) {
         return entry.toModel().copyWith(feed: feed.toModel());
@@ -159,11 +159,11 @@ class EntryRepository {
   }
 
   Future<List<Entry>> getEntriesByFeedId(int feedId) async {
-    final entrys = await _dao.getEntriesByFeedId(feedId);
-    final feedIds = entrys.map((e) => int.parse(e.feedId.toString())).toSet().toList();
+    final entries = await _dao.getEntriesByFeedId(feedId);
+    final feedIds = entries.map((e) => int.parse(e.feedId.toString())).toSet().toList();
     final feeds = await _feedDao.getFeedsByIds(feedIds);
     final feedMap = {for (var feed in feeds) feed.id: feed};
-    return entrys.map((entry) {
+    return entries.map((entry) {
       final feed = feedMap[entry.feedId];
       if (feed != null) {
         return entry.toModel().copyWith(feed: feed.toModel());
@@ -181,13 +181,13 @@ class EntryRepository {
       return [];
     }
     final entryIds = list.map((item) => item.id).toList();
-    final entrys = await _dao.getAllEntriesByIds(entryIds);
+    final entries = await _dao.getAllEntriesByIds(entryIds);
 
     final feedIds = list.map((e) => e.feedId).toSet().toList();
     final feeds = await _feedDao.getFeedsByIds(feedIds);
     final feedMap = {for (var feed in feeds) feed.id: feed};
 
-    return entrys.map((entry) {
+    return entries.map((entry) {
       final feed = feedMap[entry.feedId];
       if (feed != null) {
         return entry.toModel().copyWith(feed: feed.toModel());

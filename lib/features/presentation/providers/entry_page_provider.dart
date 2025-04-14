@@ -56,6 +56,8 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
 
     List<int> feedIds = [];
     List<String> statuses = tile.onlyShowUnread ? ["unread"] : ["unread", "read"];
+    DateTime? minTime;
+    bool? starred;
     if (type == TileType.feed) {
       feedIds.add(id);
     }
@@ -63,18 +65,21 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
       feedIds.addAll(tile.feeds.map((item) => item.id).toList());
     }
     if (type == TileType.cluster) {
-      feedIds.addAll(tile.cluster.feedIds);
+      feedIds.addAll(tile.cluster.feedIds);//feed hide针对list不生效
+      if (tile.cluster.statuses.isNotEmpty) {
+        statuses = tile.cluster.statuses;
+      }
+      if (tile.cluster.recentTime > 0) {
+        minTime = DateTime.now().add(Duration(minutes: -tile.cluster.recentTime));
+      }
+      // starred = tile.cluster.starred;
+
     }
 
-    List<Entry> list = <Entry>[];
-    if (type == TileType.feed || type == TileType.folder) {
-      list = await _entryRepository.getEntries(
-        page, feedIds: [id], size: pageSize, status: statuses,
-        orderx: order,
-      );
-    } else if (type == TileType.cluster) {
-      list = await _getListx(tile.cluster, page, pageSize);
-    }
+    List<Entry> list = await _entryRepository.getEntries(
+        page, feedIds: feedIds, size: pageSize, status: statuses,
+        order: order, startTime: minTime, starred: starred,
+    );
     final newList = reset ? list : [...state.value!.entries, ...list];
     return EntriesState(
       isLoadingMore: false,
@@ -84,13 +89,6 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
     );
   }
 
-  Future<List<Entry>>  _getListx(Cluster cluster, int page, int pageSize) async {
-    List<String> status = cluster.statuses;
-    bool? starred;
-    DateTime? startTime;
-    return await _entryRepository.getEntries(feedIds: cluster.feedIds ?? [], page, size: pageSize,
-        status: status, starred: starred, startTime: startTime);
-  }
 }
 
 class EntriesState {
