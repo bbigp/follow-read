@@ -30,17 +30,35 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
     state = AsyncValue.data(state.value!.copyWith(word: word, isInitializing: true));
     _searchDao.save(word);
     final tile = state.value!.tile;
-    List<int> feedIds = [];
     int page = 1;
     int size = 10;
-    List<String> status = ["unread", "read"];
     final order = tile.orderx;
+    final type = tile.type;
+
+    List<int> feedIds = [];
+    List<String> statuses = tile.onlyShowUnread ? ["unread"] : ["unread", "read"];
+    DateTime? minTime;
     bool? starred;
-    DateTime? time;
+    if (type == TileType.feed) {
+      feedIds.add(tile.id);
+    }
+    if (type == TileType.folder) {
+      feedIds.addAll(tile.feeds.map((item) => item.id).toList());
+    }
+    if (type == TileType.cluster) {
+      feedIds.addAll(tile.cluster.feedIds);//feed hide针对list不生效
+      if (tile.cluster.statuses.isNotEmpty) {
+        statuses = tile.cluster.statuses;
+      }
+      if (tile.cluster.recentTime > 0) {
+        minTime = DateTime.now().add(Duration(minutes: -tile.cluster.recentTime));
+      }
+      // starred = tile.cluster.starred;
+    }
 
     final list = await _entryRepository.getEntries(
-      page, feedIds: feedIds, size: size, status: status,
-      order: order, starred: starred, startTime: time,
+      page, feedIds: feedIds, size: size, status: statuses,
+      order: order, starred: starred, startTime: minTime,
       word: word,
     );
 
@@ -56,18 +74,37 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
   Future<void> loadMore() async {
     state = AsyncValue.data(state.value!.copyWith(isLoadingMore: true));
     final tile = state.value!.tile;
-    List<int> feedIds = [];
     int page = state.value!.page + 1;
     int size = state.value!.size;
-    List<String> status = ["unread", "read"];
     final order = tile.orderx;
-    bool? starred;
-    DateTime? time;
     String word = state.value!.word;
+    final type = tile.type;
+
+    List<int> feedIds = [];
+    List<String> statuses = tile.onlyShowUnread ? ["unread"] : ["unread", "read"];
+    DateTime? minTime;
+    bool? starred;
+    if (type == TileType.feed) {
+      feedIds.add(tile.id);
+    }
+    if (type == TileType.folder) {
+      feedIds.addAll(tile.feeds.map((item) => item.id).toList());
+    }
+    if (type == TileType.cluster) {
+      feedIds.addAll(tile.cluster.feedIds);//feed hide针对list不生效
+      if (tile.cluster.statuses.isNotEmpty) {
+        statuses = tile.cluster.statuses;
+      }
+      if (tile.cluster.recentTime > 0) {
+        minTime = DateTime.now().add(Duration(minutes: -tile.cluster.recentTime));
+      }
+      // starred = tile.cluster.starred;
+    }
+
 
     final list = await _entryRepository.getEntries(
-      page, feedIds: feedIds, size: size, status: status,
-      order: order, starred: starred, startTime: time,
+      page, feedIds: feedIds, size: size, status: statuses,
+      order: order, starred: starred, startTime: minTime,
       word: word,
     );
 
