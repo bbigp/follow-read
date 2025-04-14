@@ -3,11 +3,11 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 
-import '../../domain/models/listx.dart';
 import '../../domain/models/tile.dart';
 
 
@@ -49,27 +49,31 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
     final tile = await ref.watch(tileProvider(pid).future);
     final type = tile.type;
     final id = tile.id;
-    List<String> status = tile.onlyShowUnread ? ["unread"] : ["unread", "read"];
     final page = reset ? 1 : state.value!.page + 1;
     final pageSize = reset ? 10 : state.value!.size;
-    final orderx = tile.orderx;
+    final order = tile.orderx;
+    if (tile.id == 0) return EntriesState();
+
+    List<int> feedIds = [];
+    List<String> statuses = tile.onlyShowUnread ? ["unread"] : ["unread", "read"];
+    if (type == TileType.feed) {
+      feedIds.add(id);
+    }
+    if (type == TileType.folder) {
+      feedIds.addAll(tile.feeds.map((item) => item.id).toList());
+    }
+    if (type == TileType.cluster) {
+      feedIds.addAll(tile.cluster.feedIds);
+    }
 
     List<Entry> list = <Entry>[];
-    if (type == TileType.feed) {
-      if (tile.feed.id == 0) return EntriesState();
+    if (type == TileType.feed || type == TileType.folder) {
       list = await _entryRepository.getEntries(
-        page, feedIds: [id], size: pageSize, status: status,
-        orderx: orderx,
+        page, feedIds: [id], size: pageSize, status: statuses,
+        orderx: order,
       );
-    } else if (type == TileType.folder) {
-      if (tile.category.id == 0) return EntriesState();
-      list = await _entryRepository.getEntries(
-        page, feedIds: tile.feeds.map((i) => i.id).toList(), size: pageSize, status: status,
-        orderx: orderx,
-      );
-    } else if (type == TileType.list) {
-      if (tile.feeds.isEmpty) return EntriesState();
-      list = await _getListx(tile.id, page, pageSize, tile.feeds.map((item) => item.id).toList());
+    } else if (type == TileType.cluster) {
+      list = await _getListx(tile.cluster, page, pageSize);
     }
     final newList = reset ? list : [...state.value!.entries, ...list];
     return EntriesState(
@@ -80,29 +84,11 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
     );
   }
 
-  Future<List<Entry>>  _getListx(int id, int page, int pageSize, List<int>? feedIds,) async {
-    List<String> status = [];
+  Future<List<Entry>>  _getListx(Cluster cluster, int page, int pageSize) async {
+    List<String> status = cluster.statuses;
     bool? starred;
     DateTime? startTime;
-    if (id == Listx.all) {
-      status = ["unread", "read"];
-    }
-    if (id == Listx.read) {
-      status = ["read"];
-    }
-    if (id == Listx.unread) {
-      status = ["unread"];
-    }
-    if(id == Listx.starred) {
-      starred = true;
-      status = ["unread", "read"];
-    }
-    if (id == Listx.today) {
-      final now = DateTime.now().toUtc();
-      startTime = DateTime(now.year, now.month, now.day);
-      status = ["unread", "read"];
-    }
-    return await _entryRepository.getEntries(feedIds: feedIds ?? [], page, size: pageSize,
+    return await _entryRepository.getEntries(feedIds: cluster.feedIds ?? [], page, size: pageSize,
         status: status, starred: starred, startTime: startTime);
   }
 }

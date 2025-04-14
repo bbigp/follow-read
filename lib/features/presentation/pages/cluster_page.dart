@@ -13,20 +13,20 @@ import '../../../config/theme.dart';
 import '../widgets/list_switch.dart';
 import '../widgets/two_tab_switch.dart';
 
-class ListxPage extends ConsumerStatefulWidget {
+class ClusterPage extends ConsumerStatefulWidget {
 
-  const ListxPage({super.key});
+  const ClusterPage({super.key});
 
   @override
-  ConsumerState<ListxPage> createState() => _ListxPageState();
+  ConsumerState<ClusterPage> createState() => _ClusterPageState();
 
 
 }
 
-class _ListxPageState extends ConsumerState<ListxPage> {
+class _ClusterPageState extends ConsumerState<ClusterPage> {
 
 
-  List<String> icons = ListxIcons.iconsPaths;
+  List<String> icons = ClusterIcons.iconsPaths;
   int _selectedIcon = 0;
   bool _enabled = false;
   String _selectedSegment = 'Advanced';

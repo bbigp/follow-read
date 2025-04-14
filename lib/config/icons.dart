@@ -1,8 +1,24 @@
 
 
-class ListxIcons {
-  ListxIcons._();
+class ClusterIcons {
+  ClusterIcons._();
 
+  static String name(String icon){
+    return icon.replaceAll("assets/icons/", "").replaceAll(".svg", "");
+  }
+
+  static String icon(String iconName) {
+    return 'assets/icons/$iconName.svg';
+  }
+
+  //内置list图标
+  static const String all = "assets/icons/all_entry.svg";
+  static const String markRead = "assets/icons/mark_read.svg";
+  static const String markUnread = "assets/icons/mark_unread.svg";
+  static const String addCollection = "assets/icons/add_collection.svg";
+  static const String today = "assets/icons/today.svg";
+
+  //用户建的list图标
   static const String menu = 'assets/icons/menu.svg';
   static const String starOutline = 'assets/icons/star_outline.svg';
   static const String triangle = 'assets/icons/triangle.svg';
@@ -59,54 +75,54 @@ class ListxIcons {
 
 
   static final List<String> iconsPaths = [
-    ListxIcons.menu,
-    ListxIcons.starOutline,
-    ListxIcons.triangle,
-    ListxIcons.squareOutline,
-    ListxIcons.diamondOutline,
-    ListxIcons.hexagonOutline,
-    ListxIcons.badgeOutline,
-    ListxIcons.heartOutline,
-    ListxIcons.shieldOutline,
-    ListxIcons.asterisk,
-    ListxIcons.chatBubble,
-    ListxIcons.penCancel,
-    ListxIcons.scribble,
-    ListxIcons.fileOutline,
-    ListxIcons.bookOpen,
-    ListxIcons.bookClosed,
-    ListxIcons.noteOutline,
-    ListxIcons.paperclip,
-    ListxIcons.accessibility,
-    ListxIcons.runner,
-    ListxIcons.friends,
-    ListxIcons.commandKey,
-    ListxIcons.sunOutline,
-    ListxIcons.moonOutline,
-    ListxIcons.cloudOutline,
-    ListxIcons.snowflake,
-    ListxIcons.peace,
-    ListxIcons.globeAmericas,
-    ListxIcons.globeGrid,
-    ListxIcons.sparkleOne,
-    ListxIcons.sparkleTwo,
-    ListxIcons.refreshSync,
-    ListxIcons.soccer,
-    ListxIcons.baseball,
-    ListxIcons.drop,
-    ListxIcons.umbrella,
-    ListxIcons.playOutline,
-    ListxIcons.musicNote,
-    ListxIcons.musicDouble,
-    ListxIcons.microphone,
-    ListxIcons.swiftLogo,
-    ListxIcons.terminal,
-    ListxIcons.contrastHalf,
-    ListxIcons.lightning,
-    ListxIcons.warning,
-    ListxIcons.megaphone,
-    ListxIcons.flag,
-    ListxIcons.sendArrow,
+    ClusterIcons.menu,
+    ClusterIcons.starOutline,
+    ClusterIcons.triangle,
+    ClusterIcons.squareOutline,
+    ClusterIcons.diamondOutline,
+    ClusterIcons.hexagonOutline,
+    ClusterIcons.badgeOutline,
+    ClusterIcons.heartOutline,
+    ClusterIcons.shieldOutline,
+    ClusterIcons.asterisk,
+    ClusterIcons.chatBubble,
+    ClusterIcons.penCancel,
+    ClusterIcons.scribble,
+    ClusterIcons.fileOutline,
+    ClusterIcons.bookOpen,
+    ClusterIcons.bookClosed,
+    ClusterIcons.noteOutline,
+    ClusterIcons.paperclip,
+    ClusterIcons.accessibility,
+    ClusterIcons.runner,
+    ClusterIcons.friends,
+    ClusterIcons.commandKey,
+    ClusterIcons.sunOutline,
+    ClusterIcons.moonOutline,
+    ClusterIcons.cloudOutline,
+    ClusterIcons.snowflake,
+    ClusterIcons.peace,
+    ClusterIcons.globeAmericas,
+    ClusterIcons.globeGrid,
+    ClusterIcons.sparkleOne,
+    ClusterIcons.sparkleTwo,
+    ClusterIcons.refreshSync,
+    ClusterIcons.soccer,
+    ClusterIcons.baseball,
+    ClusterIcons.drop,
+    ClusterIcons.umbrella,
+    ClusterIcons.playOutline,
+    ClusterIcons.musicNote,
+    ClusterIcons.musicDouble,
+    ClusterIcons.microphone,
+    ClusterIcons.swiftLogo,
+    ClusterIcons.terminal,
+    ClusterIcons.contrastHalf,
+    ClusterIcons.lightning,
+    ClusterIcons.warning,
+    ClusterIcons.megaphone,
+    ClusterIcons.flag,
+    ClusterIcons.sendArrow,
   ];
 
 }

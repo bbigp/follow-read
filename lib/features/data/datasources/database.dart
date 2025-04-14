@@ -5,8 +5,9 @@ import 'package:follow_read/features/data/datasources/entities/category_entity.d
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+import '../../../config/icons.dart';
 import '../../../core/utils/logger.dart';
-import 'entities/clusters_entity.dart';
+import 'entities/cluster_entity.dart';
 import 'entities/conf_entity.dart';
 import 'entities/entry_entity.dart';
 import 'entities/feed_entity.dart';
@@ -26,12 +27,50 @@ class AppDatabase extends _$AppDatabase {
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) async {
       await m.createAll();
+      await _initDefaultData(m);
     },
     onUpgrade: (Migrator m, int from, int to) async {
 
     },
   );
 
+
+  Future<void> _initDefaultData(Migrator m) async {
+    await batch((batch) async {
+      batch.insertAll(clustersTable, [
+        ClustersTableCompanion(
+          name: Value("全部"), icon: Value(ClusterIcons.name(ClusterIcons.all)),
+          feedIds: Value(""), recentTime: Value(0),
+          statuses: Value(["unread", "read",].join(",")),
+          deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
+        ),
+        ClustersTableCompanion(
+          name: Value("近期已读"), icon: Value(ClusterIcons.name(ClusterIcons.markRead)),
+          feedIds: Value(""), recentTime: Value(0),
+          statuses: Value(["read",].join(",")),
+          deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
+        ),
+        ClustersTableCompanion(
+          name: Value("星标"), icon: Value(ClusterIcons.name(ClusterIcons.addCollection)),
+          feedIds: Value(""), recentTime: Value(0),
+          statuses: Value(["unread", "read",].join(",")),
+          deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
+        ),
+        ClustersTableCompanion(
+          name: Value("未读"), icon: Value(ClusterIcons.name(ClusterIcons.markUnread)),
+          feedIds: Value(""), recentTime: Value(0),
+          statuses: Value(["unread",].join(",")),
+          deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
+        ),
+        ClustersTableCompanion(
+          name: Value("今日"), icon: Value(ClusterIcons.name(ClusterIcons.today)),
+          feedIds: Value(""), recentTime: Value(24 * 60),
+          statuses: Value(["unread", "read",].join(",")),
+          deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
+        ),
+      ]);
+    });
+  }
 }
 LazyDatabase _openConnection() {
   logger.i("数据库初始化完成");

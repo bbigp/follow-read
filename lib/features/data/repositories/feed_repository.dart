@@ -58,8 +58,8 @@ class FeedRepository {
     );
   }
 
-  Future<List<Feed>> getFeeds({bool? hideGlobally}) async {
-    final feeds = await feedDao.getAllFeeds(hideGlobally: hideGlobally);
+  Future<List<Feed>> getFeeds({bool? hideGlobally, List<int>? ids}) async {
+    final feeds = await feedDao.getAllFeeds(hideGlobally: hideGlobally, ids: ids);
     logger.i('查询到本地feeds: ${feeds.length}');
     return feeds.map((e) => e.toModel()).toList();
   }

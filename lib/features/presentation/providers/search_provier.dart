@@ -30,13 +30,13 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
     state = AsyncValue.data(state.value!.copyWith(word: word, isInitializing: true));
     _searchDao.save(word);
     final tile = state.value!.tile;
-    List<int> feedIds = tile.feedIds;
+    List<int> feedIds = [];
     int page = 1;
     int size = 10;
-    List<String> status = tile.status;
+    List<String> status = ["unread", "read"];
     final orderx = tile.orderx;
-    bool? starred = tile.starred;
-    DateTime? time = tile.time;
+    bool? starred;
+    DateTime? time;
 
     final list = await _entryRepository.getEntries(
       page, feedIds: feedIds, size: size, status: status,
@@ -56,13 +56,13 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
   Future<void> loadMore() async {
     state = AsyncValue.data(state.value!.copyWith(isLoadingMore: true));
     final tile = state.value!.tile;
-    List<int> feedIds = tile.feedIds;
+    List<int> feedIds = [];
     int page = state.value!.page + 1;
     int size = state.value!.size;
-    List<String> status = tile.status;
+    List<String> status = ["unread", "read"];
     final orderx = tile.orderx;
-    bool? starred = tile.starred;
-    DateTime? time = tile.time;
+    bool? starred;
+    DateTime? time;
     String word = state.value!.word;
 
     final list = await _entryRepository.getEntries(

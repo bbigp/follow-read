@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/data/datasources/cluster_dao.dart';
 import 'package:follow_read/features/data/datasources/conf_dao.dart';
 import 'package:follow_read/features/data/datasources/entry_dao.dart';
 import 'package:follow_read/features/data/datasources/local_data.dart';
 import 'package:follow_read/features/data/datasources/search_dao.dart';
+import 'package:follow_read/features/data/repositories/cluster_repository.dart';
 import 'package:follow_read/features/data/repositories/entry_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,6 +63,9 @@ final confDaoProvider = Provider<ConfDao>((ref){
 final searchDaoProvider = Provider<SearchDao>((ref){
   return SearchDao(ref.watch(appDatabaseProvider));
 });
+final clusterDaoProvider = Provider((ref){
+  return ClusterDao(ref.watch(appDatabaseProvider));
+});
 
 
 final feedRepositoryProvider = Provider<FeedRepository>((ref) {
@@ -70,11 +75,9 @@ final feedRepositoryProvider = Provider<FeedRepository>((ref) {
     categoryDao: ref.watch(categoryDaoProvider),
   );
 });
-
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepository(ref.watch(localDataSourceProvider),);
 });
-
 final entryRepositoryProvider = Provider<EntryRepository>((ref) {
   return EntryRepository(
       dao: ref.watch(entryDaoProvider),
@@ -83,9 +86,11 @@ final entryRepositoryProvider = Provider<EntryRepository>((ref) {
     feedRepository: ref.watch(feedRepositoryProvider),
   );
 });
-
 final categoryRepository = Provider<CategoryRepository>((ref){
   return CategoryRepository(
     dao: ref.watch(categoryDaoProvider),
   );
+});
+final clusterRepository = Provider((ref){
+  return ClusterRepository(dao: ref.watch(clusterDaoProvider));
 });

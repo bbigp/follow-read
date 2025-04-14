@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
-import 'package:follow_read/features/presentation/pages/listx_page.dart';
 import 'package:follow_read/features/presentation/pages/search_page.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/utils/logger.dart';
 import '../features/domain/models/tile.dart';
+import '../features/presentation/pages/cluster_page.dart';
 import '../features/presentation/pages/general_page.dart';
 import '../features/presentation/pages/home_screen.dart';
 import '../features/presentation/pages/login_screen.dart';
@@ -88,7 +88,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/listx',
         name: RouteNames.listx,
         builder: (context, state) {
-          return ListxPage();
+          return ClusterPage();
         }
       )
     ],

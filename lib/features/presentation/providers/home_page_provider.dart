@@ -3,9 +3,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/features/data/repositories/cluster_repository.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/category.dart';
-import 'package:follow_read/features/domain/models/listx.dart';
+import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/user_provider.dart';
 
@@ -24,6 +25,7 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
   late final FeedRepository _feedRepository = ref.watch(feedRepositoryProvider);
   late final CategoryRepository _categoryRepository = ref.watch(categoryRepository);
   late final EntryDao _entryDao = ref.watch(entryDaoProvider);
+  late final ClusterRepository _clusterRepository = ref.watch(clusterRepository);
 
   @override
   FutureOr<HomePageValue> build() async {
@@ -32,8 +34,8 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
     bool? hideGlobally = showAll ? null : false;
 
     var tiles = await loadingTiles(hideGlobally);
-    var listx = await list();
-    return HomePageValue(tiles: tiles, listx: listx);
+    var clusters = await _clusterRepository.getAll();
+    return HomePageValue(tiles: tiles, clusters: clusters);
   }
 
   Future<List<Tile>> loadingTiles(bool? hideGlobally) async{
@@ -60,17 +62,6 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
     return tiles;
   }
 
-  Future<List<Listx>> list() async {
-    final smartCount = await _entryDao.countSmartList();
-    return [
-      Listx.allListx.copyWith(count: smartCount.total),
-      Listx.readListx.copyWith(count: smartCount.read),
-      Listx.starredListx.copyWith(count: smartCount.starred),
-      Listx.unreadListx.copyWith(count: smartCount.unread),
-      Listx.todayListx.copyWith(count: smartCount.today),
-    ];
-  }
-
   void expanded(int id){
     final index = state.value!.tiles.indexWhere((c) => c.type == TileType.folder && c.category.id == id);
     if (index == -1) {
@@ -86,22 +77,22 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
 
 class HomePageValue {
 
-  final List<Listx> listx;
+  final List<Cluster> clusters;
   final List<Tile> tiles;
 
   const HomePageValue({
     this.tiles = const [],
-    this.listx = const <Listx>[],
+    this.clusters = const <Cluster>[],
   });
   static const empty = HomePageValue();
 
   HomePageValue copyWith({
     List<Tile>? tiles,
-    List<Listx>? listx,
+    List<Cluster>? clusters,
   }) {
     return HomePageValue(
       tiles: tiles ?? this.tiles,
-        listx: listx ?? this.listx,
+      clusters: clusters ?? this.clusters,
     );
   }
 

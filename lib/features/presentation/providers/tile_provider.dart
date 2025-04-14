@@ -5,13 +5,13 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/data/repositories/category_repository.dart';
+import 'package:follow_read/features/data/repositories/cluster_repository.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/user_provider.dart';
 
 import '../../../core/utils/logger.dart';
 import '../../domain/models/feed.dart';
-import '../../domain/models/listx.dart';
 import '../../domain/models/tile.dart';
 
 
@@ -25,6 +25,7 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
 
   late final CategoryRepository _categoryRepository = ref.watch(categoryRepository);
   late final FeedRepository _feedRepository = ref.watch(feedRepositoryProvider);
+  late final ClusterRepository _clusterRepository = ref.watch(clusterRepository);
   late final TileType type;
   late final int id;
 
@@ -52,14 +53,21 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
         if (!showAll && category.hideGlobally) {
           return Tile(type: type);
         }
-        final feeds = await _feedRepository.getFeedsByCategoryId(id);
+        var feeds = await _feedRepository.getFeedsByCategoryId(id);
+        feeds = feeds.where((item) {
+          if (showAll) return true;
+          return !item.hideGlobally;
+        }).toList();
         return Tile(type: type, feeds: feeds, category: category);
       }
-      if (type == TileType.list) {
-        final listx = Listx.pageAll.firstWhere((item) => item.id == id);
-        final feeds = await _feedRepository.getFeeds();
+      if (type == TileType.cluster) {
+        final cluster = await _clusterRepository.getById(id);
+        if (!showAll && cluster.hideGlobally) {
+          return Tile(type: type);
+        }
+        final feeds = await _feedRepository.getFeeds(ids: cluster.feedIds);
         if (showAll) {
-          return Tile(type: type, listx: listx, feeds: feeds);
+          return Tile(type: type, cluster: cluster, feeds: feeds);
         }
 
         final Map<int, List<Feed>> feedsMap = feeds
@@ -81,7 +89,7 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
             nfeeds.addAll(feedsMap[category.id] ?? []);
           }
         }
-        return Tile(type: type, listx: listx, feeds: nfeeds);
+        return Tile(type: type, cluster: cluster, feeds: nfeeds);
       }
       return Future.error("error type");
     } catch (e, stackTrace) {

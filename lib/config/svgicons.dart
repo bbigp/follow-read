@@ -1,4 +1,6 @@
 
+import 'package:follow_read/config/icons.dart';
+
 class Svgicons {
   const Svgicons._();
 
@@ -7,12 +9,10 @@ class Svgicons {
   static const String more = "assets/svg/more.svg";
   static const String search = "assets/svg/search.svg";
   static const String searchInput = "assets/svg/search_input.svg";
-  static const String markRead = "assets/svg/mark_read.svg";
-  static const String markUnread = "assets/svg/mark_unread.svg";
-  static const String addCollection = "assets/svg/add_collection.svg";
+  static const String markRead = ClusterIcons.markRead;
+  static const String markUnread = ClusterIcons.markUnread;
+  static const String addCollection = ClusterIcons.addCollection;
   static const String removeCollection = "assets/svg/remove_collection.svg";
-  static const String all = "assets/svg/all_entry.svg";
-  static const String today = "assets/svg/today.svg";
   static const String expired = "assets/svg/expired.svg";
   static const String retry = "assets/svg/retry.svg";
   static const String link = "assets/svg/link.svg";

@@ -1,18 +1,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:follow_read/routes/app_route.dart';
 
 import '../../../config/theme.dart';
-import '../../domain/models/listx.dart';
 import '../../domain/models/tile.dart';
 
-class ListItem extends ConsumerWidget {
+class ClusterItem extends ConsumerWidget {
   
-  final Listx list;
+  final Cluster cluster;
 
-  const ListItem({super.key, required this.list,});
+
+  const ClusterItem({super.key, required this.cluster,});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,11 +28,11 @@ class ListItem extends ConsumerWidget {
             onTap: () {
               ref.read(routerProvider).pushNamed(
                   RouteNames.entry,
-                  pathParameters: {'id': list.id.toString(), 'type': TileType.list.toString()},
+                  pathParameters: {'id': cluster.id.toString(), 'type': TileType.cluster.toString()},
               );
             },
-            leading: Svgicon(list.svgicon),
-            title: Text(list.title,
+            leading: Svgicon(cluster.svgIcon),
+            title: Text(cluster.name,
                 maxLines: 1,
                 style: const TextStyle(
                   fontSize: 15,
@@ -40,7 +41,7 @@ class ListItem extends ConsumerWidget {
                   color: AppTheme.black95,
                 )),
             trailing: Text(
-              '${list.count > 0 ? list.count : ''}',
+              '${cluster.count > 0 ? cluster.count : ''}',
               // 这里可以是你想显示的任何数字
               style: const TextStyle(
                 color: AppTheme.black25,

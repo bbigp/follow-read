@@ -7,13 +7,13 @@ import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed_item.dart';
-import 'package:follow_read/features/presentation/widgets/list_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
 
 import '../../../config/svgicons.dart';
 import '../providers/sync_data_provider.dart';
+import '../widgets/cluster_item.dart';
 import '../widgets/home_group.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -91,13 +91,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final listx = pageValue.value!.listx[index];
-                    return ListItem(
-                      key: ValueKey(PageUtils.pid(TileType.list, listx.id)),
-                      list: listx,
+                    final cluster = pageValue.value!.clusters[index];
+                    return ClusterItem(
+                      key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
+                      cluster: cluster,
                     );
                   },
-                  childCount: pageValue.value!.listx.length,
+                  childCount: pageValue.value!.clusters.length,
                 ),
               ),
             SliverToBoxAdapter(

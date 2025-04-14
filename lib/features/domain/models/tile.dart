@@ -1,10 +1,9 @@
 
 
 import 'package:follow_read/features/domain/models/category.dart';
+import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
-import 'package:follow_read/features/domain/models/listx.dart';
 
-import 'constants.dart';
 
 
 class Tile {
@@ -14,7 +13,7 @@ class Tile {
   final Category category;
   final List<Feed> feeds;
   final bool expanded;
-  final Listx listx;
+  final Cluster cluster;
 
   const Tile({
     this.feed = const Feed(id: 0, userId: 0, feedUrl: "", siteUrl: "", title: ""),
@@ -22,7 +21,7 @@ class Tile {
     this.feeds = const [],
     this.type = TileType.none,
     this.expanded = false,
-    this.listx = const Listx(id: 0, title: "", svgicon: ""),
+    this.cluster = const Cluster(),
   });
 
   Tile copyWith({
@@ -31,7 +30,7 @@ class Tile {
     List<Feed>? feeds,
     TileType? type,
     bool? expanded,
-    Listx? listx,
+    Cluster? cluster,
   }) {
     return Tile(
       feed: feed ?? this.feed,
@@ -39,15 +38,8 @@ class Tile {
       feeds: feeds ?? this.feeds,
       type: type ?? this.type,
       expanded: expanded ?? this.expanded,
-      listx: listx ?? this.listx,
+      cluster: cluster ?? this.cluster,
     );
-  }
-
-  List<int> get feedIds {
-    List<int> ids = [];
-    if (feed.id != 0) ids.add(feed.id);
-    if (feeds.isNotEmpty) ids.addAll(feeds.map((item) => item.id).toList());
-    return ids;
   }
 
   static Tile empty = Tile();
@@ -55,28 +47,29 @@ class Tile {
   int get id {
     if (type == TileType.feed) return feed.id;
     if (type == TileType.folder) return category.id;
-    if (type == TileType.list) return listx.id;
+    if (type == TileType.cluster) return cluster.id;
     return 0;
   }
 
   bool get hideGlobally {
     if (type == TileType.feed) return feed.hideGlobally;
     if (type == TileType.folder) return category.hideGlobally;
-    // if (type == TileType.list) return listx.title;
+    if (type == TileType.cluster) return cluster.hideGlobally;
     return false;
   }
 
   String get title {
     if (type == TileType.feed) return feed.title;
     if (type == TileType.folder) return category.title;
-    if (type == TileType.list) return listx.title;
+    if (type == TileType.cluster) return cluster.name;
     return "";
   }
 
   String get orderx {
     if (type == TileType.feed) return feed.orderx;
     if (type == TileType.folder) return category.orderx;
-    return Frc.orderxPublishedAt;
+    if (type == TileType.cluster) return cluster.orderx;
+    return "";
   }
 
   String get feedUrl {
@@ -92,7 +85,7 @@ class Tile {
   int get unread {
     if (type == TileType.feed) return feed.unread;
     if (type == TileType.folder) return feeds.fold<int>(0, (sum, feed) => sum + feed.unread);
-    if (type == TileType.list) return listx.count;
+    if (type == TileType.cluster) return cluster.count;
     return 0;
   }
 
@@ -102,55 +95,24 @@ class Tile {
     return 0;
   }
 
-  List<String> get status {
-    if (type == TileType.feed || type == TileType.folder) return onlyShowUnread ? ["unread"] : ["unread", "read"];
-    if (id == Listx.all) {
-      return ["unread", "read"];
-    }
-    if (id == Listx.read) {
-      return ["read"];
-    }
-    if (id == Listx.unread) {
-      return ["unread"];
-    }
-    if(id == Listx.starred) {
-      return ["unread", "read"];
-    }
-    if (id == Listx.today) {
-      return ["unread", "read"];
-    }
-    return [];
-  }
-
-  bool? get starred {
-    if (type == TileType.list && id == Listx.starred) return true;
-    return null;
-  }
-
-  DateTime? get time {
-    if (type == TileType.list && id == Listx.today) {
-      final now = DateTime.now().toUtc();
-      return DateTime(now.year, now.month, now.day);
-    }
-    return null;
-  }
-
   bool get onlyShowUnread {
     if (type == TileType.feed) return feed.onlyShowUnread;
     if (type == TileType.folder) return category.onlyShowUnread;
+    if (type == TileType.cluster) return cluster.onlyShowUnread;
     return false;
   }
 
   bool get showReadingTime {
     if (type == TileType.feed) return feed.showReadingTime;
     if (type == TileType.folder) return category.showReadingTime;
+    if (type == TileType.cluster) return cluster.showReadingTime;
     return false;
   }
 
 }
 
 enum TileType {
-  list, feed, folder, none;
+  cluster, feed, folder, none;
 
   @override
   String toString() => name;
