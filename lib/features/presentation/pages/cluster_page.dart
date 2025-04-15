@@ -14,6 +14,7 @@ import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import '../../../config/icons.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
+import '../widgets/cluster/recent_time.dart';
 import '../widgets/list_switch.dart';
 import '../widgets/two_tab_switch.dart';
 
@@ -38,7 +39,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
   String _icon = "";
   bool _inited = false;//第一次的时候初始化数据
   List<int> _feedIds = [];
-  String _recentTime = 'Off';
+  int _recentTime = 0;
 
   void initView(Cluster cluster){
     if (_inited) return;
@@ -47,13 +48,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
     _name = cluster.name;
     _enabled = true;
     _feedIds = cluster.feedIds;
-    _recentTime = switch(cluster.recentTime) {
-      1440 => '最近24小时',
-      2880 => '最近48小时',
-      10080 => '最近一周',
-      40320 => '最近一个月',
-      _ => 'Off'
-    };
+    _recentTime = cluster.recentTime;
   }
 
   @override
@@ -145,14 +140,8 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
 
   Widget _rightView(){
     return Column(children: [
-      if (_feedIds.isNotEmpty) CardView(child: FeedSource(icon: Svgicons.squareRss, title: '订阅源', selected: _feedIds,),),
-      if (_recentTime != 'Off')
-        CardView(child: FeedSource(icon: Svgicons.calendarToday,
-          title: '发布日期',
-          isMultiSelect: false,
-          selected: [_recentTime],
-          options: ['Off', '最近24小时', '最近48小时', '最近一周', '最近一个月'],
-        ),),
+      if (_recentTime > 0)
+        CardView(child: _buildRecentTime()),
 
       Container(
         padding: EdgeInsets.symmetric(vertical: 4),
@@ -162,11 +151,16 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
           border: Border.all(color: AppTheme.black4, width: 1),
         ),
         child: Column(children: [
-          if (_feedIds.isEmpty) FeedSource(icon: Svgicons.squareRss, title: '订阅源',),
-          if (_recentTime == 'Off') FeedSource(icon: Svgicons.calendarToday, title: '发布日期',),
+          if (_recentTime == 0) _buildRecentTime(),
         ],)
       ),
     ],);
+  }
+
+  Widget _buildRecentTime(){
+    return RecentTime(recentTime: _recentTime, onChanged: (v) => setState(() {
+      _recentTime = v;
+    }),);
   }
 
 

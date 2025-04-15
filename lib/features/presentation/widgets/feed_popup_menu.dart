@@ -8,9 +8,9 @@ class FeedPopupMenu {
   static void show({
     required BuildContext context,
     required Offset position,
-    required int selectedIndex,
+    required String selected,
     required Function(String) onSelected,
-    double width = 180,
+    // double width = 180,
     List<String> options = const ['Off', 'Custom'],
   }) {
     final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
@@ -26,16 +26,16 @@ class FeedPopupMenu {
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: AppTheme.black4, width: 1),
       ),
-      items: _buildMenuItems(options, selectedIndex, width),
+      items: _buildMenuItems(options, selected, width),
     ).then((value) {
       if (value != null) onSelected(value);
     });
   }
 
-  static List<PopupMenuEntry<String>> _buildMenuItems(List<String> options, int selectedIndex, double width) {
+  static List<PopupMenuEntry<String>> _buildMenuItems(List<String> options, String selected, double width) {
     List<PopupMenuEntry<String>> list = [];
     for (int i = 0; i < options.length; i++) {
-      list.add(CustomPopupMenuItem(value: options[i], isSelected: i == selectedIndex, width: width));
+      list.add(CustomPopupMenuItem(value: options[i], isSelected: selected == options[i], width: width,));
       if (i != options.length - 1) {
         list.add(PopupMenuDivider());
       }
@@ -76,7 +76,7 @@ class _CustomPopupMenuItemState extends State<CustomPopupMenuItem> {
       },
       child: Container(
         height: widget.height,
-        width: widget.width,
+        // width: widget.width,
         padding: EdgeInsets.symmetric(horizontal: 8),
         alignment: Alignment.centerLeft,
         child: Row(
@@ -87,6 +87,7 @@ class _CustomPopupMenuItemState extends State<CustomPopupMenuItem> {
             SizedBox(width: 8),
             Expanded(child: Text(
               widget.value,
+              maxLines: 1,
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,

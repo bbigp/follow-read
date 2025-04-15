@@ -29,12 +29,15 @@ class FeedSource<T> extends StatefulWidget {
   State<StatefulWidget> createState() => _FeedSourceState();
 }
 
-class _FeedSourceState extends State<FeedSource> {
+class _FeedSourceState<T> extends State<FeedSource<T>> {
+
+  late List<T> _selected;
 
 
   @override
   void initState() {
     super.initState();
+    _selected = widget.selected;
   }
 
   @override
@@ -61,27 +64,26 @@ class _FeedSourceState extends State<FeedSource> {
                 widgetPosition.dy + widgetSize.height, // 下方
               );
               var selectedIndex = 0;
-              if (widget.isMultiSelect) selectedIndex = widget.selected.isEmpty ? 0 : 1;
-              if (!widget.isMultiSelect) selectedIndex = widget.selected.isEmpty ? 0 : widget.options.indexOf(widget.selected[0]);
+              if (widget.isMultiSelect) selectedIndex = _selected.isEmpty ? 0 : 1;
+              if (!widget.isMultiSelect) selectedIndex = _selected.isEmpty ? 0 : widget.options.indexOf(_selected[0].toString());
               if (selectedIndex < 0) selectedIndex = 0;
-              FeedPopupMenu.show(
-                context: context,
-                position: menuPosition,
-                selectedIndex: selectedIndex,
-                width: widgetSize.width * 0.6,
-                options: widget.options,
-                onSelected: (val) {
-                  setState(() {
-                    logger.i(val);
-
-                  });
-                },
-              );
+              // FeedPopupMenu.show(
+              //   context: context,
+              //   position: menuPosition,
+              //   selectedIndex: selectedIndex,
+              //   width: widgetSize.width * 0.6,
+              //   options: widget.options,
+              //   onSelected: (val) {
+              //     setState(() {
+              //       _selected = [val as T];
+              //     });
+              //   },
+              // );
             },
             child: Row(children: [
               SizedBox(width: 4,),
-              if (widget.selected.isNotEmpty && !widget.isMultiSelect)
-                Text(widget.selected[0].toString(), style: TextStyle(
+              if (_selected.isNotEmpty && !widget.isMultiSelect)
+                Text(_selected[0].toString(), style: TextStyle(
                   fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
                 ),),
               SizedBox(width: 4,),
@@ -91,7 +93,7 @@ class _FeedSourceState extends State<FeedSource> {
           SizedBox(width: 12,),
         ],
       ),
-      if (widget.selected.isNotEmpty && widget.isMultiSelect)
+      if (_selected.isNotEmpty && widget.isMultiSelect)
         Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12),
           child: SpacerDivider(
             thickness: 0.5,
@@ -100,12 +102,12 @@ class _FeedSourceState extends State<FeedSource> {
             color: AppTheme.black8,
           ),
         ),
-      if (widget.selected.isNotEmpty && widget.isMultiSelect)
+      if (_selected.isNotEmpty && widget.isMultiSelect)
         GestureDetector(
           onTap: (){},
           child: Row(children: [
             SizedBox(width: 20, height: 44,),
-            Expanded(child: Text(widget.selected.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
+            Expanded(child: Text(_selected.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
               fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
             ),),),
             SizedBox(width: 8,),

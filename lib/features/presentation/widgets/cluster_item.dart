@@ -31,6 +31,11 @@ class ClusterItem extends ConsumerWidget {
                   pathParameters: {'id': cluster.id.toString(), 'type': TileType.cluster.toString()},
               );
             },
+            onLongPress: (){
+              ref.watch(routerProvider).pushNamed(RouteNames.cluster, queryParameters: {
+                "id": cluster.id.toString(),
+              });
+            },
             leading: Svgicon(cluster.svgIcon),
             title: Text(cluster.name,
                 maxLines: 1,
