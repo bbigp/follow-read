@@ -85,10 +85,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
       ),
       GoRoute(
-        path: '/listx',
-        name: RouteNames.listx,
+        path: '/cluster',
+        name: RouteNames.cluster,
         builder: (context, state) {
-          return ClusterPage();
+          final id = state.uri.queryParameters['id'] ?? "0";
+          return ClusterPage(id: int.parse(id));
         }
       )
     ],
@@ -106,7 +107,7 @@ class RouteNames {
   static const entryDetail = 'entryDetail';
   static const imageGallery = 'imageGallery';
   static const search = 'search';
-  static const listx = 'listx';
+  static const cluster = 'cluster';
 }
 
 

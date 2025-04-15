@@ -8,10 +8,10 @@ class FeedPopupMenu {
   static void show({
     required BuildContext context,
     required Offset position,
-    required String selected,
+    required int selectedIndex,
     required Function(String) onSelected,
     double width = 180,
-    List<String> items = const ['Off', 'Custom'],
+    List<String> options = const ['Off', 'Custom'],
   }) {
     final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
@@ -26,17 +26,17 @@ class FeedPopupMenu {
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: AppTheme.black4, width: 1),
       ),
-      items: _buildMenuItems(items, selected, width),
+      items: _buildMenuItems(options, selectedIndex, width),
     ).then((value) {
       if (value != null) onSelected(value);
     });
   }
 
-  static List<PopupMenuEntry<String>> _buildMenuItems(List<String> items, String selected, double width) {
+  static List<PopupMenuEntry<String>> _buildMenuItems(List<String> options, int selectedIndex, double width) {
     List<PopupMenuEntry<String>> list = [];
-    for (int i = 0; i < items.length; i++) {
-      list.add(CustomPopupMenuItem(value: items[i], selected: selected, width: width));
-      if (i != items.length - 1) {
+    for (int i = 0; i < options.length; i++) {
+      list.add(CustomPopupMenuItem(value: options[i], isSelected: i == selectedIndex, width: width));
+      if (i != options.length - 1) {
         list.add(PopupMenuDivider());
       }
     }
@@ -46,14 +46,14 @@ class FeedPopupMenu {
 
 class CustomPopupMenuItem extends PopupMenuEntry<String> {
   final String value;
-  final String selected;
+  final bool isSelected;
   final double _height = 36;
   final double width;
 
   const CustomPopupMenuItem({
     super.key,
     required this.value,
-    required this.selected,
+    this.isSelected = false,
     this.width = 100,
   });
 
@@ -70,8 +70,6 @@ class CustomPopupMenuItem extends PopupMenuEntry<String> {
 class _CustomPopupMenuItemState extends State<CustomPopupMenuItem> {
   @override
   Widget build(BuildContext context) {
-    final isSelected = widget.value == widget.selected;
-
     return GestureDetector(
       onTap: () {
         Navigator.pop(context, widget.value);
@@ -83,7 +81,7 @@ class _CustomPopupMenuItemState extends State<CustomPopupMenuItem> {
         alignment: Alignment.centerLeft,
         child: Row(
           children: [
-            isSelected
+            widget.isSelected
                 ? SvgPicture.asset(Svgicons.check, width: 20, height: 20)
                 : SizedBox(width: 20, height: 20),
             SizedBox(width: 8),

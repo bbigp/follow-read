@@ -9,14 +9,20 @@ import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import 'feed_popup_menu.dart';
 
-class FeedSource extends StatefulWidget {
+class FeedSource<T> extends StatefulWidget {
 
   final String icon;
   final String title;
+  final List<T> selected;
+  final bool isMultiSelect;
+  final List<String> options;
 
   const FeedSource({super.key,
     required this.icon,
     required this.title,
+    this.selected = const [],
+    this.isMultiSelect = true,
+    this.options = const ['Off', 'Custom'],
   });
 
   @override
@@ -25,11 +31,14 @@ class FeedSource extends StatefulWidget {
 
 class _FeedSourceState extends State<FeedSource> {
 
-  String _selected = 'Off';
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    logger.i('build $_selected');
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -51,24 +60,30 @@ class _FeedSourceState extends State<FeedSource> {
                 widgetPosition.dx + widgetSize.width, // 右侧
                 widgetPosition.dy + widgetSize.height, // 下方
               );
+              var selectedIndex = 0;
+              if (widget.isMultiSelect) selectedIndex = widget.selected.isEmpty ? 0 : 1;
+              if (!widget.isMultiSelect) selectedIndex = widget.selected.isEmpty ? 0 : widget.options.indexOf(widget.selected[0]);
+              if (selectedIndex < 0) selectedIndex = 0;
               FeedPopupMenu.show(
                 context: context,
                 position: menuPosition,
-                selected: _selected,
+                selectedIndex: selectedIndex,
                 width: widgetSize.width * 0.6,
+                options: widget.options,
                 onSelected: (val) {
                   setState(() {
                     logger.i(val);
-                    _selected = val;
+
                   });
                 },
               );
             },
             child: Row(children: [
               SizedBox(width: 4,),
-              Text(_selected, style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
-              ),),
+              if (widget.selected.isNotEmpty && !widget.isMultiSelect)
+                Text(widget.selected[0].toString(), style: TextStyle(
+                  fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
+                ),),
               SizedBox(width: 4,),
               SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
             ],),
@@ -76,7 +91,7 @@ class _FeedSourceState extends State<FeedSource> {
           SizedBox(width: 12,),
         ],
       ),
-      if (_selected == "Custom")
+      if (widget.selected.isNotEmpty && widget.isMultiSelect)
         Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12),
           child: SpacerDivider(
             thickness: 0.5,
@@ -85,12 +100,12 @@ class _FeedSourceState extends State<FeedSource> {
             color: AppTheme.black8,
           ),
         ),
-      if (_selected == "Custom")
+      if (widget.selected.isNotEmpty && widget.isMultiSelect)
         GestureDetector(
           onTap: (){},
           child: Row(children: [
             SizedBox(width: 20, height: 44,),
-            Expanded(child: Text('Subscription Title, Subscription Title, Subscription Title,', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
+            Expanded(child: Text(widget.selected.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
               fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
             ),),),
             SizedBox(width: 8,),

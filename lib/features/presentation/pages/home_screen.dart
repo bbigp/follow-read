@@ -84,7 +84,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             SliverToBoxAdapter(
               child: HomeGroup(title: '智能视图', rightIcon: Svgicons.plusO, onTap: (){
-                  ref.read(routerProvider).pushNamed(RouteNames.listx);
+                  ref.read(routerProvider).pushNamed(RouteNames.cluster,);
               },),
             ),
             if (!pageValue.isLoading)

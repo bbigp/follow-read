@@ -17,6 +17,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../../routes/app_route.dart';
+import '../../domain/models/feed.dart';
 import '../../domain/models/tile.dart';
 import '../providers/entry_page_provider.dart';
 import '../widgets/feed_icon.dart';
@@ -139,15 +140,24 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                             ],
                           )),
                           SizedBox(width: 8,),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: AppTheme.black8,
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                            child: SvgPicture.asset(
-                              Svgicons.edit,
-                              height: 20, width: 20,
+                          GestureDetector(
+                            onTap: (){
+                              if (tile.type == TileType.cluster) {
+                                ref.watch(routerProvider).pushNamed(RouteNames.cluster, queryParameters: {
+                                  "id": tile.id.toString(),
+                                });
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: AppTheme.black8,
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                              child: SvgPicture.asset(
+                                Svgicons.edit,
+                                height: 20, width: 20,
+                              ),
                             ),
                           )
                         ],
@@ -219,6 +229,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                     SizedBox(height: 8,),
                     FeedSwitch(id: widget.id, type: widget.type,),
                     SizedBox(height: 8,),
+                    if (tile.type == TileType.feed) _buildSiteUrl(tile.feed),
                     SizedBox(
                       height: 21,
                     )
@@ -230,6 +241,21 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         });
       },
     );
+  }
+
+  Widget _buildSiteUrl(Feed feed){
+    return Expanded(child: Container(
+      height: 40,
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(vertical: 4),
+      decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+      ),
+      child: Text(feed.siteUrl, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
+        fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
+      ),),
+    ));
   }
 
 
