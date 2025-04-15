@@ -73,8 +73,11 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
       if (tile.cluster.recentTime > 0) {
         minTime = DateTime.now().add(Duration(minutes: -tile.cluster.recentTime));
       }
-      // starred = tile.cluster.starred;
-
+      starred = switch(tile.cluster.starred) {
+        1 => true,
+        0 => false,
+        _ => null
+      };
     }
 
     List<Entry> list = await _entryRepository.getEntries(

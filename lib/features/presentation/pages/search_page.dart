@@ -179,7 +179,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             SizedBox(width: 10, height: 36,),
             GestureDetector(
               onTap: (){
-                ref.read(searchProvier(pid).notifier).clearSearchHitory();
+                ref.read(searchProvier(pid).notifier).clearSearchHistory();
               },
               child: Svgicon(Svgicons.trash, size: 24, iconSize: 20,),
             ),

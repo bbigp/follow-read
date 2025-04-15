@@ -34,8 +34,8 @@ class ClustersTable extends Table {
       .withDefault(const Constant(false))();
   TextColumn get orderx => text().named("orderx")
       .withDefault(Constant("published_at"))();
-  // BoolColumn get starred => boolean().named('starred')
-  //     .withDefault(const Constant(false))();
+  IntColumn get starred => integer().named('starred')
+      .withDefault(const Constant(-1))();
 
   @override
   String? get tableName => "clusters";
@@ -50,6 +50,7 @@ extension ClusterEntityConversion on ClusterEntity {
       createdAt: createdAt, changedAt: changedAt,
       hideGlobally: hideGlobally, onlyShowUnread: onlyShowUnread,
       showReadingTime: showReadingTime, order: orderx,
+      starred: starred,
     );
   }
 

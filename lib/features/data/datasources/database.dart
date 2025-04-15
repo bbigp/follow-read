@@ -40,31 +40,31 @@ class AppDatabase extends _$AppDatabase {
       batch.insertAll(clustersTable, [
         ClustersTableCompanion(
           name: Value("全部"), icon: Value(ClusterIcons.name(ClusterIcons.all)),
-          feedIds: Value(""), recentTime: Value(0),
+          feedIds: Value(""), recentTime: Value(0), starred: Value(-1),
           statuses: Value(["unread", "read",].join(",")),
           deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
         ),
         ClustersTableCompanion(
           name: Value("近期已读"), icon: Value(ClusterIcons.name(ClusterIcons.markRead)),
-          feedIds: Value(""), recentTime: Value(0),
+          feedIds: Value(""), recentTime: Value(0), starred: Value(-1),
           statuses: Value(["read",].join(",")),
           deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
         ),
         ClustersTableCompanion(
           name: Value("星标"), icon: Value(ClusterIcons.name(ClusterIcons.addCollection)),
-          feedIds: Value(""), recentTime: Value(0),
+          feedIds: Value(""), recentTime: Value(0), starred: Value(1),
           statuses: Value(["unread", "read",].join(",")),
           deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
         ),
         ClustersTableCompanion(
           name: Value("未读"), icon: Value(ClusterIcons.name(ClusterIcons.markUnread)),
-          feedIds: Value(""), recentTime: Value(0),
+          feedIds: Value(""), recentTime: Value(0), starred: Value(-1),
           statuses: Value(["unread",].join(",")),
           deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
         ),
         ClustersTableCompanion(
           name: Value("今日"), icon: Value(ClusterIcons.name(ClusterIcons.today)),
-          feedIds: Value(""), recentTime: Value(24 * 60),
+          feedIds: Value(""), recentTime: Value(24 * 60), starred: Value(-1),
           statuses: Value(["unread", "read",].join(",")),
           deleted: Value(0), createdAt: Value(DateTime.now()), changedAt: Value(DateTime.now()),
         ),

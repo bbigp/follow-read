@@ -16,6 +16,7 @@ class Cluster {
   final DateTime? createdAt;
   final DateTime? changedAt;
   final int count;
+  final int starred;
 
   final bool hideGlobally;
   final String order;
@@ -40,6 +41,7 @@ class Cluster {
     this.order = Frc.orderxPublishedAt,
     this.showReadingTime = false,
     this.onlyShowUnread = false,
+    this.starred = -1,
   });
 
   Cluster copyWith({
@@ -57,6 +59,7 @@ class Cluster {
     String? order,
     bool? showReadingTime,
     bool? onlyShowUnread,
+    int? starred,
   }) {
     return Cluster(
       id: id ?? this.id,
@@ -73,6 +76,7 @@ class Cluster {
       order: order ?? this.order,
       showReadingTime: showReadingTime ?? this.showReadingTime,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+      starred: starred ?? this.starred,
     );
   }
 
