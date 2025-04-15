@@ -10,7 +10,7 @@ class FeedPopupMenu {
     required Offset position,
     required String selected,
     required Function(String) onSelected,
-    // double width = 180,
+    double width = 180,
     List<String> options = const ['Off', 'Custom'],
   }) {
     final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;

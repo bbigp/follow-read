@@ -15,7 +15,7 @@ import '../../../config/icons.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../widgets/cluster/recent_time.dart';
-import '../widgets/list_switch.dart';
+import '../widgets/cluster/list_switch.dart';
 import '../widgets/two_tab_switch.dart';
 
 class ClusterPage extends ConsumerStatefulWidget {
@@ -140,6 +140,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
 
   Widget _rightView(){
     return Column(children: [
+      if (_feedIds.isNotEmpty) CardView(child: FeedSource(selected: _feedIds,)),
       if (_recentTime > 0)
         CardView(child: _buildRecentTime()),
 
@@ -151,6 +152,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
           border: Border.all(color: AppTheme.black4, width: 1),
         ),
         child: Column(children: [
+          if (_feedIds.isEmpty) FeedSource(selected: _feedIds,),
           if (_recentTime == 0) _buildRecentTime(),
         ],)
       ),
