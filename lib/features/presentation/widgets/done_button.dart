@@ -9,7 +9,7 @@ class DoneButton extends StatelessWidget {
   const DoneButton({super.key,
     this.width = double.infinity,
     this.height = 44,
-    this.enabled = true,
+    this.enabled = false,
     this.textStyle = const TextStyle(
       fontSize: 17, fontWeight: FontWeight.w500, height: 1.29,
     ),

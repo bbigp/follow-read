@@ -15,7 +15,7 @@ import '../../../config/icons.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../widgets/cluster/recent_time.dart';
-import '../widgets/cluster/list_switch.dart';
+import '../widgets/cluster/feed_source.dart';
 import '../widgets/two_tab_switch.dart';
 
 class ClusterPage extends ConsumerStatefulWidget {
@@ -63,44 +63,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(54),
-        child: SafeArea(
-          bottom: false,
-          child: Container(
-            color: AppTheme.black4,
-            padding: EdgeInsets.only(left: 16, right: 16,),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: 30, height: 30,
-                    margin: EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: AppTheme.black4,
-                      borderRadius: BorderRadius.circular(99),
-                    ),
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(Svgicons.x, width: 20, height: 20,),
-                  ),
-                ),
-                SizedBox(width: 39,),
-                Expanded(child: Text('New List',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                  height: 1.29,
-                  color: AppTheme.black95,
-                ),)),
-                DoneButton(onPressed: (){
-
-                }, enabled: _enabled, width: 69, height: 36, textStyle: TextStyle(
-                  fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
-                ), borderRadius: BorderRadius.circular(10),)
-              ],
-            ),
-          ),
-        ),
+        child: Bar(title: 'New List', enabled: _enabled,)
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -233,6 +196,60 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
         ),
       )
     ],);
+  }
+
+}
+
+class Bar extends StatelessWidget {
+  final bool enabled;
+  final String title;
+  final Color color;
+  const Bar({super.key,
+    required this.title,
+    this.enabled = false,
+    this.color = AppTheme.black4,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        bottom: false,
+        child: Container(
+          color: color,
+          padding: EdgeInsets.only(left: 16, right: 16,),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: 30, height: 30,
+                  margin: EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.black4,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(Svgicons.x, width: 20, height: 20,),
+                ),
+              ),
+              SizedBox(width: 39,),
+              Expanded(child: Text(title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  height: 1.29,
+                  color: AppTheme.black95,
+                ),)),
+              DoneButton(onPressed: (){
+
+              }, enabled: enabled, width: 69, height: 36, textStyle: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
+              ), borderRadius: BorderRadius.circular(10),)
+            ],
+          ),
+        ),
+    );
   }
 
 }

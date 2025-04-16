@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/features/presentation/widgets/cluster/select_feed.dart';
+import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../../config/svgicons.dart';
@@ -64,7 +66,7 @@ class _FeedSourceState extends State<FeedSource> {
               FeedPopupMenu.show(
                 context: context,
                 position: menuPosition,
-                selected: _isSelected ? 'Off' : 'Custom',
+                selected: _isSelected ? 'Custom' : 'Off',
                 options: ['Off', 'Custom'],
                 onSelected: (val) {
                   setState(() {
@@ -96,7 +98,9 @@ class _FeedSourceState extends State<FeedSource> {
         ),
       if (_isSelected)
         GestureDetector(
-          onTap: (){},
+          onTap: (){
+            SmartModal.openSmartModal(context, SelectFeed());
+          },
           child: Row(children: [
             SizedBox(width: 20, height: 44,),
             Expanded(child: Text(widget.selected.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
@@ -115,53 +119,5 @@ class _FeedSourceState extends State<FeedSource> {
 }
 
 
-// class A extends StatelessWidget {
-//   const A({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         SizedBox(width: 16, height: 44,),
-//         SvgPicture.asset(Svgicons.squareRss, width: 24, height: 24,),
-//         SizedBox(width: 12,),
-//         Expanded(child: Text('订阅源', style: TextStyle(
-//           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
-//         ),)),
-//         GestureDetector(
-//           onTapDown: (details) {
-//             final Offset menuPosition = Offset(
-//               cachedPosition!.dx + cachedSize!.width,
-//               cachedPosition!.dy + cachedSize!.height,
-//             );
-//             FeedPopupMenu.show(
-//               context: context,
-//               position: menuPosition,
-//               selected: _isSelected ? 'Off' : 'Custom',
-//               options: ['Off', 'Custom'],
-//               onSelected: (val) {
-//                 setState(() {
-//                   _isSelected = 'Off' != val;
-//                 });
-//               },
-//             );
-//           },
-//           child: Row(children: [
-//             SizedBox(width: 4,),
-//             Text(_isSelected ? 'Custom' : 'Off', style: TextStyle(
-//               fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
-//             ),),
-//             SizedBox(width: 4,),
-//             SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
-//           ],),
-//         ),
-//         SizedBox(width: 12,),
-//       ],
-//     );
-//   }
-//
-//
-// }
 
 
