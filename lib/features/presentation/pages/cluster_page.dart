@@ -104,8 +104,9 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
   Widget _rightView(){
     return Column(children: [
       if (_feedIds.isNotEmpty) CardView(child: FeedSource(selected: _feedIds,)),
-      if (_recentTime > 0)
-        CardView(child: _buildRecentTime()),
+      if (_feedIds.isNotEmpty) SizedBox(height: 8,),
+      if (_recentTime > 0) CardView(child: _buildRecentTime()),
+      if (_recentTime > 0) SizedBox(height: 8,),
 
       Container(
         padding: EdgeInsets.symmetric(vertical: 4),
@@ -204,10 +205,12 @@ class Bar extends StatelessWidget {
   final bool enabled;
   final String title;
   final Color color;
+  final EdgeInsetsGeometry padding;
   const Bar({super.key,
     required this.title,
     this.enabled = false,
     this.color = AppTheme.black4,
+    this.padding = const EdgeInsets.only(left: 16, right: 16,),
   });
 
   @override
@@ -216,7 +219,7 @@ class Bar extends StatelessWidget {
         bottom: false,
         child: Container(
           color: color,
-          padding: EdgeInsets.only(left: 16, right: 16,),
+          padding: padding,
           child: Row(
             children: [
               GestureDetector(

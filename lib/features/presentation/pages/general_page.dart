@@ -52,7 +52,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                 ),
                 child: Column(children: [
                   ModalTile(Svgicons.book, '服务器URL', onTap: () {
-                    OpenModal.open(context, ServerPicker());
+                    OpenModal.open(context, ServerPicker(), scrollable: true);
                   }),
                   Container(
                     padding: EdgeInsets.only(left: 16 + 24 + 12, right: 12),

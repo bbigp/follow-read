@@ -10,11 +10,16 @@ import '../../../../config/svgicons.dart';
 import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';
 import '../../providers/all_feeds_provider.dart';
+import '../done_button.dart';
 import '../drag_handle.dart';
 import '../feed_icon.dart';
 import '../spacer_divider.dart';
 
 class SelectFeed extends ConsumerWidget {
+
+  final void Function(Feed) onSelect;
+
+  const SelectFeed({super.key, required this.onSelect,});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,16 +27,14 @@ class SelectFeed extends ConsumerWidget {
       if (allFeedsAsync.isLoading) return SizedBox.shrink();
       List<Feed> feeds = allFeedsAsync.requireValue;
       return Column(children: [
-        DragHandle(),
-        PreferredSize(
-            preferredSize: const Size.fromHeight(54),
-            child: Bar(title: '选择订阅源', enabled: false, color: Colors.white,)
+        Bar(title: '选择订阅源', enabled: false,
+          color: AppTheme.black4,
         ),
         ListView.separated(shrinkWrap: true, physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, index){
             final feed = feeds[index];
-            return FeedRadio(feed: feed);
+            return FeedRadio(feed: feed, onSelect: onSelect,);
         }, itemCount: feeds.length,
           separatorBuilder: (_, __) => Padding(
             padding: EdgeInsets.only(left: 28 + 12 + 24 + 12,),
@@ -47,12 +50,17 @@ class FeedRadio extends StatelessWidget {
 
   final Feed feed;
   final bool isSelected;
+  final void Function(Feed) onSelect;
 
-  const FeedRadio({super.key, required this.feed, this.isSelected = false,});
+  const FeedRadio({super.key, required this.feed, this.isSelected = false,
+    required this.onSelect,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return InkWell(onTap: (){
+      onSelect(feed);
+    }, child: Row(children: [
       SvgPicture.asset(
         isSelected ? Svgicons.selection : Svgicons.circular,
         height: 28,
@@ -64,7 +72,7 @@ class FeedRadio extends StatelessWidget {
       Expanded(child: Text(feed.title, style: TextStyle(
         fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
       ),))
-    ],);
+    ],),);
   }
 
 }

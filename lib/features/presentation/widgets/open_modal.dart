@@ -6,7 +6,10 @@ import 'drag_handle.dart';
 
 class OpenModal {
 
-  static void open(BuildContext context, Widget view){
+  static void open(BuildContext context, Widget view,{
+    bool scrollable = false, // 👈 是否启用滚动容器
+    double maxHeightFactor = 0.85, // 最大高度比例
+  }){
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -16,31 +19,31 @@ class OpenModal {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,//确保点击空白区域也能触发
-          onTap: (){
-            FocusScope.of(context).unfocus();//仅取消键盘，不关闭 modal
-          },
-          child: Padding(padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+        final mediaQuery = MediaQuery.of(context);
+        final bottomPadding = mediaQuery.viewInsets.bottom;
+        final maxHeight = mediaQuery.size.height * maxHeightFactor;
+        Widget content = scrollable
+            ? ConstrainedBox( // 如果需要滚动，就限制最大高度并加滚动容器
+          constraints: BoxConstraints(maxHeight: maxHeight),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: bottomPadding),
+            child: view,
           ),
-            child: SingleChildScrollView(
-              child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.85,
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    DragHandle(),
-                    view,
-                  ],
-                ),
-              ),
+        )
+            : Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding),
+          child: IntrinsicHeight( // 不滚动，自动根据内容高度适配
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [view],
             ),
           ),
+        );
+
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,//确保点击空白区域也能触发
+          onTap: () =>FocusScope.of(context).unfocus(), //仅取消键盘，不关闭 modal
+          child: content,
         );
       },
     );

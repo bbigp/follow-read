@@ -10,6 +10,7 @@ import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import '../../../../config/svgicons.dart';
 import '../../../../config/theme.dart';
 import '../feed_popup_menu.dart';
+import '../open_modal.dart';
 
 class FeedSource extends StatefulWidget {
 
@@ -35,11 +36,13 @@ class _FeedSourceState extends State<FeedSource> {
   }
 
   bool _isSelected = false;
+  List<int> _selected = [];
 
   @override
   void initState() {
     super.initState();
     _isSelected = widget.selected.isNotEmpty;
+    _selected = widget.selected;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _cachePosition(); // 页面绘制完毕后缓存一次
     });
@@ -99,7 +102,11 @@ class _FeedSourceState extends State<FeedSource> {
       if (_isSelected)
         GestureDetector(
           onTap: (){
-            SmartModal.openSmartModal(context, SelectFeed());
+            OpenModal.open(context, SelectFeed(onSelect: (feed) {
+              setState(() {
+                _selected.add(feed.id);
+              });
+            },), scrollable: true);
           },
           child: Row(children: [
             SizedBox(width: 20, height: 44,),

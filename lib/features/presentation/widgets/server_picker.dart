@@ -12,6 +12,7 @@ import '../providers/user_provider.dart';
 import 'add_text.dart';
 import 'circle_radio_tile.dart';
 import 'done_button.dart';
+import 'drag_handle.dart';
 
 class ServerPicker extends ConsumerWidget {
 
@@ -28,9 +29,11 @@ class ServerPicker extends ConsumerWidget {
     final selectedUrl = tempSelected ?? user.user.baseUrl;
     return Column(
       children: [
+        DragHandle(),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(width: 16,),
             Expanded(child: Text('选择服务器URL', maxLines: 1, overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 17, fontWeight: FontWeight.w500, height: 1.29, color: AppTheme.black95,
@@ -49,7 +52,8 @@ class ServerPicker extends ConsumerWidget {
                 alignment: Alignment.center,
                 child: SvgPicture.asset(Svgicons.x, width: 20, height: 20,),
               ),
-            )
+            ),
+            SizedBox(width: 16,),
           ],
         ),
         SizedBox(height: 12,),
@@ -59,9 +63,12 @@ class ServerPicker extends ConsumerWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             height: user.urls.length * 40 + 16,
+            margin: EdgeInsets.symmetric(horizontal: 16),
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(vertical: 8,),
               child: ListView.builder(
+                shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: user.urls.length,
                   itemBuilder: (context, index) {
                     final url = user.urls[index];
@@ -77,6 +84,7 @@ class ServerPicker extends ConsumerWidget {
         SizedBox(height: 8,),
         Row(
           children: [
+            SizedBox(width: 16,),
             AddText('添加URL', onTap: (){
               SmartModal.openSmartModal(context, NewUrl());
             }),
@@ -88,6 +96,7 @@ class ServerPicker extends ConsumerWidget {
               }
               Navigator.pop(context);
             }, width: 128,),
+            SizedBox(width: 16,),
           ],
         ),
         SizedBox(
