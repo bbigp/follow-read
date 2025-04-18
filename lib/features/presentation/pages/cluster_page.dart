@@ -16,7 +16,28 @@ import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../widgets/cluster/recent_time.dart';
 import '../widgets/cluster/feed_source.dart';
+import '../widgets/spacer_divider.dart';
 import '../widgets/two_tab_switch.dart';
+
+final clusterProvider = NotifierProvider.autoDispose<ClusterNotifier, Cluster>(
+  ClusterNotifier.new,
+);
+
+class ClusterNotifier extends AutoDisposeNotifier<Cluster> {
+  @override
+  Cluster build() => Cluster(icon: ClusterIcons.name(ClusterIcons.menu));
+
+  void load(int id) async {
+    final tile = await ref.read(tileProvider(PageUtils.pid(TileType.cluster, id)).future);
+    state = tile.cluster;
+  }
+
+  void update({String? name, String? icon, int? recentTime}) {
+    state = state.copyWith(name: name, icon: icon, recentTime: recentTime);
+  }
+
+}
+
 
 class ClusterPage extends ConsumerStatefulWidget {
 
@@ -34,79 +55,83 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
 
   List<String> icons = ClusterIcons.iconsPaths;
   String _selectedSegment = 'Basic';
-  String _name = "";
-  bool _enabled = false;
-  String _icon = "";
-  bool _inited = false;//第一次的时候初始化数据
-  List<int> _feedIds = [];
-  int _recentTime = 0;
 
-  void initView(Cluster cluster){
-    if (_inited) return;
-    _inited = true;
-    _icon = cluster.svgIcon;
-    _name = cluster.name;
-    _enabled = true;
-    _feedIds = cluster.feedIds;
-    _recentTime = cluster.recentTime;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.id != 0) {
+      ref.read(clusterProvider.notifier).load(widget.id);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var cluster = Cluster(icon: ClusterIcons.name(ClusterIcons.menu));
-    if (widget.id != 0) {
-      final tileAsync = ref.watch(tileProvider(PageUtils.pid(TileType.cluster, widget.id)));
-      if (tileAsync.isLoading) return SizedBox.shrink();
-      cluster = tileAsync.requireValue.cluster;
-    }
-    initView(cluster);
+    final cluster = ref.watch(clusterProvider);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(54),
-        child: Bar(title: 'New List', enabled: _enabled,)
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        color: AppTheme.black4,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight,
-                  ),
-                child: Column(children: [
-                  SizedBox(height: 4,),
-                  TwoTabSwitch(leftLabel: 'Basic', leftValue: 'Basic',
-                    rightLabel: 'Advanced', rightValue: 'Advanced',
-                    selectedValue: _selectedSegment,
-                    onChanged: (v) {
-                        setState(() {
-                          _selectedSegment = v;
-                        });
-                    },
-                    borderRadius: 10, selectedBorderRadius: 8, height: 36,
-                  ),
-                  SizedBox(height: 12,),
-                  SizedBox(height: 4,),
-                  if (_selectedSegment == 'Basic') _leftView(),
-                  if (_selectedSegment == 'Advanced') _rightView(),
-
-                ],),
-              ),
-            );
-          }
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(54),
+            child: Bar(title: 'New List', enabled: cluster.name.isNotEmpty,)
         ),
-      )
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          color: AppTheme.black4,
+          child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: Column(children: [
+                      SizedBox(height: 4,),
+                      TwoTabSwitch(leftLabel: 'Basic', leftValue: 'Basic',
+                        rightLabel: 'Advanced', rightValue: 'Advanced',
+                        selectedValue: _selectedSegment,
+                        onChanged: (v) {
+                          setState(() {
+                            _selectedSegment = v;
+                          });
+                        },
+                        borderRadius: 10, selectedBorderRadius: 8, height: 36,
+                      ),
+                      SizedBox(height: 12,),
+                      SizedBox(height: 4,),
+                      if (_selectedSegment == 'Basic') _leftView(),
+                      if (_selectedSegment == 'Advanced') _rightView(),
+
+                    ],),
+                  ),
+                );
+              }
+          ),
+        )
     );
   }
 
   Widget _rightView(){
+    final cluster = ref.watch(clusterProvider);
+
+    final allFilters = ['feed', 'recentTime'];
+    final activeFilters = [];
+    if (cluster.feedIds.isNotEmpty) activeFilters.add('feed');
+    if (cluster.recentTime > 0) activeFilters.add('recentTime');
+    final inactiveFilters = allFilters.toSet().difference(activeFilters.toSet()).toList();
+
     return Column(children: [
-      if (_feedIds.isNotEmpty) CardView(child: FeedSource(selected: _feedIds,)),
-      if (_feedIds.isNotEmpty) SizedBox(height: 8,),
-      if (_recentTime > 0) CardView(child: _buildRecentTime()),
-      if (_recentTime > 0) SizedBox(height: 8,),
+      if (activeFilters.isNotEmpty)
+        ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              final t = activeFilters[index];
+              if (t == 'feed') return CardView(child: FeedSource(selected: cluster.feedIds,));
+              if (t == 'recentTime') return CardView(child: _buildRecentTime());
+              return SizedBox.shrink();
+            },
+            separatorBuilder: (_, __) => const SizedBox(height: 8,),
+            itemCount: activeFilters.length
+        ),
 
       Container(
         padding: EdgeInsets.symmetric(vertical: 4),
@@ -115,22 +140,44 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
           color: Colors.white,
           border: Border.all(color: AppTheme.black4, width: 1),
         ),
-        child: Column(children: [
-          if (_feedIds.isEmpty) FeedSource(selected: _feedIds,),
-          if (_recentTime == 0) _buildRecentTime(),
-        ],)
+        child: ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              final t = inactiveFilters[index];
+              if (t == 'feed') return FeedSource(selected: cluster.feedIds,);
+              if (t == 'recentTime') return _buildRecentTime();
+              return SizedBox.shrink();
+            },
+            separatorBuilder: (_, __) => _buildDivider(),
+            itemCount: inactiveFilters.length
+        ),
       ),
     ],);
   }
 
   Widget _buildRecentTime(){
-    return RecentTime(recentTime: _recentTime, onChanged: (v) => setState(() {
-      _recentTime = v;
-    }),);
+    final cluster = ref.watch(clusterProvider);
+    return RecentTime(recentTime: cluster.recentTime, onChanged: (v){
+      ref.read(clusterProvider.notifier).update(recentTime: v);
+    },);
+  }
+
+  Widget _buildDivider(){
+    return Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12),
+      child: SpacerDivider(
+        thickness: 0.5,
+        spacing: 1,
+        indent: 0,
+        color: AppTheme.black8,
+      ),
+    );
   }
 
 
   Widget _leftView(){
+    var cluster = ref.watch(clusterProvider);
     return Column(children: [
       Container(
         decoration: BoxDecoration(
@@ -145,16 +192,12 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(width: 1, color: AppTheme.black8),
             ),
-            child: Svgicon(_icon, size: 40, iconSize: 24, fit: BoxFit.none),
+            child: Svgicon(cluster.svgIcon, size: 40, iconSize: 24, fit: BoxFit.none),
           ),
           SizedBox(width: 12,),
           Expanded(child: InputField(onChanged: (v) {
-            setState(() {
-              _enabled = v != "";
-              _name = v;
-            });
-
-          }, hintText: '标题', data: _name,
+            ref.read(clusterProvider.notifier).update(name: v);
+          }, hintText: '标题', data: cluster.name,
             contentPadding: EdgeInsets.only(left: 12, top: 10, bottom: 10),
             suffixIconPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ))
@@ -181,13 +224,11 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
             final icon = icons[index];
             return GestureDetector(
               onTap: () {
-                setState(() {
-                  _icon = icon;
-                });
+                ref.read(clusterProvider.notifier).update(icon: icon);
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: icon == _icon ? AppTheme.black8 : Colors.transparent,
+                  color: icon == cluster.svgIcon ? AppTheme.black8 : Colors.transparent,
                   borderRadius: BorderRadius.circular(99),
                 ),
                 child: Svgicon(icon, size: 40, iconSize: 24, fit: BoxFit.none,),
