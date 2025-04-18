@@ -42,7 +42,7 @@ class OpenModal {
 
         return GestureDetector(
           behavior: HitTestBehavior.opaque,//确保点击空白区域也能触发
-          onTap: () =>FocusScope.of(context).unfocus(), //仅取消键盘，不关闭 modal
+          onTap: () => FocusScope.of(context).unfocus(), //仅取消键盘，不关闭 modal
           child: content,
         );
       },

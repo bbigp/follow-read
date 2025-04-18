@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
@@ -32,8 +33,10 @@ class ClusterNotifier extends AutoDisposeNotifier<Cluster> {
     state = tile.cluster;
   }
 
-  void update({String? name, String? icon, int? recentTime}) {
-    state = state.copyWith(name: name, icon: icon, recentTime: recentTime);
+  void update({String? name, String? icon, int? recentTime, List<int>? feedIds}) {
+    state = state.copyWith(name: name, icon: icon, recentTime: recentTime,
+      feedIds: feedIds,
+    );
   }
 
 }
@@ -122,10 +125,10 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
         ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.only(bottom: 8),
             itemBuilder: (context, index) {
               final t = activeFilters[index];
-              if (t == 'feed') return CardView(child: FeedSource(selected: cluster.feedIds,));
+              if (t == 'feed') return CardView(child: FeedSource());
               if (t == 'recentTime') return CardView(child: _buildRecentTime());
               return SizedBox.shrink();
             },
@@ -133,27 +136,28 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
             itemCount: activeFilters.length
         ),
 
-      Container(
-        padding: EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-          border: Border.all(color: AppTheme.black4, width: 1),
+      if (inactiveFilters.isNotEmpty)
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.white,
+            border: Border.all(color: AppTheme.black4, width: 1),
+          ),
+          child: ListView.separated(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) {
+                final t = inactiveFilters[index];
+                if (t == 'feed') return FeedSource();
+                if (t == 'recentTime') return _buildRecentTime();
+                return SizedBox.shrink();
+              },
+              separatorBuilder: (_, __) => _buildDivider(),
+              itemCount: inactiveFilters.length
+          ),
         ),
-        child: ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              final t = inactiveFilters[index];
-              if (t == 'feed') return FeedSource(selected: cluster.feedIds,);
-              if (t == 'recentTime') return _buildRecentTime();
-              return SizedBox.shrink();
-            },
-            separatorBuilder: (_, __) => _buildDivider(),
-            itemCount: inactiveFilters.length
-        ),
-      ),
     ],);
   }
 
@@ -247,11 +251,13 @@ class Bar extends StatelessWidget {
   final String title;
   final Color color;
   final EdgeInsetsGeometry padding;
+  final VoidCallback? onPressed;
   const Bar({super.key,
     required this.title,
     this.enabled = false,
     this.color = AppTheme.black4,
     this.padding = const EdgeInsets.only(left: 16, right: 16,),
+    this.onPressed,
   });
 
   @override
@@ -285,9 +291,7 @@ class Bar extends StatelessWidget {
                   height: 1.29,
                   color: AppTheme.black95,
                 ),)),
-              DoneButton(onPressed: (){
-
-              }, enabled: enabled, width: 69, height: 36, textStyle: TextStyle(
+              DoneButton(onPressed: onPressed, enabled: enabled, width: 69, height: 36, textStyle: TextStyle(
                 fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
               ), borderRadius: BorderRadius.circular(10),)
             ],

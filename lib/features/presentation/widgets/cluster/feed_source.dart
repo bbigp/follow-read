@@ -1,8 +1,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/select_feed.dart';
 import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
@@ -12,19 +14,16 @@ import '../../../../config/theme.dart';
 import '../feed_popup_menu.dart';
 import '../open_modal.dart';
 
-class FeedSource extends StatefulWidget {
-
-  final List<int> selected;
+class FeedSource extends ConsumerStatefulWidget {
 
   const FeedSource({super.key,
-    this.selected = const [],
   });
 
   @override
-  State<StatefulWidget> createState() => _FeedSourceState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _FeedSourceState();
 }
 
-class _FeedSourceState extends State<FeedSource> {
+class _FeedSourceState extends ConsumerState<FeedSource> {
 
 
   Offset? cachedPosition;
@@ -35,14 +34,11 @@ class _FeedSourceState extends State<FeedSource> {
     cachedSize = renderBox.size;
   }
 
-  bool _isSelected = false;
-  List<int> _selected = [];
+  bool? _isSelected;
 
   @override
   void initState() {
     super.initState();
-    _isSelected = widget.selected.isNotEmpty;
-    _selected = widget.selected;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _cachePosition(); // 页面绘制完毕后缓存一次
     });
@@ -50,8 +46,29 @@ class _FeedSourceState extends State<FeedSource> {
 
   @override
   Widget build(BuildContext context) {
+    final cluster = ref.watch(clusterProvider);
+    _isSelected ??= cluster.feedIds.isNotEmpty;
     return Column(children: [
-      Row(
+      InkWell(onTap: (){
+        final Offset menuPosition = Offset(
+          cachedPosition!.dx + cachedSize!.width,
+          cachedPosition!.dy + cachedSize!.height,
+        );
+        FeedPopupMenu.show(
+          context: context,
+          position: menuPosition,
+          selected: _isSelected ?? false ? 'Custom' : 'Off',
+          options: ['Off', 'Custom'],
+          onSelected: (val) {
+            setState(() {
+              _isSelected = 'Off' != val;
+            });
+            if (!_isSelected!) {
+              ref.read(clusterProvider.notifier).update(feedIds: []);
+            }
+          },
+        );
+      }, child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 16, height: 44,),
@@ -60,37 +77,16 @@ class _FeedSourceState extends State<FeedSource> {
           Expanded(child: Text('订阅源', style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
           ),)),
-          GestureDetector(
-            onTapDown: (details) {
-              final Offset menuPosition = Offset(
-                cachedPosition!.dx + cachedSize!.width,
-                cachedPosition!.dy + cachedSize!.height,
-              );
-              FeedPopupMenu.show(
-                context: context,
-                position: menuPosition,
-                selected: _isSelected ? 'Custom' : 'Off',
-                options: ['Off', 'Custom'],
-                onSelected: (val) {
-                  setState(() {
-                    _isSelected = 'Off' != val;
-                  });
-                },
-              );
-            },
-            child: Row(children: [
-              SizedBox(width: 4,),
-              Text(_isSelected ? 'Custom' : 'Off', style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
-              ),),
-              SizedBox(width: 4,),
-              SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
-            ],),
-          ),
+          SizedBox(width: 4,),
+          Text(_isSelected ?? false ? 'Custom' : 'Off', style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
+          ),),
+          SizedBox(width: 4,),
+          SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
           SizedBox(width: 12,),
         ],
-      ),
-      if (_isSelected)
+      ),),
+      if (_isSelected ?? false)
         Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12),
           child: SpacerDivider(
             thickness: 0.5,
@@ -99,18 +95,14 @@ class _FeedSourceState extends State<FeedSource> {
             color: AppTheme.black8,
           ),
         ),
-      if (_isSelected)
+      if (_isSelected ?? false)
         GestureDetector(
           onTap: (){
-            OpenModal.open(context, SelectFeed(onSelect: (feed) {
-              setState(() {
-                _selected.add(feed.id);
-              });
-            },), scrollable: true);
+            OpenModal.open(context, SelectFeed(), scrollable: true);
           },
           child: Row(children: [
             SizedBox(width: 20, height: 44,),
-            Expanded(child: Text(widget.selected.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
+            Expanded(child: Text(cluster.feedIds.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
               fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
             ),),),
             SizedBox(width: 8,),

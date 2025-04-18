@@ -83,7 +83,7 @@ class _CustomPopupMenuItemState extends State<CustomPopupMenuItem> {
           children: [
             widget.isSelected
                 ? SvgPicture.asset(Svgicons.check, width: 20, height: 20)
-                : SizedBox(width: 20, height: 20),
+                : Container(color: AppTheme.white95, width: 20, height: widget.height),
             SizedBox(width: 8),
             Expanded(child: Text(
               widget.value,

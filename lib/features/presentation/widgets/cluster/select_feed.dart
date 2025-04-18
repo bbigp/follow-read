@@ -15,26 +15,53 @@ import '../drag_handle.dart';
 import '../feed_icon.dart';
 import '../spacer_divider.dart';
 
-class SelectFeed extends ConsumerWidget {
+class SelectFeed extends ConsumerStatefulWidget {
 
-  final void Function(Feed) onSelect;
+  const SelectFeed({super.key,});
 
-  const SelectFeed({super.key, required this.onSelect,});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SelectFeed> createState() => _SelectFeedState();
+}
+
+class _SelectFeedState extends ConsumerState<SelectFeed> {
+
+  List<int> _feedIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final cluster = ref.read(clusterProvider);
+    _feedIds = List<int>.from(cluster.feedIds);
+  }
+
+  @override
+  Widget build(BuildContext context) {
       final allFeedsAsync = ref.watch(allFeedsProvider);
       if (allFeedsAsync.isLoading) return SizedBox.shrink();
       List<Feed> feeds = allFeedsAsync.requireValue;
       return Column(children: [
-        Bar(title: '选择订阅源', enabled: false,
-          color: AppTheme.black4,
+        Bar(title: '选择订阅源', enabled: _feedIds.isNotEmpty,
+          color: AppTheme.black4, onPressed: (){
+            ref.read(clusterProvider.notifier).update(feedIds: _feedIds);
+            Navigator.pop(context);
+          },
         ),
         ListView.separated(shrinkWrap: true, physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, index){
             final feed = feeds[index];
-            return FeedRadio(feed: feed, onSelect: onSelect,);
+            return FeedRadio(feed: feed, isSelected: _feedIds.contains(feed.id),
+              onSelect: (feed) {
+                setState(() {
+                  if (_feedIds.contains(feed.id)) {
+                    _feedIds.remove(feed.id);
+                  } else {
+                    _feedIds.add(feed.id);
+                  }
+                });
+              },
+            );
         }, itemCount: feeds.length,
           separatorBuilder: (_, __) => Padding(
             padding: EdgeInsets.only(left: 28 + 12 + 24 + 12,),
@@ -46,7 +73,7 @@ class SelectFeed extends ConsumerWidget {
 
 }
 
-class FeedRadio extends StatelessWidget {
+class FeedRadio extends ConsumerWidget {
 
   final Feed feed;
   final bool isSelected;
@@ -57,10 +84,8 @@ class FeedRadio extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(onTap: (){
-      onSelect(feed);
-    }, child: Row(children: [
+  Widget build(BuildContext context, WidgetRef ref) {
+    return InkWell(onTap: () => onSelect(feed), child: Row(children: [
       SvgPicture.asset(
         isSelected ? Svgicons.selection : Svgicons.circular,
         height: 28,
