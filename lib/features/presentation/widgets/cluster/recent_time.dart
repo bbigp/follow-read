@@ -1,32 +1,27 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 
 import '../../../../config/svgicons.dart';
 import '../../../../config/theme.dart';
+import '../../../domain/models/cluster.dart';
 import '../feed_popup_menu.dart';
 
-class RecentTime extends StatefulWidget {
+class RecentTime extends ConsumerStatefulWidget {
 
-  final int recentTime;
-  final Function(int)? onChanged;
-
-  const RecentTime({super.key, this.recentTime = 0, this.onChanged});
+  const RecentTime({super.key,});
 
   @override
-  State<RecentTime> createState() => _RecentTimeState();
+  ConsumerState<RecentTime> createState() => _RecentTimeState();
 }
 
-class _RecentTimeState extends State<RecentTime> {
-
-  static const options = {0: 'Off', 1440: '最近24小时', 2880: '最近48小时',
-  10080: '最近一周', 40320: '最近一个月'};
-  String showTime = 'Off';
+class _RecentTimeState extends ConsumerState<RecentTime> {
 
   Offset? cachedPosition;
   Size? cachedSize;
-
   void _cachePosition() {
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     cachedPosition = renderBox.localToGlobal(Offset.zero);
@@ -36,7 +31,6 @@ class _RecentTimeState extends State<RecentTime> {
   @override
   void initState() {
     super.initState();
-    showTime = options[widget.recentTime] ?? 'Off';
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _cachePosition(); // 页面绘制完毕后缓存一次
     });
@@ -44,6 +38,7 @@ class _RecentTimeState extends State<RecentTime> {
 
   @override
   Widget build(BuildContext context) {
+    final recentTime = ref.watch(clusterProvider.select((s) => s.recentTime));
     return InkWell(onTap: (){
       //onTapDown: (details)
       // final RenderBox renderBox = context.findRenderObject() as RenderBox;
@@ -62,37 +57,29 @@ class _RecentTimeState extends State<RecentTime> {
       FeedPopupMenu.show(
         context: context,
         position: menuPosition,
-        selected: showTime,
+        selected: Cluster.toRecentOption(recentTime),
         // width: widgetSize.width * 0.6,
-        options: options.values.toList(),
+        options: Cluster.recentOptions.values.toList(),
         onSelected: (val) {
-          setState(() {
-            showTime = val;
-          });
-          final int minutes = options.entries
-              .firstWhere((e) => e.value == val, orElse: () => const MapEntry(0, 'Off'))
-              .key;
-          if (widget.onChanged != null) {
-            widget.onChanged!(minutes);
-          }
+          ref.read(clusterProvider.notifier).update(recentTime: Cluster.toRecentTime(val));
         },
       );
     }, child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(width: 16, height: 44,),
+        const SizedBox(width: 16, height: 44,),
         SvgPicture.asset(Svgicons.calendarToday, width: 24, height: 24,),
-        SizedBox(width: 12,),
-        Expanded(child: Text("发布日期", style: TextStyle(
+        const SizedBox(width: 12,),
+        const Expanded(child: Text("发布日期", style: TextStyle(
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
         ),)),
-        SizedBox(width: 4,),
-        Text(showTime, style: TextStyle(
+        const SizedBox(width: 4,),
+        Text(Cluster.toRecentOption(recentTime), style: TextStyle(
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
         ),),
-        SizedBox(width: 4,),
+        const SizedBox(width: 4,),
         SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
-        SizedBox(width: 12,),
+        const SizedBox(width: 12,),
       ],
     ),);
   }

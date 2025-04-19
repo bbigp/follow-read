@@ -3,10 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/select_feed.dart';
-import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../../config/svgicons.dart';
@@ -46,8 +44,8 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
 
   @override
   Widget build(BuildContext context) {
-    final cluster = ref.watch(clusterProvider);
-    _isSelected ??= cluster.feedIds.isNotEmpty;
+    final feedIds = ref.watch(clusterProvider.select((s) => s.feedIds));
+    _isSelected ??= feedIds.isNotEmpty;
     return Column(children: [
       InkWell(onTap: (){
         final Offset menuPosition = Offset(
@@ -71,24 +69,24 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
       }, child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(width: 16, height: 44,),
+          const SizedBox(width: 16, height: 44,),
           SvgPicture.asset(Svgicons.squareRss, width: 24, height: 24,),
-          SizedBox(width: 12,),
-          Expanded(child: Text('订阅源', style: TextStyle(
+          const SizedBox(width: 12,),
+          const Expanded(child: Text('订阅源', style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
           ),)),
-          SizedBox(width: 4,),
+          const SizedBox(width: 4,),
           Text(_isSelected ?? false ? 'Custom' : 'Off', style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
           ),),
-          SizedBox(width: 4,),
+          const SizedBox(width: 4,),
           SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
-          SizedBox(width: 12,),
+          const SizedBox(width: 12,),
         ],
       ),),
       if (_isSelected ?? false)
-        Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12),
-          child: SpacerDivider(
+        const Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12),
+          child: const SpacerDivider(
             thickness: 0.5,
             spacing: 1,
             indent: 0,
@@ -101,13 +99,13 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
             OpenModal.open(context, SelectFeed(), scrollable: true);
           },
           child: Row(children: [
-            SizedBox(width: 20, height: 44,),
-            Expanded(child: Text(cluster.feedIds.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
+            const SizedBox(width: 20, height: 44,),
+            Expanded(child: Text(feedIds.join(","), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
               fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
             ),),),
-            SizedBox(width: 8,),
+            const SizedBox(width: 8,),
             SvgPicture.asset(Svgicons.chevronRight, width: 20, height: 20,),
-            SizedBox(width: 12,),
+            const SizedBox(width: 12,),
           ],),
         )
     ],);

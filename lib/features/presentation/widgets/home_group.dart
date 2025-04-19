@@ -28,7 +28,7 @@ class HomeGroup extends StatelessWidget {
         )),
         SizedBox(width: 12,),
         rightIcon != ''
-            ? GestureDetector(
+            ? InkWell(
             onTap: onTap,
             child: Svgicon(rightIcon, size: 28, iconSize: 24,),
           ) : const SizedBox.shrink(),

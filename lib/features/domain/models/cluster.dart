@@ -27,6 +27,19 @@ class Cluster {
     return ClusterIcons.icon(icon);
   }
 
+  static const recentOptions = {0: 'Off', 1440: '最近24小时', 2880: '最近48小时',
+    10080: '最近一周', 40320: '最近一个月'};
+
+  static String toRecentOption(int recentTime) {
+    return recentOptions[recentTime] ?? 'Off';
+  }
+
+  static int toRecentTime(String option){
+    return recentOptions.entries
+        .firstWhere((e) => e.value == option, orElse: () => const MapEntry(0, 'Off'))
+        .key;
+  }
+
 
   const Cluster({
     this.id = 0, this.name = "", this.icon = "",
@@ -80,4 +93,8 @@ class Cluster {
     );
   }
 
+  @override
+  String toString() {
+    return 'Cluster{id: $id, name: $name, icon: $icon, feedIds: $feedIds, recentTime: $recentTime, statuses: $statuses, deleted: $deleted, createdAt: $createdAt, changedAt: $changedAt, count: $count, starred: $starred, hideGlobally: $hideGlobally, order: $order, showReadingTime: $showReadingTime, onlyShowUnread: $onlyShowUnread}';
+  }
 }
