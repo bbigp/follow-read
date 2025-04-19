@@ -95,7 +95,7 @@ class ServerPicker extends ConsumerWidget {
                 ref.read(userProvider.notifier).chooseUrl(temp);
               }
               Navigator.pop(context);
-            }, width: 128,),
+            }, width: 128, enabled: ref.read(_tempSelectedUrlProvider) != null,),
             SizedBox(width: 16,),
           ],
         ),

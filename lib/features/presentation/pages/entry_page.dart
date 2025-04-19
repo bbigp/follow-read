@@ -20,6 +20,7 @@ import '../../../routes/app_route.dart';
 import '../../domain/models/feed.dart';
 import '../../domain/models/tile.dart';
 import '../providers/entry_page_provider.dart';
+import '../widgets/entry/skeleton_entry_item.dart';
 import '../widgets/feed_icon.dart';
 import '../widgets/spacer_divider.dart';
 
@@ -292,12 +293,13 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           await ref.read(entriesProvier(pid).future);
         },
         child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 16),
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: entriesState.entries.length + 2,
             separatorBuilder: (_, index) => index == 0
                 ? const SizedBox.shrink()
-                : SpacerDivider(indent: 16, spacing: 1, thickness: 0.5,),
+                : const SpacerDivider(indent: 0, spacing: 1, thickness: 0.5,),
             itemBuilder: (context, index) {
               if (index == 0) {
                 return FeedHeader(
@@ -306,14 +308,15 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                 );
               }
               if (index - 1 >= entriesState.entries.length) {
-                return entriesState.hasMore ? LoadingMore() : NoMoreLoading();
+                return entriesState.hasMore ? const LoadingMore() : const NoMoreLoading();
               }
               final entry = entriesState.entries[index - 1];
-              return entry.isUnread
-                  ? EntryItem(entry: entry, tile: tile)
-                  : Opacity(opacity: 0.5,
-                      child: EntryItem(entry: entry, tile: tile),
-                    );
+              return EntryItem(entry: entry, tile: tile);
+              // return entry.isUnread
+              //     ? EntryItem(entry: entry, tile: tile)
+              //     : Opacity(opacity: 0.5,
+              //         child: EntryItem(entry: entry, tile: tile),
+              //       );
             }));
   }
 
@@ -321,9 +324,12 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     return Shimmer.fromColors(
       baseColor: AppTheme.black4,
       highlightColor: AppTheme.black8,
-      child: ListView.builder(
+      child: ListView.separated(
         physics: NeverScrollableScrollPhysics(),
         itemCount: 11,
+        separatorBuilder: (_, index) => index == 0
+            ? const SizedBox.shrink()
+            : const SpacerDivider(indent: 16, spacing: 1, thickness: 0.5, color: Colors.white,),
         itemBuilder: (context, index) => index == 0
             ? SkeletonFeedHeader() // 第一个项用于测量
             : SkeletonEntryItem(), // 后续项复用

@@ -65,8 +65,11 @@ class FeedIcon extends HookConsumerWidget {
           if (snapshot.hasError || !snapshot.hasData) {
             return _buildInitialsAvatar();
           }
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(radius),
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+            ),
+            clipBehavior: Clip.hardEdge,
             child: Image.memory(
               snapshot.data!,
               width: size,
