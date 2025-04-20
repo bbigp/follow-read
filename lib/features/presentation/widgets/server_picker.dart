@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/new_url.dart';
 import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 
-import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../providers/user_provider.dart';
 import 'add_text.dart';
@@ -29,34 +28,9 @@ class ServerPicker extends ConsumerWidget {
     final selectedUrl = tempSelected ?? user.user.baseUrl;
     return Column(
       children: [
-        DragHandle(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(width: 16,),
-            Expanded(child: Text('选择服务器URL', maxLines: 1, overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 17, fontWeight: FontWeight.w500, height: 1.29, color: AppTheme.black95,
-              ),)),
-            SizedBox(width: 12, height: 30,),
-            GestureDetector(
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Container(
-                width: 30, height: 30,
-                decoration: BoxDecoration(
-                  color: AppTheme.black4,
-                  borderRadius: BorderRadius.circular(99),
-                ),
-                alignment: Alignment.center,
-                child: SvgPicture.asset(Svgicons.x, width: 20, height: 20,),
-              ),
-            ),
-            SizedBox(width: 16,),
-          ],
-        ),
-        SizedBox(height: 12,),
+        const DragHandle(),
+        const ClosableBar(title: '选择服务器URL'),
+        const SizedBox(height: 8),
         Container(
             decoration: BoxDecoration(
               color: AppTheme.white0,
@@ -80,15 +54,15 @@ class ServerPicker extends ConsumerWidget {
                     );
                   }),
             )),
-        SizedBox(height: 8,),
-        SizedBox(height: 8,),
+        const SizedBox(height: 8,),
+        const SizedBox(height: 8,),
         Row(
           children: [
-            SizedBox(width: 16,),
+            const SizedBox(width: 16,),
             AddText('添加URL', onTap: (){
               SmartModal.openSmartModal(context, NewUrl());
             }),
-            Spacer(),
+            const Spacer(),
             DoneButton(onPressed: () {
               final temp = ref.read(_tempSelectedUrlProvider);
               if (temp != null && temp != user.user.baseUrl) {
@@ -96,10 +70,10 @@ class ServerPicker extends ConsumerWidget {
               }
               Navigator.pop(context);
             }, width: 128, enabled: ref.read(_tempSelectedUrlProvider) != null,),
-            SizedBox(width: 16,),
+            const SizedBox(width: 16,),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 21,
         )
       ],

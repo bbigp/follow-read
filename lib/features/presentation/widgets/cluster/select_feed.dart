@@ -1,7 +1,6 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
@@ -10,8 +9,6 @@ import '../../../../config/svgicons.dart';
 import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';
 import '../../providers/all_feeds_provider.dart';
-import '../done_button.dart';
-import '../drag_handle.dart';
 import '../feed_icon.dart';
 import '../spacer_divider.dart';
 

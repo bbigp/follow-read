@@ -15,6 +15,7 @@ class AppTheme {
   static const black95 = Color(0xF2000000);
 
   static const white0 = Colors.white;
+  static const white6 = Color(0x0FFFFFFF);
   static const white15 = Color(0x26FFFFFF);
   static const white85 = Color(0xD9FFFFFF);
   static const white95 = Color(0xF2FFFFFF);

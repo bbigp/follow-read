@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/recent_time.dart';
+import 'package:follow_read/features/presentation/widgets/cluster/statuses.dart';
 
 import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';
@@ -17,10 +18,11 @@ class AdvancedView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cluster = ref.watch(clusterProvider);
 
-    final allFilters = ['feed', 'recentTime'];
+    final allFilters = ['feed', 'recentTime', 'status'];
     final activeFilters = [];
     if (cluster.feedIds.isNotEmpty) activeFilters.add('feed');
     if (cluster.recentTime > 0) activeFilters.add('recentTime');
+    if (cluster.statuses.isNotEmpty) activeFilters.add('status');
     final inactiveFilters = allFilters.toSet().difference(activeFilters.toSet()).toList();
 
     return Column(children: [
@@ -33,6 +35,7 @@ class AdvancedView extends ConsumerWidget {
             final t = activeFilters[index];
             if (t == 'feed') return CardView(child: FeedSource());
             if (t == 'recentTime') return CardView(child: RecentTime());
+            if (t == 'status') return CardView(child: Statuses());
             return const SizedBox.shrink();
           },
           separatorBuilder: (_, __) => const SizedBox(height: 8,),
@@ -55,6 +58,7 @@ class AdvancedView extends ConsumerWidget {
               final t = inactiveFilters[index];
               if (t == 'feed') return FeedSource();
               if (t == 'recentTime') return RecentTime();
+              if (t == 'status') return Statuses();
               return const SizedBox.shrink();
             },
             separatorBuilder: (_, __) => _buildDivider(),

@@ -37,6 +37,7 @@ class Svgicons {
   static const String circular = "assets/svg/circular.svg";
   static const String arrowLeft = "assets/svg/arrow_left.svg";
   static const String trash = "assets/svg/trash.svg";
+  static const String trashRed = "assets/svg/trash_red.svg";
 
   static const String squareRss = "assets/svg/square_rss.svg";
   static const String calendarToday = "assets/svg/calendar_today.svg";

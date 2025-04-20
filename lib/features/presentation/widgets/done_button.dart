@@ -14,7 +14,9 @@ class DoneButton extends StatelessWidget {
       fontSize: 17, fontWeight: FontWeight.w500, height: 1.29,
     ),
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
-    required this.onPressed});
+    required this.onPressed
+
+  });
 
   final VoidCallback? onPressed;
   final double width;

@@ -36,4 +36,8 @@ class ClusterRepository {
     dao.save(cluster);
   }
 
+  void delete(int id) {
+    dao.deleteById(id);
+  }
+
 }

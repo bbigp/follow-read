@@ -55,10 +55,12 @@ extension ClusterEntityConversion on ClusterEntity {
   }
 
   static List<int>parseFeedIds(String str) {
+    if(str == "") return [];
     return str.split(",").where((s) => s.isNotEmpty).map(int.parse).toList();
   }
 
   static List<String>parseStatuses(String str) {
+    if(str == "") return [];
     return str.split(",");
   }
 }

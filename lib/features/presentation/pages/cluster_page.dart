@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
@@ -12,16 +11,11 @@ import 'package:follow_read/features/presentation/providers/home_page_provider.d
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/advanced_view.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
-import 'package:follow_read/features/presentation/widgets/input_field.dart';
-import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
 import '../../../config/icons.dart';
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../widgets/cluster/basic_view.dart';
-import '../widgets/cluster/recent_time.dart';
-import '../widgets/cluster/feed_source.dart';
-import '../widgets/spacer_divider.dart';
 import '../widgets/two_tab_switch.dart';
 
 final clusterProvider = NotifierProvider.autoDispose<ClusterNotifier, Cluster>(
@@ -39,9 +33,11 @@ class ClusterNotifier extends AutoDisposeNotifier<Cluster> {
     state = tile.cluster;
   }
 
-  void update({String? name, String? icon, int? recentTime, List<int>? feedIds}) {
+  void update({String? name, String? icon, int? recentTime, List<int>? feedIds,
+    List<String>? statuses,
+  }) {
     state = state.copyWith(name: name, icon: icon, recentTime: recentTime,
-      feedIds: feedIds,
+      feedIds: feedIds, statuses: statuses,
     );
   }
 

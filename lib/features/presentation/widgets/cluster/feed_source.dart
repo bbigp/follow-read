@@ -86,7 +86,7 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
       ),),
       if (_isSelected ?? false)
         const Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12),
-          child: const SpacerDivider(
+          child: SpacerDivider(
             thickness: 0.5,
             spacing: 1,
             indent: 0,

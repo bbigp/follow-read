@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../config/theme.dart';
-import 'drag_handle.dart';
 
 class OpenModal {
 

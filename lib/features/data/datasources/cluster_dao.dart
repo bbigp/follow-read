@@ -15,7 +15,8 @@ class ClusterDao extends DatabaseAccessor<AppDatabase> {
 
 
   void save(Cluster c) async {
-    await into(clusterTable).insert(ClustersTableCompanion(
+    await into(clusterTable).insertOnConflictUpdate(ClustersTableCompanion(
+      id: Value(c.id),
       name: Value(c.name), icon: Value(c.icon),
       feedIds: Value(c.feedIds.join(",")),
       recentTime: Value(c.recentTime), statuses: Value(c.statuses.join(",")),
@@ -24,6 +25,12 @@ class ClusterDao extends DatabaseAccessor<AppDatabase> {
       changedAt: c.changedAt == null ? Value(DateTime.now()) : Value(c.changedAt!),
     ));
   }
+
+  void deleteById(int id) async {
+    var query = delete(clusterTable)..where((r) => r.id.equals(id));
+    await query.go();
+  }
+  
   
   Future<List<ClusterEntity>> getAll({bool? hideGlobally}) async {
     var query = select(clusterTable)

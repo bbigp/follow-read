@@ -1,9 +1,7 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../spacer_divider.dart';
 
 class SkeletonEntryItem extends StatelessWidget {
   const SkeletonEntryItem({

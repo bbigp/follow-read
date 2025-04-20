@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/logger.dart';
-import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
