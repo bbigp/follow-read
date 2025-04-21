@@ -46,11 +46,10 @@ class ServerPicker extends ConsumerWidget {
                   itemCount: user.urls.length,
                   itemBuilder: (context, index) {
                     final url = user.urls[index];
-                    return GestureDetector(
+                    return CircleRadioTile(value: url, choose: url == selectedUrl,
                       onTap: (){
                         ref.read(_tempSelectedUrlProvider.notifier).state = url;
                       },
-                      child: CircleRadioTile(value: url, choose: url == selectedUrl,),
                     );
                   }),
             )),

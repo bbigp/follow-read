@@ -182,14 +182,17 @@ class CardView extends StatelessWidget {
 
   final Widget child;
   final double borderRadius;
+  final EdgeInsetsGeometry margin;
   const CardView({super.key,
     required this.child,
     this.borderRadius = 16,
+    this.margin = const EdgeInsets.all(0),
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: margin,
         padding: EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),

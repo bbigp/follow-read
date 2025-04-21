@@ -19,6 +19,8 @@ class Svgicons {
   static const String alertFill = "assets/svg/alert_fill.svg";
 
   static const String folder = "assets/svg/folder.svg";
+  static const String folderBlack = "assets/svg/folder_black.svg";
+  static const String folderNoRss = "assets/svg/folder_no_rss.svg";
   static const String plusWhite = "assets/svg/plus_white.svg";
   static const String plusO = "assets/svg/plus_o.svg";
   static const String dot = "assets/svg/dot.svg";
@@ -42,6 +44,6 @@ class Svgicons {
   static const String squareRss = "assets/svg/square_rss.svg";
   static const String calendarToday = "assets/svg/calendar_today.svg";
   static const String check = "assets/svg/check.svg";
-
+  static const String add = "assets/svg/add.svg";
 
 }

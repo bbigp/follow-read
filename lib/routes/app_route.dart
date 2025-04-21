@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/presentation/pages/feed_creator.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
@@ -91,6 +92,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           final id = state.uri.queryParameters['id'] ?? "0";
           return ClusterPage(id: int.parse(id));
         }
+      ),
+      GoRoute(
+        path: '/add/feed',
+        name: RouteNames.addFeed,
+        builder: (context, state) {
+          return FeedCreator();
+        }
       )
     ],
   );
@@ -108,6 +116,7 @@ class RouteNames {
   static const imageGallery = 'imageGallery';
   static const search = 'search';
   static const cluster = 'cluster';
+  static const addFeed = 'addFeed';
 }
 
 

@@ -2364,7 +2364,7 @@ class $ClustersTableTable extends ClustersTable
       'starred', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultValue: const Constant(0));
+      defaultValue: const Constant(-1));
   @override
   List<GeneratedColumn> get $columns => [
         id,

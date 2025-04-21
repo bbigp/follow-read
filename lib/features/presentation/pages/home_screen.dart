@@ -8,6 +8,7 @@ import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:follow_read/features/presentation/widgets/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
 
@@ -70,6 +71,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             },
             icon: const Icon(Icons.person)),
         actions: [
+          InkWell(onTap: (){
+            ref.read(routerProvider).pushNamed(RouteNames.addFeed);
+          }, child: Svgicon(Svgicons.add, size: 24, iconSize: 20,),),
+          const SizedBox(width: 16,),
           _buildRefreshButton(ref),
           const SizedBox(width: 12),
         ],
