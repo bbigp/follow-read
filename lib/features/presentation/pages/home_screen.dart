@@ -5,6 +5,7 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/pages/feed_creator.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
@@ -16,6 +17,7 @@ import '../../../config/svgicons.dart';
 import '../providers/sync_data_provider.dart';
 import '../widgets/cluster_item.dart';
 import '../widgets/home_group.dart';
+import '../widgets/open_modal.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -72,7 +74,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             icon: const Icon(Icons.person)),
         actions: [
           InkWell(onTap: (){
-            ref.read(routerProvider).pushNamed(RouteNames.addFeed);
+            OpenModal.open(context, FeedCreator(), scrollable: false);
+            // ref.read(routerProvider).pushNamed(RouteNames.addFeed);
           }, child: Svgicon(Svgicons.add, size: 24, iconSize: 20,),),
           const SizedBox(width: 16,),
           _buildRefreshButton(ref),

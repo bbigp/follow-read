@@ -8,15 +8,19 @@ import '../../../config/theme.dart';
 class ClosableBar extends StatelessWidget {
 
   final String title;
+  final double horizontal;
 
-  const ClosableBar({super.key, required this.title});
+  const ClosableBar({super.key,
+    required this.title,
+    this.horizontal = 16,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(width: 16, height: 42,),
+        SizedBox(width: horizontal, height: 42,),
         Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 17, fontWeight: FontWeight.w500, height: 1.29, color: AppTheme.black95,
@@ -36,7 +40,7 @@ class ClosableBar extends StatelessWidget {
             child: SvgPicture.asset(Svgicons.x, width: 20, height: 20,),
           ),
         ),
-        const SizedBox(width: 16,),
+        SizedBox(width: horizontal,),
       ],
     );
   }
