@@ -79,7 +79,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(54),
             child: Bar(title: 'New List', enabled: cluster.name.isNotEmpty,
-              onPressed: (){
+              onPressed: () async {
                 ref.read(clusterProvider.notifier).save();
                 final _ = ref.refresh(homePageProvider);
                 Navigator.pop(context);
@@ -127,7 +127,7 @@ class Bar extends StatelessWidget {
   final String title;
   final Color color;
   final EdgeInsetsGeometry padding;
-  final VoidCallback? onPressed;
+  final Future<void> Function()? onPressed;
   const Bar({super.key,
     required this.title,
     this.enabled = false,

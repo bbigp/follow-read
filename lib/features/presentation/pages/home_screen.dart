@@ -5,7 +5,7 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/pages/feed_creator.dart';
+import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed_item.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';

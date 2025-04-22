@@ -6,7 +6,7 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/drag_handle.dart';
-import 'package:follow_read/features/presentation/widgets/entry/feed_settings_sheet.dart';
+import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';

@@ -51,7 +51,7 @@ class _SelectStatusState extends ConsumerState<SelectStatus> {
       },),
       const SizedBox(height: 16,),
       Padding(padding: EdgeInsets.symmetric(horizontal: 16),
-          child: DoneButton(onPressed: (){
+          child: DoneButton(onPressed: () async {
             ref.read(clusterProvider.notifier).update(statuses: _statuses);
             Navigator.of(context).pop();
           }, height: 52, enabled: (_statuses ?? []).isNotEmpty,),

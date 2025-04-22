@@ -9,17 +9,35 @@ import 'package:follow_read/features/presentation/providers/feed_provider.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
+import 'package:follow_read/features/presentation/widgets/feed/unsubscribe.dart';
 import 'package:follow_read/features/presentation/widgets/input_field.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 
-import '../../../theme/text_styles.dart';
+import '../../../../theme/text_styles.dart';
 
-class FeedCreator extends ConsumerWidget {
+class FeedCreator extends ConsumerStatefulWidget {
 
-  const FeedCreator({super.key});
+  final int id;
+
+  const FeedCreator({super.key, this.id = 0,});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _FeedCreatorState();
+
+}
+
+class _FeedCreatorState extends ConsumerState<FeedCreator> {
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.id != 0) {
+      ref.read(addFeedControllerProvider.notifier).load(widget.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final controller = ref.watch(addFeedControllerProvider);
     if (controller.isLoading) return const SizedBox.shrink();
     final add = controller.requireValue;
@@ -30,12 +48,24 @@ class FeedCreator extends ConsumerWidget {
         const ClosableBar(title: '添加Feed', horizontal: 0,),
         const SizedBox(height: 8,),
         InputField(onChanged: (v){
-          if (v != add.feedUrl) {
+          if (v != add.feed.feedUrl) {
             ref.read(addFeedControllerProvider.notifier).addUrl(v);
           }
         }, hintText: 'URL',
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16,),
-          height: 52, data: add.feedUrl,
+          height: 52, data: add.feed.feedUrl,
+          readOnly: add.feed.id != 0,
+        ),
+        const SizedBox(height: 8,),
+        Visibility(
+          visible: add.feed.id != 0,
+          child: InputField(onChanged: (v){
+            if (v != add.feed.title) {
+              ref.read(addFeedControllerProvider.notifier).updateFeed(title: v);
+            }}, hintText: '标题',
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16,),
+            height: 52, data: add.feed.title,
+          ),
         ),
         const SizedBox(height: 8,),
         CardView(child: InkWell(onTap: (){
@@ -57,9 +87,17 @@ class FeedCreator extends ConsumerWidget {
         DoneButton(onPressed: () async {
           final success = await ref.read(addFeedControllerProvider.notifier).save();
           if (success) {
-            Navigator.of(context).pop();
+            setState(() {
+              Navigator.of(context).pop();
+            });
           }
-        }, height: 52, enabled: add.feedUrl.isNotEmpty,),
+        }, height: 52, enabled: add.feed.feedUrl.isNotEmpty,),
+        const SizedBox(height: 8,),
+        Visibility(
+          visible: add.feed.id != 0,
+          child: UnsubscribeButton(onPressed: () async {},),
+        ),
+        const SizedBox(height: 8,),
         const SizedBox(height: 21,),
       ],),
     );

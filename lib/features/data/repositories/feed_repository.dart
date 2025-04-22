@@ -66,7 +66,7 @@ class FeedRepository {
   }
 
   Future<bool> saveFeed(FeedFormData formData) async {
-    final result = await ApiClient.saveFeed(formData.feedUrl, formData.folder.id);
+    final result = await ApiClient.saveFeed(formData.feed.feedUrl, formData.folder.id);
     return await result.fold((ifLeft) => false, (ifRight) => true);
   }
 

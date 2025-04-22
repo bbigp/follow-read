@@ -39,7 +39,7 @@ class _SelectFeedState extends ConsumerState<SelectFeed> {
       List<Feed> feeds = allFeedsAsync.requireValue;
       return Column(children: [
         Bar(title: '选择订阅源', enabled: _feedIds.isNotEmpty,
-          color: AppTheme.black4, onPressed: (){
+          color: AppTheme.black4, onPressed: () async {
             ref.read(clusterProvider.notifier).update(feedIds: _feedIds);
             Navigator.pop(context);
           },

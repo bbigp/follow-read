@@ -8,8 +8,10 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
+import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
+import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:follow_read/features/presentation/widgets/two_tab_switch.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:follow_read/theme/text_styles.dart';
@@ -92,7 +94,7 @@ class FeedSettingsSheet extends ConsumerWidget {
               SizedBox(
                 width: 8,
               ),
-              GestureDetector(
+              InkWell(
                 onTap: () {
                   if (tile.type == TileType.cluster) {
                     ref
@@ -100,6 +102,9 @@ class FeedSettingsSheet extends ConsumerWidget {
                         .pushNamed(RouteNames.cluster, queryParameters: {
                       "id": tile.id.toString(),
                     });
+                  }
+                  if (tile.type == TileType.feed) {
+                    OpenModal.open(context, FeedCreator(id: tile.id,), scrollable: false);
                   }
                 },
                 child: Container(
@@ -121,7 +126,7 @@ class FeedSettingsSheet extends ConsumerWidget {
         const SizedBox(height: 16,),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('排序', style: AppTextStyles.captionBold,),
+          child: Text('排序', style: AppTextStyles.caption500,),
         ),
         const SizedBox(height: 6,),
         Padding(
@@ -152,14 +157,14 @@ class FeedSettingsSheet extends ConsumerWidget {
           visible: tile.type == TileType.feed,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Website', style: AppTextStyles.captionBold,),
+            child: Text('Website', style: AppTextStyles.caption500,),
           )
         ),
         Visibility(
           visible: tile.type == TileType.feed,
           child: CardView(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: Text(tile.feed.siteUrl, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,)
           ),
         ),

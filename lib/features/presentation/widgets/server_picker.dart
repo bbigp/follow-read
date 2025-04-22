@@ -62,7 +62,7 @@ class ServerPicker extends ConsumerWidget {
               SmartModal.openSmartModal(context, NewUrl());
             }),
             const Spacer(),
-            DoneButton(onPressed: () {
+            DoneButton(onPressed: () async {
               final temp = ref.read(_tempSelectedUrlProvider);
               if (temp != null && temp != user.user.baseUrl) {
                 ref.read(userProvider.notifier).chooseUrl(temp);

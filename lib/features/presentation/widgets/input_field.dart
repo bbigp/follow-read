@@ -25,6 +25,7 @@ class InputField extends StatefulWidget  {
   final double height;
   final TextStyle textStyle;
   final TextStyle hintStyle;
+  final bool readOnly;
   const InputField({super.key,
     this.data = "",
     required this.onChanged,
@@ -41,6 +42,7 @@ class InputField extends StatefulWidget  {
     this.prefixIconSize = 24,
     this.onSubmitted,
     this.height = 40,
+    this.readOnly = false,
   }) : textStyle = const TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w400,
@@ -115,6 +117,7 @@ class _InputFieldState extends State<InputField> {
           child: Svgicon(widget.prefixIcon!, size: widget.prefixSize, iconSize: widget.prefixIconSize),
         ),
         Expanded(child: TextField(
+            readOnly: widget.readOnly,
             controller: _controller,
             maxLines: 1,
             keyboardType: widget.textInputType,
@@ -131,7 +134,7 @@ class _InputFieldState extends State<InputField> {
               focusedBorder: InputBorder.none,
             )
         ),),
-        _hasText
+        _hasText && !widget.readOnly
             ? GestureDetector(
           onTap: _clearText,
           child: Container(
