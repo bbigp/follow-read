@@ -21,6 +21,7 @@ class Svgicons {
   static const String folder = "assets/svg/folder.svg";
   static const String folderBlack = "assets/svg/folder_black.svg";
   static const String folderNoRss = "assets/svg/folder_no_rss.svg";
+  static const String folderSmall = "assets/svg/folder_small.svg";
   static const String plusWhite = "assets/svg/plus_white.svg";
   static const String plusO = "assets/svg/plus_o.svg";
   static const String dot = "assets/svg/dot.svg";

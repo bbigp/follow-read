@@ -1,0 +1,171 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/config/svgicons.dart';
+import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
+import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/pages/cluster_page.dart';
+import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
+import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
+import 'package:follow_read/features/presentation/widgets/two_tab_switch.dart';
+import 'package:follow_read/routes/app_route.dart';
+import 'package:follow_read/theme/text_styles.dart';
+
+import '../../providers/tile_provider.dart';
+import '../drag_handle.dart';
+
+class FeedSettingsSheet extends ConsumerWidget {
+  final int id;
+  final TileType type;
+
+  const FeedSettingsSheet({
+    super.key,
+    required this.id,
+    required this.type,
+  });
+
+  String get pid => PageUtils.pid(type, id);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tileAsync = ref.watch(tileProvider(pid));
+    final tile = tileAsync.requireValue;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        DragHandle(),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: EdgeInsets.all(6),
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(width: 1, color: AppTheme.black8),
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 6,
+              ),
+              FeedIcon(
+                title: tile.title,
+                iconUrl: tile.iconUrl,
+                size: 36,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    tile.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      height: 1.33,
+                      color: AppTheme.black95,
+                    ),
+                  ),
+                  if (tile.type == TileType.feed)
+                    Text(
+                      tile.feedUrl,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        height: 1.38,
+                        color: AppTheme.black50,
+                      ),
+                    ),
+                ],
+              )),
+              SizedBox(
+                width: 8,
+              ),
+              GestureDetector(
+                onTap: () {
+                  if (tile.type == TileType.cluster) {
+                    ref
+                        .watch(routerProvider)
+                        .pushNamed(RouteNames.cluster, queryParameters: {
+                      "id": tile.id.toString(),
+                    });
+                  }
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: AppTheme.black8,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                  child: SvgPicture.asset(
+                    Svgicons.edit,
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 16,),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text('排序', style: AppTextStyles.captionBold,),
+        ),
+        const SizedBox(height: 6,),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: TwoTabSwitch(
+            leftLabel: '发布时间',
+            leftValue: Frc.orderxPublishedAt,
+            rightLabel: '添加时间',
+            rightValue: Frc.orderxCreatedAt,
+            selectedValue: tile.orderx,
+            onChanged: (v) {
+              ref.read(tileProvider(pid).notifier).saveShow(orderx: v);
+            },
+            borderRadius: 14,
+            selectedBorderRadius: 10,
+            height: 40,
+          ),
+        ),
+        const SizedBox(height: 16,),
+        const SizedBox(height: 8,),
+        FeedSwitch(
+          id: id,
+          type: type,
+        ),
+        const SizedBox(height: 16,),
+        const SizedBox(height: 8,),
+        Visibility(
+          visible: tile.type == TileType.feed,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text('Website', style: AppTextStyles.captionBold,),
+          )
+        ),
+        Visibility(
+          visible: tile.type == TileType.feed,
+          child: CardView(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(tile.feed.siteUrl, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,)
+          ),
+        ),
+        const SizedBox(height: 21,)
+      ],
+    );
+  }
+
+}

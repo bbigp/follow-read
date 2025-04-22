@@ -3,10 +3,12 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:follow_read/features/data/models/add_feed_response.dart';
 import 'package:follow_read/features/data/models/entry_page_response.dart';
 
 import '../../../core/utils/failure.dart';
 import '../../../core/utils/follow_request.dart';
+import '../../presentation/providers/feed_provider.dart';
 import '../models/feed_counter_response.dart';
 import '../models/feed_response.dart';
 import '../models/user_response.dart';
@@ -45,6 +47,18 @@ class ApiClient {
             .toList();
         return feeds;
       },
+    );
+  }
+
+  static Future<Either<Failure, AddFeedResponse>> saveFeed(String url, int categoryId) async {
+    return await httpUtil.safeRequest(
+        path: 'feeds',
+        body: {
+          'feed_url': url,
+          'category_id': categoryId,
+        },
+        method: HttpMethod.post,
+        fromJson: (json) => AddFeedResponseMapper.fromJson(json),
     );
   }
 

@@ -38,118 +38,116 @@ class _FolderItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        GestureDetector(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: Column(children: [
+        InkWell(
           onTap: () {
             ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
               'id': tile.id.toString(),
               'type': tile.type.toString(),
             });
           },
-          child: Container(
-            height: 52,
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    ref.read(homePageProvider.notifier).expanded(tile.id);
-                  },
-                  child: Svgicon(
-                    tile.expanded ? Svgicons.triangleDown : Svgicons.triangleRight,
-                    size: 24,
-                    iconSize: 20,
-                  ),
-                ),
-                SizedBox(
-                  width: 4,
-                ),
-                Svgicon(
-                  Svgicons.group,
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  ref.read(homePageProvider.notifier).expanded(tile.id);
+                },
+                child: Svgicon(
+                  tile.expanded ? Svgicons.triangleDown : Svgicons.triangleRight,
                   size: 24,
                   iconSize: 20,
                 ),
-                SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Text(
-                    tile.title,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.black95,
-                    ),
-                  ),
-                ),
-                if (tile.errorCount > 0)
-                  Container(
-                    padding: EdgeInsets.only(left: 12),
-                    decoration: BoxDecoration(
-                      color: AppTheme.red10,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          Svgicons.expired,
-                          width: 12,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 2,
-                            right: 14,
-                            top: 4,
-                            bottom: 4,
-                          ),
-                          child: Text(
-                            '错误',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              height: 1.18,
-                              color: AppTheme.red,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                SizedBox(
-                  width: 12,
-                ),
-                Text(
-                  '${tile.unread > 0 ? tile.unread : ''}',
+              ),
+              SizedBox(
+                width: 4, height: 52,
+              ),
+              Svgicon(
+                Svgicons.group,
+                size: 24,
+                iconSize: 20,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                child: Text(
+                  tile.title,
+                  maxLines: 1,
                   style: const TextStyle(
-                    color: AppTheme.black25,
-                    fontSize: 13,
-                    height: 1.38,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: AppTheme.black95,
                   ),
                 ),
-                SizedBox(
-                  width: 4,
+              ),
+              if (tile.errorCount > 0)
+                Container(
+                  padding: EdgeInsets.only(left: 12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.red10,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        Svgicons.expired,
+                        width: 12,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 2,
+                          right: 14,
+                          top: 4,
+                          bottom: 4,
+                        ),
+                        child: Text(
+                          '错误',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            height: 1.18,
+                            color: AppTheme.red,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              SizedBox(
+                width: 12,
+              ),
+              Text(
+                '${tile.unread > 0 ? tile.unread : ''}',
+                style: const TextStyle(
+                  color: AppTheme.black25,
+                  fontSize: 13,
+                  height: 1.38,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(
+                width: 4,
+              ),
+            ],
           ),
         ),
-        SpacerDivider(
+        Padding(padding: EdgeInsets.only(left: 24 + 4 + 24), child: SpacerDivider(
           spacing: 1,
-          thickness: 0.5,
-        ),
+          thickness: 0.5, indent: 0,
+        ),),
         if (tile.expanded)
           ListView.separated(
             shrinkWrap: true,
+            padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: tile.feeds.length,
             separatorBuilder: (_, __) => const SizedBox.shrink(),
             itemBuilder: (context, index) => _FeedItem(feed: tile.feeds[index], hasDot: false,),
           ),
-      ],
+      ],),
     );
   }
 }
@@ -162,104 +160,116 @@ class _FeedItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
-              'id': feed.id.toString(),
-              'type': TileType.feed.toString()
-            });
-          },
-          child: Container(
-            height: 52,
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                hasDot ? Svgicon(
-                  Svgicons.dot,
-                  size: 24,
-                  iconSize: 20,
-                ) : SizedBox(width: 24, height: 24,),
-                SizedBox(
-                  width: 4,
-                ),
-                FeedIcon(
-                  title: feed.title,
-                  iconUrl: feed.iconUrl,
-                ),
-                SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Text(
-                    feed.title,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.black95,
-                    ),
-                  ),
-                ),
-                if (feed.errorCount > 0)
-                  Container(
-                    padding: EdgeInsets.only(left: 12),
-                    decoration: BoxDecoration(
-                      color: AppTheme.red10,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          Svgicons.expired,
-                          width: 12,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 2,
-                            right: 14,
-                            top: 4,
-                            bottom: 4,
-                          ),
-                          child: Text(
-                            '错误',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              height: 1.18,
-                              color: AppTheme.red,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                SizedBox(
-                  width: 12,
-                ),
-                Text(
-                  '${feed.unread > 0 ? feed.unread : ''}',
-                  style: const TextStyle(
-                    color: AppTheme.black25,
-                    fontSize: 13,
-                    height: 1.38,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(
-                  width: 4,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(left: hasDot ? 0 : 24), child: SpacerDivider(
-          spacing: 1,
-          thickness: 0.5,
-        ),)
-      ],
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        children: [
+          FeedTile(feed: feed, hasDot: hasDot,),
+          Padding(padding: EdgeInsets.only(left: hasDot ? 0 : 24), child: SpacerDivider(
+            spacing: 1,
+            thickness: 0.5,
+          ),)
+        ],
+      ),
     );
   }
+}
+
+class FeedTile extends ConsumerWidget {
+
+  final Feed feed;
+  final bool hasDot;
+  const FeedTile({super.key, required this.feed, this.hasDot = true});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return InkWell(
+      onTap: () {
+        ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
+          'id': feed.id.toString(),
+          'type': TileType.feed.toString()
+        });
+      },
+      child: Row(
+        children: [
+          hasDot ? Svgicon(
+            Svgicons.dot,
+            size: 24,
+            iconSize: 20,
+          ) : SizedBox(width: 24, height: 24,),
+          SizedBox(
+            width: 4, height: 52,
+          ),
+          FeedIcon(
+            title: feed.title,
+            iconUrl: feed.iconUrl,
+          ),
+          SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: Text(
+              feed.title,
+              maxLines: 1,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: AppTheme.black95,
+              ),
+            ),
+          ),
+          if (feed.errorCount > 0)
+            Container(
+              padding: EdgeInsets.only(left: 12),
+              decoration: BoxDecoration(
+                color: AppTheme.red10,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    Svgicons.expired,
+                    width: 12,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 2,
+                      right: 14,
+                      top: 4,
+                      bottom: 4,
+                    ),
+                    child: Text(
+                      '错误',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1.18,
+                        color: AppTheme.red,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          SizedBox(
+            width: 12,
+          ),
+          Text(
+            '${feed.unread > 0 ? feed.unread : ''}',
+            style: const TextStyle(
+              color: AppTheme.black25,
+              fontSize: 13,
+              height: 1.38,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(
+            width: 4,
+          ),
+        ],
+      ),
+    );
+  }
+
 }

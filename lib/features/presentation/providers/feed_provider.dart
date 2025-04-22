@@ -1,6 +1,8 @@
 
 
 
+import 'package:follow_read/features/presentation/providers/app_container.dart';
+import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/models/category.dart';
@@ -24,6 +26,14 @@ class AddFeedController extends _$AddFeedController {
 
   void addUrl(String url) {
     state = AsyncData(state.requireValue.copyWith(feedUrl: url));
+  }
+
+  Future<bool> save() async {
+    if (await ref.read(feedRepositoryProvider).saveFeed(state.requireValue)) {
+      ref.read(syncProvider.notifier).startSync();
+      return true;
+    }
+    return false;
   }
 }
 

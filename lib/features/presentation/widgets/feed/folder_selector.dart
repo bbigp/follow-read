@@ -36,11 +36,11 @@ class FolderSelector extends ConsumerWidget {
           itemBuilder: (context, index) {
             var folder = folders[index];
             return CircleRadioTile(
-              icon: index == 0 ? Svgicons.folder : Svgicons.folderNoRss,
+              icon: index == 0 ? Svgicons.folderSmall : Svgicons.folderNoRss,
               value: folder.title,
               choose: controller.value?.folder.id == folder.id,
               leftPadding: index == 0 ? 12 : 28,
-              fit: index == 0 ? BoxFit.contain : BoxFit.none,
+              fit: BoxFit.none,
               onTap: (){
                 ref.read(addFeedControllerProvider.notifier).updateFolder(folder);
                 Navigator.of(context).pop();

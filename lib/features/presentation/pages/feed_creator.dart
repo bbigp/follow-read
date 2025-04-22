@@ -1,15 +1,11 @@
 
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/providers/feed_provider.dart';
-import 'package:follow_read/features/presentation/providers/folder_provider.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
@@ -17,7 +13,6 @@ import 'package:follow_read/features/presentation/widgets/input_field.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 
 import '../../../theme/text_styles.dart';
-import '../../domain/models/category.dart';
 
 class FeedCreator extends ConsumerWidget {
 
@@ -25,9 +20,9 @@ class FeedCreator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final addFeedState = ref.watch(addFeedControllerProvider);
-    if (addFeedState.isLoading) return const SizedBox.shrink();
-    final add = addFeedState.requireValue;
+    final controller = ref.watch(addFeedControllerProvider);
+    if (controller.isLoading) return const SizedBox.shrink();
+    final add = controller.requireValue;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(children: [
@@ -59,7 +54,12 @@ class FeedCreator extends ConsumerWidget {
         const SizedBox(height: 8,),
         const SizedBox(height: 8,),
         const SizedBox(height: 8,),
-        DoneButton(onPressed: (){}, height: 52, enabled: add.feedUrl.isNotEmpty,),
+        DoneButton(onPressed: () async {
+          final success = await ref.read(addFeedControllerProvider.notifier).save();
+          if (success) {
+            Navigator.of(context).pop();
+          }
+        }, height: 52, enabled: add.feedUrl.isNotEmpty,),
         const SizedBox(height: 21,),
       ],),
     );

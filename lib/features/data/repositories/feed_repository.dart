@@ -8,6 +8,7 @@ import 'package:follow_read/features/domain/models/feed.dart';
 
 import '../../../core/utils/failure.dart';
 import '../../../core/utils/logger.dart';
+import '../../presentation/providers/feed_provider.dart';
 import '../datasources/api_client.dart';
 import '../datasources/local_data.dart';
 
@@ -62,6 +63,11 @@ class FeedRepository {
     final feeds = await feedDao.getAllFeeds(hideGlobally: hideGlobally, ids: ids);
     logger.i('查询到本地feeds: ${feeds.length}');
     return feeds.map((e) => e.toModel()).toList();
+  }
+
+  Future<bool> saveFeed(FeedFormData formData) async {
+    final result = await ApiClient.saveFeed(formData.feedUrl, formData.folder.id);
+    return await result.fold((ifLeft) => false, (ifRight) => true);
   }
 
 }

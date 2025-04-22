@@ -6,12 +6,15 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/drag_handle.dart';
+import 'package:follow_read/features/presentation/widgets/entry/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
 import 'package:follow_read/features/presentation/widgets/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
+import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
+import 'package:follow_read/features/presentation/widgets/two_tab_switch.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../config/svgicons.dart';
@@ -69,7 +72,10 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           ),
           SizedBox(width: 16,),
           GestureDetector(
-            onTap: () => _showFilterSheet(context),
+            onTap: () => OpenModal.open(context,
+                FeedSettingsSheet(id: widget.id, type: widget.type,),
+                scrollable: true
+            ),
             child: Svgicon(Svgicons.more, size: 28, iconSize: 24,)
           ),
           // _buildRefreshButton(ref, feedsState.isSyncing),
@@ -82,182 +88,6 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     );
   }
 
-  void _showFilterSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      // 允许内容高度超过屏幕70%
-      backgroundColor: AppTheme.white95,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) {
-        return Consumer(builder: (context, ref, _) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              final tileAsync = ref.watch(tileProvider(pid));
-              final tile = tileAsync.requireValue;
-              return Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.85,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // 顶部拖拽指示条
-                    DragHandle(),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      padding: EdgeInsets.all(6),
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: AppTheme.black8
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(width: 6,),
-                          FeedIcon(title: tile.title, iconUrl: tile.iconUrl, size: 36,),
-                          SizedBox(width: 12,),
-                          Expanded(child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(tile.title,
-                                maxLines: 1, overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black95,
-                              ),),
-                              if (tile.type == TileType.feed)
-                                Text(tile.feedUrl,
-                                  maxLines: 1, overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.black50,
-                                ),),
-                            ],
-                          )),
-                          SizedBox(width: 8,),
-                          GestureDetector(
-                            onTap: (){
-                              if (tile.type == TileType.cluster) {
-                                ref.watch(routerProvider).pushNamed(RouteNames.cluster, queryParameters: {
-                                  "id": tile.id.toString(),
-                                });
-                              }
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: AppTheme.black8,
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                              child: SvgPicture.asset(
-                                Svgicons.edit,
-                                height: 20, width: 20,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    // 排序选项
-                    SizedBox(height: 16,),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: Text(
-                      '排序', style: TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black50,
-                    ),
-                    ),),
-                    SizedBox(height: 6,),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: AppTheme.black4,
-                        ),
-                        height: 40,
-                        child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-                          final width = (constraints.maxWidth - 8) / 2;
-                          return Row(
-                            children: [
-                              GestureDetector(
-                                onTap: (){
-                                  if (tile.orderx == Frc.orderxPublishedAt) return;
-                                  ref.read(tileProvider(pid).notifier).saveShow(orderx: Frc.orderxPublishedAt);
-                                },
-                                child: Container(
-                                  decoration: tile.orderx == Frc.orderxPublishedAt ? BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                  ) : null,
-                                  margin: tile.orderx == Frc.orderxPublishedAt ? EdgeInsets.all(4) : null,
-                                  width: width,
-                                  alignment: Alignment.center,
-                                  child: Text('发布时间', style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
-                                    color: tile.orderx == Frc.orderxPublishedAt ? AppTheme.black95: AppTheme.black50,
-                                  ),),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: (){
-                                  if (tile.orderx == Frc.orderxCreatedAt) return;
-                                  ref.read(tileProvider(pid).notifier).saveShow(orderx: Frc.orderxCreatedAt);
-                                },
-                                child: Container(
-                                  decoration: tile.orderx == Frc.orderxCreatedAt ? BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                  ) : null,
-                                  margin: tile.orderx == Frc.orderxCreatedAt ? EdgeInsets.all(4) : null,
-                                  width: width,
-                                  alignment: Alignment.center,
-                                  child: Text('添加时间', style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
-                                    color: tile.orderx == Frc.orderxCreatedAt ? AppTheme.black95: AppTheme.black50,
-                                  ),),
-                                ),
-                              ),
-                            ],
-                          );
-                        },),
-                      ),
-                    ),
-                    SizedBox(height: 16,),
-                    SizedBox(height: 8,),
-                    FeedSwitch(id: widget.id, type: widget.type,),
-                    SizedBox(height: 8,),
-                    if (tile.type == TileType.feed) _buildSiteUrl(tile.feed),
-                    SizedBox(
-                      height: 21,
-                    )
-                  ],
-                ),
-              );
-            },
-          );
-        });
-      },
-    );
-  }
-
-  Widget _buildSiteUrl(Feed feed){
-    return Expanded(child: Container(
-      height: 40,
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      padding: EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-      ),
-      child: Text(feed.siteUrl, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
-        fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
-      ),),
-    ));
-  }
 
 
   void _scrollListener() {
