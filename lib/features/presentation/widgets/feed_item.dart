@@ -63,6 +63,9 @@ class _FolderItem extends ConsumerWidget {
               SizedBox(
                 width: 4, height: 52,
               ),
+              SizedBox(
+                width: 4, height: 52,
+              ),
               Svgicon(
                 Svgicons.group,
                 size: 24,
@@ -134,7 +137,7 @@ class _FolderItem extends ConsumerWidget {
             ],
           ),
         ),
-        Padding(padding: EdgeInsets.only(left: 24 + 4 + 24), child: SpacerDivider(
+        Padding(padding: EdgeInsets.only(left: 24 + 4), child: SpacerDivider(
           spacing: 1,
           thickness: 0.5, indent: 0,
         ),),
@@ -145,7 +148,8 @@ class _FolderItem extends ConsumerWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: tile.feeds.length,
             separatorBuilder: (_, __) => const SizedBox.shrink(),
-            itemBuilder: (context, index) => _FeedItem(feed: tile.feeds[index], hasDot: false,),
+            itemBuilder: (context, index) => _FeedItem(feed: tile.feeds[index],
+              hasDot: false, padding: EdgeInsets.zero),
           ),
       ],),
     );
@@ -155,19 +159,22 @@ class _FolderItem extends ConsumerWidget {
 class _FeedItem extends ConsumerWidget {
   final Feed feed;
   final bool hasDot;
+  final EdgeInsetsGeometry padding;
 
-  const _FeedItem({required this.feed, this.hasDot = true});
+  const _FeedItem({required this.feed, this.hasDot = true,
+    this.padding = const EdgeInsets.symmetric(horizontal: 12),
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: padding,
       child: Column(
         children: [
           FeedTile(feed: feed, hasDot: hasDot,),
-          Padding(padding: EdgeInsets.only(left: hasDot ? 0 : 24), child: SpacerDivider(
+          Padding(padding: EdgeInsets.only(left: hasDot ? 24 + 4 : 24 + 4 + 4 + 12), child: SpacerDivider(
             spacing: 1,
-            thickness: 0.5,
+            thickness: 0.5, indent: 0,
           ),)
         ],
       ),
@@ -196,7 +203,10 @@ class FeedTile extends ConsumerWidget {
             Svgicons.dot,
             size: 24,
             iconSize: 20,
-          ) : SizedBox(width: 24, height: 24,),
+          ) : SizedBox(width: 36, height: 24,),
+          SizedBox(
+            width: 4, height: 52,
+          ),
           SizedBox(
             width: 4, height: 52,
           ),

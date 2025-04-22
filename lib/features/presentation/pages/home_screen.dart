@@ -76,8 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           InkWell(onTap: (){
             OpenModal.open(context, FeedCreator(), scrollable: false);
             // ref.read(routerProvider).pushNamed(RouteNames.addFeed);
-          }, child: Svgicon(Svgicons.add, size: 24, iconSize: 20,),),
-          const SizedBox(width: 16,),
+          }, child: Svgicon(Svgicons.add, size: 40, iconSize: 20, fit: BoxFit.none,),),
           _buildRefreshButton(ref),
           const SizedBox(width: 12),
         ],
