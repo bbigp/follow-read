@@ -46,5 +46,6 @@ class Svgicons {
   static const String calendarToday = "assets/svg/calendar_today.svg";
   static const String check = "assets/svg/check.svg";
   static const String add = "assets/svg/add.svg";
+  static const String reduceO = "assets/svg/reduce_o.svg";
 
 }
