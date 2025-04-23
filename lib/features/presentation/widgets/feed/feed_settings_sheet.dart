@@ -17,7 +17,7 @@ import 'package:follow_read/routes/app_route.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
 import '../../providers/tile_provider.dart';
-import '../drag_handle.dart';
+import '../components/drag_handle.dart';
 
 class FeedSettingsSheet extends ConsumerWidget {
   final int id;

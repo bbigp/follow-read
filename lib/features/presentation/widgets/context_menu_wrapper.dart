@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/recent_time.dart';
+import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 class ContextMenuWrapper extends StatefulWidget {
   final Widget child;
@@ -119,6 +120,19 @@ class ContextMenuEntry {
     required this.child,
     this.onTap,
   });
+
+  static ContextMenuEntry divider(){
+    return const ContextMenuEntry(
+        child: SizedBox(
+          width: 16 + 160 + 8 + 20 + 16,
+          child: SpacerDivider(
+            thickness: 1,
+            spacing: 1,
+            indent: 0,
+          ),
+        ));
+  }
+
 }
 
 

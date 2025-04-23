@@ -11,7 +11,7 @@ import '../providers/user_provider.dart';
 import 'add_text.dart';
 import 'circle_radio_tile.dart';
 import 'done_button.dart';
-import 'drag_handle.dart';
+import 'components/drag_handle.dart';
 
 class ServerPicker extends ConsumerWidget {
 

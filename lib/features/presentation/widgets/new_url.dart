@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/providers/user_provider.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
-import 'package:follow_read/features/presentation/widgets/drag_handle.dart';
+import 'package:follow_read/features/presentation/widgets/components/drag_handle.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
 import '../../../config/svgicons.dart';
