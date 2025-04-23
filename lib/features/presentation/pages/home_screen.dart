@@ -5,6 +5,7 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/widgets/feed/empty_feed_view.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed_item.dart';
@@ -75,7 +76,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         actions: [
           InkWell(onTap: (){
             OpenModal.open(context, FeedCreator(), scrollable: false);
-            // ref.read(routerProvider).pushNamed(RouteNames.addFeed);
           }, child: Svgicon(Svgicons.add, size: 40, iconSize: 20, fit: BoxFit.none,),),
           _buildRefreshButton(ref),
           const SizedBox(width: 12),
@@ -129,65 +129,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       childCount: pageValue.value!.tiles.length,
                     ),
                   )
-                : SliverToBoxAdapter(
-                    child: Column(children: [
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 39),
-                        child: SvgPicture.asset(
-                          Svgicons.folder,
-                          height: 60,
-                          width: 82,
-                        ),
-                      ),
-                      // SizedBox(height: 8,),
-                      Text(
-                        '没有订阅源',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          height: 1.33,
-                          color: AppTheme.black25,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      Container(
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: AppTheme.black95,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min, // 关键属性
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              Svgicons.plusWhite,
-                              height: 20,
-                              width: 20,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              '添加订阅',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                height: 1.33,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ]),
-                  ),
+                : SliverToBoxAdapter(child: EmptyFeedView(),),
           ],
         ),
       ),

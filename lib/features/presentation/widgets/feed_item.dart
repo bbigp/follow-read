@@ -172,7 +172,7 @@ class _FeedItem extends ConsumerWidget {
       child: Column(
         children: [
           FeedTile(feed: feed, hasDot: hasDot,),
-          Padding(padding: EdgeInsets.only(left: hasDot ? 24 + 4 : 24 + 4 + 4 + 12), child: SpacerDivider(
+          Padding(padding: EdgeInsets.only(left: hasDot ? 24 + 4 : 24 + 4 + 12), child: SpacerDivider(
             spacing: 1,
             thickness: 0.5, indent: 0,
           ),)

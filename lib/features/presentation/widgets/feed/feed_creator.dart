@@ -11,7 +11,7 @@ import 'package:follow_read/features/presentation/providers/home_page_provider.d
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
-import 'package:follow_read/features/presentation/widgets/feed/unsubscribe.dart';
+import 'package:follow_read/features/presentation/widgets/feed/unsubscribe_button.dart';
 import 'package:follow_read/features/presentation/widgets/input_field.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 

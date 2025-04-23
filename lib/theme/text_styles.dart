@@ -20,7 +20,15 @@ class AppTextStyles {
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black50,
   );
 
+  static const TextStyle hint500 = TextStyle(
+    fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black25,
+  );
+
   static const TextStyle red500 = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.red,
+  );
+
+  static const TextStyle white500 = TextStyle(
+    fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: Colors.white,
   );
 }
