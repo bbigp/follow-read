@@ -23,9 +23,9 @@ final homePageProvider = AsyncNotifierProvider.autoDispose<HomeNotifier, HomePag
 class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
 
   late final FeedRepository _feedRepository = ref.watch(feedRepositoryProvider);
-  late final CategoryRepository _categoryRepository = ref.watch(categoryRepository);
+  late final CategoryRepository _categoryRepository = ref.watch(categoryRepositoryProvider);
   late final EntryDao _entryDao = ref.watch(entryDaoProvider);
-  late final ClusterRepository _clusterRepository = ref.watch(clusterRepository);
+  late final ClusterRepository _clusterRepository = ref.watch(clusterRepositoryProvider);
 
   @override
   FutureOr<HomePageValue> build() async {

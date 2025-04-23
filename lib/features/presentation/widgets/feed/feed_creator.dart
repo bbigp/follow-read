@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
+import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/feed_provider.dart';
+import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
@@ -95,7 +97,16 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
         const SizedBox(height: 8,),
         Visibility(
           visible: add.feed.id != 0,
-          child: UnsubscribeButton(onPressed: () async {},),
+          child: UnsubscribeButton(onPressed: () async {
+            var success = await ref.read(feedRepositoryProvider).removeFeed(add.feed.id);
+            if (success) {
+              final _ = ref.refresh(homePageProvider);
+              setState(() {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              });
+            }
+          },),
         ),
         const SizedBox(height: 8,),
         const SizedBox(height: 21,),

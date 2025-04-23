@@ -104,6 +104,7 @@ class FeedSettingsSheet extends ConsumerWidget {
                     });
                   }
                   if (tile.type == TileType.feed) {
+                    Navigator.of(context).pop();
                     OpenModal.open(context, FeedCreator(id: tile.id,), scrollable: false);
                   }
                 },

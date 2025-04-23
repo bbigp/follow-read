@@ -2,6 +2,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:follow_read/features/data/datasources/category_dao.dart';
 import 'package:follow_read/features/data/datasources/entities/feed_entity.dart';
+import 'package:follow_read/features/data/datasources/entry_dao.dart';
 import 'package:follow_read/features/data/datasources/feed_dao.dart';
 import 'package:follow_read/features/data/models/feed_response.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
@@ -17,8 +18,12 @@ class FeedRepository {
   final FeedDao feedDao;
   final LocalData localData;
   final CategoryDao categoryDao;
+  final EntryDao entryDao;
 
-  FeedRepository({required this.feedDao, required this.localData, required this.categoryDao});
+  FeedRepository({required this.feedDao, required this.localData,
+    required this.categoryDao,
+    required this.entryDao,
+  });
 
   Future<Either<Failure, List<Feed>>> refreshFeeds() async {
     final result = await ApiClient.getFeeds();
@@ -65,9 +70,29 @@ class FeedRepository {
     return feeds.map((e) => e.toModel()).toList();
   }
 
-  Future<bool> saveFeed(FeedFormData formData) async {
-    final result = await ApiClient.saveFeed(formData.feed.feedUrl, formData.folder.id);
+  Future<bool> saveFeed(String feedUrl, int categoryId) async {
+    final result = await ApiClient.saveFeed(feedUrl, categoryId);
     return await result.fold((ifLeft) => false, (ifRight) => true);
+  }
+
+  Future<bool> updateFeed(int feedId, String title, int categoryId) async {
+    final result = await ApiClient.updateFeed(feedId, title, categoryId);
+    var success = result.fold((ifLeft) => false, (ifRight) => true);
+    if (success) {
+      return await feedDao.updateShow(feedId, title: title, categoryId: categoryId);
+    }
+    return false;
+  }
+
+  Future<bool> removeFeed(int feedId) async {
+    var either = await ApiClient.removeFeed(feedId);
+    var success = either.fold((_) => false, (ifRight) => true);
+    if (success) {
+      await feedDao.deleteById(feedId);
+      await entryDao.deleteByFeedId(feedId);
+      return true;
+    }
+    return false;
   }
 
 }

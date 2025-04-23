@@ -62,6 +62,27 @@ class ApiClient {
     );
   }
 
+  static Future<Either<Failure, FeedResponse>> updateFeed(int feedId,
+      String title, int categoryId) async {
+    return await httpUtil.safeRequest(
+      path: 'feeds/$feedId',
+      body: {
+        'title': title,
+        'category_id': categoryId,
+      },
+      method: HttpMethod.put,
+      fromJson: (json) => FeedResponseMapper.fromJson(json),
+    );
+  }
+
+  static Future<Either<Failure, Success>> removeFeed(int feedId) async {
+    return await httpUtil.safeRequest(
+        path: 'feeds/$feedId',
+        method: HttpMethod.delete,
+        fromJson: (json) => Success.fromJson(json)
+    );
+  }
+
   static Future<Either<Failure, EntryPageResponse>> getEntriesByFeedId(int feedId, {
     int page = 1, int size = 10, List<String> status = const ["unread"],
     String order = "published_at", String direction = "desc",

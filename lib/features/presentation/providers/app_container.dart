@@ -73,6 +73,7 @@ final feedRepositoryProvider = Provider<FeedRepository>((ref) {
       feedDao: ref.watch(feedDaoProvider),
       localData: ref.watch(localDataSourceProvider),
     categoryDao: ref.watch(categoryDaoProvider),
+    entryDao: ref.watch(entryDaoProvider),
   );
 });
 final userRepositoryProvider = Provider<UserRepository>((ref) {
@@ -86,11 +87,11 @@ final entryRepositoryProvider = Provider<EntryRepository>((ref) {
     feedRepository: ref.watch(feedRepositoryProvider),
   );
 });
-final categoryRepository = Provider<CategoryRepository>((ref){
+final categoryRepositoryProvider = Provider<CategoryRepository>((ref){
   return CategoryRepository(
     dao: ref.watch(categoryDaoProvider),
   );
 });
-final clusterRepository = Provider((ref){
+final clusterRepositoryProvider = Provider((ref){
   return ClusterRepository(dao: ref.watch(clusterDaoProvider));
 });

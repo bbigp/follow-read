@@ -11,7 +11,7 @@ part 'folder_provider.g.dart';
 class AllFolders extends _$AllFolders {
   @override
   Future<List<Category>> build() async {
-    final repo = ref.watch(categoryRepository);
+    final repo = ref.watch(categoryRepositoryProvider);
     return await repo.getCategories();
   }
 }

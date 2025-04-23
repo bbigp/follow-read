@@ -23,9 +23,9 @@ final tileProvider = AsyncNotifierProvider.family.autoDispose<TileNotifier, Tile
 
 class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
 
-  late final CategoryRepository _categoryRepository = ref.watch(categoryRepository);
+  late final CategoryRepository _categoryRepository = ref.watch(categoryRepositoryProvider);
   late final FeedRepository _feedRepository = ref.watch(feedRepositoryProvider);
-  late final ClusterRepository _clusterRepository = ref.watch(clusterRepository);
+  late final ClusterRepository _clusterRepository = ref.watch(clusterRepositoryProvider);
   late final TileType type;
   late final int id;
 

@@ -40,7 +40,7 @@ class ClusterItem extends ConsumerWidget {
       ],),),
       const ContextMenuEntry(child: SizedBox(width: 16 + 160 + 8 + 20 + 16, child: SpacerDivider(thickness: 1, spacing: 1, indent: 0,),)),
       ContextMenuEntry(onTap: (){
-        ref.read(clusterRepository).delete(cluster.id);
+        ref.read(clusterRepositoryProvider).delete(cluster.id);
         final _ = ref.refresh(homePageProvider);
       }, child: Row(children: [
         SizedBox(width: 16, height: 44,),

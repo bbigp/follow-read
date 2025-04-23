@@ -38,12 +38,10 @@ class SyncNotifier extends StateNotifier<SyncState> {
   Future<void> startSync() async {
     state = state.copyWith(status: SyncTask.syncing);
     final total = await entryRepository.syncProcess();
-    if (total > 0) {
+    if (total >= 0) {
       state = state.copyWith(total: total);
-      scheduleTask();
-    } else {
-      loadLastTask();
     }
+    scheduleTask();
   }
 
   void updateProgress(String status, int progress){

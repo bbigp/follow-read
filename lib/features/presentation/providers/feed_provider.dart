@@ -1,18 +1,28 @@
 
 
 
+import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/data/repositories/category_repository.dart';
+import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
+import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/providers/all_feeds_provider.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
+import 'package:follow_read/features/presentation/providers/entry_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/models/category.dart';
 import 'folder_provider.dart';
+import 'home_page_provider.dart';
 
 part 'feed_provider.g.dart';
 
 @riverpod
 class AddFeedController extends _$AddFeedController {
+
+  late final FeedRepository feedRepository = ref.watch(feedRepositoryProvider);
+  late final CategoryRepository categoryRepository = ref.watch(categoryRepositoryProvider);
 
   @override
   FutureOr<FeedFormData> build() async {
@@ -22,8 +32,8 @@ class AddFeedController extends _$AddFeedController {
   }
 
   void load(int id) async {
-      var feed = await ref.watch(feedRepositoryProvider).getFeedById(id);
-      var folder = await ref.watch(categoryRepository).getCategoryById(feed.categoryId);
+      var feed = await feedRepository.getFeedById(id);
+      var folder = await categoryRepository.getCategoryById(feed.categoryId);
       state = AsyncData(FeedFormData(feed: feed, folder: folder));
   }
 
@@ -32,19 +42,31 @@ class AddFeedController extends _$AddFeedController {
   }
 
   void addUrl(String url) {
-    state = AsyncData(state.requireValue.copyWith(feed: state.requireValue.feed.copyWith(feedUrl: url)));
+    var feed = state.requireValue.feed;
+    state = AsyncData(state.requireValue.copyWith(feed: feed.copyWith(feedUrl: url)));
   }
 
   void updateFeed({String? title}) {
-    state = AsyncData(state.requireValue.copyWith(feed: state.requireValue.feed.copyWith(title: title)));
+    var feed = state.requireValue.feed;
+    state = AsyncData(state.requireValue.copyWith(feed: feed.copyWith(title: title)));
   }
 
   Future<bool> save() async {
-    if (await ref.read(feedRepositoryProvider).saveFeed(state.requireValue)) {
-      ref.read(syncProvider.notifier).startSync();
-      return true;
+    var feed = state.requireValue.feed;
+    var folder = state.requireValue.folder;
+    if (feed.id == 0) {
+      var success = await feedRepository.saveFeed(feed.feedUrl, folder.id);
+      if (success) {
+        ref.read(syncProvider.notifier).startSync();
+        final _ = ref.refresh(homePageProvider);
+        return true;
+      }
+      return false;
     }
-    return false;
+    var success = await feedRepository.updateFeed(feed.id, feed.title, folder.id);
+    final _ = ref.refresh(homePageProvider);
+    final __ = ref.refresh(entriesProvier(PageUtils.pid(TileType.feed, feed.id)));
+    return success;
   }
 }
 

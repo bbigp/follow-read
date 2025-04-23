@@ -24,7 +24,7 @@ final clusterProvider = NotifierProvider.autoDispose<ClusterNotifier, Cluster>(
 
 class ClusterNotifier extends AutoDisposeNotifier<Cluster> {
 
-  late final _clusterRepository = ref.watch(clusterRepository);
+  late final _clusterRepository = ref.watch(clusterRepositoryProvider);
   @override
   Cluster build() => Cluster(icon: ClusterIcons.name(ClusterIcons.menu));
 

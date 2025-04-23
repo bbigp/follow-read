@@ -67,18 +67,24 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     });
   }
 
+  Future<bool> deleteById(int feedId) async {
+    var query = delete(feedsTable)..where((r) => r.id.equals(BigInt.from(feedId)));
+    var affectedRows = await query.go();
+    return affectedRows > 0;
+  }
+
   Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime,
-    String? orderx, bool? hideGlobally, }) async {
+    String? orderx, bool? hideGlobally,
+    String? title, int? categoryId,
+  }) async {
     final affectedRows = await (update(feedsTable)
       ..where((t) => t.id.equals(BigInt.from(feedId)))
     ).write(
       FeedsTableCompanion(
-        onlyShowUnread: onlyShowUnread != null
-            ? Value(onlyShowUnread)
-            : const Value.absent(),
-        showReadingTime: showReadingTime != null
-            ? Value(showReadingTime)
-            : const Value.absent(),
+        title: title != null && title != "" ? Value(title) : const Value.absent(),
+        categoryId: categoryId != null ? Value(BigInt.from(categoryId)) : const Value.absent(),
+        onlyShowUnread: onlyShowUnread != null ? Value(onlyShowUnread) : const Value.absent(),
+        showReadingTime: showReadingTime != null ? Value(showReadingTime) : const Value.absent(),
         orderx: orderx != null && orderx != "" ? Value(orderx) : const Value.absent(),
         hideGlobally: hideGlobally != null ? Value(hideGlobally) : const Value.absent(),
       ),
