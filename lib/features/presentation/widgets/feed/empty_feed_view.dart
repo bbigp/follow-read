@@ -23,7 +23,7 @@ class EmptyFeedView extends StatelessWidget {
       ),
       const Text('没有订阅源', style: AppTextStyles.hint500,),
       const SizedBox(height: 24,),
-      SvgIconButton(onPressed: () async {
+      SvgIconButton(label: '添加订阅', onPressed: () async {
         OpenModal.open(context, FeedCreator(), scrollable: false);
       },),
     ]);

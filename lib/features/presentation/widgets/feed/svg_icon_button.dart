@@ -10,8 +10,17 @@ import 'package:follow_read/theme/text_styles.dart';
 class SvgIconButton extends StatefulWidget {
 
   final Future<void> Function()? onPressed;
+  final double height;
+  final String icon;
+  final double iconSize;
+  final TextStyle textStyle;
+  final String label;
 
-  const SvgIconButton({super.key, this.onPressed,});
+  const SvgIconButton({
+    super.key, this.onPressed, this.height = 44, required this.label,
+    this.icon = Svgicons.plusWhite, this.iconSize = 20,
+    this.textStyle = AppTextStyles.white500,
+  });
 
   @override
   State<SvgIconButton> createState() => _SvgIconButtonState();
@@ -39,7 +48,7 @@ class _SvgIconButtonState extends State<SvgIconButton> {
     return TextButton(onPressed: _handlePress,
       style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 16), // 可选，调整左右间距
-        minimumSize: const Size(0, 44),
+        minimumSize: Size(0, widget.height),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap, // 紧贴内容  避免外扩
         alignment: Alignment.center,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -48,9 +57,9 @@ class _SvgIconButtonState extends State<SvgIconButton> {
         child: Row(
           mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SvgPicture.asset(Svgicons.plusWhite, width: 20, height: 20,),
+            SvgPicture.asset(widget.icon, width: widget.iconSize, height: widget.iconSize,),
             const SizedBox(width: 8,),
-            Text('添加订阅', style: AppTextStyles.white500,)
+            Text(widget.label, style: widget.textStyle,)
           ],
         ),
     );
