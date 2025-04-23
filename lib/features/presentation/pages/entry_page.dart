@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
+import 'package:follow_read/features/presentation/widgets/components/alert_banner.dart';
 import 'package:follow_read/features/presentation/widgets/components/drag_handle.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
@@ -61,6 +62,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: true,
+        surfaceTintColor: Colors.white, // 防止 Material 3 的默认着色影响
         actions: [
           SizedBox(width: 16,),
           GestureDetector(
@@ -84,7 +86,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
       ),
       body: entriesAsync.isLoading
           ? _buildSmartSkeleton()
-          : _buildListView(),
+          : _buildMain(),
     );
   }
 
@@ -111,6 +113,23 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     super.dispose();
   }
 
+  Widget _buildMain() {
+    final tileAsync = ref.watch(tileProvider(pid));
+    final tile = tileAsync.requireValue;
+    return Stack(children: [
+       _buildListView(),
+      Positioned(
+          top: 0, left: 0, right: 0,
+          child: Visibility(
+            visible: tile.errorCount > 0,
+              child: AlertBanner(
+                data: tile.errorMsg,
+              )
+          )
+      ),
+    ],);
+  }
+
 
   Widget _buildListView() {
     final entriesAsync = ref.watch(entriesProvier(pid));
@@ -135,6 +154,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
                 return FeedHeader(
                   title: tile.title,
                   unread: tile.unread,
+                  errorCount: tile.errorCount,
+                  errorMsg: tile.errorMsg,
                 );
               }
               if (index - 1 >= entriesState.entries.length) {

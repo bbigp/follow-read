@@ -14,7 +14,7 @@ class Svgicons {
   static const String addCollection = ClusterIcons.addCollection;
   static const String removeCollection = "assets/svg/remove_collection.svg";
   static const String expired = "assets/svg/expired.svg";
-  static const String retry = "assets/svg/retry.svg";
+  static const String reset = "assets/svg/reset.svg";
   static const String link = "assets/svg/link.svg";
   static const String alertFill = "assets/svg/alert_fill.svg";
 

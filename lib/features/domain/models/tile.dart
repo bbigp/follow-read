@@ -95,6 +95,11 @@ class Tile {
     return 0;
   }
 
+  String get errorMsg {
+    if (type == TileType.feed) return feed.errorMsg;
+    return '';
+  }
+
   bool get onlyShowUnread {
     if (type == TileType.feed) return feed.onlyShowUnread;
     if (type == TileType.folder) return category.onlyShowUnread;

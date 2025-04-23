@@ -81,7 +81,7 @@ class SyncView extends ConsumerWidget {
                   child: Row(
                     children: [
                       SizedBox(width: 12,),
-                      SvgPicture.asset(Svgicons.retry, width: 16, height: 16,),
+                      SvgPicture.asset(Svgicons.reset, width: 16, height: 16,),
                       SizedBox(width: 8,),
                       Text('重试', style: TextStyle(
                         fontSize: 13, fontWeight: FontWeight.w500, height: 1.38, color: textColor,
