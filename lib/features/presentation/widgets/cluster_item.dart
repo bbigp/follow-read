@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/features/presentation/providers/unread_count_notifier.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:follow_read/routes/app_route.dart';
@@ -80,13 +81,23 @@ class ClusterItem extends ConsumerWidget {
             maxLines: 1,
             style: AppTextStyles.text,
           ),
-          trailing: Text(
-            '${cluster.count > 0 ? cluster.count : ''}',
-            // 这里可以是你想显示的任何数字
-            style: AppTextStyles.hint13500,
-          ),
+          trailing: ClusterUnreadView(clusterId: cluster.id,),
         ),
       ),
     );
   }
+}
+
+class ClusterUnreadView extends ConsumerWidget {
+
+  final int clusterId;
+
+  const ClusterUnreadView({super.key, required this.clusterId,});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(clusterUnreadProvider(clusterId));
+    return Text(count.isLoading || count.requireValue == 0 ? '' : count.requireValue.toString(), style: AppTextStyles.hint13500,);
+  }
+
 }

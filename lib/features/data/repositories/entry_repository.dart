@@ -1,5 +1,6 @@
 
 
+import 'package:follow_read/features/data/datasources/cluster_dao.dart';
 import 'package:follow_read/features/data/datasources/entities/entry_entity.dart';
 import 'package:follow_read/features/data/datasources/entities/feed_entity.dart';
 import 'package:follow_read/features/data/datasources/entry_dao.dart';
@@ -18,11 +19,15 @@ class EntryRepository {
   final FeedDao _feedDao;
   final SharedPreferences _preferences;
   final FeedRepository _feedRepository;
+  final ClusterDao _clusterDao;
   EntryRepository({required EntryDao dao, required FeedDao feedDao,
   required SharedPreferences sharedPreferences,
-  required FeedRepository feedRepository})
+  required FeedRepository feedRepository,
+  required ClusterDao clusterDao,
+  })
       : _dao = dao, _feedDao = feedDao, _preferences = sharedPreferences,
-        _feedRepository = feedRepository;
+        _feedRepository = feedRepository,
+      _clusterDao = clusterDao;
 
   Future<int> syncProcess() async{
     try {
@@ -223,6 +228,11 @@ class EntryRepository {
       final list = await saveAndReturnData([data]);
       return list[0];
     });
+  }
+
+  Future<Map<int, int>> countCluster() async {
+    var all = await _clusterDao.getAll();
+    return await _dao.countCluster(all);
   }
 
 }

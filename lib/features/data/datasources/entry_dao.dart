@@ -1,6 +1,7 @@
 
 
 import 'package:drift/drift.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/smart_list_count.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
@@ -136,8 +137,54 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return map;
   }
 
+  Future<Map<int, int>> countCluster(List<ClusterEntity> clusters) async {
+    final parts = clusters.map(buildQuery).join(", ");
+    final query = "SELECT $parts FROM entries";
+    logger.i(query);
+    final result = await db.customSelect(
+      query,
+    ).getSingle();
+    return Map<int, int>.fromEntries(
+      result.data.entries.map((entry) {
+        final key = int.parse(entry.key);
+        final value = entry.value as int;
+        return MapEntry(key, value);
+      }),
+    );
+  }
+
+  String buildQuery(ClusterEntity cluster) {
+    List<String> cond = [];
+    if (cluster.feedIds.isNotEmpty) {
+      cond.add("feed_id in (${cluster.feedIds})");
+    }
+    if (cluster.recentTime > 0) {
+      var time = DateTime.now().add(Duration(minutes: -cluster.recentTime)).millisecondsSinceEpoch ~/ 1000;
+      cond.add("published_at >= $time");
+    }
+    if (cluster.recentAddTime > 0) {
+      var time = DateTime.now().add(Duration(minutes: -cluster.recentAddTime)).millisecondsSinceEpoch ~/ 1000;
+      cond.add("created_at >= $time");
+    }
+    if (cluster.statuses.isNotEmpty) {
+      var status = cluster.statuses.split(',').map((status) => "'$status'").toSet().join(",");
+      cond.add("status in ($status)");
+    }
+    bool? starred = switch(cluster.starred) {
+      1 => true,
+      0 => false,
+      _ => null
+    };
+    if (starred != null) {
+      cond.add("starred = $starred");
+    }
+    var query = "count(*) filter (where ${cond.join(" and ")}) as '${cluster.id}' ";
+    return query;
+  }
+
 
   Future<SmartListCount> countSmartList() async {
+
     final now = DateTime.now().toUtc();
     final todayStart = DateTime(now.year, now.month, now.day);
     // final tomorrowStart = todayStart.add(const Duration(days: 1));

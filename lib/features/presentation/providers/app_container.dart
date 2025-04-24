@@ -85,6 +85,7 @@ final entryRepositoryProvider = Provider<EntryRepository>((ref) {
       feedDao: ref.watch(feedDaoProvider),
       sharedPreferences: ref.watch(sharedPreferencesProvider),
     feedRepository: ref.watch(feedRepositoryProvider),
+    clusterDao: ref.watch(clusterDaoProvider),
   );
 });
 final categoryRepositoryProvider = Provider<CategoryRepository>((ref){

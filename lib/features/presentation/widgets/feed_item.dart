@@ -128,15 +128,7 @@ class _FolderItem extends ConsumerWidget {
             SizedBox(
               width: 12,
             ),
-            Text(
-              '${tile.unread > 0 ? tile.unread : ''}',
-              style: const TextStyle(
-                color: AppTheme.black25,
-                fontSize: 13,
-                height: 1.38,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            FolderUnreadView(feedIds: tile.feeds.map((item) => item.id).toList().join(","),),
             SizedBox(
               width: 4,
             ),
@@ -284,7 +276,7 @@ class FeedTile extends ConsumerWidget {
           SizedBox(
             width: 12,
           ),
-          UnreadView(feedId: feed.id),
+          FeedUnreadView(feedId: feed.id),
           SizedBox(
             width: 4,
           ),
@@ -296,11 +288,24 @@ class FeedTile extends ConsumerWidget {
 
 }
 
-class UnreadView extends ConsumerWidget {
+class FolderUnreadView extends ConsumerWidget {
+
+  final String feedIds;
+  const FolderUnreadView({super.key, required this.feedIds});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(folderUnreadProvider(feedIds));
+    return Text(count.isLoading || count.requireValue == 0 ? '' : count.requireValue.toString(), style: AppTextStyles.hint13500,);
+  }
+
+}
+
+class FeedUnreadView extends ConsumerWidget {
 
   final int feedId;
 
-  const UnreadView({super.key, required this.feedId,});
+  const FeedUnreadView({super.key, required this.feedId,});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
