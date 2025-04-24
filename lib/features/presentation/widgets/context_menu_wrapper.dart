@@ -160,7 +160,7 @@ class LongPressMenuExample extends StatelessWidget {
               child: Text("操作二", style: TextStyle(fontSize: 16)),
             )),
           ],
-          child: RecentTime()
+          child: RecentTime(label: '')
         ),
       ),
     );

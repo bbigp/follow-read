@@ -18,10 +18,11 @@ class AdvancedView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cluster = ref.watch(clusterProvider);
 
-    final allFilters = ['feed', 'recentTime', 'status'];
+    final allFilters = ['feed', 'recentTime', 'status', 'recentAddTime'];
     final activeFilters = [];
     if (cluster.feedIds.isNotEmpty) activeFilters.add('feed');
     if (cluster.recentTime > 0) activeFilters.add('recentTime');
+    if (cluster.recentAddTime > 0) activeFilters.add('recentAddTime');
     if (cluster.statuses.isNotEmpty) activeFilters.add('status');
     final inactiveFilters = allFilters.toSet().difference(activeFilters.toSet()).toList();
 
@@ -34,7 +35,8 @@ class AdvancedView extends ConsumerWidget {
           itemBuilder: (context, index) {
             final t = activeFilters[index];
             if (t == 'feed') return CardView(child: FeedSource());
-            if (t == 'recentTime') return CardView(child: RecentTime());
+            if (t == 'recentTime') return CardView(child: RecentTime(label: '发布日期',));
+            if (t == 'recentAddTime') return CardView(child: RecentTime(label: '添加日期'));
             if (t == 'status') return CardView(child: Statuses());
             return const SizedBox.shrink();
           },
@@ -57,7 +59,8 @@ class AdvancedView extends ConsumerWidget {
             itemBuilder: (context, index) {
               final t = inactiveFilters[index];
               if (t == 'feed') return FeedSource();
-              if (t == 'recentTime') return RecentTime();
+              if (t == 'recentTime') return RecentTime(label: '发布日期',);
+              if (t == 'recentAddTime') return RecentTime(label: '添加日期');
               if (t == 'status') return Statuses();
               return const SizedBox.shrink();
             },

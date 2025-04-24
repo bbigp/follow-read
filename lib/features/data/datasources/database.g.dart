@@ -2334,6 +2334,14 @@ class $ClustersTableTable extends ClustersTable
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: Constant(""));
+  static const VerificationMeta _recentAddTimeMeta =
+      const VerificationMeta('recentAddTime');
+  @override
+  late final GeneratedColumn<int> recentAddTime = GeneratedColumn<int>(
+      'recent_add_time', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
   static const VerificationMeta _deletedMeta =
       const VerificationMeta('deleted');
   @override
@@ -2411,6 +2419,7 @@ class $ClustersTableTable extends ClustersTable
         feedIds,
         recentTime,
         statuses,
+        recentAddTime,
         deleted,
         createdAt,
         changedAt,
@@ -2460,6 +2469,12 @@ class $ClustersTableTable extends ClustersTable
     if (data.containsKey('statuses')) {
       context.handle(_statusesMeta,
           statuses.isAcceptableOrUnknown(data['statuses']!, _statusesMeta));
+    }
+    if (data.containsKey('recent_add_time')) {
+      context.handle(
+          _recentAddTimeMeta,
+          recentAddTime.isAcceptableOrUnknown(
+              data['recent_add_time']!, _recentAddTimeMeta));
     }
     if (data.containsKey('deleted')) {
       context.handle(_deletedMeta,
@@ -2520,6 +2535,8 @@ class $ClustersTableTable extends ClustersTable
           .read(DriftSqlType.int, data['${effectivePrefix}recent_time'])!,
       statuses: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}statuses'])!,
+      recentAddTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}recent_add_time'])!,
       deleted: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}deleted'])!,
       createdAt: attachedDatabase.typeMapping
@@ -2552,6 +2569,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
   final String feedIds;
   final int recentTime;
   final String statuses;
+  final int recentAddTime;
   final int deleted;
   final DateTime createdAt;
   final DateTime changedAt;
@@ -2567,6 +2585,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       required this.feedIds,
       required this.recentTime,
       required this.statuses,
+      required this.recentAddTime,
       required this.deleted,
       required this.createdAt,
       required this.changedAt,
@@ -2584,6 +2603,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
     map['feed_ids'] = Variable<String>(feedIds);
     map['recent_time'] = Variable<int>(recentTime);
     map['statuses'] = Variable<String>(statuses);
+    map['recent_add_time'] = Variable<int>(recentAddTime);
     map['deleted'] = Variable<int>(deleted);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['changed_at'] = Variable<DateTime>(changedAt);
@@ -2603,6 +2623,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       feedIds: Value(feedIds),
       recentTime: Value(recentTime),
       statuses: Value(statuses),
+      recentAddTime: Value(recentAddTime),
       deleted: Value(deleted),
       createdAt: Value(createdAt),
       changedAt: Value(changedAt),
@@ -2624,6 +2645,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       feedIds: serializer.fromJson<String>(json['feedIds']),
       recentTime: serializer.fromJson<int>(json['recentTime']),
       statuses: serializer.fromJson<String>(json['statuses']),
+      recentAddTime: serializer.fromJson<int>(json['recentAddTime']),
       deleted: serializer.fromJson<int>(json['deleted']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       changedAt: serializer.fromJson<DateTime>(json['changedAt']),
@@ -2644,6 +2666,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       'feedIds': serializer.toJson<String>(feedIds),
       'recentTime': serializer.toJson<int>(recentTime),
       'statuses': serializer.toJson<String>(statuses),
+      'recentAddTime': serializer.toJson<int>(recentAddTime),
       'deleted': serializer.toJson<int>(deleted),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'changedAt': serializer.toJson<DateTime>(changedAt),
@@ -2662,6 +2685,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
           String? feedIds,
           int? recentTime,
           String? statuses,
+          int? recentAddTime,
           int? deleted,
           DateTime? createdAt,
           DateTime? changedAt,
@@ -2677,6 +2701,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
         feedIds: feedIds ?? this.feedIds,
         recentTime: recentTime ?? this.recentTime,
         statuses: statuses ?? this.statuses,
+        recentAddTime: recentAddTime ?? this.recentAddTime,
         deleted: deleted ?? this.deleted,
         createdAt: createdAt ?? this.createdAt,
         changedAt: changedAt ?? this.changedAt,
@@ -2695,6 +2720,9 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       recentTime:
           data.recentTime.present ? data.recentTime.value : this.recentTime,
       statuses: data.statuses.present ? data.statuses.value : this.statuses,
+      recentAddTime: data.recentAddTime.present
+          ? data.recentAddTime.value
+          : this.recentAddTime,
       deleted: data.deleted.present ? data.deleted.value : this.deleted,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       changedAt: data.changedAt.present ? data.changedAt.value : this.changedAt,
@@ -2721,6 +2749,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
           ..write('feedIds: $feedIds, ')
           ..write('recentTime: $recentTime, ')
           ..write('statuses: $statuses, ')
+          ..write('recentAddTime: $recentAddTime, ')
           ..write('deleted: $deleted, ')
           ..write('createdAt: $createdAt, ')
           ..write('changedAt: $changedAt, ')
@@ -2741,6 +2770,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
       feedIds,
       recentTime,
       statuses,
+      recentAddTime,
       deleted,
       createdAt,
       changedAt,
@@ -2759,6 +2789,7 @@ class ClusterEntity extends DataClass implements Insertable<ClusterEntity> {
           other.feedIds == this.feedIds &&
           other.recentTime == this.recentTime &&
           other.statuses == this.statuses &&
+          other.recentAddTime == this.recentAddTime &&
           other.deleted == this.deleted &&
           other.createdAt == this.createdAt &&
           other.changedAt == this.changedAt &&
@@ -2776,6 +2807,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
   final Value<String> feedIds;
   final Value<int> recentTime;
   final Value<String> statuses;
+  final Value<int> recentAddTime;
   final Value<int> deleted;
   final Value<DateTime> createdAt;
   final Value<DateTime> changedAt;
@@ -2791,6 +2823,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     this.feedIds = const Value.absent(),
     this.recentTime = const Value.absent(),
     this.statuses = const Value.absent(),
+    this.recentAddTime = const Value.absent(),
     this.deleted = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
@@ -2807,6 +2840,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     required String feedIds,
     this.recentTime = const Value.absent(),
     this.statuses = const Value.absent(),
+    this.recentAddTime = const Value.absent(),
     this.deleted = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
@@ -2825,6 +2859,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     Expression<String>? feedIds,
     Expression<int>? recentTime,
     Expression<String>? statuses,
+    Expression<int>? recentAddTime,
     Expression<int>? deleted,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? changedAt,
@@ -2841,6 +2876,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
       if (feedIds != null) 'feed_ids': feedIds,
       if (recentTime != null) 'recent_time': recentTime,
       if (statuses != null) 'statuses': statuses,
+      if (recentAddTime != null) 'recent_add_time': recentAddTime,
       if (deleted != null) 'deleted': deleted,
       if (createdAt != null) 'created_at': createdAt,
       if (changedAt != null) 'changed_at': changedAt,
@@ -2859,6 +2895,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
       Value<String>? feedIds,
       Value<int>? recentTime,
       Value<String>? statuses,
+      Value<int>? recentAddTime,
       Value<int>? deleted,
       Value<DateTime>? createdAt,
       Value<DateTime>? changedAt,
@@ -2874,6 +2911,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
       feedIds: feedIds ?? this.feedIds,
       recentTime: recentTime ?? this.recentTime,
       statuses: statuses ?? this.statuses,
+      recentAddTime: recentAddTime ?? this.recentAddTime,
       deleted: deleted ?? this.deleted,
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
@@ -2905,6 +2943,9 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
     }
     if (statuses.present) {
       map['statuses'] = Variable<String>(statuses.value);
+    }
+    if (recentAddTime.present) {
+      map['recent_add_time'] = Variable<int>(recentAddTime.value);
     }
     if (deleted.present) {
       map['deleted'] = Variable<int>(deleted.value);
@@ -2942,6 +2983,7 @@ class ClustersTableCompanion extends UpdateCompanion<ClusterEntity> {
           ..write('feedIds: $feedIds, ')
           ..write('recentTime: $recentTime, ')
           ..write('statuses: $statuses, ')
+          ..write('recentAddTime: $recentAddTime, ')
           ..write('deleted: $deleted, ')
           ..write('createdAt: $createdAt, ')
           ..write('changedAt: $changedAt, ')
@@ -4117,6 +4159,7 @@ typedef $$ClustersTableTableCreateCompanionBuilder = ClustersTableCompanion
   required String feedIds,
   Value<int> recentTime,
   Value<String> statuses,
+  Value<int> recentAddTime,
   Value<int> deleted,
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
@@ -4134,6 +4177,7 @@ typedef $$ClustersTableTableUpdateCompanionBuilder = ClustersTableCompanion
   Value<String> feedIds,
   Value<int> recentTime,
   Value<String> statuses,
+  Value<int> recentAddTime,
   Value<int> deleted,
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
@@ -4170,6 +4214,9 @@ class $$ClustersTableTableFilterComposer
 
   ColumnFilters<String> get statuses => $composableBuilder(
       column: $table.statuses, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get recentAddTime => $composableBuilder(
+      column: $table.recentAddTime, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<int> get deleted => $composableBuilder(
       column: $table.deleted, builder: (column) => ColumnFilters(column));
@@ -4225,6 +4272,10 @@ class $$ClustersTableTableOrderingComposer
   ColumnOrderings<String> get statuses => $composableBuilder(
       column: $table.statuses, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get recentAddTime => $composableBuilder(
+      column: $table.recentAddTime,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<int> get deleted => $composableBuilder(
       column: $table.deleted, builder: (column) => ColumnOrderings(column));
 
@@ -4279,6 +4330,9 @@ class $$ClustersTableTableAnnotationComposer
 
   GeneratedColumn<String> get statuses =>
       $composableBuilder(column: $table.statuses, builder: (column) => column);
+
+  GeneratedColumn<int> get recentAddTime => $composableBuilder(
+      column: $table.recentAddTime, builder: (column) => column);
 
   GeneratedColumn<int> get deleted =>
       $composableBuilder(column: $table.deleted, builder: (column) => column);
@@ -4337,6 +4391,7 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             Value<String> feedIds = const Value.absent(),
             Value<int> recentTime = const Value.absent(),
             Value<String> statuses = const Value.absent(),
+            Value<int> recentAddTime = const Value.absent(),
             Value<int> deleted = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
@@ -4353,6 +4408,7 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             feedIds: feedIds,
             recentTime: recentTime,
             statuses: statuses,
+            recentAddTime: recentAddTime,
             deleted: deleted,
             createdAt: createdAt,
             changedAt: changedAt,
@@ -4369,6 +4425,7 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             required String feedIds,
             Value<int> recentTime = const Value.absent(),
             Value<String> statuses = const Value.absent(),
+            Value<int> recentAddTime = const Value.absent(),
             Value<int> deleted = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
@@ -4385,6 +4442,7 @@ class $$ClustersTableTableTableManager extends RootTableManager<
             feedIds: feedIds,
             recentTime: recentTime,
             statuses: statuses,
+            recentAddTime: recentAddTime,
             deleted: deleted,
             createdAt: createdAt,
             changedAt: changedAt,

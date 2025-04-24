@@ -10,7 +10,10 @@ import '../feed_popup_menu.dart';
 
 class RecentTime extends ConsumerStatefulWidget {
 
-  const RecentTime({super.key,});
+  final String label;
+  const RecentTime({super.key,
+    required this.label,
+  });
 
   @override
   ConsumerState<RecentTime> createState() => _RecentTimeState();
@@ -36,7 +39,13 @@ class _RecentTimeState extends ConsumerState<RecentTime> {
 
   @override
   Widget build(BuildContext context) {
-    final recentTime = ref.watch(clusterProvider.select((s) => s.recentTime));
+    var time = 0;
+    if (widget.label == '发布日期') {
+      time = ref.watch(clusterProvider.select((s) => s.recentTime));
+    }
+    if (widget.label == '添加日期') {
+      time = ref.watch(clusterProvider.select((s) => s.recentAddTime));
+    }
     return InkWell(onTap: (){
       //onTapDown: (details)
       // final RenderBox renderBox = context.findRenderObject() as RenderBox;
@@ -55,11 +64,16 @@ class _RecentTimeState extends ConsumerState<RecentTime> {
       FeedPopupMenu.show(
         context: context,
         position: menuPosition,
-        selected: Cluster.toRecentOption(recentTime),
+        selected: Cluster.toRecentOption(time),
         // width: widgetSize.width * 0.6,
         options: Cluster.recentOptions.values.toList(),
         onSelected: (val) {
-          ref.read(clusterProvider.notifier).update(recentTime: Cluster.toRecentTime(val));
+          if (widget.label == '发布日期') {
+            ref.read(clusterProvider.notifier).update(recentTime: Cluster.toRecentTime(val));
+          }
+          if (widget.label == '添加日期') {
+            ref.read(clusterProvider.notifier).update(recentAddTime: Cluster.toRecentTime(val));
+          }
         },
       );
     }, child: Row(
@@ -68,11 +82,11 @@ class _RecentTimeState extends ConsumerState<RecentTime> {
         const SizedBox(width: 16, height: 44,),
         SvgPicture.asset(Svgicons.calendarToday, width: 24, height: 24,),
         const SizedBox(width: 12,),
-        const Expanded(child: Text("发布日期", style: TextStyle(
+        Expanded(child: Text(widget.label, style: TextStyle(
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
         ),)),
         const SizedBox(width: 4,),
-        Text(Cluster.toRecentOption(recentTime), style: TextStyle(
+        Text(Cluster.toRecentOption(time), style: TextStyle(
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
         ),),
         const SizedBox(width: 4,),

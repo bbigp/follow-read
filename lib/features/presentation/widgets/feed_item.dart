@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/features/presentation/providers/unread_count_notifier.dart';
 import 'package:follow_read/features/presentation/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
@@ -282,15 +284,7 @@ class FeedTile extends ConsumerWidget {
           SizedBox(
             width: 12,
           ),
-          Text(
-            '${feed.unread > 0 ? feed.unread : ''}',
-            style: const TextStyle(
-              color: AppTheme.black25,
-              fontSize: 13,
-              height: 1.38,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          UnreadView(feedId: feed.id),
           SizedBox(
             width: 4,
           ),
@@ -298,6 +292,20 @@ class FeedTile extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+}
+
+class UnreadView extends ConsumerWidget {
+
+  final int feedId;
+
+  const UnreadView({super.key, required this.feedId,});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(feedUnreadProvider(feedId));
+    return Text(count.isLoading || count.requireValue == 0 ? '' : count.requireValue.toString(), style: AppTextStyles.hint13500,);
   }
 
 }

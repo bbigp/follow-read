@@ -1,7 +1,10 @@
 
 
 import 'package:drift/drift.dart';
+import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/smart_list_count.dart';
+import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/domain/models/unread_count.dart';
 
 import '../../domain/models/constants.dart';
 import 'database.dart';
@@ -38,7 +41,8 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     int page = 1,
     int size = 20, List<String> status = const ['unread'],
     String? order, String direction = "desc",
-    bool? starred, DateTime? startTime, String? word,
+    bool? starred, DateTime? minPublishedTime, String? word,
+    DateTime? minAddTime,
   }) async {
     var query = select(entriesTable)..where((t) => entriesTable.status.isIn(status));
     if (feedIds.isNotEmpty){
@@ -47,8 +51,11 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     if (starred != null) {
       query = query..where((t) => t.starred.equals(starred));
     }
-    if (startTime != null) {
-      query = query..where((t) => t.publishedAt.isBiggerOrEqualValue(startTime));
+    if (minPublishedTime != null) {
+      query = query..where((t) => t.publishedAt.isBiggerOrEqualValue(minPublishedTime));
+    }
+    if (minAddTime != null) {
+      query = query..where((t) => t.createdAt.isBiggerOrEqualValue(minAddTime));
     }
     if (word != null && word != "") {
       final keyword = '%$word%';
@@ -111,6 +118,24 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return result.read(countAll()) ?? 0;
   }
 
+  Future<Map<int, int>> countFeed() async {
+    final query = '''
+       select feed_id, count(*) filter (where status = 'unread') as unread
+       from entries
+       group by feed_id
+    ''';
+    final result = await db.customSelect(
+      query,
+    ).get();
+    final map = <int, int>{};
+    for (final row in result) {
+      final id = row.read<int>('feed_id');
+      final count = row.read<int>('unread');
+      map[id] = count;
+    }
+    return map;
+  }
+
 
   Future<SmartListCount> countSmartList() async {
     final now = DateTime.now().toUtc();
@@ -126,6 +151,9 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
       ifnull(SUM(CASE WHEN published_at >= ? THEN 1 ELSE 0 END), 0) AS today_count
     FROM entries;
   ''';
+
+
+
     final result = await db.customSelect(
       query,
       variables: [Variable(todayStart)],
@@ -139,6 +167,13 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
       today: result.read<int>('today_count'),
     );
   }
+
+  // return result.map((row) {
+  // return UnreadCount(
+  // id: row.read<int>('id') ?? 0,
+  // count: row.read<int>('unread') ?? 0,
+  // );
+  // }).toList();
 
   Future<bool> deleteByFeedId(int feedId) async {
     var query = delete(entriesTable)..where((f) => f.feedId.equals(BigInt.from(feedId)));

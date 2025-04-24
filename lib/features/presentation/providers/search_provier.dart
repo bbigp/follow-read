@@ -62,7 +62,7 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
 
     final list = await _entryRepository.getEntries(
       page, feedIds: feedIds, size: size, status: statuses,
-      order: order, starred: starred, startTime: minTime,
+      order: order, starred: starred, minPublishedTime: minTime,
       word: word,
     );
 
@@ -112,7 +112,7 @@ class SearchNotifier extends AutoDisposeFamilyAsyncNotifier<SearchState, String>
 
     final list = await _entryRepository.getEntries(
       page, feedIds: feedIds, size: size, status: statuses,
-      order: order, starred: starred, startTime: minTime,
+      order: order, starred: starred, minPublishedTime: minTime,
       word: word,
     );
 

@@ -11,6 +11,7 @@ class Cluster {
   final String icon;
   final List<int> feedIds;
   final int recentTime;
+  final int recentAddTime;
   final List<String> statuses;
   final int deleted;
   final DateTime? createdAt;
@@ -30,8 +31,8 @@ class Cluster {
   static const recentOptions = {0: 'Off', 1440: '最近24小时', 2880: '最近48小时',
     10080: '最近一周', 40320: '最近一个月'};
 
-  static String toRecentOption(int recentTime) {
-    return recentOptions[recentTime] ?? 'Off';
+  static String toRecentOption(int time) {
+    return recentOptions[time] ?? 'Off';
   }
 
   static int toRecentTime(String option){
@@ -44,6 +45,7 @@ class Cluster {
   const Cluster({
     this.id = 0, this.name = "", this.icon = "",
     this.recentTime = 0,
+    this.recentAddTime = 0,
     this.deleted = 0,
     this.feedIds = const [],
     this.statuses = const [],
@@ -63,6 +65,7 @@ class Cluster {
     String? icon,
     List<int>? feedIds,
     int? recentTime,
+    int? recentAddTime,
     List<String>? statuses,
     int? deleted,
     DateTime? createdAt,
@@ -80,6 +83,7 @@ class Cluster {
       icon: icon ?? this.icon,
       feedIds: feedIds ?? this.feedIds,
       recentTime: recentTime ?? this.recentTime,
+      recentAddTime: recentAddTime ?? this.recentAddTime,
       statuses: statuses ?? this.statuses,
       deleted: deleted ?? this.deleted,
       createdAt: createdAt ?? this.createdAt,

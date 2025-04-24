@@ -16,10 +16,11 @@ class ClusterDao extends DatabaseAccessor<AppDatabase> {
 
   void save(Cluster c) async {
     await into(clusterTable).insertOnConflictUpdate(ClustersTableCompanion(
-      id: Value(c.id),
+      id: c.id == 0 ? Value.absent() : Value(c.id),
       name: Value(c.name), icon: Value(c.icon),
       feedIds: Value(c.feedIds.join(",")),
       recentTime: Value(c.recentTime), statuses: Value(c.statuses.join(",")),
+      recentAddTime: Value(c.recentAddTime),
       deleted: Value(c.deleted),
       createdAt: c.createdAt == null ? Value(DateTime.now()) : Value(c.createdAt!),
       changedAt: c.changedAt == null ? Value(DateTime.now()) : Value(c.changedAt!),

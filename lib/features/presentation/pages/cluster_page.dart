@@ -34,10 +34,11 @@ class ClusterNotifier extends AutoDisposeNotifier<Cluster> {
   }
 
   void update({String? name, String? icon, int? recentTime, List<int>? feedIds,
-    List<String>? statuses,
+    List<String>? statuses, int? recentAddTime,
   }) {
     state = state.copyWith(name: name, icon: icon, recentTime: recentTime,
       feedIds: feedIds, statuses: statuses,
+      recentAddTime: recentAddTime,
     );
   }
 

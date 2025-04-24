@@ -18,6 +18,8 @@ class ClustersTable extends Table {
       .withDefault(Constant(0))();
   TextColumn get statuses => text().named("statuses")
       .withDefault(Constant(""))();
+  IntColumn get recentAddTime => integer().named("recent_add_time")
+      .withDefault(Constant(0))();
 
   IntColumn get deleted => integer().named("deleted")
       .withDefault(Constant(0))();
@@ -50,7 +52,7 @@ extension ClusterEntityConversion on ClusterEntity {
       createdAt: createdAt, changedAt: changedAt,
       hideGlobally: hideGlobally, onlyShowUnread: onlyShowUnread,
       showReadingTime: showReadingTime, order: orderx,
-      starred: starred,
+      starred: starred, recentAddTime: recentAddTime,
     );
   }
 

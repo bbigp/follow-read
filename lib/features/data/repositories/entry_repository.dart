@@ -130,13 +130,13 @@ class EntryRepository {
 
   Future<List<Entry>> getEntries(int page, { List<int> feedIds = const [],
     int size = 10, List<String> status = const ["unread", "read"],
-    bool? starred, DateTime? startTime, String? word,
-    String? order,
+    bool? starred, DateTime? minPublishedTime, String? word,
+    String? order, DateTime? minAddTime,
   }) async {
     final entries = await _dao.paginateEntries(feedIds: feedIds,
         status: status, size: size,
-        page: page, starred: starred, startTime: startTime,
-        order: order, word: word,
+        page: page, starred: starred, minPublishedTime: minPublishedTime,
+        order: order, word: word, minAddTime: minAddTime,
     );
     if (feedIds.isEmpty) feedIds = entries.map((item) => int.parse(item.feedId.toString())).toSet().toList();
     final feeds = await _feedDao.getFeedsByIds(feedIds);

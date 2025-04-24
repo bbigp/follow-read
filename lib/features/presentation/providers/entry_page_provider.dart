@@ -56,7 +56,8 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
 
     List<int> feedIds = [];
     List<String> statuses = tile.onlyShowUnread ? ["unread"] : ["unread", "read"];
-    DateTime? minTime;
+    DateTime? minPublishedTime;
+    DateTime? minAddTime;
     bool? starred;
     if (type == TileType.feed) {
       feedIds.add(id);
@@ -70,7 +71,10 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
         statuses = tile.cluster.statuses;
       }
       if (tile.cluster.recentTime > 0) {
-        minTime = DateTime.now().add(Duration(minutes: -tile.cluster.recentTime));
+        minPublishedTime = DateTime.now().add(Duration(minutes: -tile.cluster.recentTime));
+      }
+      if (tile.cluster.recentAddTime > 0) {
+        minAddTime = DateTime.now().add(Duration(minutes: -tile.cluster.recentAddTime));
       }
       starred = switch(tile.cluster.starred) {
         1 => true,
@@ -81,7 +85,8 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<EntriesState, Strin
 
     List<Entry> list = await _entryRepository.getEntries(
         page, feedIds: feedIds, size: pageSize, status: statuses,
-        order: order, startTime: minTime, starred: starred,
+        order: order, minPublishedTime: minPublishedTime, starred: starred,
+        minAddTime: minAddTime,
     );
     final newList = reset ? list : [...state.value!.entries, ...list];
     return EntriesState(
