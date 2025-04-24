@@ -34,6 +34,8 @@ class FeedsTable extends Table {
       .withDefault(Constant("published_at"))();
   BoolColumn get hideGlobally => boolean().named("hide_globally")
     .withDefault(Constant(false))();
+  IntColumn get deleted => integer().named("deleted")
+      .withDefault(Constant(0))();
 
   @override
   Set<Column> get primaryKey => {id};

@@ -17,6 +17,8 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
       return;
     }
     await transaction(() async {
+      var query = update(feedsTable);
+      await query.write(FeedsTableCompanion(deleted: Value(1)));
       await batch((batch) {
         batch.insertAll(
           feedsTable,
@@ -28,7 +30,10 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
   }
 
   Future<FeedEntity> getFeed(int feedId) async {
-    return await (select(feedsTable)..where((t) => t.id.equals(BigInt.from(feedId)))).getSingle();
+    return await (select(feedsTable)
+      ..where((t) => t.id.equals(BigInt.from(feedId)))
+      ..where((t) => t.deleted.equals(0))
+    ).getSingle();
   }
 
   Future<List<FeedEntity>> getAllFeeds({bool? hideGlobally, List<int>? ids}) async {
@@ -39,20 +44,30 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     if (ids != null && ids.isNotEmpty) {
       query = query..where((t) => t.id.isIn(ids.map((item) => BigInt.from(item)).toList()));
     }
+    query = query..where((t) => t.deleted.equals(0));
     return await query.get();
   }
 
   Future<List<FeedEntity>> getFeedsByIds(List<int> ids) async {
     if (ids.isEmpty) return [];
-    return await (select(feedsTable)..where((t) => t.id.isIn(ids.map((e) => BigInt.from(e)).toList()))).get();
+    return await (select(feedsTable)
+      ..where((t) => t.id.isIn(ids.map((e) => BigInt.from(e)).toList()))
+      ..where((t) => t.deleted.equals(0))
+    ).get();
   }
 
   Future<List<FeedEntity>> getFeedsByCategoryId(int categoryId) async {
-    return (select(feedsTable)..where((t) => t.categoryId.equals(BigInt.from(categoryId)))).get();
+    return await (select(feedsTable)
+      ..where((t) => t.categoryId.equals(BigInt.from(categoryId)))
+      ..where((t) => t.deleted.equals(0))
+    ).get();
   }
 
   Future<FeedEntity> getFeedById(int id) async {
-    return await (select(feedsTable)..where((t) => t.id.equals(BigInt.from(id)))).getSingle();
+    return await (select(feedsTable)
+      ..where((t) => t.id.equals(BigInt.from(id)))
+      ..where((t) => t.deleted.equals(0))
+    ).getSingle();
   }
 
   Future<void> bulkUpdateCounter(List<FeedCounter> list) async {

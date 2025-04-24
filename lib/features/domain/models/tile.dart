@@ -97,6 +97,9 @@ class Tile {
 
   String get errorMsg {
     if (type == TileType.feed) return feed.errorMsg;
+    if (type == TileType.folder) {
+      return "${feeds.where((item) => item.errorCount > 0).map((item) => '"${item.title}"').toList().join(",")}已过期";
+    }
     return '';
   }
 

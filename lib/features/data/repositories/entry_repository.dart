@@ -40,7 +40,6 @@ class EntryRepository {
     int size = 50;
     try {
       await _feedRepository.refreshFeeds();
-      await _feedRepository.refreshFeedCounter();
       final String? maxTime = _preferences.getString(SyncTask.progress);
       bool isFullSync = maxTime == null || maxTime.isEmpty;
       int totalSynced = 0;

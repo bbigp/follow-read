@@ -119,6 +119,14 @@ class $FeedsTableTable extends FeedsTable
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("hide_globally" IN (0, 1))'),
       defaultValue: Constant(false));
+  static const VerificationMeta _deletedMeta =
+      const VerificationMeta('deleted');
+  @override
+  late final GeneratedColumn<int> deleted = GeneratedColumn<int>(
+      'deleted', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -135,7 +143,8 @@ class $FeedsTableTable extends FeedsTable
         errorMsg,
         categoryId,
         orderx,
-        hideGlobally
+        hideGlobally,
+        deleted
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -224,6 +233,10 @@ class $FeedsTableTable extends FeedsTable
           hideGlobally.isAcceptableOrUnknown(
               data['hide_globally']!, _hideGloballyMeta));
     }
+    if (data.containsKey('deleted')) {
+      context.handle(_deletedMeta,
+          deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta));
+    }
     return context;
   }
 
@@ -263,6 +276,8 @@ class $FeedsTableTable extends FeedsTable
           .read(DriftSqlType.string, data['${effectivePrefix}orderx'])!,
       hideGlobally: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}hide_globally'])!,
+      deleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}deleted'])!,
     );
   }
 
@@ -288,6 +303,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
   final BigInt categoryId;
   final String orderx;
   final bool hideGlobally;
+  final int deleted;
   const FeedEntity(
       {required this.id,
       required this.userId,
@@ -303,7 +319,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       required this.errorMsg,
       required this.categoryId,
       required this.orderx,
-      required this.hideGlobally});
+      required this.hideGlobally,
+      required this.deleted});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -322,6 +339,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
     map['category_id'] = Variable<BigInt>(categoryId);
     map['orderx'] = Variable<String>(orderx);
     map['hide_globally'] = Variable<bool>(hideGlobally);
+    map['deleted'] = Variable<int>(deleted);
     return map;
   }
 
@@ -342,6 +360,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       categoryId: Value(categoryId),
       orderx: Value(orderx),
       hideGlobally: Value(hideGlobally),
+      deleted: Value(deleted),
     );
   }
 
@@ -364,6 +383,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       categoryId: serializer.fromJson<BigInt>(json['categoryId']),
       orderx: serializer.fromJson<String>(json['orderx']),
       hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
+      deleted: serializer.fromJson<int>(json['deleted']),
     );
   }
   @override
@@ -385,6 +405,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       'categoryId': serializer.toJson<BigInt>(categoryId),
       'orderx': serializer.toJson<String>(orderx),
       'hideGlobally': serializer.toJson<bool>(hideGlobally),
+      'deleted': serializer.toJson<int>(deleted),
     };
   }
 
@@ -403,7 +424,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           String? errorMsg,
           BigInt? categoryId,
           String? orderx,
-          bool? hideGlobally}) =>
+          bool? hideGlobally,
+          int? deleted}) =>
       FeedEntity(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -420,6 +442,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
         categoryId: categoryId ?? this.categoryId,
         orderx: orderx ?? this.orderx,
         hideGlobally: hideGlobally ?? this.hideGlobally,
+        deleted: deleted ?? this.deleted,
       );
   FeedEntity copyWithCompanion(FeedsTableCompanion data) {
     return FeedEntity(
@@ -446,6 +469,7 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       hideGlobally: data.hideGlobally.present
           ? data.hideGlobally.value
           : this.hideGlobally,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
     );
   }
 
@@ -466,7 +490,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           ..write('errorMsg: $errorMsg, ')
           ..write('categoryId: $categoryId, ')
           ..write('orderx: $orderx, ')
-          ..write('hideGlobally: $hideGlobally')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
@@ -487,7 +512,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
       errorMsg,
       categoryId,
       orderx,
-      hideGlobally);
+      hideGlobally,
+      deleted);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -506,7 +532,8 @@ class FeedEntity extends DataClass implements Insertable<FeedEntity> {
           other.errorMsg == this.errorMsg &&
           other.categoryId == this.categoryId &&
           other.orderx == this.orderx &&
-          other.hideGlobally == this.hideGlobally);
+          other.hideGlobally == this.hideGlobally &&
+          other.deleted == this.deleted);
 }
 
 class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
@@ -525,6 +552,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
   final Value<BigInt> categoryId;
   final Value<String> orderx;
   final Value<bool> hideGlobally;
+  final Value<int> deleted;
   const FeedsTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -541,6 +569,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.categoryId = const Value.absent(),
     this.orderx = const Value.absent(),
     this.hideGlobally = const Value.absent(),
+    this.deleted = const Value.absent(),
   });
   FeedsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -558,6 +587,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     this.categoryId = const Value.absent(),
     this.orderx = const Value.absent(),
     this.hideGlobally = const Value.absent(),
+    this.deleted = const Value.absent(),
   })  : userId = Value(userId),
         feedUrl = Value(feedUrl),
         siteUrl = Value(siteUrl),
@@ -578,6 +608,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     Expression<BigInt>? categoryId,
     Expression<String>? orderx,
     Expression<bool>? hideGlobally,
+    Expression<int>? deleted,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -595,6 +626,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       if (categoryId != null) 'category_id': categoryId,
       if (orderx != null) 'orderx': orderx,
       if (hideGlobally != null) 'hide_globally': hideGlobally,
+      if (deleted != null) 'deleted': deleted,
     });
   }
 
@@ -613,7 +645,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       Value<String>? errorMsg,
       Value<BigInt>? categoryId,
       Value<String>? orderx,
-      Value<bool>? hideGlobally}) {
+      Value<bool>? hideGlobally,
+      Value<int>? deleted}) {
     return FeedsTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -630,6 +663,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
       categoryId: categoryId ?? this.categoryId,
       orderx: orderx ?? this.orderx,
       hideGlobally: hideGlobally ?? this.hideGlobally,
+      deleted: deleted ?? this.deleted,
     );
   }
 
@@ -681,6 +715,9 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
     if (hideGlobally.present) {
       map['hide_globally'] = Variable<bool>(hideGlobally.value);
     }
+    if (deleted.present) {
+      map['deleted'] = Variable<int>(deleted.value);
+    }
     return map;
   }
 
@@ -701,7 +738,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedEntity> {
           ..write('errorMsg: $errorMsg, ')
           ..write('categoryId: $categoryId, ')
           ..write('orderx: $orderx, ')
-          ..write('hideGlobally: $hideGlobally')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('deleted: $deleted')
           ..write(')'))
         .toString();
   }
@@ -2957,6 +2995,7 @@ typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> categoryId,
   Value<String> orderx,
   Value<bool> hideGlobally,
+  Value<int> deleted,
 });
 typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> id,
@@ -2974,6 +3013,7 @@ typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<BigInt> categoryId,
   Value<String> orderx,
   Value<bool> hideGlobally,
+  Value<int> deleted,
 });
 
 class $$FeedsTableTableFilterComposer
@@ -3031,6 +3071,9 @@ class $$FeedsTableTableFilterComposer
 
   ColumnFilters<bool> get hideGlobally => $composableBuilder(
       column: $table.hideGlobally, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get deleted => $composableBuilder(
+      column: $table.deleted, builder: (column) => ColumnFilters(column));
 }
 
 class $$FeedsTableTableOrderingComposer
@@ -3089,6 +3132,9 @@ class $$FeedsTableTableOrderingComposer
   ColumnOrderings<bool> get hideGlobally => $composableBuilder(
       column: $table.hideGlobally,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get deleted => $composableBuilder(
+      column: $table.deleted, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FeedsTableTableAnnotationComposer
@@ -3144,6 +3190,9 @@ class $$FeedsTableTableAnnotationComposer
 
   GeneratedColumn<bool> get hideGlobally => $composableBuilder(
       column: $table.hideGlobally, builder: (column) => column);
+
+  GeneratedColumn<int> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
 }
 
 class $$FeedsTableTableTableManager extends RootTableManager<
@@ -3184,6 +3233,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<BigInt> categoryId = const Value.absent(),
             Value<String> orderx = const Value.absent(),
             Value<bool> hideGlobally = const Value.absent(),
+            Value<int> deleted = const Value.absent(),
           }) =>
               FeedsTableCompanion(
             id: id,
@@ -3201,6 +3251,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             categoryId: categoryId,
             orderx: orderx,
             hideGlobally: hideGlobally,
+            deleted: deleted,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -3218,6 +3269,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<BigInt> categoryId = const Value.absent(),
             Value<String> orderx = const Value.absent(),
             Value<bool> hideGlobally = const Value.absent(),
+            Value<int> deleted = const Value.absent(),
           }) =>
               FeedsTableCompanion.insert(
             id: id,
@@ -3235,6 +3287,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             categoryId: categoryId,
             orderx: orderx,
             hideGlobally: hideGlobally,
+            deleted: deleted,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
