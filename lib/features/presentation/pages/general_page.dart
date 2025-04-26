@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupertinox_list_tile.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_list_tile.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/server_picker.dart';
 
@@ -52,7 +52,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                   color: Colors.white,
                 ),
                 child: Column(children: [
-                  CupertinoxListTile.chevronUpDown(
+                  CupxListTile.chevronUpDown(
                       icon: Svgicons.book,
                       title: '服务器URL',
                       onTap: () {
@@ -64,7 +64,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                     child: SpacerDivider(
                       thickness: 0.5, spacing: 1, indent: 0,),
                   ),
-                  CupertinoxListTile.chevron(
+                  CupxListTile.chevron(
                       icon: Svgicons.ban, title: '令牌'
                   ),
                 ],),

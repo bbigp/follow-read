@@ -8,7 +8,7 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupertinox_sliding_segmented_control.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
@@ -133,7 +133,7 @@ class FeedSettingsSheet extends ConsumerWidget {
         const SizedBox(height: 6,),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: CupertinoxSlidingSegmentedControl.big(
+          child: CupxSlidingSegmentedControl.big(
             groupValue: switch(tile.orderx) {
               Frc.orderxPublishedAt => '发布时间',
               Frc.orderxCreatedAt => '添加时间',

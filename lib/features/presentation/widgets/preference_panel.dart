@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 
 import '../../../config/theme.dart';
-import 'components/cupertinox_list_tile.dart';
+import 'components/cupx_list_tile.dart';
 
 class PreferencePanel extends StatelessWidget {
 
@@ -31,7 +31,7 @@ class PreferencePanel extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
-          return CupertinoxListTile.sswitch(
+          return CupxListTile.sswitch(
             icon: item.icon, title: item.label, value: item.value,
             onChanged: item.onChanged,
           );

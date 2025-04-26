@@ -8,17 +8,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
-import 'cupertinox_switch.dart';
+import 'cupx_switch.dart';
 
-class CupertinoxListTile extends StatefulWidget {
+class CupxListTile extends StatefulWidget {
 
-  factory CupertinoxListTile.chevronUpDown({
+  factory CupxListTile.chevronUpDown({
     FutureOr<void> Function()? onTap,
     required String icon,
     required String title,
     String additionalInfo = "",
   }) {
-    return CupertinoxListTile(
+    return CupxListTile(
         title: title,
         icon: icon,
         onTap: onTap,
@@ -27,12 +27,12 @@ class CupertinoxListTile extends StatefulWidget {
     );
   }
 
-  factory CupertinoxListTile.chevron({
+  factory CupxListTile.chevron({
     FutureOr<void> Function()? onTap,
     required String icon,
     required String title,
   }) {
-    return CupertinoxListTile(
+    return CupxListTile(
       title: title,
       icon: icon,
       onTap: onTap,
@@ -40,16 +40,16 @@ class CupertinoxListTile extends StatefulWidget {
     );
   }
 
-  factory CupertinoxListTile.sswitch({
+  factory CupxListTile.sswitch({
     ValueChanged<bool>? onChanged,
     required String icon,
     required String title,
     bool value = false,
   }) {
-    return CupertinoxListTile(
+    return CupxListTile(
       title: title,
       icon: icon,
-      trailing: CupertinoxSwitch(value: value, onChanged: onChanged,),
+      trailing: CupxSwitch(value: value, onChanged: onChanged,),
     );
   }
 
@@ -62,7 +62,7 @@ class CupertinoxListTile extends StatefulWidget {
   final Widget? trailing;
   final Color? backgroundColorActivated;//点击之后的背景颜色
 
-  const CupertinoxListTile({
+  const CupxListTile({
     super.key,
     required this.title,
     required this.icon,
@@ -75,10 +75,10 @@ class CupertinoxListTile extends StatefulWidget {
   });
 
   @override
-  State<CupertinoxListTile> createState() => _CupertinoxListTileState();
+  State<CupxListTile> createState() => _CupxListTileState();
 }
 
-class _CupertinoxListTileState extends State<CupertinoxListTile> {
+class _CupxListTileState extends State<CupxListTile> {
 
   bool _tapped = false;
 

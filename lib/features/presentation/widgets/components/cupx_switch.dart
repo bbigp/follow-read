@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/theme.dart';
 
-class CupertinoxSwitch extends StatelessWidget {
+class CupxSwitch extends StatelessWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
 
-  const CupertinoxSwitch({super.key, required this.value, required this.onChanged});
+  const CupxSwitch({super.key, required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

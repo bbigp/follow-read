@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
-class CupertinoxSlidingSegmentedControl extends StatelessWidget {
+class CupxSlidingSegmentedControl extends StatelessWidget {
 
   final String groupValue;
   final ValueChanged<String?> onValueChanged;
@@ -16,7 +16,7 @@ class CupertinoxSlidingSegmentedControl extends StatelessWidget {
   final BorderRadiusGeometry? segmentedBorderRadius;
   final double trackPadding;
 
-  const CupertinoxSlidingSegmentedControl({
+  const CupxSlidingSegmentedControl({
     super.key,
     required this.groupValue,
     required this.onValueChanged,
@@ -28,12 +28,12 @@ class CupertinoxSlidingSegmentedControl extends StatelessWidget {
     this.trackPadding = 2,
   });
 
-  factory CupertinoxSlidingSegmentedControl.big({
+  factory CupxSlidingSegmentedControl.big({
     required String groupValue,
     required ValueChanged<String?> onValueChanged,
     required List<String> children,
   }) {
-    return CupertinoxSlidingSegmentedControl(
+    return CupxSlidingSegmentedControl(
       groupValue: groupValue,
       onValueChanged: onValueChanged,
       children: children,

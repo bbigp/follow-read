@@ -11,7 +11,7 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/advanced_view.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupertinox_sliding_segmented_control.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 
 import '../../../config/icons.dart';
@@ -101,7 +101,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
                     ),
                     child: Column(children: [
                       const SizedBox(height: 4,),
-                      CupertinoxSlidingSegmentedControl(
+                      CupxSlidingSegmentedControl(
                         groupValue: _selectedSegment,
                         onValueChanged: (value) {
                           if (value != null) {
