@@ -8,6 +8,7 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupertinox_sliding_segmented_control.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
@@ -132,18 +133,21 @@ class FeedSettingsSheet extends ConsumerWidget {
         const SizedBox(height: 6,),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: TwoTabSwitch(
-            leftLabel: '发布时间',
-            leftValue: Frc.orderxPublishedAt,
-            rightLabel: '添加时间',
-            rightValue: Frc.orderxCreatedAt,
-            selectedValue: tile.orderx,
-            onChanged: (v) {
+          child: CupertinoxSlidingSegmentedControl.big(
+            groupValue: switch(tile.orderx) {
+              Frc.orderxPublishedAt => '发布时间',
+              Frc.orderxCreatedAt => '添加时间',
+              _ => '发布时间',
+            },
+            onValueChanged: (value) {
+              var v = switch(value) {
+                '发布时间' => Frc.orderxPublishedAt,
+                '添加时间' => Frc.orderxCreatedAt,
+                _ => Frc.orderxPublishedAt,
+              };
               ref.read(tileProvider(pid).notifier).saveShow(orderx: v);
             },
-            borderRadius: 14,
-            selectedBorderRadius: 10,
-            height: 40,
+            children: ['发布时间', '添加时间'],
           ),
         ),
         const SizedBox(height: 16,),

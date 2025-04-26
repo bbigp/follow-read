@@ -1,10 +1,11 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/features/presentation/widgets/modal_tile.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupertinox_list_tile.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/server_picker.dart';
 
@@ -51,30 +52,20 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                   color: Colors.white,
                 ),
                 child: Column(children: [
-                  ModalTile(Svgicons.book, '服务器URL', onTap: () {
-                    OpenModal.open(context, ServerPicker(), scrollable: true);
-                  }),
+                  CupertinoxListTile.chevronUpDown(
+                      icon: Svgicons.book,
+                      title: '服务器URL',
+                      onTap: () {
+                        OpenModal.open(context, ServerPicker(), scrollable: true);
+                      },
+                  ),
                   Container(
                     padding: EdgeInsets.only(left: 16 + 24 + 12, right: 12),
                     child: SpacerDivider(
                       thickness: 0.5, spacing: 1, indent: 0,),
                   ),
-                  Row(
-                    children: [
-                      SizedBox(width: 16, height: 36,),
-                      SvgPicture.asset(Svgicons.ban, width: 24, height: 24,),
-                      SizedBox(width: 12,),
-                      Expanded(child: Text('令牌', style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        height: 1.33,
-                        color: AppTheme.black95,
-                      ),)),
-                      SizedBox(width: 4,),
-                      SvgPicture.asset(
-                        Svgicons.chevronRight, width: 20, height: 20,),
-                      SizedBox(width: 12,),
-                    ],
+                  CupertinoxListTile.chevron(
+                      icon: Svgicons.ban, title: '令牌'
                   ),
                 ],),
               ),),

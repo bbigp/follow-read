@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +11,7 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/advanced_view.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupertinox_sliding_segmented_control.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 
 import '../../../config/icons.dart';
@@ -99,15 +101,16 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
                     ),
                     child: Column(children: [
                       const SizedBox(height: 4,),
-                      TwoTabSwitch(leftLabel: 'Basic', leftValue: 'Basic',
-                        rightLabel: 'Advanced', rightValue: 'Advanced',
-                        selectedValue: _selectedSegment,
-                        onChanged: (v) {
-                          setState(() {
-                            _selectedSegment = v;
-                          });
+                      CupertinoxSlidingSegmentedControl(
+                        groupValue: _selectedSegment,
+                        onValueChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _selectedSegment = value;
+                            });
+                          }
                         },
-                        borderRadius: 10, selectedBorderRadius: 8, height: 36,
+                        children: ['Basic', 'Advanced'],
                       ),
                       const SizedBox(height: 12,),
                       const SizedBox(height: 4,),

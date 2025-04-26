@@ -11,6 +11,9 @@ class AppTextStyles {
   static const TextStyle text = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
   );
+  static const TextStyle text500 = TextStyle(
+    fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black95,
+  );
   //说明
   static const TextStyle caption = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
