@@ -11,6 +11,7 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/advanced_view.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 
@@ -171,9 +172,13 @@ class Bar extends StatelessWidget {
                   height: 1.29,
                   color: AppTheme.black95,
                 ),)),
-              DoneButton(onPressed: onPressed, enabled: enabled, width: 69, height: 36, textStyle: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
-              ), borderRadius: BorderRadius.circular(10),)
+              CupxButton.text('Done',
+                style: CupxButtonStyle.primary, size: Size(69, 36),
+                enabled: enabled, onPressed: onPressed,
+              ),
+              // DoneButton(onPressed: onPressed, enabled: enabled, width: 69, height: 36, textStyle: TextStyle(
+              //   fontSize: 15, fontWeight: FontWeight.w500, height: 1.33,
+              // ), borderRadius: BorderRadius.circular(10),)
             ],
           ),
         ),
