@@ -25,8 +25,10 @@ class CupxButtonStyle {
   final Color disabledColor;//禁用的背景色
   final TextStyle textStyle;
   final TextStyle disabledTextStyle;
+  final Size size;
 
   const CupxButtonStyle({
+    this.size = const Size(double.infinity, 40),
     this.borderRadius = const BorderRadius.all(Radius.circular(30)),
     this.color = Colors.blue,
     this.disabledColor = Colors.red,
@@ -34,12 +36,31 @@ class CupxButtonStyle {
     this.disabledTextStyle = AppTextStyles.hint500,
   });
 
-  static CupxButtonStyle primary = CupxButtonStyle(
+  static CupxButtonStyle primarySmail = CupxButtonStyle(
     borderRadius: BorderRadius.circular(10),
     color: AppTheme.black95,
     disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white500,
     disabledTextStyle: AppTextStyles.hint500,
+    size: Size(69, 36),
+  );
+
+  static CupxButtonStyle primaryMedium = CupxButtonStyle(
+    borderRadius: BorderRadius.circular(10),
+    color: AppTheme.black95,
+    disabledColor: AppTheme.black8,
+    textStyle: AppTextStyles.white500,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: Size(128, 44),
+  );
+
+  static CupxButtonStyle primaryLarge = CupxButtonStyle(
+    borderRadius: BorderRadius.circular(12),
+    color: AppTheme.black95,
+    disabledColor: AppTheme.black8,
+    textStyle: AppTextStyles.white17500,
+    disabledTextStyle: AppTextStyles.hint17500,
+    size: Size(double.infinity, 52),
   );
 
 }
@@ -51,7 +72,6 @@ class CupxButton extends StatefulWidget {
   final CupxButtonStyle style;
   final ButtonState buttonState;
   final String label;
-  final Size size;
 
   const CupxButton({
     super.key,
@@ -59,17 +79,18 @@ class CupxButton extends StatefulWidget {
     this.style = const CupxButtonStyle(),
     this.buttonState = ButtonState.enabled,
     this.label = "",
-    this.size = const Size(double.infinity, 40),
   });
   
   factory CupxButton.text(String text, {
     bool enabled = false,
     Future<void> Function()? onPressed,
     required CupxButtonStyle style,
-    required Size size,
   }) {
-    return CupxButton(buttonState: enabled ? ButtonState.enabled : ButtonState.disabled, label: text,
-        onPressed: onPressed, style: style, size: size,
+    return CupxButton(
+      buttonState: enabled ? ButtonState.enabled : ButtonState.disabled,
+      label: text,
+      onPressed: onPressed,
+      style: style,
     );  
   }
 
@@ -153,7 +174,7 @@ class _CupxButtonState extends State<CupxButton> with SingleTickerProviderStateM
       onTapCancel: enabled && !loading ? () => _animate(false) : null,
       onTap: _handlePress,
       child: SizedBox(
-        height: widget.size.height, width: widget.size.width,
+        height: widget.style.size.height, width: widget.style.size.width,
         child: FadeTransition(
           opacity: _opacityAnimation,
           child: DecoratedBox(

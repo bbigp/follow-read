@@ -67,6 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         //禁用自动返回箭头
+        surfaceTintColor: Colors.white,
         leading: IconButton(
             onPressed: () {
               ref.read(routerProvider).pushNamed(RouteNames.profile);

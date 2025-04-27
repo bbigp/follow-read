@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/new_url.dart';
 import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 
@@ -62,13 +63,17 @@ class ServerPicker extends ConsumerWidget {
               SmartModal.openSmartModal(context, NewUrl());
             }),
             const Spacer(),
-            DoneButton(onPressed: () async {
-              final temp = ref.read(_tempSelectedUrlProvider);
-              if (temp != null && temp != user.user.baseUrl) {
-                ref.read(userProvider.notifier).chooseUrl(temp);
-              }
-              Navigator.pop(context);
-            }, width: 128, enabled: ref.read(_tempSelectedUrlProvider) != null,),
+            CupxButton.text('Done',
+              style: CupxButtonStyle.primaryMedium,
+              enabled: ref.read(_tempSelectedUrlProvider) != null,
+                onPressed: () async {
+                  final temp = ref.read(_tempSelectedUrlProvider);
+                  if (temp != null && temp != user.user.baseUrl) {
+                    ref.read(userProvider.notifier).chooseUrl(temp);
+                  }
+                  Navigator.pop(context);
+                }
+            ),
             const SizedBox(width: 16,),
           ],
         ),

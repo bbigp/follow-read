@@ -32,6 +32,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
         appBar: AppBar(
           backgroundColor: AppTheme.black4,
           elevation: 0,
+          surfaceTintColor: AppTheme.black4,
           title: Text('设置', style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w500,

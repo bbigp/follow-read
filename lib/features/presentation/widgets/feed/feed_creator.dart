@@ -9,6 +9,7 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/feed_provider.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
 import 'package:follow_read/features/presentation/widgets/feed/unsubscribe_button.dart';
@@ -86,14 +87,17 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
         const SizedBox(height: 8,),
         const SizedBox(height: 8,),
         const SizedBox(height: 8,),
-        DoneButton(onPressed: () async {
-          final success = await ref.read(addFeedControllerProvider.notifier).save();
-          if (success) {
-            setState(() {
-              Navigator.of(context).pop();
-            });
-          }
-        }, height: 52, enabled: add.feed.feedUrl.isNotEmpty,),
+        CupxButton.text('Done',
+          style: CupxButtonStyle.primaryLarge,
+          enabled: add.feed.feedUrl.isNotEmpty, onPressed: () async {
+              final success = await ref.read(addFeedControllerProvider.notifier).save();
+              if (success) {
+                setState(() {
+                  Navigator.of(context).pop();
+                });
+              }
+            },
+        ),
         const SizedBox(height: 8,),
         Visibility(
           visible: add.feed.id != 0,
