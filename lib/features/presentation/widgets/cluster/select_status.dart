@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/done_button.dart';
 
 import '../../../../config/svgicons.dart';
@@ -50,11 +51,15 @@ class _SelectStatusState extends ConsumerState<SelectStatus> {
         setState(() {});
       },),
       const SizedBox(height: 16,),
-      Padding(padding: EdgeInsets.symmetric(horizontal: 16),
-          child: DoneButton(onPressed: () async {
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: CupxButton.text('Done', style: CupxButtonStyle.primaryLarge,
+          enabled: (_statuses ?? []).isNotEmpty,
+          onPressed: () async {
             ref.read(clusterProvider.notifier).update(statuses: _statuses);
             Navigator.of(context).pop();
-          }, height: 52, enabled: (_statuses ?? []).isNotEmpty,),
+          }
+        )
       ),
       const SizedBox(height: 21,),
     ],);

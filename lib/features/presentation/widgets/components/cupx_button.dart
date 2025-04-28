@@ -14,8 +14,44 @@ import 'package:follow_read/theme/text_styles.dart';
 
 enum ButtonState { enabled, disabled, loading }
 
-extension CupxButtonSize on Size{
-  static Size smallSize = const Size(double.infinity, 36);
+class CupxButtonSize {
+
+  final bool compact;
+  final double? height;
+  final double? width;
+  final double padding;
+
+  const CupxButtonSize({
+    this.compact = false, //宽度是包住组件就行
+    this.padding = 0,
+    this.width,
+    this.height,
+  });
+
+  CupxButtonSize copyWith({
+    bool? compact,
+    double? height,
+    double? width,
+    double? padding,
+  }) {
+    return CupxButtonSize(
+      compact: compact ?? this.compact,
+      height: height ?? this.height,
+      width: width ?? this.width,
+      padding: padding ?? this.padding,
+    );
+  }
+
+  static CupxButtonSize small = CupxButtonSize(height: 36, width: double.infinity,);
+
+  static CupxButtonSize smallCompact = CupxButtonSize(height: 36, compact: true, padding: 16);
+
+  static CupxButtonSize medium = CupxButtonSize(height: 44, width: double.infinity,);
+
+  static CupxButtonSize mediumCompact = CupxButtonSize(height: 44, compact: true, padding: 16);
+
+  static CupxButtonSize large = CupxButtonSize(height: 52, width: double.infinity,);
+
 }
 
 class CupxButtonStyle {
@@ -25,10 +61,10 @@ class CupxButtonStyle {
   final Color disabledColor;//禁用的背景色
   final TextStyle textStyle;
   final TextStyle disabledTextStyle;
-  final Size size;
+  final CupxButtonSize size;
 
   const CupxButtonStyle({
-    this.size = const Size(double.infinity, 40),
+    this.size = const CupxButtonSize(height: 0),
     this.borderRadius = const BorderRadius.all(Radius.circular(30)),
     this.color = Colors.blue,
     this.disabledColor = Colors.red,
@@ -36,22 +72,40 @@ class CupxButtonStyle {
     this.disabledTextStyle = AppTextStyles.hint500,
   });
 
-  static CupxButtonStyle primarySmail = CupxButtonStyle(
+  CupxButtonStyle copyWith({
+    BorderRadiusGeometry? borderRadius,
+    Color? color,
+    Color? disabledColor,
+    TextStyle? textStyle,
+    TextStyle? disabledTextStyle,
+    CupxButtonSize? size,
+  }) {
+    return CupxButtonStyle(
+      borderRadius: borderRadius ?? this.borderRadius,
+      color: color ?? this.color,
+      disabledColor: disabledColor ?? this.disabledColor,
+      textStyle: textStyle ?? this.textStyle,
+      disabledTextStyle: disabledTextStyle ?? this.disabledTextStyle,
+      size: size ?? this.size,
+    );
+  }
+
+  static CupxButtonStyle primarySmailCompact = CupxButtonStyle(
     borderRadius: BorderRadius.circular(10),
     color: AppTheme.black95,
     disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white500,
     disabledTextStyle: AppTextStyles.hint500,
-    size: Size(69, 36),
+    size: CupxButtonSize.smallCompact,
   );
 
-  static CupxButtonStyle primaryMedium = CupxButtonStyle(
+  static CupxButtonStyle primaryMediumCompact = CupxButtonStyle(
     borderRadius: BorderRadius.circular(10),
     color: AppTheme.black95,
     disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white500,
     disabledTextStyle: AppTextStyles.hint500,
-    size: Size(128, 44),
+    size: CupxButtonSize.mediumCompact,
   );
 
   static CupxButtonStyle primaryLarge = CupxButtonStyle(
@@ -60,7 +114,7 @@ class CupxButtonStyle {
     disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white17500,
     disabledTextStyle: AppTextStyles.hint17500,
-    size: Size(double.infinity, 52),
+    size: CupxButtonSize.large,
   );
 
 }
@@ -185,7 +239,13 @@ class _CupxButtonState extends State<CupxButton> with SingleTickerProviderStateM
             child: Center(
               child: loading
                   ? const CupertinoActivityIndicator(radius: 10)
-                  : Text(widget.label, style: textStyle,),
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                SizedBox(width: widget.style.size.padding,),
+                Text(widget.label, style: textStyle,),
+                SizedBox(width: widget.style.size.padding,),
+              ],),
             ),
           ),
         ),

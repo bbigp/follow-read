@@ -173,7 +173,7 @@ class Bar extends StatelessWidget {
                   color: AppTheme.black95,
                 ),)),
               CupxButton.text('Done',
-                style: CupxButtonStyle.primarySmail,
+                style: CupxButtonStyle.primarySmailCompact,
                 enabled: enabled, onPressed: onPressed,
               ),
               // DoneButton(onPressed: onPressed, enabled: enabled, width: 69, height: 36, textStyle: TextStyle(

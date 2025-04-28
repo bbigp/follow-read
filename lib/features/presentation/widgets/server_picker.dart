@@ -64,7 +64,8 @@ class ServerPicker extends ConsumerWidget {
             }),
             const Spacer(),
             CupxButton.text('Done',
-              style: CupxButtonStyle.primaryMedium,
+              style: CupxButtonStyle.primaryMediumCompact
+                  .copyWith(size: CupxButtonSize.mediumCompact.copyWith(padding: 45)),
               enabled: ref.read(_tempSelectedUrlProvider) != null,
                 onPressed: () async {
                   final temp = ref.read(_tempSelectedUrlProvider);
