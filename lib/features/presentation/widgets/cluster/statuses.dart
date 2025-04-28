@@ -64,7 +64,7 @@ class _StatusesState extends ConsumerState<Statuses> {
                   _isSelected = 'Off' != val;
                 });
                 if (!_isSelected!) {
-                  ref.read(clusterProvider.notifier).update(feedIds: []);
+                  ref.read(clusterProvider.notifier).update(statuses: []);
                 }
                 if (_isSelected!) {
                   OpenModal.open(context, SelectStatus(), scrollable: false);
