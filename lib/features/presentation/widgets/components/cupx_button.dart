@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
@@ -126,6 +127,7 @@ class CupxButton extends StatefulWidget {
   final CupxButtonStyle style;
   final ButtonState buttonState;
   final String label;
+  final String? icon;
 
   const CupxButton({
     super.key,
@@ -133,6 +135,7 @@ class CupxButton extends StatefulWidget {
     this.style = const CupxButtonStyle(),
     this.buttonState = ButtonState.enabled,
     this.label = "",
+    this.icon,
   });
   
   factory CupxButton.text(String text, {
@@ -146,6 +149,19 @@ class CupxButton extends StatefulWidget {
       onPressed: onPressed,
       style: style,
     );  
+  }
+
+  factory CupxButton.icon(String text, String icon, {
+    bool enabled = false,
+    Future<void> Function()? onPressed,
+    required CupxButtonStyle style,
+  }) {
+    return CupxButton(
+      buttonState: enabled ? ButtonState.enabled : ButtonState.disabled,
+      label: text, icon: icon,
+      onPressed: onPressed,
+      style: style,
+    );
   }
 
   @override
@@ -243,6 +259,10 @@ class _CupxButtonState extends State<CupxButton> with SingleTickerProviderStateM
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                 SizedBox(width: widget.style.size.padding,),
+                if (widget.icon case final String icon) ...<Widget>[
+                  SvgPicture.asset(icon, width: 20, height: 20,),
+                  const SizedBox(width: 8,),
+                ],
                 Text(widget.label, style: textStyle,),
                 SizedBox(width: widget.style.size.padding,),
               ],),
