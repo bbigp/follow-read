@@ -13,6 +13,15 @@ import 'package:follow_read/theme/text_styles.dart';
 //                 },
 //               ),
 
+
+CupxButtonSize smallButtonSize = CupxButtonSize(height: 36, width: double.infinity, borderRadius: BorderRadius.circular(10),);
+CupxButtonSize smallCompactButtonSize = CupxButtonSize(height: 36, compact: true, padding: 16, borderRadius: BorderRadius.circular(10),);
+CupxButtonSize mediumButtonSize = CupxButtonSize(height: 44, width: double.infinity, borderRadius: BorderRadius.circular(10),);
+CupxButtonSize mediumCompactButtonSize = CupxButtonSize(height: 44, compact: true, padding: 16, borderRadius: BorderRadius.circular(10),);
+CupxButtonSize largeButtonSize = CupxButtonSize(height: 52, width: double.infinity, borderRadius: BorderRadius.circular(12),);
+CupxButtonSize largeCompactButtonSize = CupxButtonSize(height: 52, compact: true, padding: 16, borderRadius: BorderRadius.circular(12),);
+
+
 enum ButtonState { enabled, disabled, loading }
 
 class CupxButtonSize {
@@ -21,12 +30,14 @@ class CupxButtonSize {
   final double? height;
   final double? width;
   final double padding;
+  final BorderRadiusGeometry? borderRadius;
 
   const CupxButtonSize({
     this.compact = false, //宽度是包住组件就行
     this.padding = 0,
     this.width,
     this.height,
+    this.borderRadius = const BorderRadius.all(Radius.circular(30)),
   });
 
   CupxButtonSize copyWith({
@@ -34,30 +45,21 @@ class CupxButtonSize {
     double? height,
     double? width,
     double? padding,
+    BorderRadiusGeometry? borderRadius,
   }) {
     return CupxButtonSize(
       compact: compact ?? this.compact,
       height: height ?? this.height,
       width: width ?? this.width,
       padding: padding ?? this.padding,
+      borderRadius: borderRadius ?? this.borderRadius,
     );
   }
-
-  static CupxButtonSize small = CupxButtonSize(height: 36, width: double.infinity,);
-
-  static CupxButtonSize smallCompact = CupxButtonSize(height: 36, compact: true, padding: 16);
-
-  static CupxButtonSize medium = CupxButtonSize(height: 44, width: double.infinity,);
-
-  static CupxButtonSize mediumCompact = CupxButtonSize(height: 44, compact: true, padding: 16);
-
-  static CupxButtonSize large = CupxButtonSize(height: 52, width: double.infinity,);
 
 }
 
 class CupxButtonStyle {
 
-  final BorderRadiusGeometry? borderRadius;
   final Color color;//正常背景色
   final Color disabledColor;//禁用的背景色
   final TextStyle textStyle;
@@ -66,7 +68,6 @@ class CupxButtonStyle {
 
   const CupxButtonStyle({
     this.size = const CupxButtonSize(height: 0),
-    this.borderRadius = const BorderRadius.all(Radius.circular(30)),
     this.color = Colors.blue,
     this.disabledColor = Colors.red,
     this.textStyle = AppTextStyles.white500,
@@ -74,7 +75,6 @@ class CupxButtonStyle {
   });
 
   CupxButtonStyle copyWith({
-    BorderRadiusGeometry? borderRadius,
     Color? color,
     Color? disabledColor,
     TextStyle? textStyle,
@@ -82,7 +82,6 @@ class CupxButtonStyle {
     CupxButtonSize? size,
   }) {
     return CupxButtonStyle(
-      borderRadius: borderRadius ?? this.borderRadius,
       color: color ?? this.color,
       disabledColor: disabledColor ?? this.disabledColor,
       textStyle: textStyle ?? this.textStyle,
@@ -92,30 +91,27 @@ class CupxButtonStyle {
   }
 
   static CupxButtonStyle primarySmailCompact = CupxButtonStyle(
-    borderRadius: BorderRadius.circular(10),
     color: AppTheme.black95,
     disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white500,
     disabledTextStyle: AppTextStyles.hint500,
-    size: CupxButtonSize.smallCompact,
+    size: smallCompactButtonSize,
   );
 
   static CupxButtonStyle primaryMediumCompact = CupxButtonStyle(
-    borderRadius: BorderRadius.circular(10),
     color: AppTheme.black95,
     disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white500,
     disabledTextStyle: AppTextStyles.hint500,
-    size: CupxButtonSize.mediumCompact,
+    size: mediumCompactButtonSize,
   );
 
   static CupxButtonStyle primaryLarge = CupxButtonStyle(
-    borderRadius: BorderRadius.circular(12),
     color: AppTheme.black95,
     disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white17500,
     disabledTextStyle: AppTextStyles.hint17500,
-    size: CupxButtonSize.large,
+    size: largeButtonSize,
   );
 
 }
@@ -249,7 +245,7 @@ class _CupxButtonState extends State<CupxButton> with SingleTickerProviderStateM
           opacity: _opacityAnimation,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: widget.style.borderRadius,
+              borderRadius: widget.style.size.borderRadius,
               color: backgroundColor,
             ),
             child: Center(

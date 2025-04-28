@@ -63,17 +63,16 @@ class ServerPicker extends ConsumerWidget {
             }),
             const Spacer(),
             CupxButton.text('Done',
-              style: CupxButtonStyle.primaryMediumCompact
-                  .copyWith(size: CupxButtonSize.mediumCompact.copyWith(padding: 45)),
-              enabled: ref.read(_tempSelectedUrlProvider) != null,
+                style: CupxButtonStyle.primaryMediumCompact.copyWith(
+                    size: mediumCompactButtonSize.copyWith(padding: 45)),
+                enabled: ref.read(_tempSelectedUrlProvider) != null,
                 onPressed: () async {
                   final temp = ref.read(_tempSelectedUrlProvider);
                   if (temp != null && temp != user.user.baseUrl) {
                     ref.read(userProvider.notifier).chooseUrl(temp);
                   }
                   Navigator.pop(context);
-                }
-            ),
+                }),
             const SizedBox(width: 16,),
           ],
         ),
