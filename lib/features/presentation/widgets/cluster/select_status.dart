@@ -6,7 +6,6 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
-import 'package:follow_read/features/presentation/widgets/done_button.dart';
 
 import '../../../../config/svgicons.dart';
 import '../../../../core/utils/logger.dart';

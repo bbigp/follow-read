@@ -10,7 +10,6 @@ import 'package:follow_read/features/presentation/providers/feed_provider.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
-import 'package:follow_read/features/presentation/widgets/done_button.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
 import 'package:follow_read/features/presentation/widgets/feed/unsubscribe_button.dart';
 import 'package:follow_read/features/presentation/widgets/input_field.dart';

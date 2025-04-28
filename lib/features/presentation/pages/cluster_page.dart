@@ -13,7 +13,6 @@ import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/advanced_view.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sliding_segmented_control.dart';
-import 'package:follow_read/features/presentation/widgets/done_button.dart';
 
 import '../../../config/icons.dart';
 import '../../../config/svgicons.dart';
