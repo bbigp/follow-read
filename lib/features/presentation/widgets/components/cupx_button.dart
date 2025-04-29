@@ -92,26 +92,80 @@ class CupxButtonStyle {
 
   static CupxButtonStyle primarySmailCompact = CupxButtonStyle(
     color: AppTheme.black95,
-    disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white500,
+    disabledColor: AppTheme.black8,
     disabledTextStyle: AppTextStyles.hint500,
     size: smallCompactButtonSize,
   );
 
   static CupxButtonStyle primaryMediumCompact = CupxButtonStyle(
     color: AppTheme.black95,
-    disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white500,
+    disabledColor: AppTheme.black8,
     disabledTextStyle: AppTextStyles.hint500,
     size: mediumCompactButtonSize,
   );
 
+  //主要颜色，黑色背景
   static CupxButtonStyle primaryLarge = CupxButtonStyle(
     color: AppTheme.black95,
-    disabledColor: AppTheme.black8,
     textStyle: AppTextStyles.white17500,
+    disabledColor: AppTheme.black8,
     disabledTextStyle: AppTextStyles.hint17500,
     size: largeButtonSize,
+  );
+
+  //次要颜色 灰色背景
+  static CupxButtonStyle secondarySmailCompact = CupxButtonStyle(
+    color: AppTheme.black4,
+    textStyle: AppTextStyles.text500,
+    disabledColor: AppTheme.black4,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: smallCompactButtonSize,
+  );
+
+  //透明色无框
+  static CupxButtonStyle ghostSmailCompact = CupxButtonStyle(
+    color: Colors.transparent,
+    textStyle: AppTextStyles.text500,
+    disabledColor: Colors.transparent,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: smallCompactButtonSize,
+  );
+
+  static CupxButtonStyle ghostMediumCompact = CupxButtonStyle(
+    color: Colors.transparent,
+    textStyle: AppTextStyles.text500,
+    disabledColor: Colors.transparent,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: mediumCompactButtonSize,
+  );
+
+  //透明描边
+  static CupxButtonStyle strokedSmailCompact = CupxButtonStyle(
+    //8黑色的边
+    color: Colors.transparent,
+    textStyle: AppTextStyles.text500,
+    disabledColor: AppTheme.black4,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: smallCompactButtonSize,
+  );
+
+  //红底红字
+  static CupxButtonStyle dangerSmailCompact = CupxButtonStyle(
+    color: AppTheme.red10,
+    textStyle: AppTextStyles.red500,
+    disabledColor: AppTheme.black4,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: smallCompactButtonSize,
+  );
+
+  static CupxButtonStyle dangerGhostSmailCompact = CupxButtonStyle(
+    color: Colors.transparent,
+    textStyle: AppTextStyles.red500,
+    disabledColor: Colors.transparent,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: smallCompactButtonSize,
   );
 
 }
@@ -124,6 +178,7 @@ class CupxButton extends StatefulWidget {
   final ButtonState buttonState;
   final String label;
   final String? icon;
+  final String? trailing;
 
   const CupxButton({
     super.key,
@@ -131,7 +186,7 @@ class CupxButton extends StatefulWidget {
     this.style = const CupxButtonStyle(),
     this.buttonState = ButtonState.enabled,
     this.label = "",
-    this.icon,
+    this.icon, this.trailing,
   });
   
   factory CupxButton.text(String text, {
@@ -147,14 +202,16 @@ class CupxButton extends StatefulWidget {
     );  
   }
 
-  factory CupxButton.icon(String text, String icon, {
+  factory CupxButton.icon(String text, {
     bool enabled = false,
     Future<void> Function()? onPressed,
     required CupxButtonStyle style,
+    String? trailing,
+    String? icon,
   }) {
     return CupxButton(
       buttonState: enabled ? ButtonState.enabled : ButtonState.disabled,
-      label: text, icon: icon,
+      label: text, icon: icon, trailing: trailing,
       onPressed: onPressed,
       style: style,
     );
@@ -254,13 +311,17 @@ class _CupxButtonState extends State<CupxButton> with SingleTickerProviderStateM
                   : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                SizedBox(width: widget.style.size.padding,),
-                if (widget.icon case final String icon) ...<Widget>[
-                  SvgPicture.asset(icon, width: 20, height: 20,),
-                  const SizedBox(width: 8,),
-                ],
-                Text(widget.label, style: textStyle,),
-                SizedBox(width: widget.style.size.padding,),
+                  SizedBox(width: widget.style.size.padding,),
+                  if (widget.icon case final String icon) ...<Widget>[
+                    SvgPicture.asset(icon, width: 20, height: 20,),
+                    const SizedBox(width: 8,),
+                  ],
+                  Text(widget.label, style: textStyle,),
+                  if (widget.trailing case final String trailing) ...<Widget>[
+                    SvgPicture.asset(trailing, width: 20, height: 20,),
+                    const SizedBox(width: 8,),
+                  ],
+                  SizedBox(width: widget.style.size.padding,),
               ],),
             ),
           ),

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/new_url.dart';
@@ -9,7 +10,6 @@ import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 
 import '../../../config/theme.dart';
 import '../providers/user_provider.dart';
-import 'add_text.dart';
 import 'circle_radio_tile.dart';
 import 'components/drag_handle.dart';
 
@@ -58,9 +58,13 @@ class ServerPicker extends ConsumerWidget {
         Row(
           children: [
             const SizedBox(width: 16,),
-            AddText('添加URL', onTap: (){
-              SmartModal.openSmartModal(context, NewUrl());
-            }),
+            CupxButton.icon('添加URL', icon: Svgicons.plusO,
+              style: CupxButtonStyle.ghostMediumCompact.copyWith(size: mediumCompactButtonSize.copyWith(padding: 8)),
+              enabled: true,
+              onPressed: () async {
+                SmartModal.openSmartModal(context, NewUrl());
+              },
+            ),
             const Spacer(),
             CupxButton.text('Done',
                 style: CupxButtonStyle.primaryMediumCompact.copyWith(
