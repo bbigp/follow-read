@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,7 +12,6 @@ import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
-import 'package:follow_read/features/presentation/widgets/two_tab_switch.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:follow_read/theme/text_styles.dart';
 

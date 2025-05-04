@@ -6,7 +6,6 @@ import 'package:follow_read/features/data/repositories/category_repository.dart'
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/providers/all_feeds_provider.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/entry_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';

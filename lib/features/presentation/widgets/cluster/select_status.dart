@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
-import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 
 import '../../../../config/svgicons.dart';
 import '../../../../core/utils/logger.dart';
@@ -30,7 +30,7 @@ class _SelectStatusState extends ConsumerState<SelectStatus> {
     _statuses ??= List<String>.from(statuses);
     return Column(children: [
       const SizedBox(height: 8,),
-      const ClosableBar(title: '选择状态'),
+      CupxSheetTitle.closeButton(title: '选择状态', left: false, right: true,),
       FilterCard(title: '未读', icon: Svgicons.markUnread, isSelected: (_statuses ?? []).contains('unread'), onTap: (){
         if ((_statuses ?? []).contains('unread')) {
           (_statuses ?? []).remove('unread');

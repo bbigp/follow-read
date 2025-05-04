@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
-import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 
 import '../../providers/feed_provider.dart';
 import '../../providers/folder_provider.dart';
@@ -27,7 +27,7 @@ class FolderSelector extends ConsumerWidget {
     final controller = ref.watch(addFeedControllerProvider);
     return Column(children: [
       const SizedBox(height: 8,),
-      const ClosableBar(title: '选择文件夹'),
+      CupxSheetTitle.closeButton(title: '选择文件夹', left: false, right: true,),
       CardView(margin: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
           child: ListView.builder(
           shrinkWrap: true,

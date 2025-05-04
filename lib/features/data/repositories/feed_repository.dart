@@ -9,7 +9,6 @@ import 'package:follow_read/features/domain/models/feed.dart';
 
 import '../../../core/utils/failure.dart';
 import '../../../core/utils/logger.dart';
-import '../../presentation/providers/feed_provider.dart';
 import '../datasources/api_client.dart';
 import '../datasources/local_data.dart';
 

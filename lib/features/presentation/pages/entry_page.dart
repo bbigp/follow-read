@@ -1,31 +1,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
-import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/alert_banner.dart';
-import 'package:follow_read/features/presentation/widgets/components/drag_handle.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
-import 'package:follow_read/features/presentation/widgets/feed_switch.dart';
 import 'package:follow_read/features/presentation/widgets/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
-import 'package:follow_read/features/presentation/widgets/two_tab_switch.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../../routes/app_route.dart';
-import '../../domain/models/feed.dart';
 import '../../domain/models/tile.dart';
 import '../providers/entry_page_provider.dart';
 import '../widgets/entry/skeleton_entry_item.dart';
-import '../widgets/feed_icon.dart';
 import '../widgets/spacer_divider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {

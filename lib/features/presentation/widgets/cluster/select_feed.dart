@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 
 import '../../../../config/svgicons.dart';
 import '../../../../config/theme.dart';
@@ -38,11 +40,19 @@ class _SelectFeedState extends ConsumerState<SelectFeed> {
       if (allFeedsAsync.isLoading) return SizedBox.shrink();
       List<Feed> feeds = allFeedsAsync.requireValue;
       return Column(children: [
-        Bar(title: '选择订阅源', enabled: _feedIds.isNotEmpty,
-          color: AppTheme.black4, onPressed: () async {
-            ref.read(clusterProvider.notifier).update(feedIds: _feedIds);
-            Navigator.pop(context);
-          },
+        CupxSheetTitle.button(
+          context,
+          color: AppTheme.black4, height: 48,
+          title: '选择订阅源',
+          leading: CupxSheetTitleCloseButton(),
+          button: CupxButton.text('Done',
+            style: CupxButtonStyle.primarySmailCompact,
+            enabled: _feedIds.isNotEmpty,
+            onPressed: () async {
+              ref.read(clusterProvider.notifier).update(feedIds: _feedIds);
+              Navigator.pop(context);
+            },
+          ),
         ),
         ListView.separated(shrinkWrap: true, physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 16),

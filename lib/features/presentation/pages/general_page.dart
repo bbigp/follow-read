@@ -1,11 +1,10 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_list_tile.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/server_picker.dart';
 
@@ -29,16 +28,13 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
   Widget build(BuildContext context) {
     final userAsync = ref.watch(userProvider);
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppTheme.black4,
-          elevation: 0,
-          surfaceTintColor: AppTheme.black4,
-          title: Text('设置', style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
-            height: 1.29,
-            color: AppTheme.black95,
-          ),),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(54),
+          child: CupxSheetTitle.closeButton(
+            color: AppTheme.black4, height: 54,
+            title: '设置',
+            leading: ChevronLeftCloseButton(),
+          ),
         ),
         body: userAsync.isLoading ? SizedBox.shrink() : Container(
           color: AppTheme.black4,

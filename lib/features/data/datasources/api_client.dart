@@ -8,7 +8,6 @@ import 'package:follow_read/features/data/models/entry_page_response.dart';
 
 import '../../../core/utils/failure.dart';
 import '../../../core/utils/follow_request.dart';
-import '../../presentation/providers/feed_provider.dart';
 import '../models/feed_counter_response.dart';
 import '../models/feed_response.dart';
 import '../models/user_response.dart';

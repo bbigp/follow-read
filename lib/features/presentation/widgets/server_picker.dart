@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/features/presentation/widgets/closable_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/new_url.dart';
 import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
@@ -11,6 +10,7 @@ import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 import '../../../config/theme.dart';
 import '../providers/user_provider.dart';
 import 'circle_radio_tile.dart';
+import 'components/cupx_sheet_title.dart';
 import 'components/drag_handle.dart';
 
 class ServerPicker extends ConsumerWidget {
@@ -29,7 +29,7 @@ class ServerPicker extends ConsumerWidget {
     return Column(
       children: [
         const DragHandle(),
-        const ClosableBar(title: '选择服务器URL'),
+        CupxSheetTitle.closeButton(title: '选择服务器URL', left: false, right: true,),
         const SizedBox(height: 8),
         Container(
             decoration: BoxDecoration(
