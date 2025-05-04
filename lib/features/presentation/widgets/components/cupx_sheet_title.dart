@@ -29,8 +29,8 @@ class CupxSheetTitle extends StatefulWidget {
   factory CupxSheetTitle.closeButton({
     required String title,
     Widget? leading,
-    Color? color,
-    double? height,
+    Color color = Colors.transparent,
+    double height = 44,
     bool left = true, bool right = false,
   }){
     return CupxSheetTitle(
@@ -45,8 +45,8 @@ class CupxSheetTitle extends StatefulWidget {
     required String title,
     required CupxButton button,
     Widget? leading,
-    Color? color,
-    double? height,
+    Color color = Colors.transparent,
+    double height = 44,
   }) {
     return CupxSheetTitle(
       color: color, height: height,
@@ -110,28 +110,20 @@ class _CupxSheetTitleState extends State<CupxSheetTitle> {
         color: widget.color, height: widget.height,
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           const SizedBox(width: 12,),
-          const SizedBox(width: 4,),
-
-          if (widget.leading case final Widget leading) ...<Widget>[
-            KeyedSubtree(key: _leadingKey, child: leading),
-            const SizedBox(width: 4,),
-          ],
-
+          if (widget.leading case final Widget leading) KeyedSubtree(key: _leadingKey, child: leading),
           if (leftGap > 0) SizedBox(width: leftGap),
 
-          Expanded(child: Text(widget.title,
+          Expanded(child: Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: Text(widget.title,
             maxLines: 1, overflow: TextOverflow.ellipsis,
             style: AppTextStyles.text17500,
             textAlign: shouldCenter ? TextAlign.center : TextAlign.start,
-          )),
+          ),)),
 
           if (rightGap > 0) SizedBox(width: rightGap),
-
-          if (widget.trailing case final Widget trailing) ...<Widget>[
-            const SizedBox(width: 4,),
-            KeyedSubtree(key: _trailingKey, child: trailing),
-            const SizedBox(width: 4,),
-          ],
+          if (widget.trailing case final Widget trailing) KeyedSubtree(key: _trailingKey, child: Padding(
+              padding: EdgeInsets.all(4),
+              child: trailing,
+          )),
           const SizedBox(width: 12,)
         ],),
       )
@@ -151,6 +143,7 @@ class CupxSheetTitleCloseButton extends StatelessWidget {
         Navigator.pop(context);
       },
       child: Container(
+        margin: EdgeInsets.all(4),
         width: 30, height: 30,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),
@@ -175,7 +168,10 @@ class ChevronLeftCloseButton extends StatelessWidget {
       onTap: (){
         Navigator.pop(context);
       },
-      child: SvgPicture.asset(Svgicons.arrowLeft, width: 24, height: 24,),
+      child: Container(
+        padding: EdgeInsets.all(4),
+        child: SvgPicture.asset(Svgicons.arrowLeft, width: 24, height: 24, fit: BoxFit.none,),
+      ),
     );
   }
 
