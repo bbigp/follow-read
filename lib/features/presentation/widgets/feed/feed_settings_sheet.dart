@@ -62,34 +62,34 @@ class FeedSettingsSheet extends ConsumerWidget {
               ),
               Expanded(
                   child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    tile.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      height: 1.33,
-                      color: AppTheme.black95,
-                    ),
-                  ),
-                  if (tile.type == TileType.feed)
-                    Text(
-                      tile.feedUrl,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        height: 1.38,
-                        color: AppTheme.black50,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        tile.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          height: 1.33,
+                          color: AppTheme.black95,
+                        ),
                       ),
-                    ),
-                ],
-              )),
+                      if (tile.type == TileType.feed)
+                        Text(
+                          tile.feedUrl,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            height: 1.38,
+                            color: AppTheme.black50,
+                          ),
+                        ),
+                    ],
+                  )),
               SizedBox(
                 width: 8,
               ),
@@ -157,11 +157,11 @@ class FeedSettingsSheet extends ConsumerWidget {
         const SizedBox(height: 16,),
         const SizedBox(height: 8,),
         Visibility(
-          visible: tile.type == TileType.feed,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Website', style: AppTextStyles.caption500,),
-          )
+            visible: tile.type == TileType.feed,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('Website', style: AppTextStyles.caption500,),
+            )
         ),
         Visibility(
           visible: tile.type == TileType.feed,
