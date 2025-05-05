@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/unread_count_notifier.dart';
+import 'package:follow_read/features/presentation/widgets/components/alert_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
@@ -175,7 +176,7 @@ class _FeedItem extends ConsumerWidget {
             ContextMenuEntry.divider(),
             ContextMenuEntry(
                 onTap: (){
-
+                  OpenModal.open(context, AlertSheet(), scrollable: false, hasMargin: true);
                 },
                 child: ContextMenu(label: '取消订阅', icon: Svgicons.reduceO, textStyle: AppTextStyles.red,)
             )
