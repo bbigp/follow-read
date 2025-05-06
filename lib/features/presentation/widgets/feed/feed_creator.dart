@@ -8,10 +8,10 @@ import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/feed_provider.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/features/presentation/widgets/components/alert_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
-import 'package:follow_read/features/presentation/widgets/feed/unsubscribe_button.dart';
 import 'package:follow_read/features/presentation/widgets/input_field.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 
@@ -20,8 +20,9 @@ import '../../../../theme/text_styles.dart';
 class FeedCreator extends ConsumerStatefulWidget {
 
   final int id;
+  final bool shouldPop;
 
-  const FeedCreator({super.key, this.id = 0,});
+  const FeedCreator({super.key, this.id = 0, this.shouldPop = false,});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _FeedCreatorState();
@@ -101,16 +102,23 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
           const SizedBox(height: 8,),
           Visibility(
             visible: add.feed.id != 0,
-            child: UnsubscribeButton(onPressed: () async {
-              var success = await ref.read(feedRepositoryProvider).removeFeed(add.feed.id);
-              if (success) {
-                final _ = ref.refresh(homePageProvider);
-                setState(() {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                });
-              }
-            },),
+            child: CupxButton.icon('取消订阅', icon: Svgicons.reduceO,
+              style: CupxButtonStyle.dangerGhostMedium,
+              enabled: true,
+              onPressed: () async {
+                OpenModal.open(context, AlertSheet(
+                  title: "确认取消订阅?",
+                  msg: "该订阅将从所有文件夹和列表中删除",
+                  onPressed: () async {
+                    var success = await ref.read(feedRepositoryProvider).removeFeed(add.feed.id);
+                    if (success) {
+                      final _ = ref.refresh(homePageProvider);
+                      OpenModal.closeMultiple(context, count: widget.shouldPop ? 3 : 2);
+                    }
+                  },
+                ), scrollable: false, hasMargin: true);
+              },
+            ),
           ),
           const SizedBox(height: 8,),
           const SizedBox(height: 21,),

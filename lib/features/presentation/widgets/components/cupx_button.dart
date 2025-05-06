@@ -176,6 +176,14 @@ class CupxButtonStyle {
     size: smallCompactButtonSize,
   );
 
+  static CupxButtonStyle dangerGhostMedium = CupxButtonStyle(
+    color: Colors.transparent,
+    textStyle: AppTextStyles.red500,
+    disabledColor: Colors.transparent,
+    disabledTextStyle: AppTextStyles.hint500,
+    size: mediumButtonSize,
+  );
+
 }
 
 

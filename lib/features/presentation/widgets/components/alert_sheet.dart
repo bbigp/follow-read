@@ -10,7 +10,12 @@ import 'package:follow_read/theme/text_styles.dart';
 
 class AlertSheet extends StatelessWidget {
 
-  const AlertSheet({super.key});
+  final String title;
+  final String msg;
+  final Future<void> Function()? onPressed;
+
+
+  const AlertSheet({super.key, required this.title, this.msg = "", this.onPressed,});
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +26,14 @@ class AlertSheet extends StatelessWidget {
         Row(children: [
           SvgPicture.asset(Svgicons.alertFill, width: 20, height: 20, fit: BoxFit.none,),
           const SizedBox(width: 12,),
-          Expanded(child: Text('Delete folder?', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500,)),
+          Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500,)),
           const SizedBox(width: 12,),
           const CupxSheetTitleCloseButton(),
         ],),
         const SizedBox(height: 12,),
-        Text('Are you sure you want to delete this folder? Feeds contained in the folder will be deleted together.', style: AppTextStyles.caption,),
+        if (msg.isNotEmpty) Text(msg, style: AppTextStyles.caption,),
         const SizedBox(height: 24,),
-        CupxButton.text('确认', style: CupxButtonStyle.dangerLarge, enabled: true,),
+        CupxButton.text('确认', style: CupxButtonStyle.dangerLarge, enabled: true, onPressed: onPressed,),
         const SizedBox(height: 24,),
       ],),
     );

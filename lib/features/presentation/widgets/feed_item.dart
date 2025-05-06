@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/unread_count_notifier.dart';
 import 'package:follow_read/features/presentation/widgets/components/alert_sheet.dart';
@@ -176,7 +177,17 @@ class _FeedItem extends ConsumerWidget {
             ContextMenuEntry.divider(),
             ContextMenuEntry(
                 onTap: (){
-                  OpenModal.open(context, AlertSheet(), scrollable: false, hasMargin: true);
+                  OpenModal.open(context, AlertSheet(
+                    title: "确认取消订阅?",
+                    msg: "该订阅将从所有文件夹和列表中删除",
+                    onPressed: () async {
+                      var success = await ref.read(feedRepositoryProvider).removeFeed(feed.id);
+                      if (success) {
+                        final _ = ref.refresh(homePageProvider);
+                        Navigator.of(context).pop();
+                      }
+                    },
+                  ), scrollable: false, hasMargin: true);
                 },
                 child: ContextMenu(label: '取消订阅', icon: Svgicons.reduceO, textStyle: AppTextStyles.red,)
             )
