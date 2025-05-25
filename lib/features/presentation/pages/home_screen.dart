@@ -11,10 +11,12 @@ import 'package:follow_read/features/presentation/widgets/components/dashed_line
 import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
 import 'package:follow_read/features/presentation/widgets/components/sync_icon.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/widgets/home/cluster_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/feed_stream.dart';
 import 'package:follow_read/features/presentation/widgets/home/group_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/loading_page.dart';
+import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:follow_read/features/presentation/widgets/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
 
@@ -72,7 +74,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ref.read(routerProvider).pushNamed(RouteNames.profile);
         },),
         actions: [
-          PaddedSvgIcon(Svgicons.add,),
+          PaddedSvgIcon(Svgicons.add, onTap: (){
+            OpenModal.open(context, FeedCreator(), scrollable: false);
+          },),
           SyncIcon(),
           PaddedSvgIcon(Svgicons.more,),
         ],
