@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/recent_time.dart';
-import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 
 class ContextMenuWrapper extends StatefulWidget {
-  final Widget child;
-  final List<ContextMenuEntry> menuItems;
+  final Widget child; //长按组件
+  final List<ContextMenuEntry> menuItems; //弹出菜单
 
   const ContextMenuWrapper({
     super.key,
@@ -81,10 +81,10 @@ class _ContextMenuWrapperState extends State<ContextMenuWrapper> {
                   return InkWell(
                     onTap: () {
                       _hideOverlay();
-                      item.onTap?.call();
+                      item.getTap()?.call();
                       // 你也可以在这里加入具体的操作回调
                     },
-                    child: item.child,
+                    child: item.get(),
                   );
                 }).toList(),
               ),
@@ -112,59 +112,11 @@ class _ContextMenuWrapperState extends State<ContextMenuWrapper> {
   }
 }
 
-class ContextMenuEntry {
-  final Widget child;
-  final VoidCallback? onTap;
-
-  const ContextMenuEntry({
-    required this.child,
-    this.onTap,
-  });
-
-  static ContextMenuEntry divider(){
-    return const ContextMenuEntry(
-        child: SizedBox(
-          width: 16 + 160 + 8 + 20 + 16,
-          child: SpacerDivider(
-            thickness: 1,
-            spacing: 1,
-            indent: 0,
-          ),
-        ));
-  }
-
-}
 
 
-
-
-class LongPressMenuExample extends StatelessWidget {
-  const LongPressMenuExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Long Press Menu")),
-      body: Center(
-        child: ContextMenuWrapper(
-          menuItems: [
-            ContextMenuEntry(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text("操作一", style: TextStyle(fontSize: 16)),
-              )
-            ),
-            ContextMenuEntry(child: Divider(height: 1)),
-            ContextMenuEntry(child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text("操作二", style: TextStyle(fontSize: 16)),
-            )),
-          ],
-          child: RecentTime(label: '')
-        ),
-      ),
-    );
-  }
+abstract class ContextMenuEntry {
+  Widget get();
+  VoidCallback? getTap();
 }
 
 

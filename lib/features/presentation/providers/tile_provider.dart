@@ -65,7 +65,7 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
         if (!showAll && cluster.hideGlobally) {
           return Tile(type: type);
         }
-        final feeds = await _feedRepository.getFeeds(ids: cluster.feedIds);
+        final feeds = await _feedRepository.getFeeds(ids: cluster.feedIds, showAll: true);
         if (showAll) {
           return Tile(type: type, cluster: cluster, feeds: feeds);
         }
@@ -83,7 +83,7 @@ class TileNotifier extends AutoDisposeFamilyAsyncNotifier<Tile, String> {
           },
         );
         //判断分类是否是hide的
-        final categories = await _categoryRepository.getCategories();
+        final categories = await _categoryRepository.getCategories(showAll: false);
         List<Feed> needs = [];
         for (final category in categories) {
           if (!category.hideGlobally) {

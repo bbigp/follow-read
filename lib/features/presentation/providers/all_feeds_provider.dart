@@ -19,7 +19,7 @@ class AllFeedsNotifier extends AutoDisposeAsyncNotifier<List<Feed>> {
 
   @override
   FutureOr<List<Feed>> build() async {
-    return await _feedRepository.getFeeds();
+    return await _feedRepository.getFeeds(showAll: true);
   }
 
 }

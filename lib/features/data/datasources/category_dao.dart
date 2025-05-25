@@ -28,10 +28,10 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
     });
   }
 
-  Future<List<CategoryEntity>> getAll({bool? hideGlobally}) async {
+  Future<List<CategoryEntity>> getAll({bool showAll = false}) async {
     var query = select(categoriesTable);
-    if (hideGlobally != null) {
-      query = query..where((t) => t.hideGlobally.equals(hideGlobally));
+    if (!showAll) {
+      query = query..where((t) => t.hideGlobally.equals(showAll));
     }
     return await query.get();
   }

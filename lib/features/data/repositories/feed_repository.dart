@@ -36,7 +36,7 @@ class FeedRepository {
           await feedDao.bulkInsertWithTransaction(feedResponse.map((item) => item.toCompanion(baseUrl)).toList());
           final categories = feedResponse.map((item) => item.category).toSet().toList();
           await categoryDao.bulkInsertWithTransaction(categories.map((item) => item.toCompanion()).toList());
-          return Right(await getFeeds());
+          return Right(await getFeeds(showAll: true));
         });
   }
 
@@ -63,8 +63,8 @@ class FeedRepository {
     );
   }
 
-  Future<List<Feed>> getFeeds({bool? hideGlobally, List<int>? ids}) async {
-    final feeds = await feedDao.getAllFeeds(hideGlobally: hideGlobally, ids: ids);
+  Future<List<Feed>> getFeeds({required bool showAll, List<int>? ids}) async {
+    final feeds = await feedDao.getAllFeeds(showAll: showAll, ids: ids);
     logger.i('查询到本地feeds: ${feeds.length}');
     return feeds.map((e) => e.toModel()).toList();
   }

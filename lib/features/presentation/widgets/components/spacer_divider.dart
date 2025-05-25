@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:follow_read/config/theme.dart';
 
+///重开
 class SpacerDivider extends StatelessWidget {
   final Color color;
   final double thickness;//分割线粗细
@@ -9,7 +11,7 @@ class SpacerDivider extends StatelessWidget {
 
   const SpacerDivider({
     super.key,
-    this.color = const Color(0x14000000),//8%透明度的黑色
+    this.color = AppTheme.black8,//8%透明度的黑色
     this.thickness = 1,
     this.spacing = 32,
     this.indent = 12,

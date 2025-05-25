@@ -57,13 +57,13 @@ class AddFeedController extends _$AddFeedController {
       var success = await feedRepository.saveFeed(feed.feedUrl, folder.id);
       if (success) {
         ref.read(syncProvider.notifier).startSync();
-        final _ = ref.refresh(homePageProvider);
+        // final _ = ref.refresh(homePageProvider);
         return true;
       }
       return false;
     }
     var success = await feedRepository.updateFeed(feed.id, feed.title, folder.id);
-    final _ = ref.refresh(homePageProvider);
+    // final _ = ref.refresh(homePageProvider);
     final __ = ref.refresh(entriesProvier(PageUtils.pid(TileType.feed, feed.id)));
     return success;
   }

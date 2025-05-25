@@ -30,16 +30,14 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
   @override
   FutureOr<HomePageValue> build() async {
     logger.i('初始化home notifier');
-    bool showAll = await ref.watch(showAllProvider);
-    bool? hideGlobally = showAll ? null : false;
-
-    var tiles = await loadingTiles(hideGlobally);
-    var clusters = await _clusterRepository.getAll(hideGlobally: hideGlobally);
+    final user = await ref.watch(userProvider.future);
+    var tiles = await loadingTiles(user.showAll);
+    var clusters = await _clusterRepository.getAll(showAll: user.showAll);
     return HomePageValue(tiles: tiles, clusters: clusters);
   }
 
-  Future<List<Tile>> loadingTiles(bool? hideGlobally) async{
-    final feeds = await _feedRepository.getFeeds(hideGlobally: hideGlobally);
+  Future<List<Tile>> loadingTiles(bool showAll) async{
+    final feeds = await _feedRepository.getFeeds(showAll: showAll);
     final Map<int, List<Feed>> feedsMap = feeds.fold<Map<int, List<Feed>>>(
       {}, (map, feed) {
         final cid = feed.categoryId;
@@ -48,11 +46,15 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
         return map;
       },
     );
-    final categories = await _categoryRepository.getCategories(hideGlobally: hideGlobally);
+    final categories = await _categoryRepository.getCategories(showAll: showAll);
     List<Tile> tiles = [];
     for (final category in categories) {
       if (category.title != "All") {
-        tiles.add(Tile(type: TileType.folder, category: category, feeds: feedsMap[category.id] ?? []));
+        tiles.add(Tile(
+            type: TileType.folder,
+            category: category.copyWith(feeds: feedsMap[category.id] ?? []),
+            feeds: feedsMap[category.id] ?? []
+        ));
       }
     }
     final all = categories.firstWhere((c) => c.title == "All", orElse: () => Category.empty);
@@ -69,7 +71,7 @@ class HomeNotifier extends AutoDisposeAsyncNotifier<HomePageValue> {
     }
     final newList = List<Tile>.from(state.value!.tiles);
     final tile = state.value!.tiles[index];
-    newList[index] = tile.copyWith(expanded: !tile.expanded);
+    newList[index] = tile.copyWith(category: tile.category.copyWith(expanded: !tile.category.expanded));
     state = AsyncData(state.value!.copyWith(tiles: newList));
   }
 

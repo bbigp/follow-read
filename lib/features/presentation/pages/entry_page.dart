@@ -19,7 +19,7 @@ import '../../../routes/app_route.dart';
 import '../../domain/models/tile.dart';
 import '../providers/entry_page_provider.dart';
 import '../widgets/entry/skeleton_entry_item.dart';
-import '../widgets/spacer_divider.dart';
+import '../widgets/components/spacer_divider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int id;

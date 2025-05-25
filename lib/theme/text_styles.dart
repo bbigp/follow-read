@@ -10,13 +10,13 @@ class AppTextStyles {
 
   static const TextStyle text = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
-  );
+  ); //1.33高度是20
   static const TextStyle text500 = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black95,
   );
   static const TextStyle text17500 = TextStyle(
     fontSize: 17, fontWeight: FontWeight.w500, height: 1.29, color: AppTheme.black95,
-  );
+  );//height 22
   //说明
   static const TextStyle caption = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
@@ -35,8 +35,8 @@ class AppTextStyles {
   );
 
   static const TextStyle hint13500 = TextStyle(
-    fontSize: 13, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black25,
-  );
+    fontSize: 13, fontWeight: FontWeight.w500, height: 1.38, color: AppTheme.black25,
+  );// 18
 
   static const TextStyle red13 = TextStyle(
     fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.red,

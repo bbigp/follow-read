@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:follow_read/features/presentation/widgets/cluster/cluster_icon.dart';
 
-import '../../../../config/icons.dart';
+import '../../../../config/cluster_icons.dart';
 import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';
 import '../input_field.dart';
@@ -16,7 +18,7 @@ class BasicView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var cluster = ref.watch(clusterProvider);
-    List<String> icons = ClusterIcons.iconsPaths;
+    List<String> allIcons = ClusterIcons.iconMap.keys.toList();
     return Column(children: [
       Container(
         decoration: BoxDecoration(
@@ -31,7 +33,7 @@ class BasicView extends ConsumerWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(width: 1, color: AppTheme.black8),
             ),
-            child: Svgicon(cluster.svgIcon, size: 40, iconSize: 24, fit: BoxFit.none),
+            child: SizedBox(width: 40, height: 40, child: ClusterIcon(icon: cluster.icon, size: 24,),),
           ),
           const SizedBox(width: 12,),
           Expanded(child: InputField(onChanged: (v) {
@@ -55,24 +57,24 @@ class BasicView extends ConsumerWidget {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(), // 如果你希望外部控制滚动
           padding: EdgeInsets.symmetric(horizontal: 16),
-          itemCount: icons.length,
+          itemCount: allIcons.length,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 40, // 每个图标最大宽度（可根据需求调整）
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
           ),
           itemBuilder: (context, index) {
-            final icon = icons[index];
+            String icon = allIcons[index];
             return GestureDetector(
               onTap: () {
-                ref.read(clusterProvider.notifier).update(icon: ClusterIcons.name(icon));
+                ref.read(clusterProvider.notifier).update(icon: icon);
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: icon == cluster.svgIcon ? AppTheme.black8 : Colors.transparent,
+                  color: icon == cluster.icon ? AppTheme.black8 : Colors.transparent,
                   borderRadius: BorderRadius.circular(99),
                 ),
-                child: Svgicon(icon, size: 40, iconSize: 24, fit: BoxFit.none,),
+                child: SizedBox(width: 40, height: 40, child: ClusterIcon(icon: icon, size: 24,),),
               ),
             );
           },

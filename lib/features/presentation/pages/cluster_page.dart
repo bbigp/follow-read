@@ -13,7 +13,7 @@ import 'package:follow_read/features/presentation/widgets/components/cupx_button
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sliding_segmented_control.dart';
 
-import '../../../config/icons.dart';
+import '../../../config/cluster_icons.dart';
 import '../../../config/theme.dart';
 import '../widgets/cluster/basic_view.dart';
 
@@ -25,7 +25,7 @@ class ClusterNotifier extends AutoDisposeNotifier<Cluster> {
 
   late final _clusterRepository = ref.watch(clusterRepositoryProvider);
   @override
-  Cluster build() => Cluster(icon: ClusterIcons.name(ClusterIcons.menu));
+  Cluster build() => Cluster(icon: ClusterIcons.reverseIconsMap[ClusterIcons.list_bullet]!);
 
   void load(int id) async {
     final tile = await ref.read(tileProvider(PageUtils.pid(TileType.cluster, id)).future);
@@ -88,7 +88,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
                 enabled: cluster.name.isNotEmpty,
                 onPressed: () async {
                   ref.read(clusterProvider.notifier).save();
-                  final _ = ref.refresh(homePageProvider);
+                  // final _ = ref.refresh(homePageProvider);
                   Navigator.pop(context);
                 },
               ),

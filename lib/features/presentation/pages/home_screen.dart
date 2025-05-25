@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/widgets/feed/empty_feed_view.dart';
-import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
+import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
+import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
+import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
+import 'package:follow_read/features/presentation/widgets/components/sync_icon.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
-import 'package:follow_read/features/presentation/widgets/feed_item.dart';
-import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
-import 'package:follow_read/features/presentation/widgets/svgicon.dart';
+import 'package:follow_read/features/presentation/widgets/home/cluster_tile.dart';
+import 'package:follow_read/features/presentation/widgets/home/feed_stream.dart';
+import 'package:follow_read/features/presentation/widgets/home/group_tile.dart';
+import 'package:follow_read/features/presentation/widgets/home/loading_page.dart';
 import 'package:follow_read/features/presentation/widgets/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
 
-import '../../../config/svgicons.dart';
-import '../providers/sync_data_provider.dart';
-import '../widgets/cluster_item.dart';
-import '../widgets/home_group.dart';
-import '../widgets/open_modal.dart';
-
+///
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -61,24 +61,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ref.read(syncProvider.notifier).resetStatus();
       });
     }
+
+    if (pageValue.isLoading) {
+      return const LoadingPage();
+    }
+    final homeList = pageValue.requireValue;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        //禁用自动返回箭头
-        surfaceTintColor: Colors.white,
-        leading: IconButton(
-            onPressed: () {
-              ref.read(routerProvider).pushNamed(RouteNames.profile);
-            },
-            icon: const Icon(Icons.person)),
+      appBar: CupxAppBar(
+        leading: PaddedSvgIcon(Svgicons.user_fill, onTap: (){
+          ref.read(routerProvider).pushNamed(RouteNames.profile);
+        },),
         actions: [
-          InkWell(onTap: (){
-            OpenModal.open(context, FeedCreator(), scrollable: false);
-          }, child: Svgicon(Svgicons.add, size: 40, iconSize: 20, fit: BoxFit.none,),),
-          _buildRefreshButton(ref),
-          const SizedBox(width: 12),
+          PaddedSvgIcon(Svgicons.add,),
+          SyncIcon(),
+          PaddedSvgIcon(Svgicons.more,),
         ],
       ),
       body: RefreshIndicator(
@@ -86,78 +82,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: CustomScrollView(
           controller: _scrollController,
           slivers: [
+            SliverToBoxAdapter(child: SyncView(),),
             SliverToBoxAdapter(
-              child: SyncView(),
+              child: GroupTile(title: '智能视图', trailing: AddTrailing(onTap: () {
+                ref.read(routerProvider).pushNamed(RouteNames.cluster,);
+              })),
             ),
+            SliverList(delegate: SliverChildBuilderDelegate(
+              childCount: homeList.clusters.length,
+              (context, index) {
+                final cluster = homeList.clusters[index];
+                return ClusterTile(
+                  key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
+                  cluster: cluster,
+                );
+              },
+            )),
             SliverToBoxAdapter(
-              child: HomeGroup(title: '智能视图', rightIcon: Svgicons.plusO, onTap: (){
-                  ref.read(routerProvider).pushNamed(RouteNames.cluster,);
-              },),
-            ),
-            if (!pageValue.isLoading)
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final cluster = pageValue.value!.clusters[index];
-                    return ClusterItem(
-                      key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
-                      cluster: cluster,
-                    );
-                  },
-                  childCount: pageValue.value!.clusters.length,
+              child: Padding(
+                padding: EdgeInsets.only(top: 12, bottom: 8, left: 16, right: 16),
+                child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0,
+                  color: AppTheme.black8,
                 ),
               ),
-            SliverToBoxAdapter(
-              child: SpacerDivider(
-                thickness: 0.2,
-                spacing: 32,
-                color: AppTheme.black8,
-              ),
             ),
-            SliverToBoxAdapter(
-              child: HomeGroup(title: '订阅源', ),
-            ),
-            !pageValue.isLoading && pageValue.value!.tiles.isNotEmpty
-                ? SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final tile = pageValue.value!.tiles[index];
-                        return FeedItem(
-                            key: ValueKey(PageUtils.pid(tile.type, tile.id)),
-                            tile: tile);
-                      },
-                      childCount: pageValue.value!.tiles.length,
-                    ),
-                  )
-                : SliverToBoxAdapter(child: EmptyFeedView(),),
+            SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
+            FeedStream(),
           ],
         ),
       ),
     );
-  }
-
-  Widget _buildRefreshButton(WidgetRef ref) {
-    final status = ref.watch(syncProvider.select((s) => s.status));
-    return status == SyncTask.syncing
-        ? Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.black,
-              ),
-            ),
-          )
-        : IconButton(
-            icon: const Icon(
-              Icons.refresh,
-              color: Colors.black,
-            ),
-            onPressed: () async {
-              ref.read(syncProvider.notifier).startSync();
-            },
-          );
   }
 }

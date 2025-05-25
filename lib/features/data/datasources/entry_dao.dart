@@ -175,6 +175,9 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     if (starred != null) {
       cond.add("starred = $starred");
     }
+    if (cond.isEmpty) {
+      cond.add("true");
+    }
     var query = "count(*) filter (where ${cond.join(" and ")}) as '${cluster.id}' ";
     return query;
   }

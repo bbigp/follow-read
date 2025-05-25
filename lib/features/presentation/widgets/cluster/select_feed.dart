@@ -12,7 +12,7 @@ import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';
 import '../../providers/all_feeds_provider.dart';
 import '../feed_icon.dart';
-import '../spacer_divider.dart';
+import '../components/spacer_divider.dart';
 
 class SelectFeed extends ConsumerStatefulWidget {
 

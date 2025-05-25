@@ -7,7 +7,7 @@ import 'package:follow_read/features/presentation/widgets/cluster/statuses.dart'
 
 import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';
-import '../spacer_divider.dart';
+import '../components/spacer_divider.dart';
 import 'feed_source.dart';
 
 class AdvancedView extends ConsumerWidget {

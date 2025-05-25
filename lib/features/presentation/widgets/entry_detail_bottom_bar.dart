@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
 import '../../../config/svgicons.dart';

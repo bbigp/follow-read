@@ -102,7 +102,7 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
           const SizedBox(height: 8,),
           Visibility(
             visible: add.feed.id != 0,
-            child: CupxButton.icon('取消订阅', icon: Svgicons.reduceO,
+            child: CupxButton.icon('取消订阅', icon: Svgicons.reduce_o,
               style: CupxButtonStyle.dangerGhostMedium,
               enabled: true,
               onPressed: () async {
@@ -112,7 +112,7 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
                   onPressed: () async {
                     var success = await ref.read(feedRepositoryProvider).removeFeed(add.feed.id);
                     if (success) {
-                      final _ = ref.refresh(homePageProvider);
+                      // final _ = ref.refresh(homePageProvider);
                       OpenModal.closeMultiple(context, count: widget.shouldPop ? 3 : 2);
                     }
                   },

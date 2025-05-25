@@ -14,7 +14,7 @@ import '../../../core/utils/page_utils.dart';
 import '../providers/search_provier.dart';
 import '../widgets/entry_item.dart';
 import '../widgets/loading_more.dart';
-import '../widgets/spacer_divider.dart';
+import '../widgets/components/spacer_divider.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
 

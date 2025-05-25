@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_list_tile.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
-import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/server_picker.dart';
 
 import '../../../config/svgicons.dart';

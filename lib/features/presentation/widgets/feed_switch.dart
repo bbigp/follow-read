@@ -28,7 +28,7 @@ class FeedSwitch extends ConsumerWidget {
           value: tile.onlyShowUnread,
           onChanged: (v){
             ref.read(tileProvider(pid).notifier).saveShow(onlyShowUnread: v);
-            final _ = ref.refresh(homePageProvider);
+            // final _ = ref.refresh(homePageProvider);
           }
       );
       var s2 = SwitchItem(icon: Svgicons.readingTime, label: '阅读时间',
@@ -39,7 +39,7 @@ class FeedSwitch extends ConsumerWidget {
           value: tile.hideGlobally,
         onChanged: (v) {
           ref.read(tileProvider(pid).notifier).saveShow(hideGlobally: v);
-          final _ = ref.refresh(homePageProvider);
+          // final _ = ref.refresh(homePageProvider);
         }
       );
       List<SwitchItem> items = [];

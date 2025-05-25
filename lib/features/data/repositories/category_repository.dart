@@ -11,8 +11,8 @@ class CategoryRepository {
 
   CategoryRepository({required this.dao});
 
-  Future<List<Category>> getCategories({bool? hideGlobally}) async {
-    final list = await dao.getAll(hideGlobally: hideGlobally);
+  Future<List<Category>> getCategories({required bool showAll}) async {
+    final list = await dao.getAll(showAll: showAll);
     return list.map((item) => item.toModel()).toList();
   }
 

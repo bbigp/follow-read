@@ -1,6 +1,6 @@
 
 
-import 'package:follow_read/config/icons.dart';
+import 'package:follow_read/config/cluster_icons.dart';
 
 import 'constants.dart';
 
@@ -23,10 +23,6 @@ class Cluster {
   final String order;
   final bool showReadingTime;
   final bool onlyShowUnread;
-
-  String get svgIcon {
-    return ClusterIcons.icon(icon);
-  }
 
   static const recentOptions = {0: 'Off', 1440: '最近24小时', 2880: '最近48小时',
     10080: '最近一周', 40320: '最近一个月'};

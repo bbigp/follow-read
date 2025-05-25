@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/theme.dart';
 import 'components/alert_banner.dart';
-import 'dashed_line.dart';
+import 'components/dashed_line.dart';
 
 class FeedHeader extends StatelessWidget {
 

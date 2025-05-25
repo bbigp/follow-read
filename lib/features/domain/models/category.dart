@@ -1,5 +1,6 @@
 
 import 'constants.dart';
+import 'feed.dart';
 
 class Category {
 
@@ -12,8 +13,8 @@ class Category {
   final String order;
 
 
-  // final List<Feed> feeds;
-  // final bool expanded;
+  final List<Feed> feeds;
+  final bool expanded;
 
   const Category({
     required this.id,
@@ -23,8 +24,8 @@ class Category {
     this.onlyShowUnread = false,
     this.showReadingTime = false,
     this.order = Frc.orderxPublishedAt,
-    // this.feeds = const [],
-    // this.expanded = false,
+    this.feeds = const [],
+    this.expanded = false,
   });
 
   static Category empty = Category(id: 0, title: "",);
@@ -50,8 +51,8 @@ class Category {
     bool? onlyShowUnread,
     bool? showReadingTime,
     String? order,
-    // List<Feed>? feeds,
-    // bool? expanded,
+    List<Feed>? feeds,
+    bool? expanded,
   }) {
     return Category(
       id: id ?? this.id,
@@ -61,8 +62,8 @@ class Category {
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       showReadingTime: showReadingTime ?? this.showReadingTime,
       order: order ?? this.order,
-      // feeds: feeds ?? this.feeds,
-      // expanded: expanded ?? this.expanded,
+      feeds: feeds ?? this.feeds,
+      expanded: expanded ?? this.expanded,
     );
   }
 

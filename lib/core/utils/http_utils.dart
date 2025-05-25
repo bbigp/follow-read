@@ -89,7 +89,7 @@ class HttpUtil {
       if (token != "") {
         h = buildHeaders(h, token);
       }
-      // logger.i('$uri');
+      logger.i('$uri');
 
       final response = await FollowRequest.sendRequest(
         uri: uri,

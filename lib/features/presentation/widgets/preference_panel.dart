@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:follow_read/features/presentation/widgets/spacer_divider.dart';
+import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 
 import '../../../config/theme.dart';
 import 'components/cupx_list_tile.dart';

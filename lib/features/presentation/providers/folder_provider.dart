@@ -12,6 +12,6 @@ class AllFolders extends _$AllFolders {
   @override
   Future<List<Category>> build() async {
     final repo = ref.watch(categoryRepositoryProvider);
-    return await repo.getCategories();
+    return await repo.getCategories(showAll: false);
   }
 }

@@ -36,10 +36,10 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     ).getSingle();
   }
 
-  Future<List<FeedEntity>> getAllFeeds({bool? hideGlobally, List<int>? ids}) async {
+  Future<List<FeedEntity>> getAllFeeds({bool showAll = false, List<int>? ids}) async {
     var query = select(feedsTable);
-    if (hideGlobally != null) {
-      query = query..where((t) => t.hideGlobally.equals(hideGlobally));
+    if (!showAll) {
+      query = query..where((t) => t.hideGlobally.equals(showAll));
     }
     if (ids != null && ids.isNotEmpty) {
       query = query..where((t) => t.id.isIn(ids.map((item) => BigInt.from(item)).toList()));
