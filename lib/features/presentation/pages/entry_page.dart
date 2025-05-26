@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
-import 'package:follow_read/features/presentation/widgets/components/alert_banner.dart';
+import 'package:follow_read/features/presentation/widgets/components/alert_view.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
