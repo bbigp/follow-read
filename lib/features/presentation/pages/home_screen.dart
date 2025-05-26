@@ -128,14 +128,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 controller: _scrollController,
                 slivers: [...widgets],
               )),
-          if (_showTip)
             Positioned(
                 left: 0,
                 right: 0,
                 top: 0,
                 child: AnimatedSlide(
-                  offset: _showTip ? Offset(0, 0) : Offset(0, -1),
-                  duration: Duration(milliseconds: 300),
+                  offset: _showTip ? Offset(0, 0) : Offset(-1, 0),
+                  duration: Duration(seconds: 3),
                   curve: Curves.easeInOut,
                   child: GestureDetector(
                     onTap: () {
