@@ -9,7 +9,7 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/feed_provider.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/alert_sheet.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 import 'package:follow_read/features/presentation/widgets/feed/folder_selector.dart';
 import 'package:follow_read/features/presentation/widgets/input_field.dart';
@@ -88,8 +88,8 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
           const SizedBox(height: 8,),
           const SizedBox(height: 8,),
           const SizedBox(height: 8,),
-          CupxButton.text('Done',
-            style: CupxButtonStyle.primaryLarge,
+          TextButtonx(child: 'Done',
+            size: Sizex.large,
             enabled: add.feed.feedUrl.isNotEmpty, onPressed: () async {
               final success = await ref.read(addFeedControllerProvider.notifier).save();
               if (success) {
@@ -102,8 +102,8 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
           const SizedBox(height: 8,),
           Visibility(
             visible: add.feed.id != 0,
-            child: CupxButton.icon('取消订阅', icon: Svgicons.reduce_o,
-              style: CupxButtonStyle.dangerGhostMedium,
+            child: IconButtonx(child: '取消订阅', icon: Svgicons.reduce_o,
+              size: Sizex.medium, type: ButtonxType.dangerGhost,
               enabled: true,
               onPressed: () async {
                 OpenModal.open(context, AlertSheet(

@@ -111,15 +111,15 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     final tile = tileAsync.requireValue;
     return Stack(children: [
        _buildListView(),
-      Positioned(
-          top: 0, left: 0, right: 0,
-          child: Visibility(
-            visible: tile.errorCount > 0,
-              child: AlertBanner(
-                data: tile.errorMsg,
-              )
-          )
-      ),
+      // Positioned(
+      //     top: 0, left: 0, right: 0,
+      //     child: Visibility(
+      //       visible: tile.errorCount > 0,
+      //         child: AlertView(
+      //           data: tile.errorMsg,
+      //         )
+      //     )
+      // ),
     ],);
   }
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
 class CupxSheetTitle extends StatefulWidget {
@@ -43,7 +43,7 @@ class CupxSheetTitle extends StatefulWidget {
 
   factory CupxSheetTitle.button(BuildContext context, {
     required String title,
-    required CupxButton button,
+    required Widget button,
     Widget? leading,
     Color color = Colors.transparent,
     double height = 44,

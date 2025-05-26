@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/providers/user_provider.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/drag_handle.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
@@ -74,7 +74,7 @@ class NewUrl extends ConsumerWidget  {
           },
         ),
         const SizedBox(height: 16),
-        CupxButton.text('Done', style: CupxButtonStyle.primaryLarge, enabled: enabled, onPressed: () async {
+        TextButtonx(child: 'Done', size: Sizex.large, type: ButtonxType.primary, enabled: enabled, onPressed: () async {
           if (await ref.read(userProvider.notifier).saveUrl(urlText)) {
             if (!context.mounted) return;
             _close(context);

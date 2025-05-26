@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/new_url.dart';
 import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 
@@ -54,29 +54,38 @@ class ServerPicker extends ConsumerWidget {
                   }),
             )),
         const SizedBox(height: 8,),
-        const SizedBox(height: 8,),
+        const SizedBox(
+          height: 8,
+        ),
         Row(
           children: [
-            const SizedBox(width: 16,),
-            CupxButton.icon('添加URL', icon: Svgicons.plusO,
-              style: CupxButtonStyle.ghostMediumCompact.copyWith(size: mediumCompactButtonSize.copyWith(padding: 8)),
+            const SizedBox(
+              width: 16,
+            ),
+            IconButtonx(
+              child: '添加URL',
+              icon: Svgicons.plusO,
+              size: Sizex.custom,
+              buttonSize: mediumCompact().copyWith(padding: 8),
+              type: ButtonxType.ghost,
               enabled: true,
               onPressed: () async {
                 SmartModal.openSmartModal(context, NewUrl());
               },
             ),
             const Spacer(),
-            CupxButton.text('Done',
-                style: CupxButtonStyle.primaryMediumCompact.copyWith(
-                    size: mediumCompactButtonSize.copyWith(padding: 45)),
-                enabled: ref.read(_tempSelectedUrlProvider) != null,
-                onPressed: () async {
-                  final temp = ref.read(_tempSelectedUrlProvider);
-                  if (temp != null && temp != user.user.baseUrl) {
-                    ref.read(userProvider.notifier).chooseUrl(temp);
-                  }
-                  Navigator.pop(context);
-                }),
+            TextButtonx(
+              child: 'Done', type: ButtonxType.primary,
+              size: Sizex.custom, buttonSize: mediumCompact().copyWith(padding: 45),
+              enabled: ref.read(_tempSelectedUrlProvider) != null,
+              onPressed: () async {
+                final temp = ref.read(_tempSelectedUrlProvider);
+                if (temp != null && temp != user.user.baseUrl) {
+                  ref.read(userProvider.notifier).chooseUrl(temp);
+                }
+                Navigator.pop(context);
+              },
+            ),
             const SizedBox(width: 16,),
           ],
         ),

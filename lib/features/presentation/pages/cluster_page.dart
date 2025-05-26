@@ -9,7 +9,7 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/advanced_view.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sliding_segmented_control.dart';
 
@@ -83,12 +83,13 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
               color: AppTheme.black4, height: 54,
               title: 'New List',
               leading: CupxSheetTitleCloseButton(),
-              button: CupxButton.text('Done',
-                style: CupxButtonStyle.primarySmailCompact,
+              button: TextButtonx(child: 'Done',
+                size: Sizex.smallCompact,
+                type: ButtonxType.primary,
                 enabled: cluster.name.isNotEmpty,
                 onPressed: () async {
                   ref.read(clusterProvider.notifier).save();
-                  // final _ = ref.refresh(homePageProvider);
+                  final _ = ref.refresh(homePageProvider);
                   Navigator.pop(context);
                 },
               ),

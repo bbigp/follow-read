@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 
 import '../../../../config/svgicons.dart';
@@ -52,7 +52,7 @@ class _SelectStatusState extends ConsumerState<SelectStatus> {
       const SizedBox(height: 16,),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
-        child: CupxButton.text('Done', style: CupxButtonStyle.primaryLarge,
+        child: TextButtonx(child: 'Done', size: Sizex.large,
           enabled: (_statuses ?? []).isNotEmpty,
           onPressed: () async {
             ref.read(clusterProvider.notifier).update(statuses: _statuses);

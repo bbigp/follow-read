@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
-import 'package:follow_read/features/presentation/widgets/components/cupx_button.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 
 import '../../../../config/svgicons.dart';
@@ -45,8 +45,8 @@ class _SelectFeedState extends ConsumerState<SelectFeed> {
           color: AppTheme.black4, height: 48,
           title: '选择订阅源',
           leading: CupxSheetTitleCloseButton(),
-          button: CupxButton.text('Done',
-            style: CupxButtonStyle.primarySmailCompact,
+          button: TextButtonx(child: 'Done',
+            size: Sizex.smallCompact, type: ButtonxType.primary,
             enabled: _feedIds.isNotEmpty,
             onPressed: () async {
               ref.read(clusterProvider.notifier).update(feedIds: _feedIds);

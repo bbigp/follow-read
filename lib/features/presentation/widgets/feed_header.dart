@@ -23,13 +23,13 @@ class FeedHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Visibility  (
-          visible: false,
-            maintainSize: true, // 保持组件的尺寸
-            maintainAnimation: true, // 保持动画状态
-            maintainState: true, // 保持状态
-            child: AlertBanner(data: errorMsg,)
-        ),
+        // Visibility  (
+        //   visible: false,
+        //     maintainSize: true, // 保持组件的尺寸
+        //     maintainAnimation: true, // 保持动画状态
+        //     maintainState: true, // 保持状态
+        //     child: AlertView(data: errorMsg,)
+        // ),
         Padding(
           padding: EdgeInsets.only(top: 8, bottom: 16),
           child: Column(
