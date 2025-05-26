@@ -14,48 +14,49 @@ class AlertView extends StatelessWidget {
   final String title;
   final AlertViewType type;
   final String? action;
-  final String actionIcon;
+  final String? actionIcon;
 
   const AlertView({super.key,
     required this.icon,
     required this.title,
-    required this.actionIcon,
+    this.actionIcon,
     this.type = AlertViewType.danger,
     this.action,
   });
 
-
+  //实现的是一行中号   没有action是小号   2行是2号
   @override
   Widget build(BuildContext context) {
     Color iconColor = type == AlertViewType.danger ? AppTheme.red : AppTheme.blue;
     Color backgroundColor = type == AlertViewType.danger ? AppTheme.red10 : AppTheme.blue10;
     return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(4),
+      padding: EdgeInsets.all(4), //没有action，左右4上下2  1行上下左右4   2行左右8上下3
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10), //没有action 8  一行10  2行12
         color: backgroundColor,
       ),
       child: Row(children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-          child: Row(children: [
-            SvgPicture.asset(
-              icon, width: 16, height: 16,
-              colorFilter: ColorFilter.mode(
-                iconColor, BlendMode.srcIn,
-              ),
+        Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+              child: Row(children: [
+                SvgPicture.asset(
+                  icon, width: 16, height: 16,
+                  colorFilter: ColorFilter.mode(
+                    iconColor, BlendMode.srcIn,
+                  ),
+                ),
+                const SizedBox(width: 8,),
+                Text(title, style: AppTextStyles.red13.copyWith(color: iconColor)),
+              ],),
             ),
-            const SizedBox(width: 8, height: 18,),
-            Expanded(child: Text(title, style: AppTextStyles.red13.copyWith(color: iconColor))),
-          ],),
         ),
         if (actionIcon case final String icon) ...<Widget>[
             const SizedBox(
               width: 8,
             ),
             action == null
-                ? PaddedSvgIcon(actionIcon,
+                ? PaddedSvgIcon(icon,
                     colorFilter: ColorFilter.mode(
                       iconColor,
                       BlendMode.srcIn,
@@ -71,6 +72,7 @@ class AlertView extends StatelessWidget {
                         compact: true,
                         height: double.infinity,
                         textSize: AppTextStyles.red13500,
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       type: type == AlertViewType.danger
                           ? ButtonxType.danger
@@ -81,45 +83,6 @@ class AlertView extends StatelessWidget {
           ],
         ],),
     );
-    // return IntrinsicHeight(
-    //   child: Stack(children: [
-    //     Container(
-    //       color: AppTheme.white0,
-    //       width: double.infinity,
-    //     ),
-    //     Positioned(
-    //       child: Container(
-    //         // height: 28,
-    //         decoration: BoxDecoration(
-    //           borderRadius: BorderRadius.circular(10),
-    //           color: AppTheme.red10,
-    //         ),
-    //         padding: EdgeInsets.all(4),
-    //         margin: EdgeInsets.symmetric(horizontal: 12),
-    //         child: Row(children: [
-    //           const SizedBox(width: 4,),
-    //           SvgPicture.asset(Svgicons.alertFill, width: 16, height: 16,),
-    //           const SizedBox(width: 8,),
-    //           Expanded(child: Text(data, maxLines: 5, style: AppTextStyles.red13,),),
-    //           Visibility(
-    //             visible: buttonText.isNotEmpty,
-    //             child: const SizedBox(width: 8,),
-    //           ),
-    //           Visibility(visible: buttonText.isNotEmpty,
-    //               child: SvgIconButton(label: buttonText,
-    //                 height: 28,
-    //                 borderRadius: BorderRadius.circular(6),
-    //                 backgroundColor: AppTheme.red10,
-    //                 icon: Svgicons.reset, iconSize: 16,
-    //                 textStyle: AppTextStyles.red13500,
-    //                 padding: EdgeInsets.only(left: 12, right: 16),
-    //               )
-    //           ),
-    //         ],),
-    //       ),
-    //     )
-    //   ],),
-    // );
   }
 
 }

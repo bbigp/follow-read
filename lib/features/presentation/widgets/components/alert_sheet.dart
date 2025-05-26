@@ -24,7 +24,7 @@ class AlertSheet extends StatelessWidget {
         const DragHandle(),
         const SizedBox(height: 4,),
         Row(children: [
-          SvgPicture.asset(Svgicons.alertFill, width: 20, height: 20, fit: BoxFit.none,),
+          SvgPicture.asset(Svgicons.alert_fill, width: 20, height: 20, fit: BoxFit.none,),
           const SizedBox(width: 12,),
           Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500,)),
           const SizedBox(width: 12,),

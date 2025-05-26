@@ -17,7 +17,7 @@ import 'package:follow_read/features/presentation/widgets/home/feed_stream.dart'
 import 'package:follow_read/features/presentation/widgets/home/group_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/loading_page.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
-import 'package:follow_read/features/presentation/widgets/sync_view.dart';
+import 'package:follow_read/features/presentation/widgets/home/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
 
 ///
@@ -29,6 +29,9 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+
+  bool _showTip = true;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +43,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   final ScrollController _scrollController = ScrollController();
 
-  Future<void> _refreshData() async {}
+  Future<void> _refreshData() async {
+    setState(() {
+      _showTip = true;
+    });
+  }
 
   void _scrollListener() {
     if (_scrollController.position.pixels >=
@@ -68,6 +75,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return const LoadingPage();
     }
     final homeList = pageValue.requireValue;
+
+    final widgets = [
+      SliverToBoxAdapter(
+        child: GroupTile(title: '智能视图', trailing: AddTrailing(onTap: () {
+          ref.read(routerProvider).pushNamed(RouteNames.cluster,);
+        })),
+      ),
+      SliverList(delegate: SliverChildBuilderDelegate(
+        childCount: homeList.clusters.length,
+        (context, index) {
+          final cluster = homeList.clusters[index];
+          return ClusterTile(
+            key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
+            cluster: cluster,
+          );
+        },
+      )),
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.only(top: 12, bottom: 8, left: 16, right: 16),
+          child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0,
+            color: AppTheme.black8,
+          ),
+        ),
+      ),
+      SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
+      FeedStream(),
+    ];
+
+    if (_showTip) {
+      widgets.insert(0, SliverToBoxAdapter(child: SyncView(),));
+    }
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.user_fill, onTap: (){
@@ -81,40 +120,127 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           PaddedSvgIcon(Svgicons.more,),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverToBoxAdapter(child: SyncView(),),
-            SliverToBoxAdapter(
-              child: GroupTile(title: '智能视图', trailing: AddTrailing(onTap: () {
-                ref.read(routerProvider).pushNamed(RouteNames.cluster,);
-              })),
-            ),
-            SliverList(delegate: SliverChildBuilderDelegate(
-              childCount: homeList.clusters.length,
-              (context, index) {
-                final cluster = homeList.clusters[index];
-                return ClusterTile(
-                  key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
-                  cluster: cluster,
-                );
-              },
-            )),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(top: 12, bottom: 8, left: 16, right: 16),
-                child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0,
-                  color: AppTheme.black8,
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
-            FeedStream(),
-          ],
+      body: Stack(
+        children: [
+          RefreshIndicator(
+              onRefresh: _refreshData,
+              child: CustomScrollView(
+                controller: _scrollController,
+                slivers: [...widgets],
+              )),
+          if (_showTip)
+            Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                child: AnimatedSlide(
+                  offset: _showTip ? Offset(0, 0) : Offset(0, -1),
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showTip = false;
+                      });
+                    },
+                    child: SyncView(),
+                  ),
+                ))
+        ],
+      ),
+    );
+  }
+}
+
+// AlwaysStickyHeader(
+// enableDismiss: true,
+// child: SyncView(),
+// ),
+
+
+class AlwaysStickyHeader extends StatefulWidget {
+  final Widget child;
+  final bool enableDismiss;
+
+  const AlwaysStickyHeader({
+    super.key,
+    required this.child,
+    this.enableDismiss = false,
+  });
+
+  @override
+  State<AlwaysStickyHeader> createState() => _AlwaysStickyHeaderState();
+}
+
+class _AlwaysStickyHeaderState extends State<AlwaysStickyHeader> {
+  bool _visible = true;
+  final GlobalKey _key = GlobalKey();
+  double _height = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateHeight());
+  }
+
+  void _updateHeight() {
+    final context = _key.currentContext;
+    if (context != null) {
+      final box = context.findRenderObject() as RenderBox;
+      setState(() {
+        _height = box.size.height;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_visible) return SliverToBoxAdapter(child: SizedBox.shrink());
+
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: _AlwaysStickyHeaderDelegate(
+        height: _height == 0 ? 60 : _height, // 先给默认高度
+        child: GestureDetector(
+          key: _key,
+          behavior: HitTestBehavior.translucent,
+          onTap: widget.enableDismiss
+              ? () {
+            setState(() {
+              _visible = false;
+            });
+          }
+              : null,
+          child: widget.child,
         ),
       ),
     );
   }
 }
+
+class _AlwaysStickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final double height;
+  final Widget child;
+
+  _AlwaysStickyHeaderDelegate({
+    required this.height,
+    required this.child,
+  });
+
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  bool shouldRebuild(covariant _AlwaysStickyHeaderDelegate oldDelegate) {
+    return oldDelegate.child != child || oldDelegate.height != height;
+  }
+}
+

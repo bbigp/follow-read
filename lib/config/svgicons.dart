@@ -16,8 +16,8 @@ class Svgicons {
   static const String removeCollection = "assets/svg/remove_collection.svg";
   static const String expired = "assets/svg/expired.svg";
 
-  static const String link = "assets/svg/link.svg";
-  static const String alertFill = "assets/svg/alert_fill.svg";
+
+
 
   static const String folder = "assets/svg/folder.svg";
   static const String folderBlack = "assets/svg/folder_black.svg";
@@ -64,4 +64,6 @@ class Svgicons {
   static const String loading = "assets/svg/loading.svg";
   static const String reset = "assets/svg/reset.svg";
   static const String more = "assets/svg/more.svg";
+  static const String alert_fill = "assets/svg/alert_fill.svg";
+  static const String link = "assets/svg/link.svg";
 }
