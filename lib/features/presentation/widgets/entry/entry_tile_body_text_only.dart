@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
+///
 class EntryTileBodyTextOnly extends StatelessWidget {
 
   final Entry entry;

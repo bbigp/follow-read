@@ -8,6 +8,7 @@ import 'package:follow_read/features/presentation/widgets/lazy_image.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
+///
 class EntryTileBodySingleImage extends ConsumerWidget {
 
   final Entry entry;
@@ -15,7 +16,7 @@ class EntryTileBodySingleImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(children: [
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(child: Column(children: [
         Text(entry.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.text500,),
         const SizedBox(height: 4,),

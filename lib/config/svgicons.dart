@@ -8,7 +8,7 @@ class Svgicons {
   static const String readingTime = "assets/svg/time.svg";
   static const String onlyUnread = "assets/svg/eyes.svg";
 
-  static const String search = "assets/svg/search.svg";
+
   static const String searchInput = "assets/svg/search_input.svg";
   static const String markRead = ClusterIcons.read;
   static const String markUnread = ClusterIcons.unread;
@@ -37,7 +37,7 @@ class Svgicons {
   static const String xFill = "assets/svg/x_fill.svg";
   static const String selection = "assets/svg/selection.svg";
   static const String circular = "assets/svg/circular.svg";
-  static const String arrowLeft = "assets/svg/arrow_left.svg";
+
   static const String trashRed = "assets/svg/trash_red.svg";
 
   static const String squareRss = "assets/svg/square_rss.svg";
@@ -67,4 +67,6 @@ class Svgicons {
   static const String alert_fill = "assets/svg/alert_fill.svg";
   static const String link = "assets/svg/link.svg";
   static const String vector = "assets/svg/vector.svg";
+  static const String search = "assets/svg/search.svg";
+  static const String arrow_left = "assets/svg/arrow_left.svg";
 }

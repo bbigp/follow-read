@@ -27,7 +27,7 @@ class NewUrl extends ConsumerWidget  {
           children: [
             GestureDetector(
               onTap: () => _close(context),
-              child:  Svgicon(Svgicons.arrowLeft, size: 28, iconSize: 24,),
+              child:  Svgicon(Svgicons.arrow_left, size: 28, iconSize: 24,),
             ),
             Expanded(child: Text('新URL',
               textAlign: TextAlign.center,

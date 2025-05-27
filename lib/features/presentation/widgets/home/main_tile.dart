@@ -38,7 +38,7 @@ class MainTile extends StatelessWidget {
 
         CountBadge(id: provider.id, counter: FeedCounter(),),
 
-        const SizedBox(width: 12,),
+        const SizedBox(width: 16,), //设计图12
       ],),
     );
     if (provider.contextMenus.isEmpty) {

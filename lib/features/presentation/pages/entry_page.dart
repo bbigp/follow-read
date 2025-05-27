@@ -1,26 +1,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/config/svgicons.dart';
+import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/providers/entry_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
-import 'package:follow_read/features/presentation/widgets/components/alert_view.dart';
+import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
+import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
+import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/entry/feed_summary.dart';
-import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/entry/entry_tile.dart';
+import 'package:follow_read/features/presentation/widgets/entry/skeleton_entry_item.dart';
+import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/components/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
-import 'package:follow_read/features/presentation/widgets/svgicon.dart';
+import 'package:follow_read/routes/app_route.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../config/svgicons.dart';
-import '../../../config/theme.dart';
-import '../../../routes/app_route.dart';
-import '../../domain/models/tile.dart';
-import '../providers/entry_page_provider.dart';
-import '../widgets/entry/skeleton_entry_item.dart';
-import '../widgets/components/spacer_divider.dart';
 
 class EntryPage extends ConsumerStatefulWidget {
   final int id;
@@ -52,30 +52,22 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   Widget build(BuildContext context) {
     final entriesAsync = ref.watch(entriesProvier(pid));
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: true,
-        surfaceTintColor: Colors.white, // 防止 Material 3 的默认着色影响
+      appBar: CupxAppBar(
+        leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: (){
+          Navigator.of(context).pop();
+        },),
         actions: [
-          SizedBox(width: 16,),
-          GestureDetector(
-            onTap: () => ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
-              'id': widget.id.toString(),
-              'type': widget.type.toString(),
-            }),
-            child: Svgicon(Svgicons.search, size: 28, iconSize: 24,),
-          ),
-          SizedBox(width: 16,),
-          GestureDetector(
-            onTap: () => OpenModal.open(context,
+          InkWell(onTap: (){
+              ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
+                'id': widget.id.toString(), 'type': widget.type.toString(),
+              });
+          }, child: PaddedSvgIcon(Svgicons.search),),
+          InkWell(onTap: (){
+            OpenModal.open(context,
                 FeedSettingsSheet(id: widget.id, type: widget.type,),
                 scrollable: true
-            ),
-            child: Svgicon(Svgicons.more, size: 28, iconSize: 24,)
-          ),
-          // _buildRefreshButton(ref, feedsState.isSyncing),
-          const SizedBox(width: 16),
+            );
+          }, child: PaddedSvgIcon(Svgicons.more),)
         ],
       ),
       body: entriesAsync.isLoading
@@ -110,47 +102,35 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   Widget _buildMain() {
     final tileAsync = ref.watch(tileProvider(pid));
     final tile = tileAsync.requireValue;
-    return Stack(children: [
-       _buildListView(),
-      // Positioned(
-      //     top: 0, left: 0, right: 0,
-      //     child: Visibility(
-      //       visible: tile.errorCount > 0,
-      //         child: AlertView(
-      //           data: tile.errorMsg,
-      //         )
-      //     )
-      // ),
-    ],);
-  }
 
-
-  Widget _buildListView() {
     final entriesAsync = ref.watch(entriesProvier(pid));
-    final tileAsync = ref.watch(tileProvider(pid));
     final entriesState = entriesAsync.requireValue;
-    final tile = tileAsync.requireValue;
-    return RefreshIndicator(
+
+    return Stack(children: [
+      RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(entriesProvier(pid));
           await ref.read(entriesProvier(pid).future);
         },
-        child: ListView.separated(padding: EdgeInsets.zero, controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: entriesState.entries.length + 2,
-            separatorBuilder: (_, index) => index == 0 ? const SizedBox.shrink()
-                : const SpacerDivider(indent: 16, spacing: 1, thickness: 0.5,),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return FeedSummary(feed: tile);
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+
+            SliverToBoxAdapter(child: FeedSummary(feed: tile),),
+            SliverList(delegate: SliverChildBuilderDelegate(
+              childCount: entriesState.entries.length,
+              (context, index) {
+                final entry = entriesState.entries[index];
+                return EntryTile(entry: entry);
               }
-              if (index - 1 >= entriesState.entries.length) {
-                return entriesState.hasMore ? const LoadingMore() : const NoMore();
-              }
-              final entry = entriesState.entries[index - 1];
-              return EntryTile(entry: entry);
-            }));
+            )),
+            SliverToBoxAdapter(child: entriesState.hasMore ? const LoadingMore() : const NoMore(),)
+          ]
+        ),
+      ),
+    ],);
   }
+
 
   Widget _buildSmartSkeleton() {
     return Shimmer.fromColors(

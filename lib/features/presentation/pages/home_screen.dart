@@ -124,34 +124,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
       ),
       body: Stack(
         children: [
-          RefreshIndicator(
-              onRefresh: _refreshData,
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: [...widgets],
-              )),
-            Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                child: AnimatedOpacity( //变淡效果
-                  opacity: _showTip ? 1.0 : 0.0,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  onEnd: (){
-                    if (!_showTip) {
-                      setState(() {}); // 触发 AnimatedSize
-                    }
-                  },
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _showTip = false;
-                      });
-                    },
-                    child: SyncView(),
-                  ),
-                ))
+          RefreshIndicator(onRefresh: _refreshData,
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [...widgets],
+            )
+          ),
+          Positioned(
+            left: 0, right: 0, top: 0,
+            child: AnimatedOpacity( //变淡效果
+              opacity: _showTip ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              onEnd: (){
+                if (!_showTip) {
+                  setState(() {}); // 触发 AnimatedSize
+                }
+              },
+              child: GestureDetector(onTap: () {
+                  setState(() {
+                    _showTip = false;
+                  });
+                },
+                child: SyncView(),
+              ),
+            )
+          )
         ],
       ),
     );

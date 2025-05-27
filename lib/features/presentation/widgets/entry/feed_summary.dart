@@ -17,21 +17,21 @@ class FeedSummary extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14),
-      child: Column(children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const SizedBox(height: 8,),
         Text(feed.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text28500,),
 
         if (feed.unread > 0 ) ...[
           const SizedBox(height: 4,),
           Row(children: [
-            const SizedBox(width: 4,),
+            const SizedBox(width: 6,),
             Text('${feed.unread}未读', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.hint11500,),
             const SizedBox(width: 4,),
           ],),
         ],
 
         const SizedBox(height: 16,),
-        const DashedDivider(indent: 16, spacing: 16, thickness: 1, color: AppTheme.black8,),
+        const DashedDivider(indent: 2, spacing: 16, thickness: 1, color: AppTheme.black8,),
     ],),);
   }
 

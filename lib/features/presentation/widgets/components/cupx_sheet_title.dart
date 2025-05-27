@@ -170,7 +170,7 @@ class ChevronLeftCloseButton extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.all(4),
-        child: SvgPicture.asset(Svgicons.arrowLeft, width: 24, height: 24, fit: BoxFit.none,),
+        child: SvgPicture.asset(Svgicons.arrow_left, width: 24, height: 24, fit: BoxFit.none,),
       ),
     );
   }
