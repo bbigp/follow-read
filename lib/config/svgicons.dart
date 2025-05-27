@@ -66,4 +66,5 @@ class Svgicons {
   static const String more = "assets/svg/more.svg";
   static const String alert_fill = "assets/svg/alert_fill.svg";
   static const String link = "assets/svg/link.svg";
+  static const String vector = "assets/svg/vector.svg";
 }

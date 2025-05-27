@@ -4,11 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/alert_view.dart';
+import 'package:follow_read/features/presentation/widgets/entry/feed_summary.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
-import 'package:follow_read/features/presentation/widgets/entry_item.dart';
+import 'package:follow_read/features/presentation/widgets/entry/entry_tile.dart';
 import 'package:follow_read/features/presentation/widgets/feed_header.dart';
-import 'package:follow_read/features/presentation/widgets/loading_more.dart';
-import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
+import 'package:follow_read/features/presentation/widgets/components/loading_more.dart';
+import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 import 'package:shimmer/shimmer.dart';
@@ -134,33 +135,20 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           ref.invalidate(entriesProvier(pid));
           await ref.read(entriesProvier(pid).future);
         },
-        child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            controller: _scrollController,
+        child: ListView.separated(padding: EdgeInsets.zero, controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: entriesState.entries.length + 2,
-            separatorBuilder: (_, index) => index == 0
-                ? const SizedBox.shrink()
-                : const SpacerDivider(indent: 0, spacing: 1, thickness: 0.5,),
+            separatorBuilder: (_, index) => index == 0 ? const SizedBox.shrink()
+                : const SpacerDivider(indent: 16, spacing: 1, thickness: 0.5,),
             itemBuilder: (context, index) {
               if (index == 0) {
-                return FeedHeader(
-                  title: tile.title,
-                  unread: tile.unread,
-                  errorCount: tile.errorCount,
-                  errorMsg: tile.errorMsg,
-                );
+                return FeedSummary(feed: tile);
               }
               if (index - 1 >= entriesState.entries.length) {
-                return entriesState.hasMore ? const LoadingMore() : const NoMoreLoading();
+                return entriesState.hasMore ? const LoadingMore() : const NoMore();
               }
               final entry = entriesState.entries[index - 1];
-              return EntryItem(entry: entry, tile: tile);
-              // return entry.isUnread
-              //     ? EntryItem(entry: entry, tile: tile)
-              //     : Opacity(opacity: 0.5,
-              //         child: EntryItem(entry: entry, tile: tile),
-              //       );
+              return EntryTile(entry: entry);
             }));
   }
 

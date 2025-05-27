@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/providers/entry_detail_provider.dart';
 import 'package:follow_read/features/presentation/widgets/entry_detail_bottom_bar.dart';
-import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
+import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 import 'package:follow_read/features/presentation/widgets/view_website_button.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:html/dom.dart' as dom;
@@ -90,7 +90,7 @@ class _EntryDetailPageState extends ConsumerState<EntryDetailPage> {
                   _buildContent(entry),
                   Padding(
                     padding: EdgeInsets.only(top: 12),
-                    child: NoMoreLoading(),
+                    child: NoMore(),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 12, bottom: 48 + 60),

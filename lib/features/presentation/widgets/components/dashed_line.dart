@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-///重开
+///
 class DashedDivider extends StatelessWidget {
   final Color color;
   final double dashLength;

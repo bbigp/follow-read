@@ -5,15 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/widgets/input_field.dart';
-import 'package:follow_read/features/presentation/widgets/no_more_loading.dart';
+import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 import 'package:follow_read/features/presentation/widgets/svgicon.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
 import '../../../core/utils/page_utils.dart';
 import '../providers/search_provier.dart';
-import '../widgets/entry_item.dart';
-import '../widgets/loading_more.dart';
+import '../widgets/entry/entry_tile.dart';
+import '../widgets/components/loading_more.dart';
 import '../widgets/components/spacer_divider.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -129,14 +129,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               childCount: state.entries.length + 1,
                   (context, index) {
                 if (index >= state.entries.length) {
-                  return state.hasMore ? LoadingMore() : NoMoreLoading();
+                  return state.hasMore ? LoadingMore() : NoMore();
                 }
                 final entry = state.entries[index];
-                final tile = state.tile;
                 return entry.isUnread
-                    ? EntryItem(entry: entry, tile: tile)
+                    ? EntryTile(entry: entry)
                     : Opacity(opacity: 0.5,
-                  child: EntryItem(entry: entry, tile: tile),
+                  child: EntryTile(entry: entry),
                 );
               }),
           ),
@@ -186,7 +185,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           ],);
         }
         if (index == histories.length + 1) {
-          return NoMoreLoading();
+          return NoMore();
         }
         final item = histories[index - 1];
         return GestureDetector(
