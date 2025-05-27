@@ -8,7 +8,8 @@ import 'package:follow_read/features/presentation/widgets/components/alert_view.
 ///
 class SyncView extends ConsumerWidget {
 
-  const SyncView({super.key});
+  final bool skeleton;
+  const SyncView({super.key, this.skeleton = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,26 +17,29 @@ class SyncView extends ConsumerWidget {
     if (syncState.status == "") {
       return const SizedBox.shrink();
     }
+    AlertTipType type = syncState.status == SyncTask.failed
+        ? AlertTipType.danger
+        : AlertTipType.normal;
+    String icon = syncState.status == SyncTask.failed
+        ? Svgicons.link
+        : Svgicons.alert_fill;
     String msg;
-    AlertViewType type = AlertViewType.normal;
-    String icon = Svgicons.link;
-    String? action;
-    String? actionIcon;
+    AlertTipActionButton? button;
     if (syncState.status == SyncTask.syncing) {
       msg = '数据同步中(${syncState.progress}/${syncState.total})...';
     } else if (syncState.status == SyncTask.success) {
       msg = "同步成功 ${syncState.executeTime}";
     } else {
       msg = "同步失败";
-      type = AlertViewType.danger;
-      icon = Svgicons.alert_fill;
-      actionIcon = Svgicons.reset;
-      action = "重试";
+      button = AlertTipActionButton(icon: Svgicons.reset, child: "重试", onTap: (){
+        ref.read(syncProvider.notifier).startSync();
+      });
     }
-    //ref.read(syncProvider.notifier).startSync();
-    return Container(padding: EdgeInsets.only(left: 12, right: 12),
+    return Container(padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
       color: Colors.white,
-      child: AlertView(icon: icon, title: msg, type: type, action: action, actionIcon: actionIcon,),
+      child: AlertTip(icon: icon, title: msg, type: type, action: button,
+        skeleton: skeleton,
+      ),
     );
   }
 }

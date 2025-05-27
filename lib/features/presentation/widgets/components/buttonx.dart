@@ -8,7 +8,7 @@ import 'package:follow_read/theme/text_styles.dart';
 ///
 enum ButtonState { enabled, disabled, loading }
 enum ButtonxType {
-  primary, secondary, ghost, stroked, danger, dangerGhost, info,
+  primary, secondary, ghost, stroked, danger, dangerGhost, info, skeleton,
 }
 enum Sizex {
   small, smallCompact, medium, mediumCompact, large, largeCompact, custom,
@@ -158,6 +158,7 @@ class _ButtonxState extends State<Buttonx> with SingleTickerProviderStateMixin {
       ButtonxType.danger => danger(),
       ButtonxType.dangerGhost => dangerGhost(),
       ButtonxType.info => info(),
+      ButtonxType.skeleton => skeleton(),
       _ => primary(),
     };
     ButtonxSize size = switch(widget.size) {
@@ -291,6 +292,13 @@ ButtonxColor dangerGhost() { //透明背景 红色字体
   return ButtonxColor(
     color: AppTheme.red, disabledColor: AppTheme.black25,
     backgroundColor: Colors.transparent, disabledBackgroundColor: Colors.transparent,
+  );
+}
+
+ButtonxColor skeleton(){
+  return ButtonxColor(
+    color: Colors.white, disabledColor: Colors.white,
+    backgroundColor: Colors.white, disabledBackgroundColor: Colors.white,
   );
 }
 

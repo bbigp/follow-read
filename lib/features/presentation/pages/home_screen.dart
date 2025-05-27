@@ -105,7 +105,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ];
 
     if (_showTip) {
-      widgets.insert(0, SliverToBoxAdapter(child: SyncView(),));
+      widgets.insert(0, SliverToBoxAdapter(child: SyncView(skeleton: true,),));
     }
     return Scaffold(
       appBar: CupxAppBar(
@@ -132,7 +132,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 left: 0,
                 right: 0,
                 top: 0,
-                child: AnimatedSlide(
+                child: AnimatedSlide( //变淡效果
                   offset: _showTip ? Offset(0, 0) : Offset(-1, 0),
                   duration: Duration(seconds: 3),
                   curve: Curves.easeInOut,
