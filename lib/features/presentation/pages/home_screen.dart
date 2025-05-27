@@ -28,7 +28,7 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStateMixin {
 
   bool _showTip = true;
 
@@ -77,6 +77,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final homeList = pageValue.requireValue;
 
     final widgets = [
+      SliverToBoxAdapter(child: AnimatedSize(
+        duration: Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+        alignment: Alignment.topCenter,
+        child: _showTip ? SyncView(skeleton: true,) : SizedBox(height: 0,),
+      ),),
       SliverToBoxAdapter(
         child: GroupTile(title: '智能视图', trailing: AddTrailing(onTap: () {
           ref.read(routerProvider).pushNamed(RouteNames.cluster,);
@@ -103,10 +109,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
       FeedStream(),
     ];
-
-    if (_showTip) {
-      widgets.insert(0, SliverToBoxAdapter(child: SyncView(skeleton: true,),));
-    }
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.user_fill, onTap: (){
@@ -132,10 +134,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 left: 0,
                 right: 0,
                 top: 0,
-                child: AnimatedSlide( //变淡效果
-                  offset: _showTip ? Offset(0, 0) : Offset(-1, 0),
-                  duration: Duration(seconds: 3),
+                child: AnimatedOpacity( //变淡效果
+                  opacity: _showTip ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
+                  onEnd: (){
+                    if (!_showTip) {
+                      setState(() {}); // 触发 AnimatedSize
+                    }
+                  },
                   child: GestureDetector(
                     onTap: () {
                       setState(() {

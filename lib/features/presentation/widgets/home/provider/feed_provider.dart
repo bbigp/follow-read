@@ -37,13 +37,13 @@ class FeedProvider implements TileDataProvider {
   Widget get icon => FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,);
 
   @override
-  Widget get leadingIndicator => hasLeadingIndicator ? SizedBox(
+  WidgetxBuilder get leadingIndicator => WidgetxBuilder(hasLeadingIndicator ? SizedBox(
     width: 24, height: 24,
     child: SvgPicture.asset(
       Svgicons.dot_s, width: 24, height: 24, fit: BoxFit.contain, //设计图dot_s半径1.5
       colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn,),//设计图black8
     ),
-  ) : SizedBox(width: 24,); //设计图36
+  ) : SizedBox(width: 24,)); //设计图36
 
   @override
   String get title => feed.title;

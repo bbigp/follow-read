@@ -21,8 +21,8 @@ class SyncView extends ConsumerWidget {
         ? AlertTipType.danger
         : AlertTipType.normal;
     String icon = syncState.status == SyncTask.failed
-        ? Svgicons.link
-        : Svgicons.alert_fill;
+        ? Svgicons.alert_fill
+        : Svgicons.link;
     String msg;
     AlertTipActionButton? button;
     if (syncState.status == SyncTask.syncing) {

@@ -28,17 +28,17 @@ class FolderProvider implements TileDataProvider {
   Widget get icon => SizedBox(width: 24, height: 24, child: SvgPicture.asset(Svgicons.group, width: 24, height: 14, fit: BoxFit.contain,),);
 
   @override
-  Widget get leadingIndicator => InkWell(
-    onTap: () {
-      ref.read(homePageProvider.notifier).expanded(folder.id);
-    },
-    child: SizedBox(
+  WidgetxBuilder get leadingIndicator => WidgetxBuilder(
+    SizedBox(
       width: 24, height: 24,
       child: SvgPicture.asset(
         folder.expanded ? Svgicons.triangle_down : Svgicons.triangle_right, width: 24, height: 24, fit: BoxFit.contain,
         colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn,),
       ),
     ),
+    onTap: () {
+      ref.read(homePageProvider.notifier).expanded(folder.id);
+    }
   );
 
   @override
