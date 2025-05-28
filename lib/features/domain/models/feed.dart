@@ -1,9 +1,10 @@
 import 'package:follow_read/features/domain/models/ui_item.dart';
 
 import 'constants.dart';
+import 'feedx.dart';
 
 
-class Feed extends BaseUiItem {
+class Feed implements Mata {
   final int id;
   final int userId;
   final String feedUrl;

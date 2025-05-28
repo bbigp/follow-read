@@ -5,15 +5,19 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/providers/feedx_provider.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
 import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
 import 'package:follow_read/features/presentation/widgets/components/sync_icon.dart';
 import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/features/presentation/widgets/feed/empty_feed_view.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/widgets/home/cluster_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/feed_stream.dart';
+import 'package:follow_read/features/presentation/widgets/home/feed_tile.dart';
+import 'package:follow_read/features/presentation/widgets/home/folder_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/group_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/loading_page.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
@@ -62,8 +66,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final homeAsync = ref.watch(homeProvider);
     final syncState = ref.watch(syncProvider);
-    final pageValue = ref.watch(homePageProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final _ = ref.refresh(homePageProvider);
@@ -71,10 +75,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
       });
     }
 
-    if (pageValue.isLoading) {
+    if (homeAsync == null) {
       return const LoadingPage();
     }
-    final homeList = pageValue.requireValue;
+    final homeList = homeAsync;
 
     final widgets = [
       SliverToBoxAdapter(child: AnimatedSize(
@@ -89,9 +93,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
         })),
       ),
       SliverList(delegate: SliverChildBuilderDelegate(
-        childCount: homeList.clusters.length,
+        childCount: homeList.aists.length,
         (context, index) {
-          final cluster = homeList.clusters[index];
+          final cluster = homeList.aists[index];
           return ClusterTile(
             key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
             cluster: cluster,
@@ -107,8 +111,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
         ),
       ),
       SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
-      FeedStream(),
     ];
+    if (homeList.feeds.isEmpty && homeList.folders.isEmpty) {
+      widgets.add(SliverToBoxAdapter(child: EmptyFeedView(),));
+    } else {
+      widgets.add(SliverList(delegate: SliverChildBuilderDelegate(
+          childCount: homeList.folders.length,
+              (context, index) {
+            final folder = homeList.folders[index];
+            return FolderTile(folder: folder);
+          }
+      ),));
+      widgets.add(SliverList(delegate: SliverChildBuilderDelegate(
+          childCount: homeList.feeds.length,
+              (context, index) {
+            final feed = homeList.feeds[index];
+            return FeedTile(feed: feed);
+          }
+      )));
+    }
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.user_fill, onTap: (){

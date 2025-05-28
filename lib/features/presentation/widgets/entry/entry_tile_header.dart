@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
 import 'package:follow_read/theme/text_styles.dart';
@@ -37,5 +37,20 @@ class EntryTileHeader extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class EntryTileHeaderSkeleton extends StatelessWidget {
+  const EntryTileHeaderSkeleton({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      ClipRRect(
+        borderRadius: BorderRadius.circular(4.0),
+        child: Container(width: 18, height: 18, color: Colors.white,),
+      ),
+      const SizedBox(width: 6,),
+      Container(width: 72, height: 12, color: Colors.white,),
+    ],);
   }
 }

@@ -6,25 +6,45 @@ import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 
-// abstract class Fata {
-//
-// }
-//
-// abstract class IFata {
-//
-//   Fata get(WidgetRef ref);
-// }
-//
-// class Feedx implements IFata {
-//   final int id;
-//   const Feedx(this.id);
-//
+final mataDetailProvider = FutureProvider.family.autoDispose<Mata, IMata>((ref, mata) {
+  return mata.load(ref);
+});
+
+abstract class Mata {
+}
+
+
+abstract class IMata {
+
+  Future<Mata> load(Ref ref);
+
+  Future<void> update(Ref ref);
+}
+
+class Feedx implements IMata {
+  
+  final int id;
+  const Feedx(this.id);
+  
+  @override
+  Future<Mata> load(Ref ref) {
+    return ref.read(feedRepositoryProvider).getFeedById(id);
+  }
+  @override
+  Future<void> update(Ref ref) {
+    // TODO: implement update
+    throw UnimplementedError();
+  }
+}
+
+// class Folderx implements IMata {
 //   @override
-//   Fata get(WidgetRef ref) {
-//     final data = ref.read(tileProvider(PageUtils.pid(TileType.feed, id)).future);
-//
-//     final tileAsync = ref.watch(tileProvider(pid));
-//     data
+//   Future<Mata> load(WidgetRef ref) {
+//     return Folder();
 //   }
-//
+//   @override
+//   Future<void> update(WidgetRef ref) {
+//     // TODO: implement update
+//     throw UnimplementedError();
+//   }
 // }

@@ -2,7 +2,7 @@ import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/ui_item.dart';
 import 'package:html/parser.dart' as html;
 
-class Entry extends BaseUiItem {
+class Entry  {
   final int id;
   final int userId;
   final int feedId;

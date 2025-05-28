@@ -69,4 +69,5 @@ class Svgicons {
   static const String vector = "assets/svg/vector.svg";
   static const String search = "assets/svg/search.svg";
   static const String arrow_left = "assets/svg/arrow_left.svg";
+  static const String time = "assets/svg/time.svg";
 }

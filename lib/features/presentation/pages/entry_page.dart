@@ -14,7 +14,6 @@ import 'package:follow_read/features/presentation/widgets/entry/feed_summary.dar
 import 'package:follow_read/features/presentation/widgets/entry/entry_tile.dart';
 import 'package:follow_read/features/presentation/widgets/entry/skeleton_entry_item.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
-import 'package:follow_read/features/presentation/widgets/feed_header.dart';
 import 'package:follow_read/features/presentation/widgets/components/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
@@ -143,8 +142,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
             ? const SizedBox.shrink()
             : const SpacerDivider(indent: 16, spacing: 1, thickness: 0.5, color: Colors.white,),
         itemBuilder: (context, index) => index == 0
-            ? SkeletonFeedHeader() // 第一个项用于测量
-            : SkeletonEntryItem(), // 后续项复用
+            ? FeedSummarySkeleton()
+            : SkeletonEntryItem(),
       ),
     );
   }

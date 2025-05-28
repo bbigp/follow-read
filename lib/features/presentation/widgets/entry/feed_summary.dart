@@ -23,16 +23,38 @@ class FeedSummary extends ConsumerWidget {
 
         if (feed.unread > 0 ) ...[
           const SizedBox(height: 4,),
+
+          const SizedBox(height: 2,),
           Row(children: [
-            const SizedBox(width: 6,),
+            const SizedBox(width: 4,),
             Text('${feed.unread}未读', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.hint11500,),
             const SizedBox(width: 4,),
           ],),
         ],
 
         const SizedBox(height: 16,),
-        const DashedDivider(indent: 2, spacing: 16, thickness: 1, color: AppTheme.black8,),
+        const DashedDivider(indent: 0, spacing: 16, thickness: 1, color: AppTheme.black8,),
     ],),);
   }
 
+}
+
+class FeedSummarySkeleton extends StatelessWidget {
+  const FeedSummarySkeleton({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 14),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(height: 8,),
+        Text('All', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text28500,),
+
+        const SizedBox(height: 4,),
+        Container(width: 15, height: 69, color: Colors.white,),
+
+        const SizedBox(height: 16,),
+        const DashedDivider(indent: 0, spacing: 16, thickness: 1, color: Colors.white,),
+      ],),
+    );
+  }
 }

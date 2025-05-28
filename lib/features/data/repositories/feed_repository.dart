@@ -63,7 +63,7 @@ class FeedRepository {
     );
   }
 
-  Future<List<Feed>> getFeeds({required bool showAll, List<int>? ids}) async {
+  Future<List<Feed>> getFeeds({bool showAll = true, List<int>? ids}) async {
     final feeds = await feedDao.getAllFeeds(showAll: showAll, ids: ids);
     logger.i('查询到本地feeds: ${feeds.length}');
     return feeds.map((e) => e.toModel()).toList();

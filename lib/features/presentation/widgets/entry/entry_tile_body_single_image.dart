@@ -19,6 +19,14 @@ class EntryTileBodySingleImage extends ConsumerWidget {
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(child: Column(children: [
         Text(entry.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.text500,),
+        // const SizedBox(height: 4,),
+        // Row(children: [
+        //   SvgPicture.asset(Svgicons.time, width: 14, height: 14, fit: BoxFit.contain, colorFilter: ColorFilter.mode(
+        //       AppTheme.black50, BlendMode.srcIn,
+        //   ),),
+        //   const SizedBox(width: 4,),
+        //   Text('${entry.readingTime}', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.caption13500,),
+        // ],),
         const SizedBox(height: 4,),
         Visibility(visible: entry.summary.isNotEmpty,
             child: Text(entry.summary, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.caption13,)

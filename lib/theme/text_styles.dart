@@ -31,6 +31,9 @@ class AppTextStyles {
   static const TextStyle caption13 = TextStyle(
     fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.black50,
   );
+  static const TextStyle caption13500 = TextStyle(
+    fontSize: 13, fontWeight: FontWeight.w500, height: 1.38, color: AppTheme.black50,
+  );
   static const TextStyle caption500 = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black50,
   );

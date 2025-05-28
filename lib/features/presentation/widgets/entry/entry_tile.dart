@@ -43,6 +43,25 @@ class EntryTile extends ConsumerWidget {
   }
 }
 
+class EntryTileSkeleton extends StatelessWidget {
+  const EntryTileSkeleton({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        EntryTileHeaderSkeleton(),
+        const SizedBox(height: 8,),
+
+        const SizedBox(height: 3,),
+
+        const SizedBox(height: 3,),
+
+      ],),
+    );
+  }
+}
+
 
 
 //已读加一个透明度百分之50的遮罩
