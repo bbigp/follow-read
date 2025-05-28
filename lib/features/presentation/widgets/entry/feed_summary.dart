@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/features/domain/models/feedx.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
 import 'package:follow_read/theme/text_styles.dart';
@@ -10,7 +11,7 @@ import 'package:follow_read/theme/text_styles.dart';
 ///
 class FeedSummary extends ConsumerWidget {
 
-  final Tile feed;
+  final Mata feed;
   const FeedSummary({super.key, required this.feed});
 
   @override
@@ -50,7 +51,10 @@ class FeedSummarySkeleton extends StatelessWidget {
         Text('All', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text28500,),
 
         const SizedBox(height: 4,),
-        Container(width: 15, height: 69, color: Colors.white,),
+        Container(width: 70, height: 9, decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          color: Colors.white,
+        ),),
 
         const SizedBox(height: 16,),
         const DashedDivider(indent: 0, spacing: 16, thickness: 1, color: Colors.white,),

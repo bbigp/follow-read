@@ -1,7 +1,5 @@
 
 
-import 'package:follow_read/config/cluster_icons.dart';
-
 import 'constants.dart';
 
 class Cluster {

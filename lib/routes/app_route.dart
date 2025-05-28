@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/models/feedx.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
@@ -52,10 +53,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           final type = state.pathParameters['type']!;
-          return EntryPage(
-            id: int.parse(id),
-            type: TileType.fromString(type),
-          );
+          final iMata = switch(TileType.fromString(type)) {
+            _ => Feedx(int.parse(id)),
+          };
+          return EntryPage(iMata: iMata,);
         }
       ),
       GoRoute(

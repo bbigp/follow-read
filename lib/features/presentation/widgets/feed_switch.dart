@@ -8,7 +8,6 @@ import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/preference_panel.dart';
 
 import '../../domain/models/tile.dart';
-import '../providers/home_page_provider.dart';
 
 class FeedSwitch extends ConsumerWidget {
 

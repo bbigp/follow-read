@@ -13,7 +13,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/models/category.dart';
 import 'folder_provider.dart';
-import 'home_page_provider.dart';
 
 part 'feed_provider.g.dart';
 

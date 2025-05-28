@@ -6,7 +6,7 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/features/presentation/providers/home_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/advanced_view.dart';
 import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
@@ -89,7 +89,7 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
                 enabled: cluster.name.isNotEmpty,
                 onPressed: () async {
                   ref.read(clusterProvider.notifier).save();
-                  final _ = ref.refresh(homePageProvider);
+                  final _ = ref.refresh(homeProvider);
                   Navigator.pop(context);
                 },
               ),

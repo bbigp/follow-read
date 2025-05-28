@@ -9,7 +9,9 @@ class Feed implements Mata {
   final int userId;
   final String feedUrl;
   final String siteUrl;
+  @override
   final String title;
+  @override
   final int unread;
   final int read;
   final String iconUrl;

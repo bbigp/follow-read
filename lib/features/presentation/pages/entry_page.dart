@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/features/domain/models/feedx.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/entry_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
@@ -22,14 +24,9 @@ import 'package:shimmer/shimmer.dart';
 
 
 class EntryPage extends ConsumerStatefulWidget {
-  final int id;
-  final TileType type;
+  final IMata iMata;
 
-  const EntryPage({
-    super.key,
-    required this.id,
-    required this.type,
-  });
+  const EntryPage({super.key, required this.iMata,});
 
   @override
   ConsumerState<EntryPage> createState() => _EntryPageState();
@@ -37,8 +34,6 @@ class EntryPage extends ConsumerStatefulWidget {
 
 class _EntryPageState extends ConsumerState<EntryPage> {
   final ScrollController _scrollController = ScrollController();
-
-  String get pid => PageUtils.pid(widget.type, widget.id);
 
   @override
   void initState() {
@@ -49,7 +44,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final entriesAsync = ref.watch(entriesProvier(pid));
+    final mate = ref.watch(mataProvider(widget.iMata));
+    // final entriesAsync = ref.watch(entriesProvier(""));
+
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: (){
@@ -57,38 +54,36 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         },),
         actions: [
           InkWell(onTap: (){
-              ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
-                'id': widget.id.toString(), 'type': widget.type.toString(),
-              });
+              // ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
+              //   'id': widget.id.toString(), 'type': widget.type.toString(),
+              // });
           }, child: PaddedSvgIcon(Svgicons.search),),
           InkWell(onTap: (){
-            OpenModal.open(context,
-                FeedSettingsSheet(id: widget.id, type: widget.type,),
-                scrollable: true
-            );
+            // OpenModal.open(context,
+            //     FeedSettingsSheet(id: widget.id, type: widget.type,),
+            //     scrollable: true
+            // );
           }, child: PaddedSvgIcon(Svgicons.more),)
         ],
       ),
-      body: entriesAsync.isLoading
-          ? _buildSmartSkeleton()
-          : _buildMain(),
+      body: mate.isLoading ? _buildSmartSkeleton() : _buildMain(),
     );
   }
 
 
 
   void _scrollListener() {
-    final entriesAsync = ref.watch(entriesProvier(pid));
-    final position = _scrollController.position;
+    // final entriesAsync = ref.watch(entriesProvier(pid));
+    // final position = _scrollController.position;
 
     // 空列表或未加载完成时直接返回
-    if (position.maxScrollExtent <= 0) return;
+    // if (position.maxScrollExtent <= 0) return;
 
-    if (!entriesAsync.isLoading && entriesAsync.requireValue.hasMore
-        && !entriesAsync.requireValue.isLoadingMore
-        && _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      ref.read(entriesProvier(pid).notifier).loadMore();
-    }
+    // if (!entriesAsync.isLoading && entriesAsync.requireValue.hasMore
+    //     && !entriesAsync.requireValue.isLoadingMore
+    //     && _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      // ref.read(entriesProvier(pid).notifier).loadMore();
+    // }
   }
 
   @override
@@ -99,31 +94,34 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   }
 
   Widget _buildMain() {
-    final tileAsync = ref.watch(tileProvider(pid));
-    final tile = tileAsync.requireValue;
+    // final tileAsync = ref.watch(tileProvider(""));
+    // final tile = tileAsync.requireValue;
+    //
+    // final entriesAsync = ref.watch(entriesProvier(""));
+    // final entriesState = entriesAsync.requireValue;
+    List<Entry> list = [];
 
-    final entriesAsync = ref.watch(entriesProvier(pid));
-    final entriesState = entriesAsync.requireValue;
+    final mate = ref.watch(mataProvider(widget.iMata)).requireValue;
 
     return Stack(children: [
       RefreshIndicator(
         onRefresh: () async {
-          ref.invalidate(entriesProvier(pid));
-          await ref.read(entriesProvier(pid).future);
+          ref.invalidate(entriesProvier(""));
+          await ref.read(entriesProvier("").future);
         },
         child: CustomScrollView(
           controller: _scrollController,
           slivers: [
 
-            SliverToBoxAdapter(child: FeedSummary(feed: tile),),
+            SliverToBoxAdapter(child: FeedSummary(feed: mate),),
             SliverList(delegate: SliverChildBuilderDelegate(
-              childCount: entriesState.entries.length,
+              childCount: 0,
               (context, index) {
-                final entry = entriesState.entries[index];
+                final entry = list[index];
                 return EntryTile(entry: entry);
               }
             )),
-            SliverToBoxAdapter(child: entriesState.hasMore ? const LoadingMore() : const NoMore(),)
+            SliverToBoxAdapter(child: false ? const LoadingMore() : const NoMore(),)
           ]
         ),
       ),
@@ -148,39 +146,4 @@ class _EntryPageState extends ConsumerState<EntryPage> {
     );
   }
 
-  Widget _noContentYet() {
-    final screenHeight = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsets.only(top: screenHeight / 5),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 24, left: 35, right: 35, bottom: 0),
-              child: Image.asset(
-                'assets/png/no_content_yet.png',
-                width: 90,
-                height: 46,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text(
-                '没有内容了',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  height: 1.33,
-                  color: AppTheme.black25,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }

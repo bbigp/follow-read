@@ -7,7 +7,6 @@ import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/feed_provider.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/alert_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';

@@ -6,7 +6,7 @@ import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
+import 'package:follow_read/features/presentation/providers/folders_provider.dart';
 import 'package:follow_read/features/presentation/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/features/presentation/widgets/home/count_badge.dart';
 import 'package:follow_read/routes/app_route.dart';
@@ -37,7 +37,7 @@ class FolderProvider implements TileDataProvider {
       ),
     ),
     onTap: () {
-      ref.read(homePageProvider.notifier).expanded(folder.id);
+      ref.read(foldersProvider.notifier).expanded(folder.id);
     }
   );
 

@@ -5,17 +5,15 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/providers/feedx_provider.dart';
+import 'package:follow_read/features/presentation/providers/home_provider.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
 import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
 import 'package:follow_read/features/presentation/widgets/components/sync_icon.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/feed/empty_feed_view.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/widgets/home/cluster_tile.dart';
-import 'package:follow_read/features/presentation/widgets/home/feed_stream.dart';
 import 'package:follow_read/features/presentation/widgets/home/feed_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/folder_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/group_tile.dart';
@@ -70,7 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
     final syncState = ref.watch(syncProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final _ = ref.refresh(homePageProvider);
+        final _ = ref.refresh(homeProvider);
         ref.read(syncProvider.notifier).resetStatus();
       });
     }
@@ -82,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
 
     final widgets = [
       SliverToBoxAdapter(child: AnimatedSize(
-        duration: Duration(milliseconds: 400),
+        duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         alignment: Alignment.topCenter,
         child: _showTip ? SyncView(skeleton: true,) : SizedBox(height: 0,),
@@ -155,7 +153,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
             left: 0, right: 0, top: 0,
             child: AnimatedOpacity( //变淡效果
               opacity: _showTip ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 300),
+              duration: Duration(milliseconds: 500),
               curve: Curves.easeInOut,
               onEnd: (){
                 if (!_showTip) {

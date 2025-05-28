@@ -1,23 +1,11 @@
-
-
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/data/repositories/category_repository.dart';
-import 'package:follow_read/features/data/repositories/cluster_repository.dart';
-import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/category.dart';
 import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 
-import 'app_container.dart';
-
-class PageInfo<T> {
-  final List<T> list;
-  final int page;
-  final int size;
-  const PageInfo({required this.list, this.page = 1, this.size = 10});
-}
+import 'aists_provider.dart';
+import 'feeds_provider.dart';
+import 'folders_provider.dart';
 
 class HomePageData {
   final List<Feed> feeds;
@@ -84,54 +72,3 @@ final homeProvider = Provider.autoDispose<HomePageData?>((ref) {
 //   }
 //
 // }
-
-
-//FutureProvider 一次性 数据不缓存
-//AsyncNotifierProvider  数据缓存  Provider暴漏出去，Notifier数据控制器
-
-final feedsProvider = AsyncNotifierProvider.autoDispose<FeedsNotifier, List<Feed>>(
-  FeedsNotifier.new,
-);
-final foldersProvider = AsyncNotifierProvider.autoDispose<FoldersNotifier, List<Category>>(
-  FoldersNotifier.new
-);
-final aistsProvider = AsyncNotifierProvider.autoDispose<AistsNotifier, List<Cluster>>(
-  AistsNotifier.new
-);
-
-
-
-class FeedsNotifier extends AutoDisposeAsyncNotifier<List<Feed>> {
-
-  late final FeedRepository _feedRepository = ref.watch(feedRepositoryProvider);
-
-  @override
-  FutureOr<List<Feed>> build() async {
-    final feeds = await _feedRepository.getFeeds();
-    return feeds;
-  }
-
-}
-
-class FoldersNotifier extends AutoDisposeAsyncNotifier<List<Category>> {
-  late final CategoryRepository _categoryRepository = ref.watch(categoryRepositoryProvider);
-
-  @override
-  FutureOr<List<Category>> build() async {
-    final categories = await _categoryRepository.getCategories();
-    return categories;
-  }
-}
-
-class AistsNotifier extends AutoDisposeAsyncNotifier<List<Cluster>> {
-  late final ClusterRepository _clusterRepository = ref.watch(clusterRepositoryProvider);
-
-  @override
-  FutureOr<List<Cluster>> build() async {
-    return await _clusterRepository.getAll();
-  }
-}
-
-
-
-

@@ -4,7 +4,6 @@ import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/domain/models/cluster.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
-import 'package:follow_read/features/presentation/providers/home_page_provider.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/cluster_icon.dart';
 import 'package:follow_read/features/presentation/widgets/components/context_menu.dart';
 import 'package:follow_read/features/presentation/widgets/context_menu_wrapper.dart';
