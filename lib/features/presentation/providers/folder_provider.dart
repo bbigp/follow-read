@@ -2,7 +2,7 @@
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../domain/models/category.dart';
+import '../../domain/models/folder.dart';
 import 'app_container.dart';
 
 part 'folder_provider.g.dart';

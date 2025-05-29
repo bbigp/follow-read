@@ -2,7 +2,7 @@
 
 import 'package:follow_read/features/data/datasources/cluster_dao.dart';
 import 'package:follow_read/features/data/datasources/entities/cluster_entity.dart';
-import 'package:follow_read/features/domain/models/cluster.dart';
+import 'package:follow_read/features/domain/models/aist.dart';
 
 import '../../../core/utils/logger.dart';
 

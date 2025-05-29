@@ -5,7 +5,7 @@ import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 
 import '../../../../config/svgicons.dart';
 import '../../../../config/theme.dart';
-import '../../../domain/models/cluster.dart';
+import '../../../domain/models/aist.dart';
 import '../feed_popup_menu.dart';
 
 class RecentTime extends ConsumerStatefulWidget {

@@ -2,7 +2,7 @@
 
 import 'package:drift/drift.dart';
 
-import '../../domain/models/cluster.dart';
+import '../../domain/models/aist.dart';
 import 'database.dart';
 import 'entities/cluster_entity.dart';
 

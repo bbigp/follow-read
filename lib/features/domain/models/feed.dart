@@ -1,5 +1,4 @@
-import 'package:follow_read/features/domain/models/ui_item.dart';
-
+import 'base.dart';
 import 'constants.dart';
 import 'feedx.dart';
 
@@ -90,25 +89,5 @@ class Feed implements MetaViewData {
 
 }
 
-class SQLQueryBuilder {
-  final List<int>? feedIds;
-  final List<String>? statuses;
-  final DateTime? minPublishedTime;
-  final DateTime? minAddTime;
-  final bool? starred;
-  final int page;
-  final int pageSize;
-  final String? order;
 
-  const SQLQueryBuilder({
-    this.feedIds,
-    this.statuses,
-    this.minPublishedTime,
-    this.minAddTime,
-    this.starred,
-    required this.page,
-    required this.pageSize,
-    this.order,
-  });
-}
 

@@ -2,8 +2,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:follow_read/core/utils/logger.dart';
-import 'package:follow_read/features/domain/models/feed.dart';
-import 'package:follow_read/features/domain/models/smart_list_count.dart';
+import 'package:follow_read/features/domain/models/base.dart';
 
 import '../../domain/models/constants.dart';
 import 'database.dart';
@@ -35,8 +34,34 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return await (select(entriesTable)..where((r) => r.feedId.equals(BigInt.from(feedId)))).get();
   }
 
-  Future<List<EntryEntity>> fetch(int page, int size, SQLQueryBuilder builder) {
+  Future<List<EntryEntity>> fetch(int page, int size, SQLQueryBuilder builder) async {
+    var query = select(entriesTable)..where((t) => entriesTable.status.isIn(builder.statuses));
+    if (builder.feedIds.isNotEmpty){
+      query = query..where((t) => t.feedId.isIn(builder.feedIds.map((i) => BigInt.from(i)).toList()));
+    }
+    if (builder.starred) {
+      query = query..where((t) => t.starred.equals(true));
+    }
+    if (builder.minPublishedTime != null) {
+      query = query..where((t) => t.publishedAt.isBiggerOrEqualValue(builder.minPublishedTime!));
+    }
+    if (builder.minAddTime != null) {
+      query = query..where((t) => t.createdAt.isBiggerOrEqualValue(builder.minAddTime!));
+    }
 
+    final orderByColumn = switch(builder.order) {
+      Frc.orderxCreatedAt => entriesTable.createdAt,
+      _ => entriesTable.publishedAt,
+    };
+
+    // final ordering = direction.toLowerCase() == 'asc'
+    //     ? OrderingMode.asc
+    //     : OrderingMode.desc;
+
+    query..orderBy([(t) => OrderingTerm(expression: orderByColumn, mode: OrderingMode.desc)])
+      ..limit(size, offset: (page - 1) * size);
+
+    return await query.get();
   }
 
   Future<List<EntryEntity>> paginateEntries({
@@ -187,38 +212,38 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     return query;
   }
 
-
-  Future<SmartListCount> countSmartList() async {
-
-    final now = DateTime.now().toUtc();
-    final todayStart = DateTime(now.year, now.month, now.day);
-    // final tomorrowStart = todayStart.add(const Duration(days: 1));
-
-    final query = '''
-    SELECT 
-      COUNT(*) AS total,
-      ifnull(SUM(CASE WHEN status = 'read' THEN 1 ELSE 0 END), 0) AS read_count,
-      ifnull(SUM(CASE WHEN status = 'unread' THEN 1 ELSE 0 END), 0) AS unread_count,
-      ifnull(SUM(CASE WHEN starred THEN 1 ELSE 0 END), 0) AS starred_count,
-      ifnull(SUM(CASE WHEN published_at >= ? THEN 1 ELSE 0 END), 0) AS today_count
-    FROM entries;
-  ''';
-
-
-
-    final result = await db.customSelect(
-      query,
-      variables: [Variable(todayStart)],
-    ).getSingle();
-
-    return SmartListCount(
-      total: result.read<int>('total'),
-      read: result.read<int>('read_count'),
-      unread: result.read<int>('unread_count'),
-      starred: result.read<int>('starred_count'),
-      today: result.read<int>('today_count'),
-    );
-  }
+  //
+  // Future<SmartListCount> countSmartList() async {
+  //
+  //   final now = DateTime.now().toUtc();
+  //   final todayStart = DateTime(now.year, now.month, now.day);
+  //   // final tomorrowStart = todayStart.add(const Duration(days: 1));
+  //
+  //   final query = '''
+  //   SELECT
+  //     COUNT(*) AS total,
+  //     ifnull(SUM(CASE WHEN status = 'read' THEN 1 ELSE 0 END), 0) AS read_count,
+  //     ifnull(SUM(CASE WHEN status = 'unread' THEN 1 ELSE 0 END), 0) AS unread_count,
+  //     ifnull(SUM(CASE WHEN starred THEN 1 ELSE 0 END), 0) AS starred_count,
+  //     ifnull(SUM(CASE WHEN published_at >= ? THEN 1 ELSE 0 END), 0) AS today_count
+  //   FROM entries;
+  // ''';
+  //
+  //
+  //
+  //   final result = await db.customSelect(
+  //     query,
+  //     variables: [Variable(todayStart)],
+  //   ).getSingle();
+  //
+  //   return SmartListCount(
+  //     total: result.read<int>('total'),
+  //     read: result.read<int>('read_count'),
+  //     unread: result.read<int>('unread_count'),
+  //     starred: result.read<int>('starred_count'),
+  //     today: result.read<int>('today_count'),
+  //   );
+  // }
 
   // return result.map((row) {
   // return UnreadCount(

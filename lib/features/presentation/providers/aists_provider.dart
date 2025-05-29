@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/repositories/cluster_repository.dart';
-import 'package:follow_read/features/domain/models/cluster.dart';
+import 'package:follow_read/features/domain/models/aist.dart';
 
 import 'app_container.dart';
 

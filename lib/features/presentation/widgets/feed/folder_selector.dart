@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/features/domain/models/category.dart';
+import 'package:follow_read/features/domain/models/folder.dart';
 import 'package:follow_read/features/presentation/pages/cluster_page.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
 

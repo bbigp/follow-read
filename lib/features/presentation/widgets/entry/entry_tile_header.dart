@@ -50,7 +50,10 @@ class EntryTileHeaderSkeleton extends StatelessWidget {
         child: Container(width: 18, height: 18, color: Colors.white,),
       ),
       const SizedBox(width: 6,),
-      Container(width: 72, height: 12, color: Colors.white,),
+      Container(width: 72, height: 12, decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: Colors.white,
+      ),),
     ],);
   }
 }

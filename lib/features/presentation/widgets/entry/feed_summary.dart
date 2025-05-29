@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/features/domain/models/base.dart';
 import 'package:follow_read/features/domain/models/feedx.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
@@ -11,11 +12,12 @@ import 'package:follow_read/theme/text_styles.dart';
 ///
 class FeedSummary extends ConsumerWidget {
 
-  final Mata feed;
-  const FeedSummary({super.key, required this.feed});
+  final MetaDatax metaDatax;
+  const FeedSummary({super.key, required this.metaDatax});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final feed = metaDatax.get(ref).requireValue;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

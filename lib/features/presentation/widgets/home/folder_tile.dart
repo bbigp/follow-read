@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/models/category.dart';
+import 'package:follow_read/features/domain/models/folder.dart';
 import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/home/main_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/provider/feed_provider.dart';

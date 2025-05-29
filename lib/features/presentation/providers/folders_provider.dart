@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/data/repositories/category_repository.dart';
-import 'package:follow_read/features/domain/models/category.dart';
+import 'package:follow_read/features/domain/models/folder.dart';
 
 import 'app_container.dart';
 

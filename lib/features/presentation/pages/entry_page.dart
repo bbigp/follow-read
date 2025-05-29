@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/domain/models/base.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/models/feedx.dart';
+import 'package:follow_read/features/domain/models/page_info.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/entry_page_provider.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
@@ -35,17 +37,39 @@ class EntryPage extends ConsumerStatefulWidget {
 class _EntryPageState extends ConsumerState<EntryPage> {
   final ScrollController _scrollController = ScrollController();
 
+  void _scrollListener() {
+    final entriesAsync = widget.metaDatax.page(ref);
+    if (entriesAsync.isLoading) return;
+    if (!entriesAsync.requireValue.hasMore) return;
+    if (entriesAsync.requireValue.isLoadingMore) return;
+
+    final position = _scrollController.position;
+    // 空列表或未加载完成时直接返回
+    if (position.maxScrollExtent <= 0) return;
+
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      widget.metaDatax.loadMore(ref);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
   }
 
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final metaAsync = widget.metaDatax.get(ref);
-    final entriesAsync = ref.watch(entriesProvier(""));
+    final entriesAsync = widget.metaDatax.page(ref);
 
     return Scaffold(
       appBar: CupxAppBar(
@@ -66,66 +90,35 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           }, child: PaddedSvgIcon(Svgicons.more),)
         ],
       ),
-      body: metaAsync.isLoading ? _buildSmartSkeleton() : _buildMain(),
+      body: metaAsync.isLoading  || entriesAsync.isLoading
+          ? _buildSmartSkeleton()
+          : _buildMain(entriesAsync.requireValue),
     );
   }
 
 
-
-  void _scrollListener() {
-    // final entriesAsync = ref.watch(entriesProvier(pid));
-    // final position = _scrollController.position;
-
-    // 空列表或未加载完成时直接返回
-    // if (position.maxScrollExtent <= 0) return;
-
-    // if (!entriesAsync.isLoading && entriesAsync.requireValue.hasMore
-    //     && !entriesAsync.requireValue.isLoadingMore
-    //     && _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      // ref.read(entriesProvier(pid).notifier).loadMore();
-    // }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Widget _buildMain() {
-    // final tileAsync = ref.watch(tileProvider(""));
-    // final tile = tileAsync.requireValue;
-    //
-    // final entriesAsync = ref.watch(entriesProvier(""));
-    // final entriesState = entriesAsync.requireValue;
-    List<Entry> list = [];
-
-    final mate = ref.watch(mataProvider(widget.iMata)).requireValue;
-
+  Widget _buildMain(PageInfo<Entry> pageInfo) {
+    final list = pageInfo.list;
     return Stack(children: [
       RefreshIndicator(
         onRefresh: () async {
-          ref.invalidate(entriesProvier(""));
-          await ref.read(entriesProvier("").future);
+          widget.metaDatax.refresh(ref);
         },
         child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-
-            SliverToBoxAdapter(child: FeedSummary(feed: mate),),
-            SliverList(delegate: SliverChildBuilderDelegate(
-              childCount: 0,
-              (context, index) {
-                final entry = list[index];
-                return EntryTile(entry: entry);
-              }
-            )),
-            SliverToBoxAdapter(child: false ? const LoadingMore() : const NoMore(),)
-          ]
+            controller: _scrollController,
+            slivers: [
+              SliverToBoxAdapter(child: FeedSummary(metaDatax: widget.metaDatax),),
+              SliverList(delegate: SliverChildBuilderDelegate(
+                  childCount: list.length, (context, index) {
+                    return EntryTile(entry: list[index]);
+                  }
+              )),
+              SliverToBoxAdapter(child: pageInfo.hasMore ? const LoadingMore() : const NoMore(),)
+            ]
         ),
       ),
     ],);
+
   }
 
 
@@ -141,7 +134,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
             : const SpacerDivider(indent: 16, spacing: 1, thickness: 0.5, color: Colors.white,),
         itemBuilder: (context, index) => index == 0
             ? FeedSummarySkeleton()
-            : SkeletonEntryItem(),
+            : EntryTileSkeleton(),
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/models/category.dart';
-import 'package:follow_read/features/domain/models/cluster.dart';
+import 'package:follow_read/features/domain/models/folder.dart';
+import 'package:follow_read/features/domain/models/aist.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 
 import 'aists_provider.dart';

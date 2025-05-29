@@ -11,7 +11,7 @@ import 'package:follow_read/features/presentation/providers/entry_page_provider.
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../domain/models/category.dart';
+import '../../domain/models/folder.dart';
 import 'folder_provider.dart';
 
 part 'feed_provider.g.dart';

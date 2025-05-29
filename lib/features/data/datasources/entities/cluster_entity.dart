@@ -3,7 +3,7 @@
 
 
 import 'package:drift/drift.dart';
-import 'package:follow_read/features/domain/models/cluster.dart';
+import 'package:follow_read/features/domain/models/aist.dart';
 
 import '../database.dart';
 

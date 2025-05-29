@@ -7,6 +7,7 @@ import 'package:follow_read/features/data/datasources/entry_dao.dart';
 import 'package:follow_read/features/data/datasources/feed_dao.dart';
 import 'package:follow_read/features/data/models/entry_page_response.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
+import 'package:follow_read/features/domain/models/base.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';

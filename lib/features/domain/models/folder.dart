@@ -1,6 +1,7 @@
 
 import 'package:follow_read/features/domain/models/feedx.dart';
 
+import 'base.dart';
 import 'constants.dart';
 import 'feed.dart';
 
@@ -72,5 +73,11 @@ class Category implements MetaViewData{
 
   @override
   int get unread => feeds.fold<int>(0, (sum, feed) => sum + feed.unread);
+
+  @override
+  SQLQueryBuilder toBuilder() {
+    // TODO: implement toBuilder
+    throw UnimplementedError();
+  }
 
 }

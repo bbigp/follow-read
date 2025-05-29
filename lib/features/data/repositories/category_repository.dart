@@ -2,7 +2,7 @@
 
 import 'package:follow_read/features/data/datasources/entities/category_entity.dart';
 
-import '../../domain/models/category.dart';
+import '../../domain/models/folder.dart';
 import '../datasources/category_dao.dart';
 
 class CategoryRepository {

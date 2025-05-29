@@ -1,7 +1,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:follow_read/features/data/datasources/database.dart';
-import 'package:follow_read/features/domain/models/category.dart';
+import 'package:follow_read/features/domain/models/folder.dart';
 
 @DataClassName("CategoryEntity")
 class CategoriesTable extends Table {

@@ -1,5 +1,8 @@
 
 
+import 'package:follow_read/features/domain/models/feed.dart';
+
+import 'base.dart';
 import 'constants.dart';
 import 'feedx.dart';
 
@@ -102,4 +105,10 @@ class Cluster implements MetaViewData {
 
   @override
   int get unread => count;
+
+  @override
+  SQLQueryBuilder toBuilder() {
+    // TODO: implement toBuilder
+    throw UnimplementedError();
+  }
 }
