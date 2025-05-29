@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
-import 'package:follow_read/features/domain/models/page_info.dart';
+import 'package:follow_read/features/domain/cases/page_info.dart';
 import 'package:follow_read/features/presentation/providers/entries_provider.dart';
 import 'package:follow_read/features/presentation/providers/feeds_provider.dart';
 

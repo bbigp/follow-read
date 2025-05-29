@@ -1,7 +1,7 @@
 
-import 'package:follow_read/features/domain/models/feedx.dart';
 
-import 'base.dart';
+import 'package:follow_read/features/domain/cases/base.dart';
+
 import 'constants.dart';
 import 'feed.dart';
 

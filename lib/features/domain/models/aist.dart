@@ -1,10 +1,8 @@
 
 
-import 'package:follow_read/features/domain/models/feed.dart';
+import 'package:follow_read/features/domain/cases/base.dart';
 
-import 'base.dart';
 import 'constants.dart';
-import 'feedx.dart';
 
 class Cluster implements MetaViewData {
 

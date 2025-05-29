@@ -57,13 +57,13 @@ class _SyncIconState extends ConsumerState<SyncIcon> with SingleTickerProviderSt
         ),
       ),
     );
-    return RotationTransition(
-      turns: _controller,
-      child: SizedBox(
-        width: 28, height: 28,
-        child: SvgPicture.asset(Svgicons.sync, width: 24, height: 24, fit: BoxFit.contain,),
-      ),
-    );
+    // return RotationTransition(
+    //   turns: _controller,
+    //   child: SizedBox(
+    //     width: 28, height: 28,
+    //     child: SvgPicture.asset(Svgicons.sync, width: 24, height: 24, fit: BoxFit.contain,),
+    //   ),
+    // );
   }
 
   // _isRotating = !_isRotating;

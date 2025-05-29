@@ -1,6 +1,6 @@
-import 'base.dart';
+import 'package:follow_read/features/domain/cases/base.dart';
+
 import 'constants.dart';
-import 'feedx.dart';
 
 
 class Feed implements MetaViewData {
@@ -78,6 +78,7 @@ class Feed implements MetaViewData {
 
   static Feed empty = Feed(id: 0, userId: 0, feedUrl: "", siteUrl: "", title: "");
 
+  @override
   SQLQueryBuilder toBuilder(){
     return SQLQueryBuilder(page: 1, pageSize: 10,
       feedIds: [id],

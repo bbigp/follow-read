@@ -3,25 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/core/utils/page_utils.dart';
-import 'package:follow_read/features/domain/models/base.dart';
+import 'package:follow_read/features/domain/cases/base.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
-import 'package:follow_read/features/domain/models/feedx.dart';
-import 'package:follow_read/features/domain/models/page_info.dart';
-import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/providers/entry_page_provider.dart';
-import 'package:follow_read/features/presentation/providers/tile_provider.dart';
+import 'package:follow_read/features/domain/cases/page_info.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
 import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 import 'package:follow_read/features/presentation/widgets/entry/feed_summary.dart';
 import 'package:follow_read/features/presentation/widgets/entry/entry_tile.dart';
-import 'package:follow_read/features/presentation/widgets/entry/skeleton_entry_item.dart';
-import 'package:follow_read/features/presentation/widgets/feed/feed_settings_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/components/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
-import 'package:follow_read/features/presentation/widgets/open_modal.dart';
-import 'package:follow_read/routes/app_route.dart';
 import 'package:shimmer/shimmer.dart';
 
 

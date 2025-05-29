@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/models/aistx.dart';
-import 'package:follow_read/features/domain/models/feedx.dart';
-import 'package:follow_read/features/domain/models/folderx.dart';
+import 'package:follow_read/features/domain/cases/aistx.dart';
+import 'package:follow_read/features/domain/cases/feedx.dart';
+import 'package:follow_read/features/domain/cases/folderx.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';

@@ -2,14 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/cluster_icon.dart';
 
 import '../../../../config/cluster_icons.dart';
 import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';
 import '../input_field.dart';
-import '../svgicon.dart';
 
 class BasicView extends ConsumerWidget {
 

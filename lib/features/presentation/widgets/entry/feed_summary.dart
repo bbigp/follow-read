@@ -3,9 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/features/domain/models/base.dart';
-import 'package:follow_read/features/domain/models/feedx.dart';
-import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/domain/cases/base.dart';
 import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
