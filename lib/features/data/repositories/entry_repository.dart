@@ -8,6 +8,7 @@ import 'package:follow_read/features/data/datasources/feed_dao.dart';
 import 'package:follow_read/features/data/models/entry_page_response.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -130,6 +131,20 @@ class EntryRepository {
     }, (data) async {
       return data.total;
     });
+  }
+
+  Future<List<Entry>> fetchEntries(int page, int size, SQLQueryBuilder builder) async {
+    final entries = await _dao.fetch(page, size, builder);
+    final feedIds = entries.map((item) => int.parse(item.feedId.toString())).toSet().toList();
+    final feeds = await _feedDao.getFeedsByIds(feedIds);
+    final feedMap = {for (var feed in feeds) feed.id: feed};
+    return entries.map((entry) {
+      final feed = feedMap[entry.feedId];
+      if (feed != null) {
+        return entry.toModel().copyWith(feed: feed.toModel());
+      }
+      return entry.toModel();
+    }).toList();
   }
 
 

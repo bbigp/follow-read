@@ -4,7 +4,7 @@ import 'constants.dart';
 import 'feedx.dart';
 
 
-class Feed implements Mata {
+class Feed implements MetaViewData {
   final int id;
   final int userId;
   final String feedUrl;
@@ -78,6 +78,37 @@ class Feed implements Mata {
   }
 
   static Feed empty = Feed(id: 0, userId: 0, feedUrl: "", siteUrl: "", title: "");
+
+  SQLQueryBuilder toBuilder(){
+    return SQLQueryBuilder(page: 1, pageSize: 10,
+      feedIds: [id],
+      statuses: onlyShowUnread ? ["unread"] : ["unread", "read"],
+      order: order,
+    );
+  }
+
+
 }
 
+class SQLQueryBuilder {
+  final List<int>? feedIds;
+  final List<String>? statuses;
+  final DateTime? minPublishedTime;
+  final DateTime? minAddTime;
+  final bool? starred;
+  final int page;
+  final int pageSize;
+  final String? order;
+
+  const SQLQueryBuilder({
+    this.feedIds,
+    this.statuses,
+    this.minPublishedTime,
+    this.minAddTime,
+    this.starred,
+    required this.page,
+    required this.pageSize,
+    this.order,
+  });
+}
 

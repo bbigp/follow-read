@@ -2,6 +2,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/smart_list_count.dart';
 
 import '../../domain/models/constants.dart';
@@ -32,6 +33,10 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
 
   Future<List<EntryEntity>> getEntriesByFeedId(int feedId) async {
     return await (select(entriesTable)..where((r) => r.feedId.equals(BigInt.from(feedId)))).get();
+  }
+
+  Future<List<EntryEntity>> fetch(int page, int size, SQLQueryBuilder builder) {
+
   }
 
   Future<List<EntryEntity>> paginateEntries({

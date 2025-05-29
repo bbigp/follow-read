@@ -8,15 +8,6 @@ import 'package:follow_read/features/domain/models/cluster.dart';
 
 import 'app_container.dart';
 
-class PageInfo<T> {
-  final List<T> list;
-  final int page;
-  final int size;
-  const PageInfo({required this.list, this.page = 1, this.size = 10});
-}
-
-
-
 //FutureProvider 一次性 数据不缓存
 //AsyncNotifierProvider  数据缓存  Provider暴漏出去，Notifier数据控制器
 

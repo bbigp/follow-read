@@ -24,9 +24,9 @@ import 'package:shimmer/shimmer.dart';
 
 
 class EntryPage extends ConsumerStatefulWidget {
-  final IMata iMata;
+  final MetaDatax metaDatax;
 
-  const EntryPage({super.key, required this.iMata,});
+  const EntryPage({super.key, required this.metaDatax,});
 
   @override
   ConsumerState<EntryPage> createState() => _EntryPageState();
@@ -44,8 +44,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mate = ref.watch(mataProvider(widget.iMata));
-    // final entriesAsync = ref.watch(entriesProvier(""));
+    final metaAsync = widget.metaDatax.get(ref);
+    final entriesAsync = ref.watch(entriesProvier(""));
 
     return Scaffold(
       appBar: CupxAppBar(
@@ -66,7 +66,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           }, child: PaddedSvgIcon(Svgicons.more),)
         ],
       ),
-      body: mate.isLoading ? _buildSmartSkeleton() : _buildMain(),
+      body: metaAsync.isLoading ? _buildSmartSkeleton() : _buildMain(),
     );
   }
 

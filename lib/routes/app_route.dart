@@ -51,12 +51,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/entry/:type/:id',
         name: RouteNames.entry,
         builder: (context, state) {
-          final id = state.pathParameters['id']!;
+          final id = int.parse(state.pathParameters['id']!);
           final type = state.pathParameters['type']!;
           final iMata = switch(TileType.fromString(type)) {
-            _ => Feedx(int.parse(id)),
+            TileType.folder => Folderx(id),
+            TileType.cluster => Aistx(id),
+            _ => Feedx(id),
           };
-          return EntryPage(iMata: iMata,);
+          return EntryPage(metaDatax: iMata,);
         }
       ),
       GoRoute(

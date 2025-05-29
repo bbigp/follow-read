@@ -1,8 +1,9 @@
 
 
 import 'constants.dart';
+import 'feedx.dart';
 
-class Cluster {
+class Cluster implements MetaViewData {
 
   final int id;
   final String name;
@@ -95,4 +96,10 @@ class Cluster {
   String toString() {
     return 'Cluster{id: $id, name: $name, icon: $icon, feedIds: $feedIds, recentTime: $recentTime, statuses: $statuses, deleted: $deleted, createdAt: $createdAt, changedAt: $changedAt, count: $count, starred: $starred, hideGlobally: $hideGlobally, order: $order, showReadingTime: $showReadingTime, onlyShowUnread: $onlyShowUnread}';
   }
+
+  @override
+  String get title => name;
+
+  @override
+  int get unread => count;
 }

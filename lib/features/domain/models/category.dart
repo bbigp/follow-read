@@ -1,10 +1,13 @@
 
+import 'package:follow_read/features/domain/models/feedx.dart';
+
 import 'constants.dart';
 import 'feed.dart';
 
-class Category {
+class Category implements MetaViewData{
 
   final int id;
+  @override
   final String title;
   final int userId;
   final bool hideGlobally;
@@ -66,5 +69,8 @@ class Category {
       expanded: expanded ?? this.expanded,
     );
   }
+
+  @override
+  int get unread => feeds.fold<int>(0, (sum, feed) => sum + feed.unread);
 
 }
