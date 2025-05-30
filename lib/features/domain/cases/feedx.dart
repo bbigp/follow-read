@@ -11,11 +11,11 @@ import 'package:follow_read/features/presentation/providers/feeds_provider.dart'
 
 import 'base.dart';
 
-class Feedx implements MetaDatax {
+class Feedx extends MetaDatax {
   
   @override
   final int id;
-  const Feedx(this.id);
+  Feedx(this.id);
 
   @override
   AsyncValue<Feed> get(WidgetRef ref){
@@ -55,15 +55,7 @@ class Feedx implements MetaDatax {
         return feeds.firstWhere((c) => c.id == id, orElse: () => Feed.empty);
       });
 
-  @override
-  AsyncValue<PageInfo<Entry>> page(WidgetRef ref) {
-    return ref.watch(entriesProvider(this));
-  }
 
-  @override
-  void loadMore(WidgetRef ref) {
-      ref.read(entriesProvider(this).notifier).nextPage();
-  }
 }
 
 

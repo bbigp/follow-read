@@ -5,11 +5,12 @@ import 'package:follow_read/features/domain/models/aist.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/cases/page_info.dart';
 import 'package:follow_read/features/presentation/providers/aists_provider.dart';
+import 'package:follow_read/features/presentation/providers/entries_provider.dart';
 
 import 'base.dart';
 
 
-class Aistx implements MetaDatax {
+class Aistx extends MetaDatax {
   @override
   final int id;
   const Aistx(this.id);
@@ -20,8 +21,11 @@ class Aistx implements MetaDatax {
   }
 
   @override
-  // TODO: implement _futureProvider
-  AutoDisposeFutureProviderFamily<MetaViewData, int> get futureProvider => throw UnimplementedError();
+  AutoDisposeFutureProviderFamily<MetaViewData, int> get futureProvider =>
+      AutoDisposeFutureProviderFamily<Cluster, int>((ref, args) async {
+        final aists = await ref.watch(aistsProvider.future);
+        return aists.firstWhere((c) => c.id == id, orElse: () => Cluster());
+      });
 
   @override
   AutoDisposeProviderFamily<AsyncValue<Cluster>, int> get uiProvider => AutoDisposeProviderFamily<AsyncValue<Cluster>, int>((ref, args) {
@@ -38,24 +42,7 @@ class Aistx implements MetaDatax {
 
 
 
-  @override
-  Future<SQLQueryBuilder> sqlBuilder(Ref ref) {
-    // TODO: implement sqlBuilder
-    throw UnimplementedError();
-  }
 
-  @override
-  AsyncValue<PageInfo<Entry>> page(WidgetRef ref) {
-    // TODO: implement page
-    throw UnimplementedError();
-  }
 
-  @override
-  void loadMore(WidgetRef ref) {
-    // TODO: implement loadMore
-  }
-  @override
-  void refresh(WidgetRef ref) {
-    // TODO: implement refresh
-  }
+
 }

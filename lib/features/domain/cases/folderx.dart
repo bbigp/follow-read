@@ -5,16 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/folder.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/cases/page_info.dart';
+import 'package:follow_read/features/presentation/providers/entries_provider.dart';
 import 'package:follow_read/features/presentation/providers/folders_provider.dart';
 
 
 import 'base.dart';
 
-class Folderx implements MetaDatax {
+class Folderx extends MetaDatax {
 
   @override
   final int id;
-  const Folderx(this.id);
+  Folderx(this.id);
 
   @override
   AsyncValue<Category> get(WidgetRef ref){
@@ -22,8 +23,11 @@ class Folderx implements MetaDatax {
   }
 
   @override
-  // TODO: implement _futureProvider
-  AutoDisposeFutureProviderFamily<MetaViewData, int> get futureProvider => throw UnimplementedError();
+  AutoDisposeFutureProviderFamily<MetaViewData, int> get futureProvider =>
+      AutoDisposeFutureProviderFamily<Category, int>((ref, args) async {
+        final folders = await ref.watch(foldersProvider.future);
+        return folders.firstWhere((c) => c.id == id, orElse: () => Category.empty);
+      });
 
   @override
   AutoDisposeProviderFamily<AsyncValue<Category>, int> get uiProvider => AutoDisposeProviderFamily<AsyncValue<Category>, int>((ref, args) {
@@ -47,18 +51,9 @@ class Folderx implements MetaDatax {
   }
 
   @override
-  AsyncValue<PageInfo<Entry>> page(WidgetRef ref) {
-    // TODO: implement page
-    throw UnimplementedError();
-  }
-
-  @override
-  void loadMore(WidgetRef ref) {
-    // TODO: implement loadMore
-  }
-
-  @override
   void refresh(WidgetRef ref) {
     // TODO: implement refresh
   }
+
+
 }

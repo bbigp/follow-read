@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/cases/page_info.dart';
+import 'package:follow_read/features/presentation/providers/entries_provider.dart';
 
 
 
@@ -17,8 +18,12 @@ abstract class MetaDatax {
   AsyncValue<MetaViewData> get(WidgetRef ref);
   AutoDisposeProviderFamily<AsyncValue<MetaViewData>, int> get uiProvider;
   AutoDisposeFutureProviderFamily<MetaViewData, int> get futureProvider;
-  AsyncValue<PageInfo<Entry>> page(WidgetRef ref);
-  void loadMore(WidgetRef ref);
+  AsyncValue<PageInfo<Entry>> page(WidgetRef ref) {
+    return ref.watch(entriesProvider(this));
+  }
+  void loadMore(WidgetRef ref) {
+    ref.read(entriesProvider(this).notifier).nextPage();
+  }
   Future<SQLQueryBuilder> sqlBuilder(Ref ref);
   void refresh(WidgetRef ref);
 }

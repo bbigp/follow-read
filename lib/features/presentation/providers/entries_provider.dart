@@ -16,9 +16,13 @@ final entriesProvider = AsyncNotifierProvider.autoDispose.family<EntriesNotifier
 class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<PageInfo<Entry>, MetaDatax> {
 
   late final _entryRepository = ref.watch(entryRepositoryProvider);
-
+  KeepAliveLink? _link;
   @override
   FutureOr<PageInfo<Entry>> build(arg) async {
+    _link = ref.keepAlive();
+    ref.onDispose(() {
+      _link?.close();
+    });
     await Future.delayed(Duration(seconds: 1));
     final size = 10;
     final builder = await arg.sqlBuilder(ref);
@@ -35,6 +39,10 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<PageInfo<Entry>, Me
     state = AsyncData(pageInfo.appendList(entries, page: nextPage,
         hasMore: entries.length >= pageInfo.size
     ));
+  }
+
+  void dispose(){
+    _link?.close();
   }
 
 }
