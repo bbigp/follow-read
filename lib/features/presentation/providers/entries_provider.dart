@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/features/domain/cases/base.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/cases/page_info.dart';
@@ -16,33 +17,44 @@ final entriesProvider = AsyncNotifierProvider.autoDispose.family<EntriesNotifier
 class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<PageInfo<Entry>, MetaDatax> {
 
   late final _entryRepository = ref.watch(entryRepositoryProvider);
-  KeepAliveLink? _link;
+  late final _searchDao = ref.watch(searchDaoProvider);
   @override
   FutureOr<PageInfo<Entry>> build(arg) async {
-    _link = ref.keepAlive();
-    ref.onDispose(() {
-      _link?.close();
+    logger.i("初始化entries");
+    ref.onDispose((){
+      logger.i("释放entries.....");
     });
-    await Future.delayed(Duration(seconds: 1));
-    final size = 10;
     final builder = await arg.sqlBuilder(ref);
-    final entries = await _entryRepository.fetchEntries(1, size, builder);
-    return PageInfo(list: entries, builder: builder, hasMore: entries.length >= size);
+    final size = 20;
+    final page = 1;
+    if (arg.search) {
+      return PageInfo(builder: builder, list: [], page: 0, size: size);
+    }
+    await Future.delayed(Duration(milliseconds: 500));
+    final entries = await _entryRepository.fetchEntries(page, size, builder);
+    return PageInfo(builder: builder,
+      list: entries, hasMore: entries.length >= size,
+      page: page, size: size,
+    );
   }
 
-  void nextPage() async {
+  void nextPage({String word = ""}) async {
     final pageInfo = state.requireValue;
     if (pageInfo.isLoadingMore) return;
     state = AsyncData(pageInfo.copyWith(isLoadingMore: true));
-    final nextPage = pageInfo.page + 1;
-    final entries = await _entryRepository.fetchEntries(nextPage, pageInfo.size, pageInfo.builder!);
-    state = AsyncData(pageInfo.appendList(entries, page: nextPage,
-        hasMore: entries.length >= pageInfo.size
-    ));
-  }
 
-  void dispose(){
-    _link?.close();
+    final nextPage = pageInfo.page + 1;
+    var builder = pageInfo.builder!;
+    if (word.isNotEmpty) {
+      builder = builder.copyWith(word: word);
+      _searchDao.save(word);
+    }
+
+    final entries = await _entryRepository.fetchEntries(nextPage, pageInfo.size, builder);
+    state = AsyncData(pageInfo.appendList(entries,
+      hasMore: entries.length >= pageInfo.size,
+      builder: builder, page: nextPage,
+    ));
   }
 
 }

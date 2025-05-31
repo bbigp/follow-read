@@ -140,7 +140,7 @@ class _InputFieldState extends State<InputField> {
           onTap: _clearText,
           child: Container(
             padding: widget.suffixIconPadding,
-            child: Svgicon(Svgicons.xFill, size: widget.suffixSize, iconSize: widget.suffixIconSize, ),
+            child: Svgicon(Svgicons.x_fill, size: widget.suffixSize, iconSize: widget.suffixIconSize, ),
           ),
         )
             : SizedBox(width: widget.suffixSize,),

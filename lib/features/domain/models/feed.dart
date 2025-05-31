@@ -36,7 +36,7 @@ class Feed implements MetaViewData {
     this.errorCount = 0,
     this.errorMsg = "",
     this.categoryId = 0,
-    this.order = Frc.orderxPublishedAt,
+    this.order = Model.orderxPublishedAt,
     this.hideGlobally = false,
   });
 
@@ -80,7 +80,7 @@ class Feed implements MetaViewData {
 
   @override
   SQLQueryBuilder toBuilder(){
-    return SQLQueryBuilder(page: 1, pageSize: 10,
+    return SQLQueryBuilder(
       feedIds: [id],
       statuses: onlyShowUnread ? ["unread"] : ["unread", "read"],
       order: order,

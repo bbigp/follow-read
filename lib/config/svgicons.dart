@@ -29,12 +29,12 @@ class Svgicons {
 
 
   static const String noMedia = "assets/svg/no_media.svg";
-  static const String chevronRight = "assets/svg/chevron_right.svg";
+
   static const String chevronUpDown = "assets/svg/chevron_up_down.svg";
   static const String ban = "assets/svg/ban.svg";
   static const String book = "assets/svg/book.svg";
   static const String x = "assets/svg/x.svg";
-  static const String xFill = "assets/svg/x_fill.svg";
+
   static const String selection = "assets/svg/selection.svg";
   static const String circular = "assets/svg/circular.svg";
 
@@ -68,6 +68,9 @@ class Svgicons {
   static const String link = "assets/svg/link.svg";
   static const String vector = "assets/svg/vector.svg";
   static const String search = "assets/svg/search.svg";
+  static const String search_1 = "assets/svg/search_1.svg";
   static const String arrow_left = "assets/svg/arrow_left.svg";
   static const String time = "assets/svg/time.svg";
+  static const String x_fill = "assets/svg/x_fill.svg";
+  static const String chevron_right = "assets/svg/chevron_right.svg";
 }

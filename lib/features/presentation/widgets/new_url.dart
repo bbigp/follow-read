@@ -63,7 +63,7 @@ class NewUrl extends ConsumerWidget  {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Svgicon(Svgicons.xFill, size: 28, iconSize: 24,),
+                child: Svgicon(Svgicons.x_fill, size: 28, iconSize: 24,),
               ),
             ) : null,
           ),

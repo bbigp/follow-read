@@ -17,7 +17,7 @@ class Cluster implements MetaViewData {
   final DateTime? createdAt;
   final DateTime? changedAt;
   final int count;
-  final int starred;
+  final int starred; // -1是all 1是true 0是false
 
   final bool hideGlobally;
   final String order;
@@ -49,7 +49,7 @@ class Cluster implements MetaViewData {
     this.changedAt,
     this.count = 0,
     this.hideGlobally = false,
-    this.order = Frc.orderxPublishedAt,
+    this.order = Model.orderxPublishedAt,
     this.showReadingTime = false,
     this.onlyShowUnread = false,
     this.starred = -1,
@@ -95,7 +95,11 @@ class Cluster implements MetaViewData {
 
   @override
   String toString() {
-    return 'Cluster{id: $id, name: $name, icon: $icon, feedIds: $feedIds, recentTime: $recentTime, statuses: $statuses, deleted: $deleted, createdAt: $createdAt, changedAt: $changedAt, count: $count, starred: $starred, hideGlobally: $hideGlobally, order: $order, showReadingTime: $showReadingTime, onlyShowUnread: $onlyShowUnread}';
+    return 'Cluster{id: $id, name: $name, icon: $icon, feedIds: $feedIds, '
+        'recentTime: $recentTime, statuses: $statuses, deleted: $deleted, '
+        'createdAt: $createdAt, changedAt: $changedAt, count: $count, '
+        'starred: $starred, hideGlobally: $hideGlobally, order: $order, '
+        'showReadingTime: $showReadingTime, onlyShowUnread: $onlyShowUnread}';
   }
 
   @override
@@ -106,7 +110,24 @@ class Cluster implements MetaViewData {
 
   @override
   SQLQueryBuilder toBuilder() {
-    // TODO: implement toBuilder
-    throw UnimplementedError();
+    var now = DateTime.now();
+    DateTime? minPublishedTime;
+    if (recentTime > 0) {
+      minPublishedTime = now.add(Duration(minutes: -recentTime));
+    }
+    DateTime? minAddTime;
+    if (recentAddTime > 0) {
+      minAddTime = now.add(Duration(minutes:  -recentAddTime));
+    }
+    bool? star = switch(starred) {
+      1 => true,
+      0 => false,
+      _ => null,
+    };
+    return SQLQueryBuilder(feedIds: feedIds, statuses: statuses,
+      minPublishedTime: minPublishedTime, minAddTime: minAddTime,
+      starred: star,
+      order: order,
+    );
   }
 }

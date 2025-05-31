@@ -39,7 +39,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     if (builder.feedIds.isNotEmpty){
       query = query..where((t) => t.feedId.isIn(builder.feedIds.map((i) => BigInt.from(i)).toList()));
     }
-    if (builder.starred) {
+    if (builder.starred != null) {
       query = query..where((t) => t.starred.equals(true));
     }
     if (builder.minPublishedTime != null) {
@@ -48,9 +48,13 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     if (builder.minAddTime != null) {
       query = query..where((t) => t.createdAt.isBiggerOrEqualValue(builder.minAddTime!));
     }
+    if (builder.word.isNotEmpty) {
+      final keyword = '%${builder.word}%';
+      query = query..where((t) => t.title.like(keyword) | t.content.like(keyword) | t.summary.like(keyword));
+    }
 
     final orderByColumn = switch(builder.order) {
-      Frc.orderxCreatedAt => entriesTable.createdAt,
+      Model.orderxCreatedAt => entriesTable.createdAt,
       _ => entriesTable.publishedAt,
     };
 
@@ -91,7 +95,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> with _$EntryDaoMixin {
     }
 
     final orderByColumn = switch(order) {
-      Frc.orderxCreatedAt => entriesTable.createdAt,
+      Model.orderxCreatedAt => entriesTable.createdAt,
       _ => entriesTable.publishedAt,
     };
 

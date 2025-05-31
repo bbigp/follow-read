@@ -19,7 +19,7 @@ class AppTextStyles {
   );//height 22
   static const TextStyle text13500 = TextStyle(
     fontSize: 13, fontWeight: FontWeight.w500, height: 1.38, color: AppTheme.black95,
-  );
+  ); // 18px
   static const TextStyle text28500 = TextStyle(
     fontSize: 28, fontWeight: FontWeight.w500, height: 1.21, color: AppTheme.black95,
   );// 34px
@@ -38,6 +38,10 @@ class AppTextStyles {
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black50,
   );
 
+
+  static const TextStyle hint = TextStyle(
+    fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black25,
+  );
   static const TextStyle hint500 = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black25,
   );

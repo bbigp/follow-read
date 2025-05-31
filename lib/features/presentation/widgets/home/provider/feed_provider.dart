@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
@@ -73,7 +74,7 @@ class FeedProvider implements TileDataProvider {
   GestureTapCallback? get onTap => () {
     ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
       'id': feed.id.toString(),
-      'type': TileType.feed.toString()
+      'type': Model.feed
     });
   };
 

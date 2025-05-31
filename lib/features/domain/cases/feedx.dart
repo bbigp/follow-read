@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/cases/page_info.dart';
@@ -15,24 +16,12 @@ class Feedx extends MetaDatax {
   
   @override
   final int id;
-  Feedx(this.id);
+  @override
+  final bool search;
+  Feedx(this.id, {this.search = false});
 
   @override
-  AsyncValue<Feed> get(WidgetRef ref){
-    return ref.watch(uiProvider(id));
-  }
-
-  @override
-  Future<SQLQueryBuilder> sqlBuilder(Ref ref) async {
-    final feed = await ref.watch(futureProvider(id).future);
-    return feed.toBuilder();
-  }
-
-  @override
-  void refresh(WidgetRef ref) async {
-    final _ = ref.refresh(uiProvider(id));
-    final state = await ref.refresh(entriesProvider(this).future);
-  }
+  String get type => Model.feed;
 
   @override
   AutoDisposeProviderFamily<AsyncValue<Feed>, int> get uiProvider =>

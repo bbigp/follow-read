@@ -13,6 +13,7 @@ import 'package:follow_read/features/presentation/widgets/entry/feed_summary.dar
 import 'package:follow_read/features/presentation/widgets/entry/entry_tile.dart';
 import 'package:follow_read/features/presentation/widgets/components/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
+import 'package:follow_read/routes/app_route.dart';
 import 'package:shimmer/shimmer.dart';
 
 
@@ -59,9 +60,8 @@ class _EntryPageState extends ConsumerState<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final metaAsync = widget.metaDatax.get(ref);
     final entriesAsync = widget.metaDatax.page(ref);
-
+    print("A页面 build 被调用 ${entriesAsync.isLoading}");
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: (){
@@ -69,23 +69,25 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         },),
         actions: [
           InkWell(onTap: (){
-              // ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
-              //   'id': widget.id.toString(), 'type': widget.type.toString(),
-              // });
+            ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
+              'id': widget.metaDatax.id.toString(), 'type': widget.metaDatax.type,
+            });
           }, child: PaddedSvgIcon(Svgicons.search),),
           InkWell(onTap: (){
-            // OpenModal.open(context,
-            //     FeedSettingsSheet(id: widget.id, type: widget.type,),
-            //     scrollable: true
-            // );
           }, child: PaddedSvgIcon(Svgicons.more),)
         ],
       ),
-      body: metaAsync.isLoading  || entriesAsync.isLoading
+      body: entriesAsync.isLoading
           ? _buildSmartSkeleton()
           : _buildMain(entriesAsync.requireValue),
     );
   }
+
+
+  // OpenModal.open(context,
+  //     FeedSettingsSheet(id: widget.id, type: widget.type,),
+  //     scrollable: true
+  // );
 
 
   Widget _buildMain(PageInfo<Entry> pageInfo) {

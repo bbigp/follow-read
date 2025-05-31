@@ -27,7 +27,7 @@ class Category implements MetaViewData{
     this.hideGlobally = false,
     this.onlyShowUnread = false,
     this.showReadingTime = false,
-    this.order = Frc.orderxPublishedAt,
+    this.order = Model.orderxPublishedAt,
     this.feeds = const [],
     this.expanded = false,
   });
@@ -38,10 +38,6 @@ class Category implements MetaViewData{
     return id == 0;
   }
 
-  // int get unread {
-  //   return feeds.fold<int>(0, (sum, feed) => sum + feed.unread);
-  // }
-  //
   // int get errorCount {
   //   return feeds.fold<int>(0, (sum, feed) => sum + feed.errorCount);
   // }
@@ -76,8 +72,11 @@ class Category implements MetaViewData{
 
   @override
   SQLQueryBuilder toBuilder() {
-    // TODO: implement toBuilder
-    throw UnimplementedError();
+    return SQLQueryBuilder(
+      feedIds: feeds.map((item) => item.id).toList(),
+      statuses: onlyShowUnread ? ["unread"] : ["unread", "read"],
+      order: order,
+    );
   }
 
 }

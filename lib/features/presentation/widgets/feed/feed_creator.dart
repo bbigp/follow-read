@@ -81,7 +81,7 @@ class _FeedCreatorState extends ConsumerState<FeedCreator> {
             const SizedBox(width: 12,),
             Text(add.folder.title, style: AppTextStyles.caption,),
             const SizedBox(width: 8,),
-            SvgPicture.asset(Svgicons.chevronRight, width: 20, height: 20,),
+            SvgPicture.asset(Svgicons.chevron_right, width: 20, height: 20,),
             const SizedBox(width: 12,),
           ],),)),
           const SizedBox(height: 8,),

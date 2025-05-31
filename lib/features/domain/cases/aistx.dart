@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/aist.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/cases/page_info.dart';
 import 'package:follow_read/features/presentation/providers/aists_provider.dart';
@@ -13,12 +14,12 @@ import 'base.dart';
 class Aistx extends MetaDatax {
   @override
   final int id;
-  const Aistx(this.id);
+  @override
+  final bool search;
+  Aistx(this.id, {this.search = false});
 
   @override
-  AsyncValue<Cluster> get(WidgetRef ref){
-    return ref.watch(uiProvider(id));
-  }
+  String get type => Model.aist;
 
   @override
   AutoDisposeFutureProviderFamily<MetaViewData, int> get futureProvider =>
@@ -28,21 +29,17 @@ class Aistx extends MetaDatax {
       });
 
   @override
-  AutoDisposeProviderFamily<AsyncValue<Cluster>, int> get uiProvider => AutoDisposeProviderFamily<AsyncValue<Cluster>, int>((ref, args) {
-    final aists = ref.watch(aistsProvider);
-    return aists.when(
-        data: (list) {
-          final item = list.firstWhere((c) => c.id == id, orElse: () => Cluster());
-          return AsyncData(item);
-        },
-        error: (error, stackTrace) => AsyncError(error, stackTrace),
-        loading: () => AsyncLoading()
-    );
-  });
-
-
-
-
-
+  AutoDisposeProviderFamily<AsyncValue<Cluster>, int> get uiProvider =>
+      AutoDisposeProviderFamily<AsyncValue<Cluster>, int>((ref, args) {
+        final aists = ref.watch(aistsProvider);
+        return aists.when(
+            data: (list) {
+              final item = list.firstWhere((c) => c.id == id, orElse: () => Cluster());
+              return AsyncData(item);
+            },
+            error: (error, stackTrace) => AsyncError(error, stackTrace),
+            loading: () => AsyncLoading()
+        );
+      });
 
 }

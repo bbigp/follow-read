@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/cases/aistx.dart';
 import 'package:follow_read/features/domain/cases/feedx.dart';
 import 'package:follow_read/features/domain/cases/folderx.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
 import 'package:follow_read/features/presentation/pages/entry_page.dart';
@@ -55,9 +56,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = int.parse(state.pathParameters['id']!);
           final type = state.pathParameters['type']!;
-          final iMata = switch(TileType.fromString(type)) {
-            TileType.folder => Folderx(id),
-            TileType.cluster => Aistx(id),
+          final iMata = switch(type) {
+            Model.folder => Folderx(id),
+            Model.aist => Aistx(id),
             _ => Feedx(id),
           };
           return EntryPage(metaDatax: iMata,);
@@ -80,14 +81,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
       ),
       GoRoute(path: '/search/:type/:id',
-      name: RouteNames.search,
+        name: RouteNames.search,
         builder: (context, state) {
-          final id = state.pathParameters['id']!;
+          final id = int.parse(state.pathParameters['id']!);
           final type = state.pathParameters['type']!;
-          return SearchPage(
-            id: int.parse(id),
-            type: TileType.fromString(type),
-          );
+          final iMata = switch(type) {
+            Model.folder => Folderx(id, search: true),
+            Model.aist => Aistx(id, search: true),
+            _ => Feedx(id, search: true),
+          };
+          return SearchPage(metaDatax: iMata,);
         }
       ),
       GoRoute(

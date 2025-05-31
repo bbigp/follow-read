@@ -36,7 +36,7 @@ class CupxListTile extends StatefulWidget {
       title: title,
       icon: icon,
       onTap: onTap,
-      trailing: SvgPicture.asset(Svgicons.chevronRight, width: 20, height: 20,),
+      trailing: SvgPicture.asset(Svgicons.chevron_right, width: 20, height: 20,),
     );
   }
 

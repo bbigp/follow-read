@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/folder.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/cases/page_info.dart';
@@ -15,12 +16,12 @@ class Folderx extends MetaDatax {
 
   @override
   final int id;
-  Folderx(this.id);
+  @override
+  final bool search;
+  Folderx(this.id, {this.search = false});
 
   @override
-  AsyncValue<Category> get(WidgetRef ref){
-    return ref.watch(uiProvider(id));
-  }
+  String get type => Model.folder;
 
   @override
   AutoDisposeFutureProviderFamily<MetaViewData, int> get futureProvider =>
@@ -30,30 +31,17 @@ class Folderx extends MetaDatax {
       });
 
   @override
-  AutoDisposeProviderFamily<AsyncValue<Category>, int> get uiProvider => AutoDisposeProviderFamily<AsyncValue<Category>, int>((ref, args) {
-    final folders = ref.watch(foldersProvider);
-    return folders.when(
-        data: (list) {
-          final item = list.firstWhere((c) => c.id == id, orElse: () => Category.empty);
-          return AsyncData(item);
-        },
-        error: (error, stackTrace) => AsyncError(error, stackTrace),
-        loading: () => AsyncLoading()
-    );
-  });
-
-
-
-  @override
-  Future<SQLQueryBuilder> sqlBuilder(Ref ref) {
-    // TODO: implement sqlBuilder
-    throw UnimplementedError();
-  }
-
-  @override
-  void refresh(WidgetRef ref) {
-    // TODO: implement refresh
-  }
-
+  AutoDisposeProviderFamily<AsyncValue<Category>, int> get uiProvider =>
+      AutoDisposeProviderFamily<AsyncValue<Category>, int>((ref, args) {
+        final folders = ref.watch(foldersProvider);
+        return folders.when(
+            data: (list) {
+              final item = list.firstWhere((c) => c.id == id, orElse: () => Category.empty);
+              return AsyncData(item);
+            },
+            error: (error, stackTrace) => AsyncError(error, stackTrace),
+            loading: () => AsyncLoading()
+        );
+      });
 
 }

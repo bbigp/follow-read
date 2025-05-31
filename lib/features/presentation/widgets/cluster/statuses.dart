@@ -93,7 +93,7 @@ class _StatusesState extends ConsumerState<Statuses> {
               fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
             ),),),
             const SizedBox(width: 8,),
-            SvgPicture.asset(Svgicons.chevronRight, width: 20, height: 20,),
+            SvgPicture.asset(Svgicons.chevron_right, width: 20, height: 20,),
             const SizedBox(width: 12,),
           ],),
         )

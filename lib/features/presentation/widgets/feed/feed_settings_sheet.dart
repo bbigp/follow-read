@@ -133,15 +133,15 @@ class FeedSettingsSheet extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: CupxSlidingSegmentedControl.big(
             groupValue: switch(tile.orderx) {
-              Frc.orderxPublishedAt => '发布时间',
-              Frc.orderxCreatedAt => '添加时间',
+              Model.orderxPublishedAt => '发布时间',
+              Model.orderxCreatedAt => '添加时间',
               _ => '发布时间',
             },
             onValueChanged: (value) {
               var v = switch(value) {
-                '发布时间' => Frc.orderxPublishedAt,
-                '添加时间' => Frc.orderxCreatedAt,
-                _ => Frc.orderxPublishedAt,
+                '发布时间' => Model.orderxPublishedAt,
+                '添加时间' => Model.orderxCreatedAt,
+                _ => Model.orderxPublishedAt,
               };
               ref.read(tileProvider(pid).notifier).saveShow(orderx: v);
             },

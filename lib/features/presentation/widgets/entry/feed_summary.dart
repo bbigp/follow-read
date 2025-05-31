@@ -15,7 +15,9 @@ class FeedSummary extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final feed = metaDatax.get(ref).requireValue;
+    final feedAsync = metaDatax.get(ref);
+    if (feedAsync.isLoading) return const SizedBox.shrink();
+    final feed = feedAsync.requireValue;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
