@@ -13,7 +13,7 @@ class PaddedSvgIcon extends StatelessWidget {
   final BoxFit fit;
   final GestureTapCallback? onTap;
   final ColorFilter? colorFilter;
-  const PaddedSvgIcon(this.icon, {super.key, this.padding = 4,
+  const PaddedSvgIcon(this.icon, {super.key, this.padding = 2,
     this.width = 24, this.height = 24, this.fit = BoxFit.contain,
     this.onTap, this.colorFilter,
   });

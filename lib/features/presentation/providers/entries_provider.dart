@@ -30,7 +30,6 @@ class EntriesNotifier extends AutoDisposeFamilyAsyncNotifier<PageInfo<Entry>, Me
     if (arg.search) {
       return PageInfo(builder: builder, list: [], page: 0, size: size);
     }
-    await Future.delayed(Duration(milliseconds: 500));
     final entries = await _entryRepository.fetchEntries(page, size, builder);
     return PageInfo(builder: builder,
       list: entries, hasMore: entries.length >= size,

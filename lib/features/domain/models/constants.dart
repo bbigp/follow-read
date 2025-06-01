@@ -11,4 +11,7 @@ class Model {
   static const String folder = "folder";
   static const String feed = "feed";
   static const String aist = "aist";
+
+  static const String unread = "unread";
+  static const String read = "read";
 }

@@ -162,7 +162,7 @@ class AlertTipActionButton {
     }
     final Widget widget;
     if (child == null) {
-      widget = PaddedSvgIcon(icon, width: 20, height: 20, colorFilter: ColorFilter.mode(
+      widget = PaddedSvgIcon(icon, width: 20, height: 20, padding: 4, colorFilter: ColorFilter.mode(
         color,
         BlendMode.srcIn,
       ));

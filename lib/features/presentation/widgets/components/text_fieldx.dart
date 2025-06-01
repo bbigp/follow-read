@@ -90,7 +90,7 @@ class _TextFieldxState extends State<TextFieldx> {
       _ => EdgeInsets.symmetric(horizontal: 12)
     };
     Widget clearIcon = switch(widget.sizex) {
-      Sizex.small => PaddedSvgIcon(Svgicons.x_fill, padding: 4, width: 20,
+      Sizex.small => PaddedSvgIcon(Svgicons.x_fill, padding: 2, width: 20,
         height: 20, fit: BoxFit.contain,
         colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn,),
       ),

@@ -23,6 +23,9 @@ class AppTextStyles {
   static const TextStyle text28500 = TextStyle(
     fontSize: 28, fontWeight: FontWeight.w500, height: 1.21, color: AppTheme.black95,
   );// 34px
+  static const TextStyle text22500 = TextStyle(
+    fontSize: 22, fontWeight: FontWeight.w500, height: 1.27, color: AppTheme.black95,
+  ); //28px
 
   //说明
   static const TextStyle caption = TextStyle(
@@ -37,6 +40,9 @@ class AppTextStyles {
   static const TextStyle caption500 = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: AppTheme.black50,
   );
+  static const TextStyle caption11500 = TextStyle(
+    fontSize: 11, fontWeight: FontWeight.w500, height: 1.18, color: AppTheme.black50,
+  );//13px
 
 
   static const TextStyle hint = TextStyle(

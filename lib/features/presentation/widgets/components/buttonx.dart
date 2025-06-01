@@ -174,46 +174,49 @@ class _ButtonxState extends State<Buttonx> with SingleTickerProviderStateMixin {
     final Color textColor = enabled ? color.color : color.disabledColor;
     final TextStyle textStyle = size.textSize.copyWith(color: textColor);
 
+    Widget child = SizedBox(
+      height: size.height, width: size.width,
+      child: FadeTransition(
+        opacity: _opacityAnimation,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: size.borderRadius,
+            color: backgroundColor,
+          ),
+          child: Center(
+            child: loading
+                ? const CupertinoActivityIndicator(radius: 10)
+                : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (size.padding > 0)
+                  SizedBox(width: size.padding,),
+                if (widget.leftIcon case final String icon) ...<Widget>[
+                  SvgPicture.asset(icon, width: 20, height: 20,),
+                  const SizedBox(width: 8,),
+                ],
+                if (widget.child != "")
+                  Text(widget.child, style: textStyle,),
+                if (widget.rightIcon case final String trailing) ...<Widget>[
+                  const SizedBox(width: 8,),
+                  SvgPicture.asset(trailing, width: 20, height: 20,),
+                ],
+                if (size.padding > 0)
+                  SizedBox(width: size.padding,),
+              ],),
+          ),
+        ),
+      ),
+    );
+
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: enabled && !loading ? (_) => _animate(true) : null,
       onTapUp: enabled && !loading ? (_) => _animate(false) : null,
       onTapCancel: enabled && !loading ? () => _animate(false) : null,
       onTap: _handlePress,
-      child: SizedBox(
-        height: size.height, width: size.width,
-        child: FadeTransition(
-          opacity: _opacityAnimation,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: size.borderRadius,
-              color: backgroundColor,
-            ),
-            child: Center(
-              child: loading
-                  ? const CupertinoActivityIndicator(radius: 10)
-                  : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (size.padding > 0)
-                    SizedBox(width: size.padding,),
-                  if (widget.leftIcon case final String icon) ...<Widget>[
-                    SvgPicture.asset(icon, width: 20, height: 20,),
-                    const SizedBox(width: 8,),
-                  ],
-                  if (widget.child != "")
-                    Text(widget.child, style: textStyle,),
-                  if (widget.rightIcon case final String trailing) ...<Widget>[
-                    SvgPicture.asset(trailing, width: 20, height: 20,),
-                    const SizedBox(width: 8,),
-                  ],
-                  if (size.padding > 0)
-                    SizedBox(width: size.padding,),
-              ],),
-            ),
-          ),
-        ),
-      ),
+      child: size.compact ? IntrinsicWidth(child: child,) : child,
     );
   }
 
@@ -340,7 +343,8 @@ class ButtonxSize {
   ButtonxSize copyWith({bool? compact, double? height, double? width, double? padding,
     BorderRadiusGeometry? borderRadius, TextStyle? textSize,
   }) {
-    return ButtonxSize(compact: compact ?? this.compact,
+    return ButtonxSize(
+      compact: compact ?? this.compact,
       height: height ?? this.height, width: width ?? this.width,
       padding: padding ?? this.padding,
       borderRadius: borderRadius ?? this.borderRadius,

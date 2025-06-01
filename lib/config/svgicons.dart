@@ -73,4 +73,17 @@ class Svgicons {
   static const String time = "assets/svg/time.svg";
   static const String x_fill = "assets/svg/x_fill.svg";
   static const String chevron_right = "assets/svg/chevron_right.svg";
+  static const String chevron_down = "assets/svg/chevron_down.svg";
+  static const String out_o = "assets/svg/out_o.svg";
+
+  static const String check_o = "assets/svg/check_o.svg";
+  static const String check_fill = "assets/svg/check_fill.svg";
+  static const String unread = "assets/svg/unread.svg";
+  static const String collection_slash = "assets/svg/collection_slash.svg";
+  static const String collection = "assets/svg/collection.svg";
+  static const String share = "assets/svg/share.svg";
+  static const String explorer = "assets/svg/explorer.svg";
+  static const String star = "assets/svg/star.svg";
+  static const String star_fill = "assets/svg/star_fill.svg";
+
 }
