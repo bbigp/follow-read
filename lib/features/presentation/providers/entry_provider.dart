@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
+import 'package:follow_read/features/presentation/providers/entries_provider.dart';
 
 import '../../data/repositories/entry_repository.dart';
 import '../../domain/models/entry.dart';
@@ -32,12 +33,13 @@ class EntryNotifier extends AutoDisposeFamilyAsyncNotifier<Entry, int> {
     }
   }
 
-  Future<void> read() async {
+  Future<void> read({String status = ""}) async {
     final entry = state.requireValue;
-    final status = entry.status == Model.read ? Model.unread : Model.read;
-    final success = await _entryRepository.updateStatus(arg, status);
+    final s = status.isNotEmpty ? status : entry.status == Model.read ? Model.unread : Model.read;
+    if (entry.status == s) return;
+    final success = await _entryRepository.updateStatus(arg, s);
     if (success) {
-      state = AsyncData(entry.copyWith(status: status));
+      state = AsyncData(entry.copyWith(status: s));
     }
   }
 

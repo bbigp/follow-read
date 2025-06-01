@@ -100,7 +100,7 @@ class _EntryPageState extends ConsumerState<EntryPage> {
         child: CustomScrollView(
             controller: _scrollController,
             slivers: [
-              SliverToBoxAdapter(child: FeedSummary(metaDatax: widget.metaDatax),),
+              SliverToBoxAdapter(child: FeedSummary(metaDatax: widget.metaDatax),), //滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
               SliverList(delegate: SliverChildBuilderDelegate(
                   childCount: list.length, (context, index) {
                     return EntryTile(entry: list[index]);
