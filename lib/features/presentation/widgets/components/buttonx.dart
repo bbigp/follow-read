@@ -48,7 +48,7 @@ class IconButtonx extends StatelessWidget {
   final ButtonxType type;
   final String icon;
   final bool isLeftIcon;
-  const IconButtonx({super.key, required this.child, required this.icon, this.onPressed,
+  const IconButtonx({super.key, this.child = "", required this.icon, this.onPressed,
     this.enabled = false, required this.size, required this.type,
     this.isLeftIcon = true, this.buttonSize,
   });
@@ -192,14 +192,16 @@ class _ButtonxState extends State<Buttonx> with SingleTickerProviderStateMixin {
                 if (size.padding > 0)
                   SizedBox(width: size.padding,),
                 if (widget.leftIcon case final String icon) ...<Widget>[
-                  SvgPicture.asset(icon, width: 20, height: 20,),
-                  const SizedBox(width: 8,),
+                  SvgPicture.asset(icon, width: size.iconSize, height: size.iconSize,),
+                  if (widget.child != "")
+                    const SizedBox(width: 8,),
                 ],
                 if (widget.child != "")
                   Text(widget.child, style: textStyle,),
                 if (widget.rightIcon case final String trailing) ...<Widget>[
-                  const SizedBox(width: 8,),
-                  SvgPicture.asset(trailing, width: 20, height: 20,),
+                  if (widget.child != "")
+                    const SizedBox(width: 8,),
+                  SvgPicture.asset(trailing, width: size.iconSize, height: size.iconSize,),
                 ],
                 if (size.padding > 0)
                   SizedBox(width: size.padding,),
@@ -330,6 +332,7 @@ class ButtonxSize {
   final double padding;
   final BorderRadiusGeometry? borderRadius;
   final TextStyle textSize;
+  final double iconSize;
 
   const ButtonxSize({
     this.compact = false, //宽度是包住组件就行
@@ -338,10 +341,12 @@ class ButtonxSize {
     this.height,
     this.borderRadius = const BorderRadius.all(Radius.circular(30)),
     this.textSize = const TextStyle(),
+    this.iconSize = 20,
   });
 
   ButtonxSize copyWith({bool? compact, double? height, double? width, double? padding,
     BorderRadiusGeometry? borderRadius, TextStyle? textSize,
+    double? iconSize,
   }) {
     return ButtonxSize(
       compact: compact ?? this.compact,
@@ -349,6 +354,7 @@ class ButtonxSize {
       padding: padding ?? this.padding,
       borderRadius: borderRadius ?? this.borderRadius,
       textSize: textSize ?? this.textSize,
+      iconSize: iconSize ?? this.iconSize,
     );
   }
 

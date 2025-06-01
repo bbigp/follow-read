@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 
+///
 class TabBarx extends StatelessWidget {
 
-  final List<Widget> tabs; //点击区域扩大
+  final List<BottomBarItem> tabs;
 
   const TabBarx({super.key, required this.tabs,});
 
@@ -14,10 +16,10 @@ class TabBarx extends StatelessWidget {
       top: false,
       child: Column(children: [
         SpacerDivider(spacing: 1, thickness: 1, indent: 0,),
-        const SizedBox(height: 16,),
+        const SizedBox(height: 12,),
         Padding(padding: EdgeInsets.symmetric(horizontal: 20),
           child: LayoutBuilder(builder: (context, constraints){
-            final totalSpacing = constraints.maxWidth - 28 * tabs.length;
+            final totalSpacing = constraints.maxWidth - 36 * tabs.length;
             final eachSpacing = totalSpacing / (tabs.length - 1);
             List<Widget> widgets = [];
             for (var tab in tabs) {
@@ -30,10 +32,25 @@ class TabBarx extends StatelessWidget {
             ],);
           }),
         ),
-        const SizedBox(height: 4,),
+        // const SizedBox(height: 4,),
         const SizedBox(height: 12,),
-      ],),
+      ],)
     );
 
+  }
+}
+
+class BottomBarItem extends StatelessWidget {
+  final String icon;
+  final Future<void> Function()? onPressed;
+  const BottomBarItem({super.key, required this.icon, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButtonx(icon: icon,
+      size: Sizex.custom, buttonSize: smallCompact().copyWith(padding: 0, width: 36, iconSize: 24),
+      type: ButtonxType.ghost, enabled: onPressed != null,
+      onPressed: onPressed,
+    );
   }
 }

@@ -23,7 +23,7 @@ class EntryNotifier extends AutoDisposeFamilyAsyncNotifier<Entry, int> {
     return await _entryRepository.getEntry(arg);
   }
 
-  void starred() async {
+  Future<void> starred() async {
     final entry = state.requireValue;
     final success = await _entryRepository.starred(arg, !entry.starred);
     if (success) {
@@ -32,7 +32,7 @@ class EntryNotifier extends AutoDisposeFamilyAsyncNotifier<Entry, int> {
     }
   }
 
-  void read() async {
+  Future<void> read() async {
     final entry = state.requireValue;
     final status = entry.status == Model.read ? Model.unread : Model.read;
     final success = await _entryRepository.updateStatus(arg, status);

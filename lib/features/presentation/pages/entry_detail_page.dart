@@ -41,6 +41,8 @@ class EntryDetailPage extends ConsumerWidget {
       return CupertinoActivityIndicator(radius: 10,);
     }
     final entry = entryAsync.requireValue;
+
+
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: (){
@@ -84,19 +86,25 @@ class EntryDetailPage extends ConsumerWidget {
           ),
         )),
         TabBarx(tabs: [
-          InkWell(onTap: (){
-            ref.read(entryProvider(entryId).notifier).starred();
-          }, child: PaddedSvgIcon(entry.starred ? Svgicons.star_fill : Svgicons.star),),
-          InkWell(onTap: (){
-            ref.read(entryProvider(entryId).notifier).read();
-          }, child: PaddedSvgIcon(entry.status == Model.unread ? Svgicons.check_o : Svgicons.check_fill),),
-          // PaddedSvgIcon(Svgicons.chevron_down),
-          InkWell(onTap: (){
+          BottomBarItem(
+            icon: entry.starred ? Svgicons.star_fill : Svgicons.star,
+            onPressed: () async {
+              await ref.read(entryProvider(entryId).notifier).starred();
+            }
+          ),
+          BottomBarItem(
+            icon: entry.status == Model.unread ? Svgicons.check_o : Svgicons.check_fill,
+            onPressed: () async {
+              await ref.read(entryProvider(entryId).notifier).read();
+            },
+          ),
+          BottomBarItem(icon: Svgicons.chevron_down,),
+          BottomBarItem(icon: Svgicons.explorer, onPressed: () async {
             Open.browser(context, entry.url);
-          }, child: PaddedSvgIcon(Svgicons.explorer),),
-          InkWell(onTap: (){
+          },),
+          BottomBarItem(icon: Svgicons.share, onPressed: () async {
             Share.share("${entry.title}\n${entry.url}");
-          }, child: PaddedSvgIcon(Svgicons.share),),
+          },)
         ],)
       ],),
     );
