@@ -30,7 +30,7 @@ void main() async {
     callbackDispatcher,
     isInDebugMode: true,
   );
-  ControllerContainer.initialized();
+  await ControllerContainer.initialized();
   // debugPaintSizeEnabled = true; // 开启调试布局
   runApp(
     UncontrolledProviderScope(

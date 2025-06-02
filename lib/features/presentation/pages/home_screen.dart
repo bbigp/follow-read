@@ -6,6 +6,8 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/providers/feeds_controller.dart';
+import 'package:follow_read/features/presentation/providers/folders_controller.dart';
 import 'package:follow_read/features/presentation/providers/home_provider.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
@@ -22,6 +24,7 @@ import 'package:follow_read/features/presentation/widgets/home/loading_page.dart
 import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:follow_read/features/presentation/widgets/home/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
+import 'package:get/get.dart';
 
 ///
 class HomeScreen extends ConsumerStatefulWidget {
@@ -65,6 +68,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final feedsController = Get.find<FeedsController>();
+    final foldersController = Get.find<FoldersController>();
     final homeAsync = ref.watch(homeProvider);
     final syncState = ref.watch(syncProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
@@ -79,7 +84,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
     }
     final homeList = homeAsync;
 
-    final widgets = [
+    final widgets = <Widget>[
       SliverToBoxAdapter(child: AnimatedSize(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -114,20 +119,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
     if (homeList.feeds.isEmpty && homeList.folders.isEmpty) {
       widgets.add(SliverToBoxAdapter(child: EmptyFeedView(),));
     } else {
-      widgets.add(SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: homeList.folders.length,
+      widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
+          childCount: foldersController.folders.length,
               (context, index) {
-            final folder = homeList.folders[index];
+            final folder = foldersController.folders[index];
             return FolderTile(folder: folder);
           }
-      ),));
-      widgets.add(SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: homeList.feeds.length,
+      ),)));
+      widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
+          childCount: feedsController.feeds.length,
               (context, index) {
-            final feed = homeList.feeds[index];
+            final feed = feedsController.feeds[index];
             return FeedTile(feed: feed);
           }
-      )));
+      ))));
     }
     return Scaffold(
       appBar: CupxAppBar(
@@ -135,9 +140,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
           ref.read(routerProvider).pushNamed(RouteNames.profile);
         },),
         actions: [
-          PaddedSvgIcon(Svgicons.add, onTap: (){
-            Open.modal(context, FeedCreator());
-          },),
+          PaddedSvgIcon(Svgicons.add, onTap: () => Open.modal(context, FeedCreator())),
           SyncIcon(),
           PaddedSvgIcon(Svgicons.more,),
         ],
