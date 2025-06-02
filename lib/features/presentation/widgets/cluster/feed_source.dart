@@ -96,7 +96,7 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
       if (_isSelected ?? false)
         GestureDetector(
           onTap: (){
-            OpenModal.open(context, SelectFeed(), scrollable: true);
+            OpenModal.open(context, SelectFeed());
           },
           child: Row(children: [
             const SizedBox(width: 20, height: 44,),

@@ -1,54 +1,49 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/domain/models/folder.dart';
-import 'package:follow_read/features/presentation/pages/cluster_page.dart';
+import 'package:follow_read/features/presentation/providers/folders_controller.dart';
+import 'package:follow_read/features/presentation/providers/gen/add_feed.dart';
+import 'package:follow_read/features/presentation/widgets/components/card_viewx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sheet_title.dart';
+import 'package:follow_read/features/presentation/widgets/components/drag_handle.dart';
+import 'package:follow_read/features/presentation/widgets/components/radiox_list_tile.dart';
+import 'package:get/get.dart';
 
-import '../../providers/feed_provider.dart';
-import '../../providers/folder_provider.dart';
-import '../circle_radio_tile.dart';
-
+///
 class FolderSelector extends ConsumerWidget {
 
   const FolderSelector({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final foldersAsync = ref.watch(allFoldersProvider);
-    if (foldersAsync.isLoading) return const SizedBox.shrink();
-    var folders = List<Category>.from(foldersAsync.requireValue);
-    folders.removeWhere((c) => c.title == "All");
-    final all = foldersAsync.requireValue.firstWhere((c) => c.title == "All", orElse: () => Category.empty);
-    folders.insert(0, all);
-
-    final controller = ref.watch(addFeedControllerProvider);
+    final controller = Get.find<FoldersController>();
+    final addFeed = Get.find<AddFeedController>();
     return Column(children: [
-      const SizedBox(height: 8,),
-      CupxSheetTitle.closeButton(title: '选择文件夹', left: false, right: true,),
-      CardView(margin: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-          child: ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          itemBuilder: (context, index) {
-            var folder = folders[index];
-            return CircleRadioTile(
-              icon: index == 0 ? Svgicons.folderSmall : Svgicons.folderNoRss,
-              value: folder.title,
-              choose: controller.value?.folder.id == folder.id,
-              leftPadding: index == 0 ? 12 : 28,
-              fit: BoxFit.none,
-              onTap: (){
-                ref.read(addFeedControllerProvider.notifier).updateFolder(folder);
-                Navigator.of(context).pop();
-              },
-            );
-          },
-          itemCount: folders.length
-      )),
+      const SheetGrabber(),
+      const CenteredSheetTitle(title: '选择文件夹'),
+      Padding(padding: EdgeInsets.symmetric(horizontal: 16),
+        child: CardView(
+          child: Obx(() => ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(), padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              Category folder = controller.folders[index];
+              return RadioxListTile(icon: Svgicons.group, title: folder.title,
+                groupValue: addFeed.folder.title,
+                onChanged: (v) {
+                  addFeed.changed(chooseFolder: folder);
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+            itemCount: controller.folders.length
+          )),
+        ),
+      ),
       const SizedBox(height: 21,)
     ],);
   }

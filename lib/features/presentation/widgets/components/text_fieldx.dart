@@ -85,6 +85,10 @@ class _TextFieldxState extends State<TextFieldx> {
       Sizex.small => 10,
       _ => 12
     };
+    double contentBottomPadding = switch(widget.sizex) {
+      Sizex.small => (height - 15) / 2 + 2,
+      _ => 0//(height - 15) / 2
+    };
     EdgeInsets padding = switch(widget.sizex) {
       Sizex.small => EdgeInsets.symmetric(horizontal: 8),
       _ => EdgeInsets.symmetric(horizontal: 12)
@@ -98,8 +102,7 @@ class _TextFieldxState extends State<TextFieldx> {
     };
     TextStyle textStyle = widget.readOnly ? AppTextStyles.caption : AppTextStyles.text;
     TextStyle hintStyle = AppTextStyles.hint;
-    print('${(height - 15) / 2 + 2}');
-    EdgeInsets contentPadding = EdgeInsets.only(right: 8, left: 4, bottom: (height - 15) / 2 + 2);
+    EdgeInsets contentPadding = EdgeInsets.only(right: 8, left: 4, bottom: contentBottomPadding);
 
     Color background = AppTheme.black4;
     return Container(

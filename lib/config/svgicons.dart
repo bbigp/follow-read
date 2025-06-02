@@ -33,7 +33,7 @@ class Svgicons {
   static const String chevronUpDown = "assets/svg/chevron_up_down.svg";
   static const String ban = "assets/svg/ban.svg";
   static const String book = "assets/svg/book.svg";
-  static const String x = "assets/svg/x.svg";
+
 
   static const String selection = "assets/svg/selection.svg";
   static const String circular = "assets/svg/circular.svg";
@@ -71,6 +71,7 @@ class Svgicons {
   static const String search_1 = "assets/svg/search_1.svg";
   static const String arrow_left = "assets/svg/arrow_left.svg";
   static const String time = "assets/svg/time.svg";
+  static const String x = "assets/svg/x.svg";
   static const String x_fill = "assets/svg/x_fill.svg";
   static const String chevron_right = "assets/svg/chevron_right.svg";
   static const String chevron_down = "assets/svg/chevron_down.svg";
@@ -85,5 +86,11 @@ class Svgicons {
   static const String explorer = "assets/svg/explorer.svg";
   static const String star = "assets/svg/star.svg";
   static const String star_fill = "assets/svg/star_fill.svg";
+  static const String folder_1 = "assets/svg/folder_1.svg";
+
+  static const String selection_off = "assets/svg/selection_off.svg";
+  static const String selection_check = "assets/svg/selection_check.svg";
+  static const String selection_mixed = "assets/svg/selection_mixed.svg";
+  static const String selection_radio = "assets/svg/selection_radio.svg";
 
 }

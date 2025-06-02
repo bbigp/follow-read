@@ -13,6 +13,7 @@ import 'package:workmanager/workmanager.dart';
 
 import 'core/utils/bigint_mapper.dart';
 import 'features/presentation/providers/app_container.dart';
+import 'features/presentation/providers/controller_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ void main() async {
     callbackDispatcher,
     isInDebugMode: true,
   );
+  ControllerContainer.initialized();
   // debugPaintSizeEnabled = true; // 开启调试布局
   runApp(
     UncontrolledProviderScope(

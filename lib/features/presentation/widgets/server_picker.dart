@@ -9,7 +9,7 @@ import 'package:follow_read/features/presentation/widgets/smart_modal.dart';
 
 import '../../../config/theme.dart';
 import '../providers/user_provider.dart';
-import 'circle_radio_tile.dart';
+import 'components/radiox_list_tile.dart';
 import 'components/cupx_sheet_title.dart';
 import 'components/drag_handle.dart';
 
@@ -29,7 +29,7 @@ class ServerPicker extends ConsumerWidget {
     return Column(
       children: [
         const DragHandle(),
-        CupxSheetTitle.closeButton(title: '选择服务器URL', left: false, right: true,),
+        CenteredSheetTitle(title: '选择服务器URL',),
         const SizedBox(height: 8),
         Container(
             decoration: BoxDecoration(
@@ -46,10 +46,10 @@ class ServerPicker extends ConsumerWidget {
                   itemCount: user.urls.length,
                   itemBuilder: (context, index) {
                     final url = user.urls[index];
-                    return CircleRadioTile(value: url, choose: url == selectedUrl,
-                      onTap: (){
+                    return RadioxListTile(title: url, groupValue: selectedUrl,
+                      onChanged: (v){
                         ref.read(_tempSelectedUrlProvider.notifier).state = url;
-                      },
+                      }, icon: '',
                     );
                   }),
             )),

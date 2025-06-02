@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
@@ -52,7 +53,7 @@ class FeedProvider implements TileDataProvider {
   @override
   List<ContextMenuEntry> get contextMenus => [
     ContextMenu(label: '编辑', icon: Svgicons.edit, onTap: (){
-      OpenModal.open(context, FeedCreator(id: feed.id,), scrollable: false);
+      Open.modal(context, FeedCreator(id: feed.id,));
     }),
     const ContextMenuDivider(),
     ContextMenu(label: "取消订阅", icon: Svgicons.reduce_o, type: ContextMenuType.danger, onTap: (){
@@ -66,7 +67,7 @@ class FeedProvider implements TileDataProvider {
             Navigator.of(context).pop();
           }
         },
-      ), scrollable: false, hasMargin: true);
+      ), hasMargin: true);
     }),
   ];
 

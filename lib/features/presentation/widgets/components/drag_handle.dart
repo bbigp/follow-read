@@ -24,3 +24,25 @@ class DragHandle extends StatelessWidget {
   }
 
 }
+
+class SheetGrabber extends StatelessWidget {
+
+  const SheetGrabber({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(padding: EdgeInsets.only(top: 8),
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(99),
+            color: AppTheme.black8,
+          ),
+          height: 3.5, width: 36,
+        ),
+      ),
+    );
+  }
+
+
+}

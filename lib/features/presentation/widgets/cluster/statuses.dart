@@ -67,7 +67,7 @@ class _StatusesState extends ConsumerState<Statuses> {
                   ref.read(clusterProvider.notifier).update(statuses: []);
                 }
                 if (_isSelected!) {
-                  OpenModal.open(context, SelectStatus(), scrollable: false);
+                  OpenModal.open(context, SelectStatus());
                 }
               },
             );
@@ -85,7 +85,7 @@ class _StatusesState extends ConsumerState<Statuses> {
       if (statuses.isNotEmpty)
         GestureDetector(
           onTap: (){
-            OpenModal.open(context, SelectStatus(), scrollable: false);
+            OpenModal.open(context, SelectStatus());
           },
           child: Row(children: [
             const SizedBox(width: 20, height: 44,),

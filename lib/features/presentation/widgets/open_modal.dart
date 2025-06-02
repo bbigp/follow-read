@@ -4,34 +4,23 @@ import '../../../config/theme.dart';
 
 class OpenModal {
   static void open(BuildContext context, Widget view, {
-    bool scrollable = false, // 👈 是否启用滚动容器
     double maxHeightFactor = 0.85, // 最大高度比例
     bool hasMargin = false,
   }) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
-      // 允许内容高度超过屏幕70%
+      isScrollControlled: true, // 允许内容高度超过屏幕70%
       backgroundColor: Colors.transparent,
+      enableDrag: true,
       builder: (context) {
         final mediaQuery = MediaQuery.of(context);
         final bottomPadding = mediaQuery.viewInsets.bottom;
-        Widget content = scrollable
-            ? ConstrainedBox(// 如果需要滚动，就限制最大高度并加滚动容器
+        Widget content = ConstrainedBox(// 如果需要滚动，就限制最大高度并加滚动容器
                 constraints: BoxConstraints(
                     maxHeight: mediaQuery.size.height * maxHeightFactor),
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(bottom: bottomPadding),
                   child: view,
-                ),
-              )
-            : Padding(
-                padding: EdgeInsets.only(bottom: bottomPadding),
-                child: IntrinsicHeight(// 不滚动，自动根据内容高度适配
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [view],
-                  ),
                 ),
               );
 
@@ -69,3 +58,23 @@ class OpenModal {
   }
 
 }
+
+
+// Widget content = true
+//     ? ConstrainedBox(// 如果需要滚动，就限制最大高度并加滚动容器
+//   constraints: BoxConstraints(
+//       maxHeight: mediaQuery.size.height * maxHeightFactor),
+//   child: SingleChildScrollView(
+//     padding: EdgeInsets.only(bottom: bottomPadding),
+//     child: view,
+//   ),
+// )
+//     : Padding(
+//   padding: EdgeInsets.only(bottom: bottomPadding),
+//   child: IntrinsicHeight(// 不滚动，自动根据内容高度适配
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [view],
+//     ),
+//   ),
+// );

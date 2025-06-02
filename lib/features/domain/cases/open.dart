@@ -1,9 +1,16 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Open {
+
+
+  static modal(BuildContext context, Widget view){
+    OpenModal.open(context, view);
+  }
+
 
   static Future<void> browser(BuildContext context, String url) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);

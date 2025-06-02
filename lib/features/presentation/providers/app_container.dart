@@ -21,12 +21,14 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError(); // 在 main 中被 override
 });
 
+final localData = LocalData();
 final localDataSourceProvider = Provider<LocalData>((ref) {
-  return LocalData(ref.watch(sharedPreferencesProvider));
+  return localData;
 });
 
+final database = AppDatabase();
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  return AppDatabase();
+  return database;
 });
 
 
@@ -47,15 +49,17 @@ final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
 
 
 
-
+final feedDao = FeedDao(database);
 final feedDaoProvider = Provider<FeedDao>((ref) {
-  return FeedDao(ref.watch(appDatabaseProvider));
+  return feedDao;
 });
+final entryDao = EntryDao(database);
 final entryDaoProvider = Provider<EntryDao>((ref) {
-  return EntryDao(ref.watch(appDatabaseProvider));
+  return entryDao;
 });
+final categoryDao = CategoryDao(database);
 final categoryDaoProvider = Provider<CategoryDao>((ref){
-  return CategoryDao(ref.watch(appDatabaseProvider));
+  return categoryDao;
 });
 final confDaoProvider = Provider<ConfDao>((ref){
   return ConfDao(ref.watch(appDatabaseProvider));
@@ -67,14 +71,13 @@ final clusterDaoProvider = Provider((ref){
   return ClusterDao(ref.watch(appDatabaseProvider));
 });
 
-
+final feedRepository = FeedRepository(
+    feedDao: feedDao,
+    localData: localData,
+    categoryDao: categoryDao, entryDao: entryDao
+);
 final feedRepositoryProvider = Provider<FeedRepository>((ref) {
-  return FeedRepository(
-      feedDao: ref.watch(feedDaoProvider),
-      localData: ref.watch(localDataSourceProvider),
-    categoryDao: ref.watch(categoryDaoProvider),
-    entryDao: ref.watch(entryDaoProvider),
-  );
+  return feedRepository;
 });
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepository(ref.watch(localDataSourceProvider),);
@@ -88,6 +91,9 @@ final entryRepositoryProvider = Provider<EntryRepository>((ref) {
     clusterDao: ref.watch(clusterDaoProvider),
   );
 });
+final folderRepository = CategoryRepository(
+  dao: categoryDao,
+);
 final categoryRepositoryProvider = Provider<CategoryRepository>((ref){
   return CategoryRepository(
     dao: ref.watch(categoryDaoProvider),

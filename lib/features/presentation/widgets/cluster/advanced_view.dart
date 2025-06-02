@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/recent_time.dart';
 import 'package:follow_read/features/presentation/widgets/cluster/statuses.dart';
+import 'package:follow_read/features/presentation/widgets/components/card_viewx.dart';
 
 import '../../../../config/theme.dart';
 import '../../pages/cluster_page.dart';

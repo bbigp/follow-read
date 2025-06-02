@@ -25,8 +25,8 @@ class CupxAppBar extends StatelessWidget implements PreferredSizeWidget {
     ];
     return SafeArea(
         bottom: false,
-        child: Container(
-          height: height, color: Colors.white,
+        child: SizedBox(
+          height: height,
           child: Row(children: [
             SizedBox(width: 12, height: height,),
 

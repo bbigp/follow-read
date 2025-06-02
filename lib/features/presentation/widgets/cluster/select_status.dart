@@ -30,7 +30,7 @@ class _SelectStatusState extends ConsumerState<SelectStatus> {
     _statuses ??= List<String>.from(statuses);
     return Column(children: [
       const SizedBox(height: 8,),
-      CupxSheetTitle.closeButton(title: '选择状态', left: false, right: true,),
+      CenteredSheetTitle(title: '选择状态',),
       FilterCard(title: '未读', icon: Svgicons.markUnread, isSelected: (_statuses ?? []).contains('unread'), onTap: (){
         if ((_statuses ?? []).contains('unread')) {
           (_statuses ?? []).remove('unread');

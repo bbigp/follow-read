@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
+import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/home_provider.dart';
@@ -135,7 +136,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
         },),
         actions: [
           PaddedSvgIcon(Svgicons.add, onTap: (){
-            OpenModal.open(context, FeedCreator(), scrollable: false);
+            Open.modal(context, FeedCreator());
           },),
           SyncIcon(),
           PaddedSvgIcon(Svgicons.more,),

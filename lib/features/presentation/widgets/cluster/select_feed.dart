@@ -40,19 +40,19 @@ class _SelectFeedState extends ConsumerState<SelectFeed> {
       if (allFeedsAsync.isLoading) return SizedBox.shrink();
       List<Feed> feeds = allFeedsAsync.requireValue;
       return Column(children: [
-        CupxSheetTitle.button(
-          context,
-          color: AppTheme.black4, height: 48,
+        CenteredSheetTitle(
+          // context,
+          // color: AppTheme.black4, height: 48,
           title: '选择订阅源',
-          leading: CupxSheetTitleCloseButton(),
-          button: TextButtonx(child: 'Done',
-            size: Sizex.smallCompact, type: ButtonxType.primary,
-            enabled: _feedIds.isNotEmpty,
-            onPressed: () async {
-              ref.read(clusterProvider.notifier).update(feedIds: _feedIds);
-              Navigator.pop(context);
-            },
-          ),
+          // leading: CupxSheetTitleCloseButton(),
+          // button: TextButtonx(child: 'Done',
+          //   size: Sizex.smallCompact, type: ButtonxType.primary,
+          //   enabled: _feedIds.isNotEmpty,
+          //   onPressed: () async {
+          //     ref.read(clusterProvider.notifier).update(feedIds: _feedIds);
+          //     Navigator.pop(context);
+          //   },
+          // ),
         ),
         ListView.separated(shrinkWrap: true, physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 16),

@@ -30,10 +30,10 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(54),
-          child: CupxSheetTitle.closeButton(
-            color: AppTheme.black4, height: 54,
+          child: CenteredSheetTitle(
+            // color: AppTheme.black4, height: 54,
             title: '设置',
-            leading: ChevronLeftCloseButton(),
+            // leading: ChevronCloseButton(),
           ),
         ),
         body: userAsync.isLoading ? SizedBox.shrink() : Container(
@@ -53,7 +53,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                       icon: Svgicons.book,
                       title: '服务器URL',
                       onTap: () {
-                        OpenModal.open(context, ServerPicker(), scrollable: true);
+                        OpenModal.open(context, ServerPicker());
                       },
                   ),
                   Container(

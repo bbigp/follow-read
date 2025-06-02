@@ -192,7 +192,10 @@ class _ButtonxState extends State<Buttonx> with SingleTickerProviderStateMixin {
                 if (size.padding > 0)
                   SizedBox(width: size.padding,),
                 if (widget.leftIcon case final String icon) ...<Widget>[
-                  SvgPicture.asset(icon, width: size.iconSize, height: size.iconSize,),
+                  SvgPicture.asset(icon, width: size.iconSize, height: size.iconSize,
+                    fit: BoxFit.contain,
+                    colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
+                  ),
                   if (widget.child != "")
                     const SizedBox(width: 8,),
                 ],

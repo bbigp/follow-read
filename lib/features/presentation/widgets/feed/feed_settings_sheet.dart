@@ -6,7 +6,7 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/pages/cluster_page.dart';
+import 'package:follow_read/features/presentation/widgets/components/card_viewx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/widgets/feed_icon.dart';
@@ -104,7 +104,7 @@ class FeedSettingsSheet extends ConsumerWidget {
                   }
                   if (tile.type == TileType.feed) {
                     Navigator.of(context).pop();
-                    OpenModal.open(context, FeedCreator(id: tile.id, shouldPop: true,), scrollable: false);
+                    OpenModal.open(context, FeedCreator(id: tile.id, shouldPop: true,));
                   }
                 },
                 child: Container(
