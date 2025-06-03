@@ -19,4 +19,13 @@ class FeedsController extends GetxController {
     isLoading.value = false;
   }
 
+  Map<int, List<Feed>> get folderFeedsMap => feeds.fold<Map<int, List<Feed>>>(
+        {},
+        (map, feed) {
+          final cid = feed.categoryId;
+          map.putIfAbsent(cid, () => []);
+          map[cid]!.add(feed);
+          return map;
+        },
+      );
 }

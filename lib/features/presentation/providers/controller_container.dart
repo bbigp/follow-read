@@ -7,13 +7,13 @@ import 'package:get/get.dart';
 class ControllerContainer {
 
   static Future<void> initialized() async {
-    await Get.putAsync<FoldersController>(() async {
-      final c = FoldersController();
+    await Get.putAsync<FeedsController>(() async {
+      final c = FeedsController();
       await c.init();
       return c;
     });
-    await Get.putAsync<FeedsController>(() async {
-      final c = FeedsController();
+    await Get.putAsync<FoldersController>(() async {
+      final c = FoldersController();
       await c.init();
       return c;
     });
