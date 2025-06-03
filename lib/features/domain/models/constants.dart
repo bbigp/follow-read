@@ -14,4 +14,6 @@ class Model {
 
   static const String unread = "unread";
   static const String read = "read";
+
+  static const String rootFolderName = "All";
 }

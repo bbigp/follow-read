@@ -40,6 +40,10 @@ class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin 
     return await (select(categoriesTable)..where((t) => t.id.equals(BigInt.from(id)))).getSingle();
   }
 
+  Future<CategoryEntity> getByName(String name) async {
+    return await (select(categoriesTable)..where((f) => f.title.equals(name))).getSingle();
+  }
+
   Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
   String? orderx, bool? hideGlobally, }) async {
     final affectedRows = await (update(categoriesTable)

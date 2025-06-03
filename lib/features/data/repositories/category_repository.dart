@@ -21,6 +21,10 @@ class CategoryRepository {
     return (await dao.getCategoryById(id)).toModel();
   }
 
+  Future<Category> getByName(String name) async {
+    return (await dao.getByName(name)).toModel();
+  }
+
   Future<bool> updateShow(int id, {bool? onlyShowUnread, bool? showReadingTime,
     String? orderx, bool? hideGlobally, }) async {
     return await dao.updateShow(id, onlyShowUnread: onlyShowUnread,

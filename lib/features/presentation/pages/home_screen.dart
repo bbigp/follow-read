@@ -6,8 +6,8 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/providers/feeds_controller.dart';
-import 'package:follow_read/features/presentation/providers/folders_controller.dart';
+import 'package:follow_read/features/presentation/providers/feedhub/feedhub_controller.dart';
+import 'package:follow_read/features/presentation/providers/folderhub/folderhub_controller.dart';
 import 'package:follow_read/features/presentation/providers/home_provider.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
@@ -68,8 +68,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    final feedsController = Get.find<FeedsController>();
-    final foldersController = Get.find<FoldersController>();
+    final feedhub = Get.find<FeedhubController>();
+    final folderhub = Get.find<FolderhubController>();
     final homeAsync = ref.watch(homeProvider);
     final syncState = ref.watch(syncProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
@@ -120,16 +120,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
       widgets.add(SliverToBoxAdapter(child: EmptyFeedView(),));
     } else {
       widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: foldersController.folders.length,
+          childCount: folderhub.state.folders.length,
               (context, index) {
-            final folder = foldersController.folders[index];
+            final folder = folderhub.state.folders[index];
             return FolderTile(folder: folder);
           }
       ),)));
       widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: feedsController.feeds.length,
+          childCount: feedhub.state.rootFeeds.length,
               (context, index) {
-            final feed = feedsController.feeds[index];
+            final feed = feedhub.state.rootFeeds[index];
             return FeedTile(feed: feed);
           }
       ))));

@@ -1,19 +1,19 @@
 
 
-import 'package:follow_read/features/presentation/providers/feeds_controller.dart';
-import 'package:follow_read/features/presentation/providers/folders_controller.dart';
+import 'package:follow_read/features/presentation/providers/feedhub/feedhub_controller.dart';
+import 'package:follow_read/features/presentation/providers/folderhub/folderhub_controller.dart';
 import 'package:get/get.dart';
 
 class ControllerContainer {
 
   static Future<void> initialized() async {
-    await Get.putAsync<FeedsController>(() async {
-      final c = FeedsController();
+    await Get.putAsync<FeedhubController>(() async {
+      final c = FeedhubController();
       await c.init();
       return c;
     });
-    await Get.putAsync<FoldersController>(() async {
-      final c = FoldersController();
+    await Get.putAsync<FolderhubController>(() async {
+      final c = FolderhubController();
       await c.init();
       return c;
     });

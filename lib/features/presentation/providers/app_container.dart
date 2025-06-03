@@ -95,9 +95,7 @@ final folderRepository = CategoryRepository(
   dao: categoryDao,
 );
 final categoryRepositoryProvider = Provider<CategoryRepository>((ref){
-  return CategoryRepository(
-    dao: ref.watch(categoryDaoProvider),
-  );
+  return folderRepository;
 });
 final clusterRepositoryProvider = Provider((ref){
   return ClusterRepository(dao: ref.watch(clusterDaoProvider));
