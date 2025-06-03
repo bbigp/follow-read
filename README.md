@@ -26,3 +26,7 @@ flutter pub run flutter_launcher_icons:main
 
 # 执行同步命令
 ./gradlew clean && ./gradlew assembleDebug
+
+> https://juejin.cn/post/6924104248275763208
+> https://juejin.cn/post/6984593635681517582
+> https://github.com/jonataslaw/getx

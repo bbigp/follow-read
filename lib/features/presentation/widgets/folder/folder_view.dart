@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/domain/models/folder.dart';
-import 'package:follow_read/features/presentation/providers/gen/add_feed.dart';
 import 'package:follow_read/features/presentation/widgets/components/radiox_list_tile.dart';
 import 'package:get/get.dart';
 
