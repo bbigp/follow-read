@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
+import 'package:follow_read/features/presentation/providers/entry/entry_controller.dart';
 import 'package:follow_read/features/presentation/providers/entry_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/buttonx.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
@@ -15,6 +16,7 @@ import 'package:follow_read/features/presentation/widgets/detail/entry_image.dar
 import 'package:follow_read/features/presentation/widgets/detail/entry_title.dart';
 import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 import 'package:follow_read/routes/app_route.dart';
+import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 ///
@@ -27,11 +29,10 @@ class EntryDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final entryAsync = ref.watch(entryProvider(entryId));
-    if (entryAsync.isLoading) {
+    final controller = Get.find<EntryController>();
+    if (controller.state.isLoading) {
       return CupertinoActivityIndicator(radius: 10,);
     }
-    final entry = entryAsync.requireValue;
     Widget child = Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: (){
@@ -44,57 +45,63 @@ class EntryDetailPage extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 48),
             child: Column(children: [
-              if (entry.pic.isNotEmpty) ...[
-                EntryImage(url: entry.pic, height: 241, onTap: (){
-                  ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
-                    "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(entry.pic),
-                  });
-                },),
+              if (controller.state.entry.pic.isNotEmpty) ...[
+                Obx(() {
+                  final entry = controller.state.entry;
+                  return EntryImage(url: entry.pic, height: 241, onTap: (){
+                    ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
+                      "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(entry.pic),
+                    });
+                  },);
+                }),
                 const SizedBox(height: 12,),
               ],
-              EntryTitle(entry: entry),
+              Obx(() => EntryTitle(entry: controller.state.entry)),
               const SizedBox(height: 12,),
-              EntryContent(entry: entry),
+              Obx(() => EntryContent(entry: controller.state.entry)),
               const SizedBox(height: 12,),
               NoMore(),
               const SizedBox(height: 12,),
 
               const SizedBox(height: 8,),
-              IconButtonx(child: "View Website", icon: Svgicons.out_o, isLeftIcon: false,
+              Obx(() => IconButtonx(child: "View Website", icon: Svgicons.out_o, isLeftIcon: false,
                 size: Sizex.custom, buttonSize: mediumCompact().copyWith(
                   padding: 32,
                 ),
                 type: ButtonxType.secondary,
                 enabled: true, onPressed: () async {
-                  Open.browser(context, entry.url);
+                  Open.browser(context, controller.state.entry.url);
                 },
-              ),
+              )),
               // const SizedBox(height: 8,),//设计图8
               const SizedBox(height: 12,), //设计图48
             ],),
           ),
         )),
-        TabBarx(tabs: [
-          BottomBarItem(
-              icon: entry.starred ? Svgicons.star_fill : Svgicons.star,
+        Obx((){
+          final entry = controller.state.entry;
+          return TabBarx(tabs: [
+            BottomBarItem(
+                icon: entry.starred ? Svgicons.star_fill : Svgicons.star,
+                onPressed: () async {
+                  await ref.read(entryProvider(entryId).notifier).starred();
+                }
+            ),
+            BottomBarItem(
+              icon: entry.status == Model.unread ? Svgicons.check_o : Svgicons.check_fill,
               onPressed: () async {
-                await ref.read(entryProvider(entryId).notifier).starred();
-              }
-          ),
-          BottomBarItem(
-            icon: entry.status == Model.unread ? Svgicons.check_o : Svgicons.check_fill,
-            onPressed: () async {
-              await ref.read(entryProvider(entryId).notifier).read();
-            },
-          ),
-          BottomBarItem(icon: Svgicons.chevron_down,),
-          BottomBarItem(icon: Svgicons.explorer, onPressed: () async {
-            Open.browser(context, entry.url);
-          },),
-          BottomBarItem(icon: Svgicons.share, onPressed: () async {
-            Share.share("${entry.title}\n${entry.url}");
-          },)
-        ],)
+                await ref.read(entryProvider(entryId).notifier).read();
+              },
+            ),
+            BottomBarItem(icon: Svgicons.chevron_down,),
+            BottomBarItem(icon: Svgicons.explorer, onPressed: () async {
+              Open.browser(context, entry.url);
+            },),
+            BottomBarItem(icon: Svgicons.share, onPressed: () async {
+              Share.share("${entry.title}\n${entry.url}");
+            },)
+          ],);
+        }),
       ],),
     );
     return PopScope(

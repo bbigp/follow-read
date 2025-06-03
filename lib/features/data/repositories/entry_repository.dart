@@ -18,15 +18,13 @@ import '../datasources/api_client.dart';
 class EntryRepository {
   final EntryDao _dao;
   final FeedDao _feedDao;
-  final SharedPreferences _preferences;
   final FeedRepository _feedRepository;
   final ClusterDao _clusterDao;
   EntryRepository({required EntryDao dao, required FeedDao feedDao,
-  required SharedPreferences sharedPreferences,
   required FeedRepository feedRepository,
   required ClusterDao clusterDao,
   })
-      : _dao = dao, _feedDao = feedDao, _preferences = sharedPreferences,
+      : _dao = dao, _feedDao = feedDao,
         _feedRepository = feedRepository,
       _clusterDao = clusterDao;
 
@@ -36,7 +34,7 @@ class EntryRepository {
       final total = await getTotal();
       return total - cacheTotal;
     } catch (e) {
-      _preferences.setString(SyncTask.status, SyncTask.failed);
+      (await SharedPreferences.getInstance()).setString(SyncTask.status, SyncTask.failed);
     }
     return -1;
   }
@@ -46,7 +44,7 @@ class EntryRepository {
     int size = 50;
     try {
       await _feedRepository.refreshFeeds();
-      final String? maxTime = _preferences.getString(SyncTask.progress);
+      final String? maxTime = (await SharedPreferences.getInstance()).getString(SyncTask.progress);
       bool isFullSync = maxTime == null || maxTime.isEmpty;
       int totalSynced = 0;
 
@@ -76,17 +74,17 @@ class EntryRepository {
         }
       }
       final newMaxTime = await _dao.getMaxChangedAt();
-      _preferences.setString(SyncTask.status, SyncTask.success);
-      _preferences.setString(SyncTask.progress, newMaxTime.toString());
+      (await SharedPreferences.getInstance()).setString(SyncTask.status, SyncTask.success);
+      (await SharedPreferences.getInstance()).setString(SyncTask.progress, newMaxTime.toString());
       onProgress(SyncTask.success, 0);
       return true;
     } catch (e) {
       logger.e("同步数据失败 $e");
-      _preferences.setString(SyncTask.status, SyncTask.failed);
+      (await SharedPreferences.getInstance()).setString(SyncTask.status, SyncTask.failed);
       onProgress(SyncTask.failed, 0);
       return false;
     } finally {
-      _preferences.setString(SyncTask.executeTime, DateTime.now().toString());
+      (await SharedPreferences.getInstance()).setString(SyncTask.executeTime, DateTime.now().toString());
     }
   }
 

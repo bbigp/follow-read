@@ -8,9 +8,7 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
-import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
-import 'package:follow_read/features/presentation/providers/home_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/alert_sheet.dart';
 import 'package:follow_read/features/presentation/widgets/components/context_menu.dart';
 import 'package:follow_read/features/presentation/widgets/context_menu_wrapper.dart';
@@ -63,7 +61,7 @@ class FeedProvider implements TileDataProvider {
         onPressed: () async {
           var success = await ref.read(feedRepositoryProvider).removeFeed(feed.id);
           if (success) {
-            final _ = ref.refresh(homeProvider);
+            // final _ = ref.refresh(homeProvider);
             Navigator.of(context).pop();
           }
         },

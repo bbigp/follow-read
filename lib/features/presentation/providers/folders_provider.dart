@@ -33,14 +33,4 @@ class FoldersNotifier extends AutoDisposeAsyncNotifier<List<Category>> {
     return f;
   }
 
-  void expanded(int id){
-    final index = state.requireValue.indexWhere((c) => c.id == id);
-    if (index == -1) {
-      return;
-    }
-    final current = state.requireValue[index];
-    var newList = List<Category>.from(state.requireValue);
-    newList[index] = current.copyWith(expanded: !current.expanded);
-    state = AsyncData(newList);
-  }
 }

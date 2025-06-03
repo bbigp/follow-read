@@ -18,6 +18,8 @@ class Entry  {
   final String summary;
   final DateTime createdAt;
 
+  static Entry empty = Entry(id: 0, title: "", hash: "");
+
   Entry({
     required this.id,
     required this.title,

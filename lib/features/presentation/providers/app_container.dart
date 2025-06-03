@@ -67,8 +67,9 @@ final confDaoProvider = Provider<ConfDao>((ref){
 final searchDaoProvider = Provider<SearchDao>((ref){
   return SearchDao(ref.watch(appDatabaseProvider));
 });
+final aistDao = ClusterDao(database);
 final clusterDaoProvider = Provider((ref){
-  return ClusterDao(ref.watch(appDatabaseProvider));
+  return aistDao;
 });
 
 final feedRepository = FeedRepository(
@@ -82,14 +83,13 @@ final feedRepositoryProvider = Provider<FeedRepository>((ref) {
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepository(ref.watch(localDataSourceProvider),);
 });
+final entryRepository = EntryRepository(
+    dao: entryDao, feedDao: feedDao,
+    feedRepository: feedRepository,
+    clusterDao: aistDao
+);
 final entryRepositoryProvider = Provider<EntryRepository>((ref) {
-  return EntryRepository(
-      dao: ref.watch(entryDaoProvider),
-      feedDao: ref.watch(feedDaoProvider),
-      sharedPreferences: ref.watch(sharedPreferencesProvider),
-    feedRepository: ref.watch(feedRepositoryProvider),
-    clusterDao: ref.watch(clusterDaoProvider),
-  );
+  return entryRepository;
 });
 final folderRepository = CategoryRepository(
   dao: categoryDao,
@@ -97,6 +97,7 @@ final folderRepository = CategoryRepository(
 final categoryRepositoryProvider = Provider<CategoryRepository>((ref){
   return folderRepository;
 });
+final aistRepository = ClusterRepository(dao: aistDao);
 final clusterRepositoryProvider = Provider((ref){
-  return ClusterRepository(dao: ref.watch(clusterDaoProvider));
+  return aistRepository;
 });

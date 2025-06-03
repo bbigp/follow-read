@@ -6,9 +6,9 @@ import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/domain/models/tile.dart';
+import 'package:follow_read/features/presentation/providers/aisthub/aisthub_controller.dart';
 import 'package:follow_read/features/presentation/providers/feedhub/feedhub_controller.dart';
 import 'package:follow_read/features/presentation/providers/folderhub/folderhub_controller.dart';
-import 'package:follow_read/features/presentation/providers/home_provider.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
@@ -21,7 +21,6 @@ import 'package:follow_read/features/presentation/widgets/home/feed_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/folder_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/group_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/loading_page.dart';
-import 'package:follow_read/features/presentation/widgets/open_modal.dart';
 import 'package:follow_read/features/presentation/widgets/home/sync_view.dart';
 import 'package:follow_read/routes/app_route.dart';
 import 'package:get/get.dart';
@@ -70,19 +69,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
   Widget build(BuildContext context) {
     final feedhub = Get.find<FeedhubController>();
     final folderhub = Get.find<FolderhubController>();
-    final homeAsync = ref.watch(homeProvider);
+    final aisthub = Get.find<AisthubController>();
+
     final syncState = ref.watch(syncProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final _ = ref.refresh(homeProvider);
+        // final _ = ref.refresh(homeProvider);
         ref.read(syncProvider.notifier).resetStatus();
       });
     }
 
-    if (homeAsync == null) {
+    if (feedhub.state.isLoading || folderhub.state.isLoading || aisthub.state.isLoading) {
       return const LoadingPage();
     }
-    final homeList = homeAsync;
 
     final widgets = <Widget>[
       SliverToBoxAdapter(child: AnimatedSize(
@@ -96,27 +95,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
           ref.read(routerProvider).pushNamed(RouteNames.cluster,);
         })),
       ),
-      SliverList(delegate: SliverChildBuilderDelegate(
-        childCount: homeList.aists.length,
-        (context, index) {
-          final cluster = homeList.aists[index];
+      Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
+        childCount: aisthub.state.aists.length,
+            (context, index) {
+          final cluster = aisthub.state.aists[index];
           return ClusterTile(
             key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
             cluster: cluster,
           );
         },
-      )),
+      ))),
       SliverToBoxAdapter(
         child: Padding(
           padding: EdgeInsets.only(top: 12, bottom: 8, left: 16, right: 16),
-          child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0,
-            color: AppTheme.black8,
-          ),
+          child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0, color: AppTheme.black8,),
         ),
       ),
       SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
     ];
-    if (homeList.feeds.isEmpty && homeList.folders.isEmpty) {
+    if (feedhub.state.feeds.isEmpty && folderhub.state.folders.isEmpty) {
       widgets.add(SliverToBoxAdapter(child: EmptyFeedView(),));
     } else {
       widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(

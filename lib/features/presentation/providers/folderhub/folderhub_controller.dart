@@ -36,4 +36,14 @@ class FolderhubController extends GetxController {
     return state.folders.firstWhere((c) => c.id == id, orElse: () => Category.empty);
   }
 
+  void expanded(int id){
+    final index = state.folders.indexWhere((c) => c.id == id);
+    if (index == -1) {
+      return;
+    }
+    final current = state.folders[index];
+    final updated = current.copyWith(expanded: !current.expanded);
+    state.folders[index] = updated;
+  }
+
 }
