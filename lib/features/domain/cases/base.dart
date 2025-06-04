@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:follow_read/features/domain/models/constants.dart';
-import 'package:follow_read/features/presentation/providers/entryhub/entryhub_controller.dart';
-import 'package:get/get.dart';
 
 
 

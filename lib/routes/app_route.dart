@@ -80,19 +80,19 @@ final routerProvider = Provider<GoRouter>((ref) {
             return ImageGalleryPage(imageUrls: data['imageUrls'], initialIndex: data['index'],);
         }
       ),
-      GoRoute(path: '/search/:type/:id',
-        name: RouteNames.search,
-        builder: (context, state) {
-          final id = int.parse(state.pathParameters['id']!);
-          final type = state.pathParameters['type']!;
-          final iMata = switch(type) {
-            Model.folder => Folderx(id, search: true),
-            Model.aist => Aistx(id, search: true),
-            _ => Feedx(id, search: true),
-          };
-          return SearchPage(metaDatax: iMata,);
-        }
-      ),
+      // GoRoute(path: '/search/:type/:id',
+      //   name: RouteNames.search,
+      //   builder: (context, state) {
+      //     final id = int.parse(state.pathParameters['id']!);
+      //     final type = state.pathParameters['type']!;
+      //     final iMata = switch(type) {
+      //       Model.folder => Folderx(id, search: true),
+      //       Model.aist => Aistx(id, search: true),
+      //       _ => Feedx(id, search: true),
+      //     };
+      //     return SearchPage(metaDatax: iMata,);
+      //   }
+      // ),
       GoRoute(
         path: '/cluster',
         name: RouteNames.cluster,

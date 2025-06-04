@@ -16,6 +16,7 @@ class FolderTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("重建folder ${folder.id}");
     return Column(children: [
       MainTile(provider: FolderProvider(folder, ref: ref)),
       Padding(

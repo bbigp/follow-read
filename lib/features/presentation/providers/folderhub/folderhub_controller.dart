@@ -13,19 +13,19 @@ class FolderhubController extends GetxController {
     if (state.isLoading) return;
     state.isLoading = true;
     final rawFolders = await folderRepository.getCategories();
+    // 设置里 选择设置root folder  config query root folder id
 
     void rebuild(){
-      state.rootFolder = feedhub.state.rootFolder;
-      List<Category> updated = rawFolders
+      state.rootFolder = rawFolders.firstWhere((c) => c.id == 1, orElse: () => Category.empty);
+      state.folders = rawFolders
           .where((item) => item.id != state.rootFolder.id)
           .map((item) => item.copyWith(
         feeds: feedhub.state.feedMap[item.id] ?? [],
       )).toList();
-      state.folders.assignAll(updated);
     }
 
     rebuild();
-    ever(feedhub.state.stateFeeds, (_) => rebuild());
+    // ever(feedhub.state.stateFeeds, (_) => rebuild());
     state.isLoading = false;
   }
 
@@ -44,6 +44,7 @@ class FolderhubController extends GetxController {
     final current = state.folders[index];
     final updated = current.copyWith(expanded: !current.expanded);
     state.folders[index] = updated;
+    update(['folderTile:$index']);
   }
 
 }

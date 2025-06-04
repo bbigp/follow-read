@@ -4,12 +4,10 @@ import 'package:get/get.dart';
 class FolderhubState {
   FolderhubState();
 
-  final RxList<Category> stateFolders = <Category>[].obs;
-  List<Category> get folders => stateFolders;
-
-  // final Rx<Category> stateRootFolder = Category.empty.obs;
-  // Category get rootFolder => stateRootFolder.value;
+  List<Category> folders = [];
   Category rootFolder = Category.empty;
+
+  final len = 0.obs;
 
   final RxBool stateIsLoading = false.obs;
   bool get isLoading => stateIsLoading.value;

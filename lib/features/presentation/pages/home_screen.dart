@@ -116,13 +116,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
     if (feedhub.state.feeds.isEmpty && folderhub.state.folders.isEmpty) {
       widgets.add(SliverToBoxAdapter(child: EmptyFeedView(),));
     } else {
-      widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: folderhub.state.folders.length,
-              (context, index) {
-            final folder = folderhub.state.folders[index];
-            return FolderTile(folder: folder);
-          }
-      ),)));
+      widgets.add(GetBuilder<FolderhubController>(
+        builder: (controller) {
+          return SliverList(delegate: SliverChildBuilderDelegate(
+              childCount: controller.state.folders.length,
+                  (context, index) {
+                return GetBuilder<FolderhubController>(builder: (controller) {
+                  final folder = controller.state.folders[index];
+                  return FolderTile(folder: folder);
+                }, id: 'folderTile:$index',);
+              }
+          ),);
+        },
+      ));
       widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
           childCount: feedhub.state.rootFeeds.length,
               (context, index) {
