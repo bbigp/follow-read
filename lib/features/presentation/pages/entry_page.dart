@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/domain/cases/base.dart';
-import 'package:follow_read/features/domain/models/entry.dart';
-import 'package:follow_read/features/domain/cases/page_info.dart';
+import 'package:follow_read/features/presentation/providers/entryhub/entryhub_controller.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
 import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
@@ -14,6 +13,7 @@ import 'package:follow_read/features/presentation/widgets/entry/entry_tile.dart'
 import 'package:follow_read/features/presentation/widgets/components/loading_more.dart';
 import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 import 'package:follow_read/routes/app_route.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 
@@ -28,25 +28,26 @@ class EntryPage extends ConsumerStatefulWidget {
 
 class _EntryPageState extends ConsumerState<EntryPage> {
   final ScrollController _scrollController = ScrollController();
+  final controller = Get.find<EntryhubController>();
 
   void _scrollListener() {
-    final entriesAsync = widget.metaDatax.page(ref);
-    if (entriesAsync.isLoading) return;
-    if (!entriesAsync.requireValue.hasMore) return;
-    if (entriesAsync.requireValue.isLoadingMore) return;
+    if (controller.state.isLoading) return;
+    if (!controller.state.hasMore) return;
+    if (controller.state.isLoadingMore) return;
 
     final position = _scrollController.position;
     // 空列表或未加载完成时直接返回
     if (position.maxScrollExtent <= 0) return;
 
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      widget.metaDatax.loadMore(ref);
+      controller.nextPage();
     }
   }
 
   @override
   void initState() {
     super.initState();
+    Get.put(EntryhubController(widget.metaDatax));
     _scrollController.addListener(_scrollListener);
   }
 
@@ -54,14 +55,14 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    Get.delete<EntryhubController>();
     super.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    final entriesAsync = widget.metaDatax.page(ref);
-    print("A页面 build 被调用 ${entriesAsync.isLoading}");
+    print("A页面 build 被调用 ${controller.state.isLoading}");
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: (){
@@ -77,9 +78,9 @@ class _EntryPageState extends ConsumerState<EntryPage> {
           }, child: PaddedSvgIcon(Svgicons.more),)
         ],
       ),
-      body: entriesAsync.isLoading
-          ? _buildSmartSkeleton()
-          : _buildMain(entriesAsync.requireValue),
+      body: Obx((){
+        return controller.state.isLoading ? _buildSmartSkeleton() : _buildMain();
+      }),
     );
   }
 
@@ -90,23 +91,27 @@ class _EntryPageState extends ConsumerState<EntryPage> {
   // );
 
 
-  Widget _buildMain(PageInfo<Entry> pageInfo) {
-    final list = pageInfo.list;
+  Widget _buildMain() {
     return Stack(children: [
       RefreshIndicator(
         onRefresh: () async {
-          widget.metaDatax.refresh(ref);
+          controller.init();
         },
         child: CustomScrollView(
             controller: _scrollController,
             slivers: [
               SliverToBoxAdapter(child: FeedSummary(metaDatax: widget.metaDatax),), //滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
-              SliverList(delegate: SliverChildBuilderDelegate(
-                  childCount: list.length, (context, index) {
-                    return EntryTile(entry: list[index]);
-                  }
-              )),
-              SliverToBoxAdapter(child: pageInfo.hasMore ? const LoadingMore() : const NoMore(),)
+              GetBuilder<EntryhubController>(builder: (controller){
+                return SliverList(delegate: SliverChildBuilderDelegate(
+                    childCount: controller.state.entries.length, (context, index) {
+                      return EntryTile(entry: controller.state.entries[index]);
+                    }
+                ));
+              }),
+              Obx((){
+                return SliverToBoxAdapter(child: controller.state.hasMore ? const LoadingMore() : const NoMore(),);
+              }),
+
             ]
         ),
       ),

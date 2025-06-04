@@ -5,9 +5,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
-import 'package:follow_read/features/presentation/providers/entries_provider.dart';
 
-import '../../data/repositories/entry_repository.dart';
 import '../../domain/models/entry.dart';
 import 'app_container.dart';
 
