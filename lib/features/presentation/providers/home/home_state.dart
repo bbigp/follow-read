@@ -8,7 +8,7 @@ class HomeState {
 
   List<Category> folders = [];
   List<Feed> feeds = [];
-  List<Cluster> artiad = [];
+  List<Cluster> artiads = [];
 
   final stateFolderLen = 0.obs;
   final stateFeedLen = 0.obs;

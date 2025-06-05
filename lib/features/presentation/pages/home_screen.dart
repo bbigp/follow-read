@@ -9,6 +9,7 @@ import 'package:follow_read/features/domain/models/tile.dart';
 import 'package:follow_read/features/presentation/providers/aisthub/aisthub_controller.dart';
 import 'package:follow_read/features/presentation/providers/feedhub/feedhub_controller.dart';
 import 'package:follow_read/features/presentation/providers/folderhub/folderhub_controller.dart';
+import 'package:follow_read/features/presentation/providers/home/home_controller.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
 import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
@@ -69,26 +70,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    final feedhub = Get.find<FeedhubController>();
-    final folderhub = Get.find<FolderhubController>();
-    final aisthub = Get.find<AisthubController>();
+    final home = Get.find<HomeController>();
+    if (home.state.isLoading) return const LoadingPage();
 
     final folderView = Obx(() { return SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: folderhub.state.len, (context, index) {
-        return GetBuilder<FolderhubController>(builder: (controller) {
-          final folder = controller.state.folders[index];
-          return FolderTile(folder: folder);
-        }, id: 'folderTile:$index',);
-      }));
-    });
+          childCount: home.state.folderLen, (context, index) {
 
-    Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-        childCount: feedhub.state.rootFeeds.length,
-            (context, index) {
-          final feed = feedhub.state.rootFeeds[index];
-          return FeedTile(feed: feed);
+            return GetBuilder<HomeController>(builder: (controller) {
+              final folder = controller.state.folders[index];
+              return FolderTile(folder: folder);
+            }, id: 'folder_tile:$index',);
+          }
+    ));});
+
+    final feedView = Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
+        childCount: home.state.feedLen, (context, index) {
+
+          return GetBuilder<HomeController>(builder: (controller) {
+            final feed = controller.state.feeds[index];
+            return FeedTile(feed: feed);
+          }, id: 'feed_tile:$index',);
         }
-    )))
+    )));
+
+    final artiadView = Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
+      childCount: home.state.artiadLen, (context, index) {
+
+        return GetBuilder<HomeController>(builder: (controller){
+          final artiad = controller.state.artiads[index];
+          return ClusterTile(artiad: artiad);
+        }, id: "artiad_tile:$index}",);
+      }
+    )));
 
 
 
@@ -100,9 +113,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
       });
     }
 
-    if (feedhub.state.isLoading || folderhub.state.isLoading || aisthub.state.isLoading) {
-      return const LoadingPage();
-    }
 
     final widgets = <Widget>[
       SliverToBoxAdapter(child: AnimatedSize(

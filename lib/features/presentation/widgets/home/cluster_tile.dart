@@ -14,11 +14,11 @@ import 'package:follow_read/theme/text_styles.dart';
 
 ///
 class ClusterTile extends ConsumerWidget {
-  final Cluster cluster;
+  final Cluster artiad;
 
   const ClusterTile({
     super.key,
-    required this.cluster,
+    required this.artiad,
   });
 
   @override
