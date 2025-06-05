@@ -7,7 +7,9 @@ class FolderhubState {
   List<Category> folders = [];
   Category rootFolder = Category.empty;
 
-  final len = 0.obs;
+  final stateLen = 0.obs;
+  int get len => stateLen.value;
+  set len(int length) => stateLen.value = length;
 
   final RxBool stateIsLoading = false.obs;
   bool get isLoading => stateIsLoading.value;

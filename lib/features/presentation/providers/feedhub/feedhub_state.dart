@@ -5,18 +5,20 @@ import 'package:get/get.dart';
 class FeedhubState {
   FeedhubState();
 
-  final RxList<Feed> stateFeeds = <Feed>[].obs;
-  List<Feed> get feeds => stateFeeds;
+  List<Feed> feeds = [];
+  List<Feed> get rootFeeds => feedMap[rootFolderId] ?? [];
+
+  final stateLen = 0.obs;
+  int get len => stateLen.value;
+  set len(int length) => stateLen.value = length;
 
   final RxBool stateIsLoading = false.obs;
   bool get isLoading => stateIsLoading.value;
   set isLoading(bool b) => stateIsLoading.value = b;
 
-  final Rx<Category> stateRootFolder = Category.empty.obs;
-  Category get rootFolder => stateRootFolder.value;
-  set rootFolder(Category f) => stateRootFolder.value = f;
+  final int rootFolderId = 1;
 
-  List<Feed> get rootFeeds => feedMap[rootFolder.id] ?? [];
+
 
   Map<int, List<Feed>> get feedMap => feeds.fold<Map<int, List<Feed>>>(
     {},

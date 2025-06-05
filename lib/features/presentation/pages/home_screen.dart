@@ -65,11 +65,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final feedhub = Get.find<FeedhubController>();
     final folderhub = Get.find<FolderhubController>();
     final aisthub = Get.find<AisthubController>();
+
+    final folderView = Obx(() { return SliverList(delegate: SliverChildBuilderDelegate(
+          childCount: folderhub.state.len, (context, index) {
+        return GetBuilder<FolderhubController>(builder: (controller) {
+          final folder = controller.state.folders[index];
+          return FolderTile(folder: folder);
+        }, id: 'folderTile:$index',);
+      }));
+    });
+
+    Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
+        childCount: feedhub.state.rootFeeds.length,
+            (context, index) {
+          final feed = feedhub.state.rootFeeds[index];
+          return FeedTile(feed: feed);
+        }
+    )))
+
+
 
     final syncState = ref.watch(syncProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
@@ -116,26 +137,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
     if (feedhub.state.feeds.isEmpty && folderhub.state.folders.isEmpty) {
       widgets.add(SliverToBoxAdapter(child: EmptyFeedView(),));
     } else {
-      widgets.add(GetBuilder<FolderhubController>(
-        builder: (controller) {
-          return SliverList(delegate: SliverChildBuilderDelegate(
-              childCount: controller.state.folders.length,
-                  (context, index) {
-                return GetBuilder<FolderhubController>(builder: (controller) {
-                  final folder = controller.state.folders[index];
-                  return FolderTile(folder: folder);
-                }, id: 'folderTile:$index',);
-              }
-          ),);
-        },
-      ));
-      widgets.add(Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: feedhub.state.rootFeeds.length,
-              (context, index) {
-            final feed = feedhub.state.rootFeeds[index];
-            return FeedTile(feed: feed);
-          }
-      ))));
+      widgets.add(folderView);
+      widgets.add();
     }
     return Scaffold(
       appBar: CupxAppBar(
