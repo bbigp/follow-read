@@ -1,4 +1,6 @@
-import 'package:follow_read/features/domain/cases/base.dart';
+
+
+import 'package:follow_read/features/presentation/providers/entries/meta_data.dart';
 
 import 'constants.dart';
 

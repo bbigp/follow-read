@@ -1,8 +1,12 @@
-import 'dart:async';
 
+
+import 'package:follow_read/features/domain/models/aist.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
-
-
+import 'package:follow_read/features/domain/models/feed.dart';
+import 'package:follow_read/features/domain/models/folder.dart';
+import 'package:follow_read/features/presentation/providers/app_container.dart';
+import 'package:follow_read/features/presentation/providers/home/home_controller.dart';
+import 'package:get/get.dart';
 
 abstract class MetaViewData {
   String get title;
@@ -13,16 +17,57 @@ abstract class MetaViewData {
 abstract class MetaDatax {
   int get id;
   String get type;
-  bool get search;
+  Future<MetaViewData> getMeta();
+}
 
-  MetaViewData getMeta();
+
+class ArtiadMeta extends MetaDatax {
+  @override
+  final int id;
+  ArtiadMeta(this.id,);
 
   @override
-  bool operator ==(Object other) =>
-      other is MetaDatax && (other.hashCode)  == hashCode;
+  String get type => Model.artiad;
 
   @override
-  int get hashCode => type.hashCode + search.hashCode + id;
+  Future<Cluster> getMeta() async {
+    return await artiadRepository.getById(id);
+  }
+
+}
+
+
+class FolderMeta extends MetaDatax {
+
+  @override
+  final int id;
+  FolderMeta(this.id,);
+
+  @override
+  String get type => Model.folder;
+
+  @override
+  Future<Category> getMeta() async {
+    final folder = await folderRepository.getCategoryById(id);
+    final controller = Get.find<HomeController>();
+    return folder.copyWith(feeds: controller.state.feedMap[folder.id] ?? []);
+  }
+
+}
+
+class FeedMeta extends MetaDatax {
+
+  @override
+  final int id;
+  FeedMeta(this.id,);
+
+  @override
+  String get type => Model.feed;
+
+  @override
+  Future<Feed> getMeta() async {
+    return await feedRepository.getFeedById(id);
+  }
 
 }
 

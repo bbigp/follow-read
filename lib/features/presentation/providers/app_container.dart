@@ -97,7 +97,7 @@ final folderRepository = CategoryRepository(
 final categoryRepositoryProvider = Provider<CategoryRepository>((ref){
   return folderRepository;
 });
-final aistRepository = ClusterRepository(dao: aistDao);
+final artiadRepository = ClusterRepository(dao: aistDao);
 final clusterRepositoryProvider = Provider((ref){
-  return aistRepository;
+  return artiadRepository;
 });

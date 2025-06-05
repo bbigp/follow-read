@@ -16,7 +16,7 @@ class HomeController extends GetxController {
     final root = rawFolders.firstWhere((c) => c.id == 1, orElse: () => Category.empty);
 
     final rawFeeds = await feedRepository.getFeeds();
-    Map<int, List<Feed>> feedMap = rawFeeds.fold<Map<int, List<Feed>>>(
+    state.feedMap = rawFeeds.fold<Map<int, List<Feed>>>(
       {},
           (map, feed) {
         final cid = feed.categoryId;
@@ -29,14 +29,14 @@ class HomeController extends GetxController {
     state.folders = rawFolders
         .where((item) => item.id != root.id)
         .map((item) => item.copyWith(
-      feeds: feedMap[item.id] ?? [],
+      feeds: state.feedMap[item.id] ?? [],
     )).toList();
     state.stateFolderLen.value = state.folders.length;
 
-    state.feeds = feedMap[root.id] ?? [];
+    state.feeds = state.feedMap[root.id] ?? [];
     state.stateFeedLen.value = state.feeds.length;
 
-    state.artiads = await aistRepository.getAll();
+    state.artiads = await artiadRepository.getAll();
     state.stateArtiadLen.value = state.artiads.length;
 
     state.isLoading = false;

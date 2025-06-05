@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/cases/aistx.dart';
-import 'package:follow_read/features/domain/cases/feedx.dart';
-import 'package:follow_read/features/domain/cases/folderx.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
+import 'package:follow_read/features/presentation/providers/entries/entries_page.dart';
+import 'package:follow_read/features/presentation/providers/entries/meta_data.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
 import 'package:follow_read/features/presentation/pages/entry_detail_page.dart';
-import 'package:follow_read/features/presentation/pages/entry_page.dart';
 import 'package:follow_read/features/presentation/pages/image_gallery_page.dart';
 import 'package:follow_read/features/presentation/pages/search_page.dart';
 import 'package:go_router/go_router.dart';
@@ -57,11 +55,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           final id = int.parse(state.pathParameters['id']!);
           final type = state.pathParameters['type']!;
           final iMata = switch(type) {
-            Model.folder => Folderx(id),
-            Model.aist => Aistx(id),
-            _ => Feedx(id),
+            Model.folder => FolderMeta(id),
+            Model.artiad => ArtiadMeta(id),
+            _ => FeedMeta(id),
           };
-          return EntryPage(metaDatax: iMata,);
+          return EntriesPage(metaDatax: iMata,);
         }
       ),
       GoRoute(

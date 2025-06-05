@@ -22,4 +22,6 @@ class HomeState {
   set isLoading(bool b) => stateIsLoading.value = b;
 
 
+  Map<int, List<Feed>> feedMap = {};
+
 }

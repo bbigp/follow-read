@@ -40,7 +40,7 @@ class ClusterTile extends ConsumerWidget {
         onTap: () {
           ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
               'id': artiad.id.toString(),
-              'type': Model.aist,
+              'type': Model.artiad,
             },
           );
         },

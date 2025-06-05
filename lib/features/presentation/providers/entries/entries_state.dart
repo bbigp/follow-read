@@ -1,8 +1,11 @@
 import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:get/get.dart';
 
-class EntryhubState {
-  EntryhubState();
+import 'meta_data.dart';
+
+class EntriesState {
+  EntriesState();
 
 
   final RxBool stateIsLoading = false.obs;
@@ -15,6 +18,8 @@ class EntryhubState {
   bool get hasMore => stateHasMore.value;
   set hasMore(bool b) => stateHasMore.value = b;
 
+  final stateLen = 0.obs;
+  int get len => stateLen.value;
 
 
   int page = 0;
@@ -22,9 +27,12 @@ class EntryhubState {
 
   bool isLoadingMore = false;
 
+  MetaViewData meta = Feed.empty;
+
   void addNextPage(List<Entry> nextPageList, {int? nextPage}){
     entries = [...entries, ...nextPageList];
     hasMore = nextPageList.length >= size;
     page = nextPage ?? page + 1;
+    stateLen.value = entries.length;
   }
 }
