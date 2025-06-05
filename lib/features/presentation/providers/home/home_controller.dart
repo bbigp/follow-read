@@ -1,3 +1,6 @@
+import 'package:follow_read/features/domain/models/feed.dart';
+import 'package:follow_read/features/domain/models/folder.dart';
+import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:get/get.dart';
 
 import 'home_state.dart';
@@ -5,33 +8,50 @@ import 'home_state.dart';
 class HomeController extends GetxController {
   final HomeState state = HomeState();
 
-
   Future<void> init() async {
-    state.rootFolder = await folderRepository.getByName(Model.rootFolderName);
-
-    await feedRepository.getFeeds()
-
     if (state.isLoading) return;
+    // 设置里 选择设置root folder  config query root folder id
     state.isLoading = true;
     final rawFolders = await folderRepository.getCategories();
-    // 设置里 选择设置root folder  config query root folder id
+    final root = rawFolders.firstWhere((c) => c.id == 1, orElse: () => Category.empty);
 
-    void rebuild(){
-      state.rootFolder = rawFolders.firstWhere((c) => c.id == 1, orElse: () => Category.empty);
-      state.folders = rawFolders
-          .where((item) => item.id != state.rootFolder.id)
-          .map((item) => item.copyWith(
-        feeds: feedhub.state.feedMap[item.id] ?? [],
-      )).toList();
-    }
+    final rawFeeds = await feedRepository.getFeeds();
+    Map<int, List<Feed>> feedMap = rawFeeds.fold<Map<int, List<Feed>>>(
+      {},
+          (map, feed) {
+        final cid = feed.categoryId;
+        map.putIfAbsent(cid, () => []);
+        map[cid]!.add(feed);
+        return map;
+      },
+    );
 
-    rebuild();
-    // ever(feedhub.state.stateFeeds, (_) => rebuild());
+    state.folders = rawFolders
+        .where((item) => item.id != root.id)
+        .map((item) => item.copyWith(
+      feeds: feedMap[item.id] ?? [],
+    )).toList();
+    state.stateFolderLen.value = state.folders.length;
+
+    state.feeds = feedMap[root.id] ?? [];
+    state.stateFeedLen.value = state.feeds.length;
+
+    state.artiads = await aistRepository.getAll();
+    state.stateArtiadLen.value = state.artiads.length;
+
     state.isLoading = false;
-
-    state.aists.assignAll(await aistRepository.getAll());
-
   }
 
+
+  void expanded(int id){
+    final index = state.folders.indexWhere((c) => c.id == id);
+    if (index == -1) {
+      return;
+    }
+    final current = state.folders[index];
+    final updated = current.copyWith(expanded: !current.expanded);
+    state.folders[index] = updated;
+    update(['folder_tile:$index']);
+  }
 
 }

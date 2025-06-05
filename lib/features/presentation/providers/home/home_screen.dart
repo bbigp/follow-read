@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/core/utils/page_utils.dart';
 import 'package:follow_read/features/domain/cases/open.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
-import 'package:follow_read/features/domain/models/tile.dart';
-import 'package:follow_read/features/presentation/providers/aisthub/aisthub_controller.dart';
-import 'package:follow_read/features/presentation/providers/feedhub/feedhub_controller.dart';
-import 'package:follow_read/features/presentation/providers/folderhub/folderhub_controller.dart';
 import 'package:follow_read/features/presentation/providers/home/home_controller.dart';
+import 'package:follow_read/features/presentation/providers/home/home_extension.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/features/presentation/widgets/components/cupx_app_bar.dart';
-import 'package:follow_read/features/presentation/widgets/components/dashed_line.dart';
 import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
 import 'package:follow_read/features/presentation/widgets/components/sync_icon.dart';
 import 'package:follow_read/features/presentation/widgets/feed/empty_feed_view.dart';
 import 'package:follow_read/features/presentation/widgets/feed/feed_creator.dart';
-import 'package:follow_read/features/presentation/widgets/home/cluster_tile.dart';
-import 'package:follow_read/features/presentation/widgets/home/feed_tile.dart';
-import 'package:follow_read/features/presentation/widgets/home/folder_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/group_tile.dart';
 import 'package:follow_read/features/presentation/widgets/home/loading_page.dart';
 import 'package:follow_read/features/presentation/widgets/home/sync_view.dart';
@@ -31,10 +22,10 @@ class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStateMixin {
+class HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStateMixin {
 
   bool _showTip = true;
 
@@ -71,39 +62,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final home = Get.find<HomeController>();
-    if (home.state.isLoading) return const LoadingPage();
-
-    final folderView = Obx(() { return SliverList(delegate: SliverChildBuilderDelegate(
-          childCount: home.state.folderLen, (context, index) {
-
-            return GetBuilder<HomeController>(builder: (controller) {
-              final folder = controller.state.folders[index];
-              return FolderTile(folder: folder);
-            }, id: 'folder_tile:$index',);
-          }
-    ));});
-
-    final feedView = Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-        childCount: home.state.feedLen, (context, index) {
-
-          return GetBuilder<HomeController>(builder: (controller) {
-            final feed = controller.state.feeds[index];
-            return FeedTile(feed: feed);
-          }, id: 'feed_tile:$index',);
-        }
-    )));
-
-    final artiadView = Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-      childCount: home.state.artiadLen, (context, index) {
-
-        return GetBuilder<HomeController>(builder: (controller){
-          final artiad = controller.state.artiads[index];
-          return ClusterTile(artiad: artiad);
-        }, id: "artiad_tile:$index}",);
-      }
-    )));
-
-
 
     final syncState = ref.watch(syncProvider);
     if (syncState.status == SyncTask.success && syncState.refreshUi) {
@@ -113,7 +71,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
       });
     }
 
-
     final widgets = <Widget>[
       SliverToBoxAdapter(child: AnimatedSize(
         duration: Duration(milliseconds: 300),
@@ -121,34 +78,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
         alignment: Alignment.topCenter,
         child: _showTip ? SyncView(skeleton: true,) : SizedBox(height: 0,),
       ),),
-      SliverToBoxAdapter(
-        child: GroupTile(title: '智能视图', trailing: AddTrailing(onTap: () {
-          ref.read(routerProvider).pushNamed(RouteNames.cluster,);
-        })),
-      ),
-      Obx(() => SliverList(delegate: SliverChildBuilderDelegate(
-        childCount: aisthub.state.aists.length,
-            (context, index) {
-          final cluster = aisthub.state.aists[index];
-          return ClusterTile(
-            key: ValueKey(PageUtils.pid(TileType.cluster, cluster.id)),
-            cluster: cluster,
-          );
-        },
-      ))),
-      SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.only(top: 12, bottom: 8, left: 16, right: 16),
-          child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0, color: AppTheme.black8,),
-        ),
-      ),
+      smartGroupView,
+      artiadView,
+      dividerView,
       SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
     ];
-    if (feedhub.state.feeds.isEmpty && folderhub.state.folders.isEmpty) {
+    if (home.state.feeds.isEmpty && home.state.folders.isEmpty) {
       widgets.add(SliverToBoxAdapter(child: EmptyFeedView(),));
     } else {
       widgets.add(folderView);
-      widgets.add();
+      widgets.add(feedView);
     }
     return Scaffold(
       appBar: CupxAppBar(
@@ -161,39 +100,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
           PaddedSvgIcon(Svgicons.more,),
         ],
       ),
-      body: Stack(
-        children: [
-          RefreshIndicator(onRefresh: _refreshData,
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: [...widgets],
+      body: Obx((){
+        return home.state.isLoading
+            ? const LoadingPage()
+            : Stack(
+          children: [
+            RefreshIndicator(onRefresh: _refreshData,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [...widgets],
+                )
+            ),
+            Positioned(
+                left: 0, right: 0, top: 0,
+                child: AnimatedOpacity( //变淡效果
+                  opacity: _showTip ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  onEnd: (){
+                    if (!_showTip) {
+                      setState(() {}); // 触发 AnimatedSize
+                    }
+                  },
+                  child: GestureDetector(onTap: () {
+                    setState(() {
+                      _showTip = false;
+                    });
+                  },
+                    child: SyncView(),
+                  ),
+                )
             )
-          ),
-          Positioned(
-            left: 0, right: 0, top: 0,
-            child: AnimatedOpacity( //变淡效果
-              opacity: _showTip ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              onEnd: (){
-                if (!_showTip) {
-                  setState(() {}); // 触发 AnimatedSize
-                }
-              },
-              child: GestureDetector(onTap: () {
-                  setState(() {
-                    _showTip = false;
-                  });
-                },
-                child: SyncView(),
-              ),
-            )
-          )
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
+
 
 // AlwaysStickyHeader(
 // enableDismiss: true,

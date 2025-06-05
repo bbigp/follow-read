@@ -17,7 +17,7 @@ class HomeState {
   int get feedLen => stateFeedLen.value;
   int get artiadLen => stateArtiadLen.value;
 
-  final stateIsLoading = true.obs;
+  final stateIsLoading = false.obs;
   bool get isLoading => stateIsLoading.value;
   set isLoading(bool b) => stateIsLoading.value = b;
 

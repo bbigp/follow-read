@@ -15,7 +15,7 @@ import '../core/utils/logger.dart';
 import '../features/domain/models/tile.dart';
 import '../features/presentation/pages/cluster_page.dart';
 import '../features/presentation/pages/general_page.dart';
-import '../features/presentation/pages/home_screen.dart';
+import '../features/presentation/providers/home/home_screen.dart';
 import '../features/presentation/pages/login_screen.dart';
 import '../features/presentation/providers/auth_provider.dart';
 

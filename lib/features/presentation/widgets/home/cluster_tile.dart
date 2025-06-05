@@ -27,30 +27,30 @@ class ClusterTile extends ConsumerWidget {
       menuItems: [
         ContextMenu(label: '编辑', icon: Svgicons.edit, onTap: () {
           ref.read(routerProvider).pushNamed(RouteNames.cluster, queryParameters: {
-            'id': cluster.id.toString(),
+            'id': artiad.id.toString(),
           });
         }),
         const ContextMenuDivider(),
         ContextMenu(label: '删除', icon: Svgicons.trash, type: ContextMenuType.danger, onTap: () {
-          ref.read(clusterRepositoryProvider).delete(cluster.id);
+          ref.read(clusterRepositoryProvider).delete(artiad.id);
           // final _ = ref.refresh(homePageProvider);
         }),
       ],
       child: InkWell(
         onTap: () {
           ref.read(routerProvider).pushNamed(RouteNames.entry, pathParameters: {
-              'id': cluster.id.toString(),
+              'id': artiad.id.toString(),
               'type': Model.aist,
             },
           );
         },
         child: Row(children: [
           const SizedBox(width: 16, height: 44,),
-          SizedBox(width: 24, height: 24, child: ClusterIcon(icon: cluster.icon, size: 24,),),
+          SizedBox(width: 24, height: 24, child: ClusterIcon(icon: artiad.icon, size: 24,),),
           const SizedBox(width: 16,),
-          Expanded(child: Text(cluster.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text500,)),
+          Expanded(child: Text(artiad.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text500,)),
           const SizedBox(width: 16,),
-          CountBadge(id: cluster.id, counter: ClusterCounter(),),
+          CountBadge(id: artiad.id, counter: ClusterCounter(),),
           const SizedBox(width: 16,),
         ],),
       )
