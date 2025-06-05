@@ -18,6 +18,7 @@ class EntriesController extends GetxController {
 
   Future<void> init() async {
     if (state.isLoading) return;
+    await Future.delayed(Duration(milliseconds: 200));
     state.meta = await metaDatax.getMeta();
     state.isLoading = true;
     final entries = await entryRepository.fetchEntries(1, state.size, state.meta.toBuilder());
@@ -27,6 +28,7 @@ class EntriesController extends GetxController {
 
   void nextPage() async {
     if (state.isLoadingMore) return;
+    await Future.delayed(Duration(milliseconds: 500));
     state.isLoadingMore = true;
     final entries = await entryRepository.fetchEntries(state.page + 1, state.size, state.meta.toBuilder());
     state.addNextPage(entries);
