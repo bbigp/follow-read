@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:follow_read/widgets/open_modal.dart';
+import 'package:follow_read/modules/widgets/open_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Open {

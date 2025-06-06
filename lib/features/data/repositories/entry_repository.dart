@@ -9,7 +9,7 @@ import 'package:follow_read/features/data/models/entry_page_response.dart';
 import 'package:follow_read/features/data/repositories/feed_repository.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
-import 'package:follow_read/pages/entries/meta_data.dart';
+import 'package:follow_read/modules/pages/entries/meta_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/utils/logger.dart';

@@ -2,7 +2,7 @@
 
 import 'package:drift/drift.dart';
 import 'package:follow_read/core/utils/logger.dart';
-import 'package:follow_read/pages/entries/meta_data.dart';
+import 'package:follow_read/modules/pages/entries/meta_data.dart';
 
 import '../../domain/models/constants.dart';
 import 'database.dart';

@@ -1,5 +1,6 @@
 
-import 'package:follow_read/pages/home/home_controller.dart';
+import 'package:follow_read/modules/controller/folders/folders_controller.dart';
+import 'package:follow_read/modules/controller/home/home_controller.dart';
 import 'package:get/get.dart';
 
 class ControllerContainer {
@@ -10,6 +11,7 @@ class ControllerContainer {
       await c.init();
       return c;
     });
+    Get.lazyPut(() => FoldersController());
   }
 
 

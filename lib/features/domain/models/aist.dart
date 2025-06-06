@@ -1,7 +1,8 @@
 
 
 
-import 'package:follow_read/pages/entries/meta_data.dart';
+
+import 'package:follow_read/modules/pages/entries/meta_data.dart';
 
 import 'constants.dart';
 

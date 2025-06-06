@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
-import 'package:follow_read/pages/entries/entries_page.dart';
-import 'package:follow_read/pages/entries/meta_data.dart';
-import 'package:follow_read/pages/home/home_screen.dart';
-import 'package:follow_read/pages/login_screen.dart';
-import 'package:follow_read/widgets/feed/feed_creator.dart';
-import 'package:follow_read/pages/entry_detail_page.dart';
-import 'package:follow_read/pages/image_gallery_page.dart';
+import 'package:follow_read/modules/pages/entry_detail_page.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/utils/logger.dart';
-import 'pages/cluster_page.dart';
-import 'pages/general_page.dart';
 import 'features/presentation/providers/auth_provider.dart';
+import 'modules/pages/cluster_page.dart';
+import 'modules/pages/entries/entries_page.dart';
+import 'modules/pages/entries/meta_data.dart';
+import 'modules/pages/general_page.dart';
+import 'modules/pages/home/home_screen.dart';
+import 'modules/pages/image_gallery_page.dart';
+import 'modules/pages/login_screen.dart';
+import 'modules/widgets/feed/feed_creator.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
