@@ -1,7 +1,7 @@
 
 
 
-import 'package:follow_read/features/presentation/providers/entries/meta_data.dart';
+import 'package:follow_read/pages/entries/meta_data.dart';
 
 import 'constants.dart';
 import 'feed.dart';
