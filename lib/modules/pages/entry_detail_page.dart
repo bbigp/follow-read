@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/features/domain/cases/open.dart';
+import 'package:follow_read/service/open.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/entry_provider.dart';
 import 'package:follow_read/app_route.dart';

@@ -13,9 +13,9 @@ import 'package:follow_read/modules/widgets/acx/radiox_list_tile.dart';
 import 'package:get/get.dart';
 
 ///
-class FolderSelector extends ConsumerWidget {
+class FolderPicker extends ConsumerWidget {
 
-  const FolderSelector({super.key});
+  const FolderPicker({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

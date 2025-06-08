@@ -6,7 +6,7 @@ import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/app_route.dart';
 import 'package:follow_read/modules/widgets/acx/context_menu.dart';
-import 'package:follow_read/modules/widgets/cluster/cluster_icon.dart';
+import 'package:follow_read/modules/widgets/artiad/artiad_icon.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/modules/widgets/home/count_badge.dart';
 import 'package:follow_read/theme/text_styles.dart';
@@ -45,7 +45,7 @@ class ClusterTile extends ConsumerWidget {
         },
         child: Row(children: [
           const SizedBox(width: 16, height: 44,),
-          SizedBox(width: 24, height: 24, child: ClusterIcon(icon: artiad.icon, size: 24,),),
+          SizedBox(width: 24, height: 24, child: ArtiadIcon(icon: artiad.icon, size: 24,),),
           const SizedBox(width: 16,),
           Expanded(child: Text(artiad.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text500,)),
           const SizedBox(width: 16,),

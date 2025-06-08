@@ -1,12 +1,35 @@
 
 
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/theme/text_styles.dart';
+
+class ListTilexChevronUpDown extends StatelessWidget {
+
+  final String icon;
+  final String title;
+  final String additionalInfo;
+  final GestureTapCallback? onTap;
+  const ListTilexChevronUpDown({super.key, required this.icon,
+    required this.title, this.onTap, this.additionalInfo = "",
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTilex(
+      icon: icon, title: title,
+      trailing: SvgPicture.asset(Svgicons.chevron_up_down, width: 20, height: 20,
+        fit: BoxFit.contain,
+        colorFilter: ColorFilter.mode(AppTheme.black25, BlendMode.srcIn),
+      ),
+      additionalInfo: additionalInfo,
+      onTap: onTap,
+    );
+  }
+}
 
 
 class ListTilexChevron extends StatelessWidget {

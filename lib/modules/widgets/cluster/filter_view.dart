@@ -32,7 +32,7 @@ class FilterView extends StatelessWidget {
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
         ),),
         const SizedBox(width: 4,),
-        SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
+        SvgPicture.asset(Svgicons.chevron_up_down, width: 20, height: 20,),
         const SizedBox(width: 12,),
       ],
     ),);

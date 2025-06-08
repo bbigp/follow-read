@@ -9,8 +9,8 @@ import 'package:follow_read/features/presentation/providers/app_container.dart';
 import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sheet_title.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sliding_segmented_control.dart';
-import 'package:follow_read/modules/widgets/cluster/advanced_view.dart';
-import 'package:follow_read/modules/widgets/cluster/basic_view.dart';
+import 'package:follow_read/modules/widgets/artiad/advanced_view.dart';
+import 'package:follow_read/modules/widgets/artiad/basic_view.dart';
 
 import '../../../config/cluster_icons.dart';
 import '../../../config/theme.dart';
@@ -118,8 +118,8 @@ class _ClusterPageState extends ConsumerState<ClusterPage> {
                       ),
                       const SizedBox(height: 12,),
                       const SizedBox(height: 4,),
-                      if (_selectedSegment == 'Basic') BasicView(),
-                      if (_selectedSegment == 'Advanced') AdvancedView(),
+                      // if (_selectedSegment == 'Basic') BasicView(),
+                      // if (_selectedSegment == 'Advanced') AdvancedView(),
                     ],),
                   ),
                 );

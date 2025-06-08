@@ -23,7 +23,7 @@ class CupxListTile extends StatefulWidget {
         icon: icon,
         onTap: onTap,
         additionalInfo: additionalInfo,
-        trailing: SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
+        trailing: SvgPicture.asset(Svgicons.chevron_up_down, width: 20, height: 20,),
     );
   }
 

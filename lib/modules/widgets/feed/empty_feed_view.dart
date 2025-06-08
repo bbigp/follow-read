@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/svgicons.dart';
+import 'package:follow_read/modules/widgets/feed/feed_form.dart';
 import 'package:follow_read/modules/widgets/open_modal.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
-import 'feed_creator.dart';
 import 'svg_icon_button.dart';
 
 class EmptyFeedView extends StatelessWidget {
@@ -24,7 +24,7 @@ class EmptyFeedView extends StatelessWidget {
       const Text('没有订阅源', style: AppTextStyles.hint500,),
       const SizedBox(height: 24,),
       SvgIconButton(label: '添加订阅', onPressed: () async {
-        OpenModal.open(context, FeedCreator());
+        OpenModal.open(context, FeedForm());
       },),
     ]);
   }

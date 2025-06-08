@@ -5,10 +5,12 @@ import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/app_route.dart';
 import 'package:follow_read/modules/controller/home/home_controller.dart';
 import 'package:follow_read/modules/widgets/acx/dashed_line.dart';
+import 'package:follow_read/modules/widgets/feed/feed_picker.dart';
 import 'package:follow_read/modules/widgets/home/cluster_tile.dart';
 import 'package:follow_read/modules/widgets/home/feed_tile.dart';
 import 'package:follow_read/modules/widgets/home/folder_tile.dart';
 import 'package:follow_read/modules/widgets/home/group_tile.dart';
+import 'package:follow_read/service/open.dart';
 import 'package:get/get.dart';
 
 import 'home_screen.dart';

@@ -78,6 +78,7 @@ class _TextFieldxState extends State<TextFieldx> {
   Widget build(BuildContext context) {
     double height = switch(widget.sizex) {
       Sizex.small => 36,
+      Sizex.custom => 44,
       _ => 52,
     };
     double borderRadius = switch(widget.sizex) {

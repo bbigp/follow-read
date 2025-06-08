@@ -44,7 +44,8 @@ class FeedDao extends DatabaseAccessor<AppDatabase> with _$FeedDaoMixin {
     if (ids != null && ids.isNotEmpty) {
       query = query..where((t) => t.id.isIn(ids.map((item) => BigInt.from(item)).toList()));
     }
-    query = query..where((t) => t.deleted.equals(0));
+    query = query..where((t) => t.deleted.equals(0))
+      ..orderBy([(t) => OrderingTerm(expression: feedsTable.id, mode: OrderingMode.asc)]);
     return await query.get();
   }
 

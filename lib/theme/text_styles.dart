@@ -63,6 +63,10 @@ class AppTextStyles {
     fontSize: 13, fontWeight: FontWeight.w500, height: 1.38, color: AppTheme.black25,
   );// 18
 
+  static const TextStyle red11500 = TextStyle(
+    fontSize: 11, fontWeight: FontWeight.w500, height: 1.18, color: AppTheme.red,
+  );//13px
+
   static const TextStyle red13 = TextStyle(
     fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.red,
   );//height 18

@@ -80,7 +80,7 @@ class _RecentTimeState extends ConsumerState<RecentTime> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(width: 16, height: 44,),
-        SvgPicture.asset(Svgicons.calendarToday, width: 24, height: 24,),
+        SvgPicture.asset(Svgicons.calendar_today, width: 24, height: 24,),
         const SizedBox(width: 12,),
         Expanded(child: Text(widget.label, style: TextStyle(
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
@@ -90,7 +90,7 @@ class _RecentTimeState extends ConsumerState<RecentTime> {
           fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
         ),),
         const SizedBox(width: 4,),
-        SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
+        SvgPicture.asset(Svgicons.chevron_up_down, width: 20, height: 20,),
         const SizedBox(width: 12,),
       ],
     ),);

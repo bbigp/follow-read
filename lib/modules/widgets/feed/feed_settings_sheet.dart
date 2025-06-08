@@ -11,12 +11,12 @@ import 'package:follow_read/features/presentation/providers/tile_provider.dart';
 import 'package:follow_read/modules/widgets/acx/card_viewx.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/modules/widgets/acx/drag_handle.dart';
+import 'package:follow_read/modules/widgets/feed/feed_form.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
 import 'package:follow_read/modules/widgets/feed_switch.dart';
 import 'package:follow_read/modules/widgets/open_modal.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
-import 'feed_creator.dart';
 
 class FeedSettingsSheet extends ConsumerWidget {
   final int id;
@@ -104,7 +104,7 @@ class FeedSettingsSheet extends ConsumerWidget {
                   }
                   if (tile.type == TileType.feed) {
                     Navigator.of(context).pop();
-                    OpenModal.open(context, FeedCreator(id: tile.id, shouldPop: true,));
+                    OpenModal.open(context, FeedForm(id: tile.id, shouldPop: true,));
                   }
                 },
                 child: Container(

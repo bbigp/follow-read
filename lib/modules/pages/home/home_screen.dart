@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/features/domain/cases/open.dart';
+import 'package:follow_read/service/open.dart';
 import 'package:follow_read/features/domain/models/sync_task.dart';
 import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
 import 'package:follow_read/app_route.dart';
@@ -10,7 +10,7 @@ import 'package:follow_read/modules/widgets/acx/cupx_app_bar.dart';
 import 'package:follow_read/modules/widgets/acx/padded_svg_icon.dart';
 import 'package:follow_read/modules/widgets/acx/sync_icon.dart';
 import 'package:follow_read/modules/widgets/feed/empty_feed_view.dart';
-import 'package:follow_read/modules/widgets/feed/feed_creator.dart';
+import 'package:follow_read/modules/widgets/feed/feed_form.dart';
 import 'package:follow_read/modules/widgets/home/group_tile.dart';
 import 'package:follow_read/modules/widgets/home/loading_page.dart';
 import 'package:follow_read/modules/widgets/home/sync_view.dart';
@@ -96,7 +96,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderState
           ref.read(routerProvider).pushNamed(RouteNames.profile);
         },),
         actions: [
-          PaddedSvgIcon(Svgicons.add, onTap: () => Open.modal(context, FeedCreator())),
+          PaddedSvgIcon(Svgicons.add, onTap: () => Open.modal(context, FeedForm())),
           SyncIcon(),
           PaddedSvgIcon(Svgicons.more,),
         ],

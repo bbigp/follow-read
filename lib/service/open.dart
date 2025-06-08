@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:follow_read/modules/widgets/acx/floating_menu.dart';
 import 'package:follow_read/modules/widgets/open_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,6 +12,9 @@ class Open {
     OpenModal.open(context, view);
   }
 
+  static menu(BuildContext context, Widget view, GlobalKey key) {
+    FloatingMenu.show(context: context, targetKey: key, child: view);
+  }
 
   static Future<void> browser(BuildContext context, String url) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);

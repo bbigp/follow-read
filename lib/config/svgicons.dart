@@ -30,7 +30,7 @@ class Svgicons {
 
   static const String noMedia = "assets/svg/no_media.svg";
 
-  static const String chevronUpDown = "assets/svg/chevron_up_down.svg";
+
   static const String ban = "assets/svg/ban.svg";
   static const String book = "assets/svg/book.svg";
 
@@ -40,9 +40,9 @@ class Svgicons {
 
   static const String trashRed = "assets/svg/trash_red.svg";
 
-  static const String squareRss = "assets/svg/square_rss.svg";
-  static const String calendarToday = "assets/svg/calendar_today.svg";
-  static const String check = "assets/svg/check.svg";
+
+
+
 
 
 
@@ -75,8 +75,10 @@ class Svgicons {
   static const String x_fill = "assets/svg/x_fill.svg";
   static const String chevron_right = "assets/svg/chevron_right.svg";
   static const String chevron_down = "assets/svg/chevron_down.svg";
+  static const String chevron_up_down = "assets/svg/chevron_up_down.svg";
   static const String out_o = "assets/svg/out_o.svg";
 
+  static const String check = "assets/svg/check.svg";
   static const String check_o = "assets/svg/check_o.svg";
   static const String check_fill = "assets/svg/check_fill.svg";
   static const String unread = "assets/svg/unread.svg";
@@ -93,4 +95,7 @@ class Svgicons {
   static const String selection_mixed = "assets/svg/selection_mixed.svg";
   static const String selection_radio = "assets/svg/selection_radio.svg";
 
+  static const String rss_slash = "assets/svg/rss_slash.svg";
+  static const String square_rss = "assets/svg/square_rss.svg";
+  static const String calendar_today = "assets/svg/calendar_today.svg";
 }

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/features/domain/cases/open.dart';
+import 'package:follow_read/service/open.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
@@ -13,7 +13,7 @@ import 'package:follow_read/app_route.dart';
 import 'package:follow_read/modules/widgets/acx/alert_sheet.dart';
 import 'package:follow_read/modules/widgets/acx/context_menu.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
-import 'package:follow_read/modules/widgets/feed/feed_creator.dart';
+import 'package:follow_read/modules/widgets/feed/feed_form.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
 import 'package:follow_read/modules/widgets/home/count_badge.dart';
 import 'package:follow_read/modules/widgets/open_modal.dart';
@@ -52,7 +52,7 @@ class FeedProvider implements TileDataProvider {
   @override
   List<ContextMenuEntry> get contextMenus => [
     ContextMenu(label: '编辑', icon: Svgicons.edit, onTap: (){
-      Open.modal(context, FeedCreator(id: feed.id,));
+      Open.modal(context, FeedForm(id: feed.id,));
     }),
     const ContextMenuDivider(),
     ContextMenu(label: "取消订阅", icon: Svgicons.reduce_o, type: ContextMenuType.danger, onTap: (){

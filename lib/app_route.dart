@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/modules/pages/entry_detail_page.dart';
+import 'package:follow_read/modules/widgets/artiad/artiad_form.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/utils/logger.dart';
@@ -13,7 +14,6 @@ import 'modules/pages/general_page.dart';
 import 'modules/pages/home/home_screen.dart';
 import 'modules/pages/image_gallery_page.dart';
 import 'modules/pages/login_screen.dart';
-import 'modules/widgets/feed/feed_creator.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -94,16 +94,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: RouteNames.cluster,
         builder: (context, state) {
           final id = state.uri.queryParameters['id'] ?? "0";
-          return ClusterPage(id: int.parse(id));
+          return ArtiadForm(id: int.parse(id));
         }
       ),
-      GoRoute(
-        path: '/add/feed',
-        name: RouteNames.addFeed,
-        builder: (context, state) {
-          return FeedCreator();
-        }
-      )
     ],
   );
 });

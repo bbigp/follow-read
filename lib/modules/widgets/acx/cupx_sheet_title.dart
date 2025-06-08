@@ -4,11 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/modules/widgets/acx/buttonx.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
 import 'padded_svg_icon.dart';
 
-
+class ActionSheetTitle extends StatelessWidget {
+  final String title;
+  final Future<void> Function()? onPressed;
+  final bool enabled;
+  const ActionSheetTitle({super.key, required this.title,
+    this.onPressed, this.enabled = false,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      CupxSheetTitle(
+          title: const SizedBox.shrink(),
+          leading: CupxSheetTitleCloseButton(),
+          trailing: Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: TextButtonx(
+            size: Sizex.smallCompact, type: ButtonxType.primary, child: 'Done',
+            onPressed: onPressed, enabled: enabled,
+          ),)
+      ),
+      Positioned(child: SizedBox(height: 34,
+        child: Center(
+          child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500, textAlign: TextAlign.center,),
+        ),
+      ))
+    ],);
+  }
+}
 
 class PlainSheetTitle extends StatelessWidget {
   final String title;
@@ -58,7 +84,7 @@ class CupxSheetTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: false,
-      child: Container(height: 34 + 2 + 12, padding: EdgeInsets.only(left: 14, right: 12, top: 2, bottom: 12),
+      child: Container(height: 34 + 2 + 12, padding: EdgeInsets.only(left: 12, right: 12, top: 2, bottom: 12),
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           leading,
           Expanded(child: title),
@@ -81,7 +107,7 @@ class CupxSheetTitleCloseButton extends StatelessWidget {
       onTap: (){
         Navigator.pop(context);
       },
-      child: Padding(padding: EdgeInsets.all(4), child: Container(
+      child: Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: Container(
         width: 30, height: 30,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(99),

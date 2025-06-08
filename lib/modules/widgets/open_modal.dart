@@ -7,11 +7,17 @@ class OpenModal {
     double maxHeightFactor = 0.85, // 最大高度比例
     bool hasMargin = false,
   }) {
+    final controller = AnimationController(
+      duration: const Duration(milliseconds: 300), // 动画时长
+      vsync: Navigator.of(context), // 必须由 State/StatefulWidget 提供 TickerProvider
+    );
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // 允许内容高度超过屏幕70%
       backgroundColor: Colors.transparent,
       enableDrag: true,
+      transitionAnimationController: controller,
       builder: (context) {
         final mediaQuery = MediaQuery.of(context);
         final bottomPadding = mediaQuery.viewInsets.bottom;

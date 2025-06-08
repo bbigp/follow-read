@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/features/domain/cases/open.dart';
+import 'package:follow_read/service/open.dart';
 import 'package:follow_read/modules/controller/add_feed/add_feed_controller.dart';
 import 'package:follow_read/modules/widgets/acx/buttonx.dart';
 import 'package:follow_read/modules/widgets/acx/card_viewx.dart';
@@ -11,23 +11,23 @@ import 'package:follow_read/modules/widgets/acx/cupx_list_tile_chevron.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sheet_title.dart';
 import 'package:follow_read/modules/widgets/acx/drag_handle.dart';
 import 'package:follow_read/modules/widgets/acx/text_fieldx.dart';
-import 'package:follow_read/modules/widgets/feed/folder_selector.dart';
+import 'package:follow_read/modules/widgets/folder/folder_picker.dart';
 import 'package:get/get.dart';
 
 
-class FeedCreator extends StatefulWidget {
+class FeedForm extends StatefulWidget {
 
   final int id;
   final bool shouldPop;
 
-  const FeedCreator({super.key, this.id = 0, this.shouldPop = false,});
+  const FeedForm({super.key, this.id = 0, this.shouldPop = false,});
 
   @override
-  State<StatefulWidget> createState() => _FeedCreatorState();
+  State<StatefulWidget> createState() => _FeedFormState();
 
 }
 
-class _FeedCreatorState extends State<FeedCreator> {
+class _FeedFormState extends State<FeedForm> with TickerProviderStateMixin {
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _FeedCreatorState extends State<FeedCreator> {
           const SizedBox(height: 8,),
           CardView(child: Obx(() => ListTilexChevron(icon: Svgicons.folder_1, title: "文件夹",
             additionalInfo: controller.state.folder.title,
-            onTap: () => Open.modal(context, FolderSelector()),
+            onTap: () => Open.modal(context, FolderPicker()),
           ))),
           const SizedBox(height: 16,),
 

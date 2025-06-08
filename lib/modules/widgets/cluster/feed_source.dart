@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/modules/pages/cluster_page.dart';
 import 'package:follow_read/modules/widgets/acx/spacer_divider.dart';
+import 'package:follow_read/modules/widgets/feed/feed_picker.dart';
 import 'package:follow_read/modules/widgets/feed_popup_menu.dart';
 import 'package:follow_read/modules/widgets/open_modal.dart';
-import 'package:follow_read/modules/widgets/cluster/select_feed.dart';
 
 import '../../../config/svgicons.dart';
 import '../../../config/theme.dart';
@@ -70,7 +70,7 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(width: 16, height: 44,),
-          SvgPicture.asset(Svgicons.squareRss, width: 24, height: 24,),
+          SvgPicture.asset(Svgicons.square_rss, width: 24, height: 24,),
           const SizedBox(width: 12,),
           const Expanded(child: Text('订阅源', style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black95,
@@ -80,7 +80,7 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
             fontSize: 15, fontWeight: FontWeight.w400, height: 1.33, color: AppTheme.black50,
           ),),
           const SizedBox(width: 4,),
-          SvgPicture.asset(Svgicons.chevronUpDown, width: 20, height: 20,),
+          SvgPicture.asset(Svgicons.chevron_up_down, width: 20, height: 20,),
           const SizedBox(width: 12,),
         ],
       ),),
@@ -96,7 +96,7 @@ class _FeedSourceState extends ConsumerState<FeedSource> {
       if (_isSelected ?? false)
         GestureDetector(
           onTap: (){
-            OpenModal.open(context, SelectFeed());
+            // OpenModal.open(context, FeedPicker());
           },
           child: Row(children: [
             const SizedBox(width: 20, height: 44,),
