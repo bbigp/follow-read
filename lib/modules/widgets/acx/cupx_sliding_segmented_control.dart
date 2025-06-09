@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
+///
 class CupxSlidingSegmentedControl extends StatelessWidget {
 
   final String groupValue;
@@ -22,10 +23,10 @@ class CupxSlidingSegmentedControl extends StatelessWidget {
     required this.onValueChanged,
     required this.children,
     this.height = 36,
-    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
-    this.segmentedHeight = 28,
+    this.borderRadius = const BorderRadius.all(Radius.circular(10)),
+    this.segmentedHeight = 30,
     this.segmentedBorderRadius = const BorderRadius.all(Radius.circular(8)),
-    this.trackPadding = 8,
+    this.trackPadding = 4,
   });
 
   factory CupxSlidingSegmentedControl.big({
@@ -52,7 +53,6 @@ class CupxSlidingSegmentedControl extends StatelessWidget {
       double totalWidth = constraints.maxWidth;
       double itemWidth = (totalWidth - trackPadding * 2 * 2 ) / children.length;
 
-      print('$totalWidth -- $itemWidth');
       final Map<String, Widget> map = {
         for (var item in children)
           item: Container(
@@ -63,14 +63,10 @@ class CupxSlidingSegmentedControl extends StatelessWidget {
               minHeight: segmentedHeight,
               maxHeight: segmentedHeight,
             ),
-            decoration: BoxDecoration(
+            decoration: item == groupValue ? BoxDecoration(
               borderRadius: segmentedBorderRadius,
               color: Colors.white,
-            ) ,
-            // decoration: item == groupValue ? BoxDecoration(
-            //   borderRadius: segmentedBorderRadius,
-            //   color: Colors.white,
-            // ) : null ,
+            ) : null ,
             child: Text(item, style: groupValue == item ? AppTextStyles.text500 :  AppTextStyles.caption500),
           ),
       };
@@ -79,12 +75,12 @@ class CupxSlidingSegmentedControl extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
-          color: AppTheme.red,
+          color: AppTheme.black4,
         ),
         child: CupertinoSlidingSegmentedControl<String>(
           padding: EdgeInsets.symmetric(horizontal: trackPadding,),
           backgroundColor: Colors.transparent,
-          // groupValue: groupValue,
+          groupValue: groupValue,
           onValueChanged: onValueChanged,
           children: map,
         ),

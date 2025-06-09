@@ -4,8 +4,11 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
+import 'package:follow_read/modules/widgets/acx/cupx_app_bar.dart';
+import 'package:follow_read/modules/widgets/acx/cupx_sheet_title.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/modules/widgets/artiad/basic_view.dart';
+import 'package:follow_read/modules/widgets/obx/obx_app_bar.dart';
 import 'package:get/get.dart';
 
 import 'advanced_view.dart';
@@ -21,15 +24,17 @@ class ArtiadForm extends StatefulWidget {
 
 class _ArtiadFormState extends State<ArtiadForm> {
 
-  String _selectedSegment = 'Advanced';
+  String _selectedSegment = 'Basic';
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<AddArtiadController>();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.black4,
-      ),
+      appBar: ObxAppBar(builder: () => ActionSheetTitleBar(
+        title: 'New List',
+        enabled: controller.state.title.isNotEmpty,
+        color: AppTheme.black4,
+      ),),
       body: Container(
         color: AppTheme.black4,
         child: LayoutBuilder(
@@ -39,15 +44,6 @@ class _ArtiadFormState extends State<ArtiadForm> {
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: Column(
                   children: [
-                    CupxSlidingSegmentedControl(
-                        groupValue: _selectedSegment,
-                        onValueChanged: (value) {
-                          setState(() {
-                            _selectedSegment = value!;
-                          });
-                        },
-                        children: ['Basic', 'Advanced'],
-                      ),
                     Padding(
                       padding: EdgeInsets.only(top: 4, bottom: 12, left: 16, right: 16),
                       child: CupxSlidingSegmentedControl(

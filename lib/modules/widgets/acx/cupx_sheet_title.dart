@@ -9,6 +9,33 @@ import 'package:follow_read/theme/text_styles.dart';
 
 import 'padded_svg_icon.dart';
 
+class ActionSheetTitleBar extends StatelessWidget implements PreferredSizeWidget {
+  final double height;
+  final String title;
+  final Future<void> Function()? onPressed;
+  final bool enabled;
+  final Color? color;
+  const ActionSheetTitleBar({super.key, this.height = 58.0, this.title = "",
+    this.onPressed, this.enabled = false, this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: Container(height: height, color: color,
+        padding: EdgeInsets.only(top: 10),
+        child: ActionSheetTitle(title: title, enabled: enabled,),
+      ),
+    );
+  }
+
+
+  @override
+  Size get preferredSize => Size.fromHeight(height);
+}
+
+
 class ActionSheetTitle extends StatelessWidget {
   final String title;
   final Future<void> Function()? onPressed;
@@ -23,8 +50,9 @@ class ActionSheetTitle extends StatelessWidget {
           title: const SizedBox.shrink(),
           leading: CupxSheetTitleCloseButton(),
           trailing: Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: TextButtonx(
-            size: Sizex.smallCompact, type: ButtonxType.primary, child: 'Done',
+            size: Sizex.custom, type: ButtonxType.primary, child: 'Done',
             onPressed: onPressed, enabled: enabled,
+            buttonSize: smallCompact().copyWith(borderRadius: BorderRadius.circular(10)),
           ),)
       ),
       Positioned(child: SizedBox(height: 34,

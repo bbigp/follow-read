@@ -47,7 +47,7 @@ class _CardTickboxListTileState extends State<CardTickboxListTile> {
     Widget child = CardView(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       borderRadius: 99,
-      border: Border.all(color: AppTheme.black95, width: 1.5),
+      border: _tristate ? Border.all(color: AppTheme.black95, width: 1.5) : Border.all(color: Colors.white, width: 1.5),
       child: Padding(padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Row(children: [
           const SizedBox(width: 4,),

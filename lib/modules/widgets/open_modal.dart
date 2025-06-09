@@ -35,8 +35,8 @@ class OpenModal {
             child: Padding(
               padding: hasMargin ? const EdgeInsets.only(left: 16, right: 16, bottom: 16,) : EdgeInsets.zero,
               child: Material(
-                color: AppTheme.white95,
                 elevation: 0,
+                clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
                   borderRadius: hasMargin
                       ? BorderRadius.circular(16)
@@ -45,7 +45,10 @@ class OpenModal {
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque, //确保点击空白区域也能触发
                   onTap: () => FocusScope.of(context).unfocus(), //仅取消键盘，不关闭 modal
-                  child: content,
+                  child: Container(
+                    color: Color(0xFFf5f5f5),
+                    child: content,
+                  ),
                 ),
               ),
             )

@@ -34,12 +34,12 @@ class ListTilexChevronUpDown extends StatelessWidget {
 
 class ListTilexChevron extends StatelessWidget {
 
-  final String icon;
-  final String title;
+  final String? icon;
+  final String? title;
   final String additionalInfo;
   final GestureTapCallback? onTap;
-  const ListTilexChevron({super.key, required this.icon,
-    required this.title, this.onTap, this.additionalInfo = "",
+  const ListTilexChevron({super.key, this.icon,
+    this.title, this.onTap, this.additionalInfo = "",
   });
 
   @override
@@ -58,12 +58,12 @@ class ListTilexChevron extends StatelessWidget {
 
 class ListTilex extends StatelessWidget {
 
-  final String icon;
-  final String title;
+  final String? icon;
+  final String? title;
   final GestureTapCallback? onTap;
   final String additionalInfo;
   final Widget trailing;
-  const ListTilex({super.key, required this.icon, required this.title,
+  const ListTilex({super.key, this.icon, this.title,
     this.onTap, this.additionalInfo = "", required this.trailing,
   });
 
@@ -71,12 +71,16 @@ class ListTilex extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget child = Row(children: [
       const SizedBox(width: 16, height: 48,),
-      SvgPicture.asset(icon, width: 24, height: 24, fit: BoxFit.contain,
+      icon == null
+          ? const SizedBox(width: 24, height: 24,)
+          : SvgPicture.asset(icon!, width: 24, height: 24, fit: BoxFit.contain,
         colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn),
       ),
       const SizedBox(width: 12,),
-      Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
-      const SizedBox(width: 12,),
+      if (title != null) ...[
+        Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
+        const SizedBox(width: 12,),
+      ],
 
       const SizedBox(width: 4,),
       Expanded(child: Text(additionalInfo, maxLines: 1, overflow: TextOverflow.ellipsis,

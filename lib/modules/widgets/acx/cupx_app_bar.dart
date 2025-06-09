@@ -9,9 +9,10 @@ class CupxAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget leading;
   final List<Widget> actions;
+  final Color? color;
   const CupxAppBar({super.key, this.height = 50.0, this.title = "",
     this.leading = const SizedBox(width: 28, height: 28,),
-    this.actions = const [],
+    this.actions = const [], this.color,
   });
 
   @override
@@ -25,7 +26,8 @@ class CupxAppBar extends StatelessWidget implements PreferredSizeWidget {
     ];
     return SafeArea(
         bottom: false,
-        child: SizedBox(
+        child: Container(
+          color: color,
           height: height,
           child: Row(children: [
             SizedBox(width: 12, height: height,),
