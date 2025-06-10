@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class FloatingMenu {
+class PopupWrapper {
   static OverlayEntry? _entry;
   static GlobalKey? _currentTargetKey;// 当前关联的目标组件的Key
 
@@ -108,7 +108,7 @@ class FloatingMenu {
 
             // 创建实际的菜单OverlayEntry
             _entry  = OverlayEntry(
-              builder: (_) => _FloatingMenuWidget(
+              builder: (_) => _PopupWrapperWidget(
                 animation: animation,
                 onTapOutside: () {
                   hide(); // 点击外部关闭菜单
@@ -153,7 +153,7 @@ class FloatingMenu {
   }
 }
 
-class _FloatingMenuWidget extends StatefulWidget {
+class _PopupWrapperWidget extends StatefulWidget {
   final Animation<double> animation;
   final VoidCallback onTapOutside;
   final double left;
@@ -162,7 +162,7 @@ class _FloatingMenuWidget extends StatefulWidget {
   final double height;
   final Widget child;
 
-  const _FloatingMenuWidget({
+  const _PopupWrapperWidget({
     required this.animation,
     required this.onTapOutside,
     required this.left,
@@ -173,10 +173,10 @@ class _FloatingMenuWidget extends StatefulWidget {
   });
 
   @override
-  State<_FloatingMenuWidget> createState() => _FloatingMenuWidgetState();
+  State<_PopupWrapperWidget> createState() => _PopupWrapperWidgetState();
 }
 
-class _FloatingMenuWidgetState extends State<_FloatingMenuWidget> {
+class _PopupWrapperWidgetState extends State<_PopupWrapperWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(

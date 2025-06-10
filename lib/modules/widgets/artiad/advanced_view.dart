@@ -6,7 +6,7 @@ import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
 import 'package:follow_read/modules/widgets/acx/card_viewx.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_list_tile_chevron.dart';
-import 'package:follow_read/modules/widgets/acx/floating_menu.dart';
+import 'package:follow_read/modules/widgets/acx/popup_wrapper.dart';
 import 'package:follow_read/modules/widgets/acx/menux.dart';
 import 'package:follow_read/modules/widgets/acx/spacer_divider.dart';
 import 'package:follow_read/modules/widgets/artiad/status_picker.dart';
@@ -48,7 +48,12 @@ class AdvancedView extends ConsumerWidget {
             icon: Svgicons.calendar_today,
             title: "发布时间",
             additionalInfo: addArtiad.state.timeMap[releaseTime] ?? 'Off',
-            onTap: () => Open.menu(context, Menux(menus: buildTimeMenu(addArtiad, typeReleaseTime)), _releaseTimeKey),
+            // onTap: () => Open.menu(context, _releaseTimeKey, PopupMenu(
+            //   items: addArtiad.state.timeMap, onTap: (v){
+            //     addArtiad.change(releaseTime: int.parse(v));
+            //   },
+            // ),),
+
           ),
           isSelected: releaseTime > 0,
         ),
@@ -58,7 +63,10 @@ class AdvancedView extends ConsumerWidget {
             icon: Svgicons.calendar_today,
             title: "添加时间",
             additionalInfo: addArtiad.state.timeMap[addTime] ?? 'Off',
-            onTap: () => Open.menu(context, Menux(menus: buildTimeMenu(addArtiad, typeAddTime)), _addTimeKey),
+            // onTap: () => Open.menu(context, _addTimeKey, PopupMenu(
+            //   items: addArtiad.state.timeMap, onTap: (v){
+            //   addArtiad.change(addTime: int.parse(v));
+            // },),),
           ),
           isSelected: addTime > 0,
         ),
@@ -72,22 +80,22 @@ class AdvancedView extends ConsumerWidget {
         //   isSelected: statuses.isNotEmpty,
         // ),
 
-        ConditionItem(
-          widget: AdvancedTile(addArtiad: addArtiad,
-            icon: Svgicons.calendar_today,
-            title: "已读未读",
-            isSelected: statuses.isNotEmpty,
-            additionalInfo: statuses.join(","),
-            onTap: () {
-              if (statuses.isEmpty) {
-                Open.modal(context, StatusPicker(addArtiad: addArtiad,));
-              } else {
-                Open.menu(context, Menux(menus: buildMenu(addArtiad, typeReleaseTime)), _releaseTimeKey);
-              }
-            },
-          ),
-          isSelected: statuses.isNotEmpty,
-        ),
+        // ConditionItem(
+        //   widget: AdvancedTile(addArtiad: addArtiad,
+        //     icon: Svgicons.calendar_today,
+        //     title: "已读未读",
+        //     isSelected: statuses.isNotEmpty,
+        //     additionalInfo: statuses.join(","),
+        //     // onTap: () {
+        //     //   if (statuses.isEmpty) {
+        //     //     Open.modal(context, StatusPicker(addArtiad: addArtiad,));
+        //     //   } else {
+        //     //     Open.menu(context, Menux(menus: buildMenu(addArtiad, typeReleaseTime)), _releaseTimeKey);
+        //     //   }
+        //     // },
+        //   ),
+        //   isSelected: statuses.isNotEmpty,
+        // ),
       ];
       final List<List<ConditionItem>> groups = _groupConditions(items);
 
@@ -118,27 +126,39 @@ class AdvancedView extends ConsumerWidget {
 
 }
 
+
 class AdvancedTile extends StatelessWidget {
+
 
   final String icon;
   final String title;
   final String additionalInfo;
   final bool isSelected;
-  final GestureTapCallback? onTap;
-  final AddArtiadController addArtiad;
+  final GestureTapCallback? openTickboxTap;
+  final GestureTapCallback? clearTap;
   const AdvancedTile({super.key, required this.icon, required this.title,
-    required this.additionalInfo, this.isSelected = false, this.onTap,
-    required this.addArtiad,
+    required this.additionalInfo, this.isSelected = false,
+    this.openTickboxTap, this.clearTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    Widget menu = PopupMenu(menuDataList: [
+      MenuData(value: 'Off', text: 'Off', onTap: () => clearTap),
+      MenuData(value: 'Custom', text: 'Custom', onTap: openTickboxTap),
+    ]);
     return Column(children: [
       ListTilexChevronUpDown(
         icon: icon,
         title: title,
         additionalInfo: isSelected ? 'Custom' : 'Off',
-        onTap: onTap,
+        onTap: () {
+          if (isSelected) {
+            Open.menu(context, GlobalKey(), menu);
+            return;
+          }
+          openTickboxTap?.call();
+        },
       ),
       if (isSelected) ...[
         const Padding(
@@ -147,7 +167,7 @@ class AdvancedTile extends StatelessWidget {
         ),
         ListTilexChevron(
           additionalInfo: additionalInfo,
-          onTap: () => Open.modal(context, StatusPicker(addArtiad: addArtiad,)),
+          onTap: () => openTickboxTap?.call(),
         ),
       ]
     ],);
@@ -208,23 +228,23 @@ extension AdvancedViewExtension on AdvancedView {
     return result;
   }
 
-  List<Widget> buildMenu(AddArtiadController addArtiad, String field){
-    final groupValue = 'Custom';
-    return [
-      RadioMenuItem(title: 'Off', value: 'Off', groupValue: groupValue, // 当前选中的 value
-        onTap: () {
-          addArtiad.change(statuses: []);
-          FloatingMenu.hide();
-        },
-      ),
-      const MenuDivider(),
-      RadioMenuItem(title: 'Custom', value: 'Custom', groupValue: groupValue, // 当前选中的 value
-        onTap: () {
-          FloatingMenu.hide();
-        },
-      ),
-    ];
-  }
+  // List<Widget> buildMenu(AddArtiadController addArtiad, String field){
+  //   final groupValue = 'Custom';
+  //   return [
+  //     RadioMenuItem(title: 'Off', value: 'Off', groupValue: groupValue, // 当前选中的 value
+  //       onTap: () {
+  //         addArtiad.change(statuses: []);
+  //         FloatingMenu.hide();
+  //       },
+  //     ),
+  //     const MenuDivider(),
+  //     RadioMenuItem(title: 'Custom', value: 'Custom', groupValue: groupValue, // 当前选中的 value
+  //       onTap: () {
+  //         FloatingMenu.hide();
+  //       },
+  //     ),
+  //   ];
+  // }
 
 
   List<Widget> buildTimeMenu(AddArtiadController addArtiad, String field) {
@@ -245,7 +265,7 @@ extension AdvancedViewExtension on AdvancedView {
             } else {
               addArtiad.change(addTime: key);
             }
-            FloatingMenu.hide();
+            PopupWrapper.hide();
           },
         ),
         const MenuDivider(),

@@ -6,8 +6,44 @@ import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/modules/widgets/acx/card_viewx.dart';
 import 'package:follow_read/modules/widgets/acx/dashed_line.dart';
+import 'package:follow_read/modules/widgets/acx/popup_wrapper.dart';
 import 'package:follow_read/modules/widgets/acx/spacer_divider.dart';
 import 'package:follow_read/theme/text_styles.dart';
+
+
+class MenuData {
+  final String value;
+  final String text;
+  final GestureTapCallback? onTap;
+  const MenuData({required this.value, required this.text, this.onTap});
+}
+
+class PopupMenu extends StatelessWidget {
+  final List<MenuData> menuDataList;
+  final String groupValue;
+  const PopupMenu({super.key, required this.menuDataList, this.groupValue = ""});
+  @override
+  Widget build(BuildContext context) {
+    final widgets = menuDataList.expand((item) {
+      final value = item.value;
+      final text = item.text;
+      return [
+        RadioMenuItem(title: text, value: value, groupValue: groupValue, // 当前选中的 value
+          onTap: () {
+            item.onTap?.call();
+            PopupWrapper.hide();
+          },
+        ),
+        const MenuDivider(),
+      ];
+    }).toList();
+    if (widgets.isNotEmpty) {
+      widgets.removeLast();
+    }
+    return Menux(menus: widgets);
+  }
+}
+
 
 class Menux extends StatelessWidget {
 
