@@ -57,7 +57,7 @@ class _StatusPickerState extends State<StatusPicker> {
       _buildTile('删除', 'remove', Svgicons.trash),
 
       Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: TextButtonx(child: 'Done', size: Sizex.large, enabled: true,
+        child: TextButtonx(child: 'Done', size: Sizex.large, enabled: selectedStatuses.isNotEmpty,
           onPressed: () async {
             widget.addArtiad.change(statuses: selectedStatuses.toList());
             Navigator.pop(context);

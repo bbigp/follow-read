@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:follow_read/config/theme.dart';
 
 
 class OpenModal {

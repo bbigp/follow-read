@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 
 import 'core/utils/logger.dart';
 import 'features/presentation/providers/auth_provider.dart';
-import 'modules/pages/cluster_page.dart';
 import 'modules/pages/entries/entries_page.dart';
 import 'modules/pages/entries/meta_data.dart';
 import 'modules/pages/general_page.dart';

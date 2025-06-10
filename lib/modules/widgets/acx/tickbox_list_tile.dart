@@ -2,10 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/modules/widgets/acx/tickbox.dart';
-import 'package:follow_read/modules/widgets/feed_icon.dart';
-import 'package:follow_read/theme/text_styles.dart';
 
 class TickboxListTile extends StatefulWidget {
 

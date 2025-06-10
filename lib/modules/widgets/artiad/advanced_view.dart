@@ -6,9 +6,9 @@ import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
 import 'package:follow_read/modules/widgets/acx/card_viewx.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_list_tile_chevron.dart';
-import 'package:follow_read/modules/widgets/acx/popup_wrapper.dart';
 import 'package:follow_read/modules/widgets/acx/menux.dart';
 import 'package:follow_read/modules/widgets/acx/spacer_divider.dart';
+import 'package:follow_read/modules/widgets/artiad/advanced_tile.dart';
 import 'package:follow_read/modules/widgets/artiad/status_picker.dart';
 import 'package:follow_read/modules/widgets/feed/feed_picker.dart';
 import 'package:follow_read/service/open.dart';
@@ -22,8 +22,8 @@ class AdvancedView extends ConsumerWidget {
   AdvancedView({super.key, required this.addArtiad});
   final GlobalKey _releaseTimeKey = GlobalKey();
   final GlobalKey _addTimeKey = GlobalKey();
-  final String typeReleaseTime = "releaseTime";
-  final String typeAddTime = "addTime";
+  final GlobalKey _feedKey = GlobalKey();
+  final GlobalKey _statusKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,72 +32,49 @@ class AdvancedView extends ConsumerWidget {
       final releaseTime = addArtiad.state.releaseTime;
       final addTime = addArtiad.state.addTime;
       final statuses = addArtiad.state.statuses;
-      final List<ConditionItem> items = [
-        ConditionItem(
-          widget: ListTilexChevronUpDown(
-            icon: Svgicons.square_rss,
-            title: '订阅源',
-            additionalInfo: feedIds.isEmpty ? 'Off' : feedIds.join(","),
-            onTap: () => Open.modal(context, FeedPicker()),
-          ),
+      print("》M《L》$feedIds");
+
+      final releaseTimeMenu = RadioPopupMenu(
+        menus: buildTimeMenu(addArtiad.state.timeMap, (v) => addArtiad.change(releaseTime: v),),
+        groupValue: releaseTime.toString(),
+      );
+      final addTimeMenu = RadioPopupMenu(
+        menus: buildTimeMenu(addArtiad.state.timeMap, (v) => addArtiad.change(addTime: v),),
+        groupValue: addTime.toString(),
+      );
+
+      final List<SelectableInterface> items = [
+        AdvancedTile(icon: Svgicons.square_rss, title: '订阅源', localKey: _feedKey,
+          selectedContent: feedIds.join(","),
           isSelected: feedIds.isNotEmpty,
+          openTickboxTap: () => Open.modal(context, FeedPicker()),
+          clearTap: () => addArtiad.change(feedIds: []),
         ),
-        ConditionItem(
-          widget: ListTilexChevronUpDown(
-            key: _releaseTimeKey,
-            icon: Svgicons.calendar_today,
-            title: "发布时间",
-            additionalInfo: addArtiad.state.timeMap[releaseTime] ?? 'Off',
-            // onTap: () => Open.menu(context, _releaseTimeKey, PopupMenu(
-            //   items: addArtiad.state.timeMap, onTap: (v){
-            //     addArtiad.change(releaseTime: int.parse(v));
-            //   },
-            // ),),
-
-          ),
-          isSelected: releaseTime > 0,
+        SelectableWidget(isSelected: releaseTime > 0, child: ListTilexChevronUpDown(
+          key: _releaseTimeKey,
+          icon: Svgicons.calendar_today,
+          title: "发布时间",
+          additionalInfo: addArtiad.state.timeMap[releaseTime] ?? 'Off',
+          onTap: () => Open.menu(context, _releaseTimeKey, releaseTimeMenu),
+        ),),
+        SelectableWidget(isSelected: addTime > 0, child: ListTilexChevronUpDown(
+          key: _addTimeKey,
+          icon: Svgicons.calendar_today,
+          title: "添加时间",
+          additionalInfo: addArtiad.state.timeMap[addTime] ?? 'Off',
+          onTap: () => Open.menu(context, _addTimeKey, addTimeMenu),
+        ),),
+        AdvancedTile(
+          icon: Svgicons.calendar_today,
+          title: '已读未读',
+          selectedContent: statuses.join(","),
+          localKey: _statusKey,
+          isSelected: statuses.isNotEmpty,
+          openTickboxTap: () => Open.modal(context, StatusPicker(addArtiad: addArtiad,)),
+          clearTap: () => addArtiad.change(statuses: []),
         ),
-        ConditionItem(
-          widget: ListTilexChevronUpDown(
-            key: _addTimeKey,
-            icon: Svgicons.calendar_today,
-            title: "添加时间",
-            additionalInfo: addArtiad.state.timeMap[addTime] ?? 'Off',
-            // onTap: () => Open.menu(context, _addTimeKey, PopupMenu(
-            //   items: addArtiad.state.timeMap, onTap: (v){
-            //   addArtiad.change(addTime: int.parse(v));
-            // },),),
-          ),
-          isSelected: addTime > 0,
-        ),
-        // ConditionItem(
-        //   widget: ListTilexChevronUpDown(
-        //     icon: Svgicons.calendar_today,
-        //     title: "已读未读",
-        //     additionalInfo: statuses.isEmpty ? 'Off' : statuses.join(","),
-        //     onTap: () => Open.modal(context, StatusPicker(addArtiad: addArtiad,)),
-        //   ),
-        //   isSelected: statuses.isNotEmpty,
-        // ),
-
-        // ConditionItem(
-        //   widget: AdvancedTile(addArtiad: addArtiad,
-        //     icon: Svgicons.calendar_today,
-        //     title: "已读未读",
-        //     isSelected: statuses.isNotEmpty,
-        //     additionalInfo: statuses.join(","),
-        //     // onTap: () {
-        //     //   if (statuses.isEmpty) {
-        //     //     Open.modal(context, StatusPicker(addArtiad: addArtiad,));
-        //     //   } else {
-        //     //     Open.menu(context, Menux(menus: buildMenu(addArtiad, typeReleaseTime)), _releaseTimeKey);
-        //     //   }
-        //     // },
-        //   ),
-        //   isSelected: statuses.isNotEmpty,
-        // ),
       ];
-      final List<List<ConditionItem>> groups = _groupConditions(items);
+      final List<List<SelectableInterface>> groups = _groupConditions(items);
 
       return Column(
         children: [
@@ -127,65 +104,11 @@ class AdvancedView extends ConsumerWidget {
 }
 
 
-class AdvancedTile extends StatelessWidget {
-
-
-  final String icon;
-  final String title;
-  final String additionalInfo;
-  final bool isSelected;
-  final GestureTapCallback? openTickboxTap;
-  final GestureTapCallback? clearTap;
-  const AdvancedTile({super.key, required this.icon, required this.title,
-    required this.additionalInfo, this.isSelected = false,
-    this.openTickboxTap, this.clearTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    Widget menu = PopupMenu(menuDataList: [
-      MenuData(value: 'Off', text: 'Off', onTap: () => clearTap),
-      MenuData(value: 'Custom', text: 'Custom', onTap: openTickboxTap),
-    ]);
-    return Column(children: [
-      ListTilexChevronUpDown(
-        icon: icon,
-        title: title,
-        additionalInfo: isSelected ? 'Custom' : 'Off',
-        onTap: () {
-          if (isSelected) {
-            Open.menu(context, GlobalKey(), menu);
-            return;
-          }
-          openTickboxTap?.call();
-        },
-      ),
-      if (isSelected) ...[
-        const Padding(
-          padding: EdgeInsets.only(left: 16 + 24 + 12, right: 12),
-          child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),
-        ),
-        ListTilexChevron(
-          additionalInfo: additionalInfo,
-          onTap: () => openTickboxTap?.call(),
-        ),
-      ]
-    ],);
-  }
-
-}
-
-class ConditionItem {
-  final Widget widget;
-  final bool isSelected;
-  ConditionItem({required this.widget, required this.isSelected});
-}
-
 extension AdvancedViewExtension on AdvancedView {
-  List<Widget> _buildGroupWithDivider(List<ConditionItem> group) {
+  List<Widget> _buildGroupWithDivider(List<SelectableInterface> group) {
     final List<Widget> widgets = [];
     for (int i = 0; i < group.length; i++) {
-      widgets.add(group[i].widget);
+      widgets.add(group[i] as Widget);
       if (i != group.length - 1) {
         widgets.add(const Padding(
           padding: EdgeInsets.only(left: 16 + 24 + 12, right: 12),
@@ -196,86 +119,46 @@ extension AdvancedViewExtension on AdvancedView {
     return widgets;
   }
 
-  List<List<ConditionItem>> _groupConditions(List<ConditionItem> items) {
-    final List<List<ConditionItem>> result = [];
-    List<ConditionItem> currentGroup = [];
-
-    // for (final item in items) {
-    //   currentGroup.add(item);
-    //   if (item.isSelected) {
-    //     result.add(currentGroup);
-    //     currentGroup = [];
-    //   }
-    // }
-    // if (currentGroup.isNotEmpty) {
-    //   result.add(currentGroup);
-    // }
+  List<List<SelectableInterface>> _groupConditions(List<SelectableInterface> items) {
+    final List<List<SelectableInterface>> result = [];
+    List<SelectableInterface> currentGroup = [];
 
     for (final item in items) {
-      if (item.isSelected) {
-        if (currentGroup.isNotEmpty) {
-          result.add(currentGroup);
-          currentGroup = [];
-        }
-        result.add([item]); // 单独放一个选中的
-      } else {
-        currentGroup.add(item);
+      currentGroup.add(item);
+      if (item.hasSelection) {
+        result.add(currentGroup);
+        currentGroup = [];
       }
     }
     if (currentGroup.isNotEmpty) {
       result.add(currentGroup);
     }
+
+    // for (final item in items) {
+    //   if (item.hasSelection) {
+    //     if (currentGroup.isNotEmpty) {
+    //       result.add(currentGroup);
+    //       currentGroup = [];
+    //     }
+    //     result.add([item]); // 单独放一个选中的
+    //   } else {
+    //     currentGroup.add(item);
+    //   }
+    // }
+    // if (currentGroup.isNotEmpty) {
+    //   result.add(currentGroup);
+    // }
     return result;
   }
 
-  // List<Widget> buildMenu(AddArtiadController addArtiad, String field){
-  //   final groupValue = 'Custom';
-  //   return [
-  //     RadioMenuItem(title: 'Off', value: 'Off', groupValue: groupValue, // 当前选中的 value
-  //       onTap: () {
-  //         addArtiad.change(statuses: []);
-  //         FloatingMenu.hide();
-  //       },
-  //     ),
-  //     const MenuDivider(),
-  //     RadioMenuItem(title: 'Custom', value: 'Custom', groupValue: groupValue, // 当前选中的 value
-  //       onTap: () {
-  //         FloatingMenu.hide();
-  //       },
-  //     ),
-  //   ];
-  // }
-
-
-  List<Widget> buildTimeMenu(AddArtiadController addArtiad, String field) {
-    final state = addArtiad.state;
-    final groupValue = field == typeReleaseTime ? state.releaseTime : state.addTime;
-    final widgets = addArtiad.state.timeMap.entries.expand((item) {
+  List<MenuData> buildTimeMenu(Map<int, String> timeMap, void Function(int) onTap) {
+    return timeMap.entries.map((item) {
       final key = item.key;
       final text = item.value;
-
-      return [
-        RadioMenuItem(
-          title: text,
-          value: key.toString(),
-          groupValue: groupValue.toString(), // 当前选中的 value
-          onTap: () {
-            if (field == typeReleaseTime) {
-              addArtiad.change(releaseTime: key);
-            } else {
-              addArtiad.change(addTime: key);
-            }
-            PopupWrapper.hide();
-          },
-        ),
-        const MenuDivider(),
-      ];
+      return MenuData(value: key.toString(), text: text, onTap: (){
+        onTap(key);
+      });
     }).toList();
-    if (widgets.isNotEmpty) {
-      widgets.removeLast();
-    }
-
-    return widgets;
   }
 
 

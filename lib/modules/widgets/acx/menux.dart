@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/modules/widgets/acx/card_viewx.dart';
-import 'package:follow_read/modules/widgets/acx/dashed_line.dart';
 import 'package:follow_read/modules/widgets/acx/popup_wrapper.dart';
 import 'package:follow_read/modules/widgets/acx/spacer_divider.dart';
 import 'package:follow_read/theme/text_styles.dart';
@@ -18,13 +17,13 @@ class MenuData {
   const MenuData({required this.value, required this.text, this.onTap});
 }
 
-class PopupMenu extends StatelessWidget {
-  final List<MenuData> menuDataList;
+class RadioPopupMenu extends StatelessWidget {
+  final List<MenuData> menus;
   final String groupValue;
-  const PopupMenu({super.key, required this.menuDataList, this.groupValue = ""});
+  const RadioPopupMenu({super.key, required this.menus, this.groupValue = ""});
   @override
   Widget build(BuildContext context) {
-    final widgets = menuDataList.expand((item) {
+    final widgets = menus.expand((item) {
       final value = item.value;
       final text = item.text;
       return [

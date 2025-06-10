@@ -1,7 +1,6 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
 import 'package:follow_read/modules/controller/feeds/feeds_controller.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sheet_title.dart';
@@ -27,10 +26,22 @@ class _FeedPickerState extends State<FeedPicker> {
 
   final controller = Get.find<FeedsController>();
   final addArtiad = Get.find<AddArtiadController>();
+  Set<int> _feedIds = {};
 
   @override
   void initState() {
     super.initState();
+    _feedIds = Set.from(addArtiad.state.feedIds);
+  }
+
+  void _onChanged(int feedId) {
+    setState(() {
+      if (_feedIds.contains(feedId)) {
+        _feedIds.remove(feedId);
+      } else {
+        _feedIds.add(feedId);
+      }
+    });
   }
 
   @override
@@ -49,10 +60,10 @@ class _FeedPickerState extends State<FeedPicker> {
               if (feed.errorCount > 0) FeedStateTag(),
             ],),
             value: feed.id.toString(),
-            tristate: addArtiad.state.feedIds.contains(feed.id),
+            tristate: _feedIds.contains(feed.id),
             onChanged: (v) {
               final feedId = int.parse(v);
-              addArtiad.change(feedId: feedId);
+              _onChanged(feedId);
             },
           );
         },
@@ -65,13 +76,12 @@ class _FeedPickerState extends State<FeedPicker> {
     });
     return Column(children: [
       const SheetGrabber(),
-      Obx((){
-        return ActionSheetTitle(
-          title: '选择文件夹', enabled: addArtiad.state.feedIds.isNotEmpty,
-          onPressed: () async {
-            Navigator.pop(context);
-        },);
-      }),
+      ActionSheetTitle(
+        title: '选择文件夹', enabled: _feedIds.isNotEmpty,
+        onPressed: () async {
+          addArtiad.change(feedIds: _feedIds.toList());
+          Navigator.pop(context);
+        },),
       listView,
     ],);
   }

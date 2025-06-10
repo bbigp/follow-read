@@ -17,21 +17,15 @@ class AddArtiadController extends GetxController {
 
   }
 
-  void change({String? icon, String? title, int? feedId, List<String>? statuses,
-    int? releaseTime, int? addTime
+  void change({String? icon, String? title, List<String>? statuses,
+    int? releaseTime, int? addTime, List<int>? feedIds,
   }){
+    print("><<<<<< $feedIds");
     if (icon != null) {
       state.stateIcon.value = icon;
     }
     if (title != null) {
       state.stateTitle.value = title;
-    }
-    if (feedId != null) {
-      if (state.feedIds.contains(feedId)) {
-        state.feedIds.remove(feedId);
-      } else {
-        state.feedIds.add(feedId);
-      }
     }
     if (releaseTime != null) {
       state.stateReleaseTime.value = releaseTime;
@@ -41,6 +35,9 @@ class AddArtiadController extends GetxController {
     }
     if (statuses != null) {
       state.statuses.value = statuses;
+    }
+    if (feedIds != null) {
+      state.feedIds.value = feedIds;
     }
   }
 

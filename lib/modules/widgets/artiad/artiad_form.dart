@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
-import 'package:follow_read/modules/widgets/acx/cupx_app_bar.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sheet_title.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/modules/widgets/artiad/basic_view.dart';

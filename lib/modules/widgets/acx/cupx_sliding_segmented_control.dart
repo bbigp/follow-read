@@ -22,9 +22,9 @@ class CupxSlidingSegmentedControl extends StatelessWidget {
     required this.groupValue,
     required this.onValueChanged,
     required this.children,
-    this.height = 36,
+    this.height = 38,
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
-    this.segmentedHeight = 30,
+    this.segmentedHeight = 32,
     this.segmentedBorderRadius = const BorderRadius.all(Radius.circular(8)),
     this.trackPadding = 4,
   });
