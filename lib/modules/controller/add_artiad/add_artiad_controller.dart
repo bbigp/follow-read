@@ -20,7 +20,6 @@ class AddArtiadController extends GetxController {
   void change({String? icon, String? title, List<String>? statuses,
     int? releaseTime, int? addTime, List<int>? feedIds,
   }){
-    print("><<<<<< $feedIds");
     if (icon != null) {
       state.stateIcon.value = icon;
     }

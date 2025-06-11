@@ -64,7 +64,6 @@ class _EntriesPageState extends ConsumerState<EntriesPage> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<EntriesController>();
-    print("A页面 build 被调用 ${controller.state.isLoading}");
     return Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: (){

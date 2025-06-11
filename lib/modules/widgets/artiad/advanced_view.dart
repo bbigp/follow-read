@@ -32,7 +32,6 @@ class AdvancedView extends ConsumerWidget {
       final releaseTime = addArtiad.state.releaseTime;
       final addTime = addArtiad.state.addTime;
       final statuses = addArtiad.state.statuses;
-      print("》M《L》$feedIds");
 
       final releaseTimeMenu = RadioPopupMenu(
         menus: buildTimeMenu(addArtiad.state.timeMap, (v) => addArtiad.change(releaseTime: v),),
