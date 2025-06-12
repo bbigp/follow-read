@@ -8,6 +8,7 @@ import 'package:follow_read/features/presentation/providers/user_provider.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_list_tile.dart';
 import 'package:follow_read/modules/widgets/acx/cupx_sheet_title.dart';
 import 'package:follow_read/modules/widgets/acx/spacer_divider.dart';
+import 'package:follow_read/modules/widgets/me/me.dart';
 import 'package:follow_read/modules/widgets/open_modal.dart';
 import 'package:follow_read/modules/widgets/preference_panel.dart';
 import 'package:follow_read/modules/widgets/server_picker.dart';
@@ -28,14 +29,7 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
   Widget build(BuildContext context) {
     final userAsync = ref.watch(userProvider);
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(54),
-          child: CenteredSheetTitle(
-            // color: AppTheme.black4, height: 54,
-            title: '设置',
-            // leading: ChevronCloseButton(),
-          ),
-        ),
+        appBar: CenteredSheetTitleBar(color: AppTheme.black4, title: '设置',),
         body: userAsync.isLoading ? SizedBox.shrink() : Container(
           color: AppTheme.black4,
           child: CustomScrollView(

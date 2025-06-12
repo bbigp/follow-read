@@ -98,4 +98,7 @@ class Svgicons {
   static const String rss_slash = "assets/svg/rss_slash.svg";
   static const String square_rss = "assets/svg/square_rss.svg";
   static const String calendar_today = "assets/svg/calendar_today.svg";
+  static const String pencil = "assets/svg/pencil.svg";
+
+  static const String avatar = "assets/png/avatar.png";
 }

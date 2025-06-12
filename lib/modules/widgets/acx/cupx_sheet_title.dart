@@ -35,6 +35,26 @@ class ActionSheetTitleBar extends StatelessWidget implements PreferredSizeWidget
   Size get preferredSize => Size.fromHeight(height);
 }
 
+class CenteredSheetTitleBar extends StatelessWidget implements PreferredSizeWidget {
+  final double height;
+  final String title;
+  final Color? color;
+  const CenteredSheetTitleBar({super.key, this.height = 58.0, this.title = "", this.color});
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: Container(height: height, color: color,
+        padding: EdgeInsets.only(top: 10),
+        child: CenteredSheetTitle(title: title,),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(height);
+}
+
 
 class ActionSheetTitle extends StatelessWidget {
   final String title;
@@ -84,10 +104,12 @@ class PlainSheetTitle extends StatelessWidget {
 
 class CenteredSheetTitle extends StatelessWidget {
   final String title;
-  const CenteredSheetTitle({super.key, required this.title});
+  final Color? color;
+  const CenteredSheetTitle({super.key, required this.title, this.color});
   @override
   Widget build(BuildContext context) {
     return CupxSheetTitle(
+      color: color,
       title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500, textAlign: TextAlign.center,),
       leading: PaddedSvgIcon(Svgicons.arrow_left, onTap: () => Navigator.pop(context),),
       trailing: const SizedBox(width: 28,)
@@ -101,18 +123,23 @@ class CupxSheetTitle extends StatelessWidget {
   final Widget title;
   final Widget leading;
   final Widget trailing;
+  final Color? color;
 
   const CupxSheetTitle({super.key,
     required this.title,
     required this.leading,
     required this.trailing,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: false,
-      child: Container(height: 34 + 2 + 12, padding: EdgeInsets.only(left: 12, right: 12, top: 2, bottom: 12),
+      child: Container(
+        height: 34 + 2 + 12,
+        color: color,
+        padding: EdgeInsets.only(left: 12, right: 12, top: 2, bottom: 12),
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           leading,
           Expanded(child: title),

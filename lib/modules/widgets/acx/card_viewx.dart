@@ -10,6 +10,7 @@ class CardView extends StatelessWidget {
   final BoxBorder? border;
   final double? height;
   final double? width;
+  final Color? color;
   const CardView({super.key, required this.child,
     this.borderRadius = 16,
     this.padding = const EdgeInsets.symmetric(vertical: 4),
@@ -17,6 +18,7 @@ class CardView extends StatelessWidget {
     this.border,
     this.height,
     this.width,
+    this.color = Colors.white,
   });
 
   @override
@@ -24,7 +26,7 @@ class CardView extends StatelessWidget {
     return Container(margin: margin, padding: padding,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
-          color: Colors.white,
+          color: color,
           border: border,
         ),
         clipBehavior: Clip.antiAlias, // ✅ 让子组件也遵守圆角
