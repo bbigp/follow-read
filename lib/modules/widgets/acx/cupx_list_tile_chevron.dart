@@ -7,6 +7,38 @@ import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
+class ListTilexSwitch extends StatelessWidget {
+  final String? icon;
+  final String? title;
+  final GestureTapCallback? onTap;
+  const ListTilexSwitch({super.key, this.icon, required this.title, this.onTap,});
+  @override
+  Widget build(BuildContext context) {
+    Widget child = Row(children: [
+      const SizedBox(width: 16, height: 48,),
+      icon == null
+          ? const SizedBox(width: 24, height: 24,)
+          : SvgPicture.asset(icon!, width: 24, height: 24, fit: BoxFit.contain,
+        colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn),
+      ),
+      const SizedBox(width: 12,),
+      if (title != null) ...[
+        Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
+        const SizedBox(width: 12,),
+      ],
+
+      const SizedBox(width: 4,),
+      Expanded(child: Text("", maxLines: 1, overflow: TextOverflow.ellipsis,)),
+      Switchx(value: value, onChanged: onChanged),
+      const SizedBox(width: 4,),
+      const SizedBox(width: 12,),
+    ],);
+    return onTap == null ? child : InkWell(onTap: onTap, child: child,);
+  }
+
+
+}
+
 class ListTilexChevronUpDown extends StatelessWidget {
 
   final String icon;

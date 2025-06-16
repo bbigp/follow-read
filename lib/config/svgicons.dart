@@ -31,7 +31,7 @@ class Svgicons {
   static const String noMedia = "assets/svg/no_media.svg";
 
 
-  static const String ban = "assets/svg/ban.svg";
+
   static const String book = "assets/svg/book.svg";
 
 
@@ -54,6 +54,7 @@ class Svgicons {
   static const String plus_o = "assets/svg/plus_o.svg";
   // static const String divider = "assets/svg/divider.svg";
   static const String dot_s = "assets/svg/dot_s.svg";
+  static const String dot_m = "assets/svg/dot_m.svg";
   static const String group = "assets/svg/group.svg";
   static const String triangle_right = "assets/svg/triangle_right.svg";
   static const String triangle_down = "assets/svg/triangle_down.svg";
@@ -82,6 +83,7 @@ class Svgicons {
   static const String check_o = "assets/svg/check_o.svg";
   static const String check_fill = "assets/svg/check_fill.svg";
   static const String unread = "assets/svg/unread.svg";
+  static const String unread_dashed = "assets/svg/unread_dashed.svg";
   static const String collection_slash = "assets/svg/collection_slash.svg";
   static const String collection = "assets/svg/collection.svg";
   static const String share = "assets/svg/share.svg";
@@ -99,6 +101,8 @@ class Svgicons {
   static const String square_rss = "assets/svg/square_rss.svg";
   static const String calendar_today = "assets/svg/calendar_today.svg";
   static const String pencil = "assets/svg/pencil.svg";
+  static const String ban = "assets/svg/ban.svg";
+  static const String notification_num = "assets/svg/notification_num.svg";
 
   static const String avatar = "assets/png/avatar.png";
 }

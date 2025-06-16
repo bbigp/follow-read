@@ -13,8 +13,9 @@ import 'package:follow_read/theme/text_styles.dart';
 class MenuData {
   final String value;
   final String text;
+  final String? icon;
   final GestureTapCallback? onTap;
-  const MenuData({required this.value, required this.text, this.onTap});
+  const MenuData({required this.value, required this.text, this.onTap, this.icon});
 }
 
 class RadioPopupMenu extends StatelessWidget {
@@ -26,8 +27,9 @@ class RadioPopupMenu extends StatelessWidget {
     final widgets = menus.expand((item) {
       final value = item.value;
       final text = item.text;
+      final icon = item.icon;
       return [
-        RadioMenuItem(title: text, value: value, groupValue: groupValue, // 当前选中的 value
+        RadioMenuItem(title: text, icon: icon, value: value, groupValue: groupValue, // 当前选中的 value
           onTap: () {
             item.onTap?.call();
             PopupWrapper.hide();
@@ -52,7 +54,7 @@ class Menux extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return CardView(width: 180, padding: EdgeInsets.zero, child: ListView.builder(
+    return CardView(width: 220, padding: EdgeInsets.zero, child: ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
@@ -80,34 +82,49 @@ class RadioMenuItem extends StatelessWidget {
   final String groupValue;
   final String? title;
   final GestureTapCallback? onTap;
+  final String? icon;
   const RadioMenuItem({super.key, required this.value, required this.groupValue,
-    this.onTap, this.title
+    this.onTap, this.title, this.icon
   });
   @override
   Widget build(BuildContext context) {
-    return MenuItem(child: title ?? value, icon: groupValue == value ? Svgicons.check : null, onTap: onTap,);
+    return MenuItem(child: title ?? value, icon: icon,
+      checkIcon: groupValue == value ? Svgicons.check : null,
+      onTap: onTap,
+    );
   }
 }
 
 
 class MenuItem extends StatelessWidget {
-  final String? icon;
+  final String? checkIcon;
   final String child;
   final GestureTapCallback? onTap;
-  const MenuItem({super.key, required this.child, this.icon, this.onTap});
+  final String? icon;
+  const MenuItem({super.key, required this.child, this.checkIcon, this.onTap,
+    this.icon
+  });
   @override
   Widget build(BuildContext context) {
     Widget widget = SizedBox(
       height: 44,
       child: Row(children: [
         const SizedBox(width: 8,),
-        icon == null
+        checkIcon == null
             ? const SizedBox(width: 20, height: 20,)
-            : SvgPicture.asset(icon!, width: 20, height: 20, fit: BoxFit.contain,),
+            : SvgPicture.asset(checkIcon!, width: 20, height: 20, fit: BoxFit.contain,),
 
         const SizedBox(width: 8,),
-        Text(child, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
+        Expanded(child: Text(child, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,)),
         const SizedBox(width: 8,),
+
+        if (icon != null) ...[
+          const SizedBox(width: 4,),
+          SvgPicture.asset(icon!, width: 20, height: 20, fit: BoxFit.contain,
+            colorFilter: ColorFilter.mode(AppTheme.black95, BlendMode.srcIn),
+          ),
+          const SizedBox(width: 4,),
+        ],
 
         const SizedBox(width: 8,),
       ],),
