@@ -49,7 +49,7 @@ class CupxListTile extends StatefulWidget {
     return CupxListTile(
       title: title,
       icon: icon,
-      trailing: CupxSwitch(value: value, onChanged: onChanged,),
+      trailing: Switchx(value: value, onChanged: onChanged,),
     );
   }
 

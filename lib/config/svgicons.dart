@@ -32,7 +32,7 @@ class Svgicons {
 
 
 
-  static const String book = "assets/svg/book.svg";
+
 
 
   static const String selection = "assets/svg/selection.svg";
@@ -103,6 +103,8 @@ class Svgicons {
   static const String pencil = "assets/svg/pencil.svg";
   static const String ban = "assets/svg/ban.svg";
   static const String notification_num = "assets/svg/notification_num.svg";
+  static const String book = "assets/svg/book.svg";
+  static const String page = "assets/svg/page.svg";
 
   static const String avatar = "assets/png/avatar.png";
 }

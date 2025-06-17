@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/modules/widgets/acx/cupx_switch.dart';
 import 'package:follow_read/theme/text_styles.dart';
 
 class ListTilexSwitch extends StatelessWidget {
   final String? icon;
   final String? title;
-  final GestureTapCallback? onTap;
-  const ListTilexSwitch({super.key, this.icon, required this.title, this.onTap,});
+  final ValueChanged<bool>? onChanged;
+  final bool value;
+  const ListTilexSwitch({super.key, this.icon, required this.title, this.onChanged, this.value = false});
   @override
   Widget build(BuildContext context) {
     Widget child = Row(children: [
@@ -33,7 +35,7 @@ class ListTilexSwitch extends StatelessWidget {
       const SizedBox(width: 4,),
       const SizedBox(width: 12,),
     ],);
-    return onTap == null ? child : InkWell(onTap: onTap, child: child,);
+    return child;
   }
 
 

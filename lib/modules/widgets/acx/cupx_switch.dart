@@ -1,33 +1,58 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/modules/widgets/acx/buttonx.dart';
 
-class CupxSwitch extends StatelessWidget {
+class Switchx extends StatefulWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
+  final Sizex sizex;
 
-  const CupxSwitch({super.key, required this.value, required this.onChanged});
+  const Switchx({super.key, required this.value, required this.onChanged, this.sizex = Sizex.medium});
+
+  @override
+  State<StatefulWidget> createState() => _SwitchxState();
+
+}
+
+class _SwitchxState extends State<Switchx> {
+
+  bool _value = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.value;
+  }
 
   @override
   Widget build(BuildContext context) {
-    // CupertinoSwitch
+    double width = 48;
+    double height = 28;
+    double size = 20;
     return GestureDetector(
-      onTap: () => onChanged == null ? null : onChanged!(!value),
+      onTap: (){
+        setState(() {
+          _value = !_value;
+        });
+        HapticFeedback.mediumImpact();
+        if (widget.onChanged == null) return;
+        widget.onChanged!(_value);
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 48,
-        height: 28,
+        width: width, height: height,
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(99),
-          color: value ? AppTheme.black95 : AppTheme.black8,
+          color: _value ? AppTheme.black95 : AppTheme.black8,
         ),
         child: Align(
-          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+          alignment: _value ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
-            width: 20,
-            height: 20,
+            width: size, height: size,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,

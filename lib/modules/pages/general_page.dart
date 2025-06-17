@@ -29,12 +29,22 @@ class GeneralPage extends ConsumerStatefulWidget {
 
 class _GeneralPageState extends ConsumerState<GeneralPage> {
   final GlobalKey _unreadMarkKey = new GlobalKey();
+  final GlobalKey _openContentKey = new GlobalKey();
 
-  List<MenuData> buildTimeMenu(Map<String, String> menuValues, void Function(String) onTap) {
+  List<MenuData> buildIconMenu(Map<String, String> menuValues, void Function(String) onTap) {
     return menuValues.entries.map((item) {
       final key = item.key;
       final icon = item.value;
       return MenuData(value: key, text: key, icon: icon,onTap: (){
+        onTap(key);
+      });
+    }).toList();
+  }
+
+  List<MenuData> buildMenu(List<String> menuValues, void Function(String) onTap) {
+    return menuValues.map((item) {
+      final key = item;
+      return MenuData(value: key, text: key, onTap: (){
         onTap(key);
       });
     }).toList();
@@ -45,12 +55,17 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
     final userAsync = ref.watch(userProvider);
 
     final unreadMarkView = RadioPopupMenu(
-      menus: buildTimeMenu({
+      menus: buildIconMenu({
         'None': Svgicons.ban,
         'Dot': Svgicons.dot_m,
         'Number': Svgicons.notification_num,
       }, (v) => null),
       groupValue: 'None',
+    );
+
+    final openContentView = RadioPopupMenu(
+      menus: buildMenu(['内置阅读器', '应用内浏览器', '系统浏览器'], (v) => null),
+      groupValue: '内置阅读器',
     );
 
 
@@ -69,7 +84,16 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
                       additionalInfo: "None",
                       onTap: () => Open.menu(context, _unreadMarkKey, unreadMarkView),
                     ),
+                    Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+                    ListTilexSwitch(title: "自动已读", icon: Svgicons.book, onChanged: (v) {
 
+                    },),
+                    Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+                    ListTilexChevronUpDown(key: _openContentKey, icon: Svgicons.page,
+                      title: "内容打开方式",
+                      additionalInfo: "内置阅读器",
+                      onTap: () => Open.menu(context, _openContentKey, openContentView),
+                    ),
                   ],)
               ),),),
 
