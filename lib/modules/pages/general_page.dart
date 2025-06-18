@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/config/svgicons.dart';
 import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/features/presentation/providers/user_provider.dart';
@@ -16,6 +17,7 @@ import 'package:follow_read/modules/widgets/open_modal.dart';
 import 'package:follow_read/modules/widgets/preference_panel.dart';
 import 'package:follow_read/modules/widgets/server_picker.dart';
 import 'package:follow_read/service/open.dart';
+import 'package:follow_read/theme/text_styles.dart';
 
 
 class GeneralPage extends ConsumerStatefulWidget {
@@ -75,7 +77,8 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
           color: AppTheme.black4,
           child: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(child: SizedBox(height: 8,),),
+              // SliverToBoxAdapter(child: SizedBox(height: 8,),),
+
               SliverToBoxAdapter(child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
                   child: Column(children: [
@@ -98,6 +101,44 @@ class _GeneralPageState extends ConsumerState<GeneralPage> {
               ),),),
 
               SliverToBoxAdapter(child: SizedBox(height: 24,),),
+
+
+              // SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
+              //     child: Column(children: [
+              //       ListTilexChevronUpDown(icon: Svgicons.page, title: "服务器地址",),
+              //       Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+              //       ListTilexChevron(title: "https://feedo.coolbet.cn/",),
+              //     ],)
+              // ),),),
+              // SliverToBoxAdapter(child: SizedBox(height: 24,),),
+
+
+              SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                child: Text("当前服务器地址", maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.hint11500,),
+              ),),
+              SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
+                  child: Column(children: [
+                    Row(children: [
+                      const SizedBox(width: 16, height: 48,),
+                      SvgPicture.asset(Svgicons.check_fill, width: 24, height: 24, fit: BoxFit.contain,
+                        colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                      ),
+                      const SizedBox(width: 12,),
+                      Expanded(child: Text("https://feedo.coolbet.cn/", maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),),
+                      const SizedBox(width: 16,),
+                    ],),
+                    Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+                    ListTilex(icon: SvgPicture.asset(Svgicons.page, width: 24, height: 24, fit: BoxFit.contain,
+                      colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn),
+                    ), title: "令牌", additionalInfo: "+klodfji_jhdshunjsndeheSAkkdjnd==",),
+                  ],)
+              ),),),
+              SliverToBoxAdapter(child: SizedBox(height: 24,),),
+
+
+
+
+
               SliverToBoxAdapter(child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 16,),
                 padding: EdgeInsets.symmetric(vertical: 4),

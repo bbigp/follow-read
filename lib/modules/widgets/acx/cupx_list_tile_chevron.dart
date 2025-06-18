@@ -53,8 +53,11 @@ class ListTilexChevronUpDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget? child = SvgPicture.asset(icon, width: 24, height: 24, fit: BoxFit.contain,
+      colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn),
+    );
     return ListTilex(
-      icon: icon, title: title,
+      icon: child, title: title,
       trailing: SvgPicture.asset(Svgicons.chevron_up_down, width: 20, height: 20,
         fit: BoxFit.contain,
         colorFilter: ColorFilter.mode(AppTheme.black25, BlendMode.srcIn),
@@ -78,8 +81,11 @@ class ListTilexChevron extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget? child = icon == null ? null : SvgPicture.asset(icon!, width: 24, height: 24, fit: BoxFit.contain,
+      colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn),
+    );
     return ListTilex(
-      icon: icon, title: title,
+      icon: child, title: title,
       trailing: SvgPicture.asset(Svgicons.chevron_right, width: 20, height: 20,
         fit: BoxFit.contain,
         colorFilter: ColorFilter.mode(AppTheme.black25, BlendMode.srcIn),
@@ -92,38 +98,38 @@ class ListTilexChevron extends StatelessWidget {
 
 class ListTilex extends StatelessWidget {
 
-  final String? icon;
+  final Widget? icon;
   final String? title;
   final GestureTapCallback? onTap;
   final String additionalInfo;
-  final Widget trailing;
+  final Widget? trailing;
   const ListTilex({super.key, this.icon, this.title,
-    this.onTap, this.additionalInfo = "", required this.trailing,
+    this.onTap, this.additionalInfo = "", this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
     Widget child = Row(children: [
       const SizedBox(width: 16, height: 48,),
-      icon == null
-          ? const SizedBox(width: 24, height: 24,)
-          : SvgPicture.asset(icon!, width: 24, height: 24, fit: BoxFit.contain,
-        colorFilter: ColorFilter.mode(AppTheme.black50, BlendMode.srcIn),
-      ),
+      icon ?? const SizedBox(width: 24, height: 24,),
       const SizedBox(width: 12,),
       if (title != null) ...[
         Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
         const SizedBox(width: 12,),
       ],
 
-      const SizedBox(width: 4,),
-      Expanded(child: Text(additionalInfo, maxLines: 1, overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.caption, textAlign: TextAlign.right,)
-      ),
-      const SizedBox(width: 4,),
+      if (additionalInfo != "") ...[
+        const SizedBox(width: 4,),
+        Expanded(child: Text(additionalInfo, maxLines: 1, overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.caption, textAlign: TextAlign.right,)
+        ),
+        const SizedBox(width: 4,),
+      ],
 
-      const SizedBox(width: 4,),
-      trailing,
+      if (trailing != null) ...[
+        const SizedBox(width: 4,),
+        trailing!,
+      ],
       const SizedBox(width: 12,),
     ],);
     return onTap == null ? child : InkWell(onTap: onTap, child: child,);
