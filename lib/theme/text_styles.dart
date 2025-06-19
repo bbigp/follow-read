@@ -59,6 +59,9 @@ class AppTextStyles {
       fontSize: 11, fontWeight: FontWeight.w500, height: 1.18, color: AppTheme.black25,
   );//13px
 
+  static const TextStyle hint13 = TextStyle(
+    fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppTheme.black25,
+  );// 18
   static const TextStyle hint13500 = TextStyle(
     fontSize: 13, fontWeight: FontWeight.w500, height: 1.38, color: AppTheme.black25,
   );// 18

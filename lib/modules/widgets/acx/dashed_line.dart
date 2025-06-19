@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:follow_read/config/theme.dart';
 
 ///
 class DashedDivider extends StatelessWidget {
@@ -13,9 +14,9 @@ class DashedDivider extends StatelessWidget {
 
   const DashedDivider({
     super.key,
-    this.color = const Color(0x14000000), // 默认改为纯黑色
+    this.color = AppTheme.black8, // 默认改为纯黑色
     this.thickness = 1, // 默认粗细调整为 2
-    this.spacing = 16,
+    this.spacing = 16, //空白模块总高度
     this.indent = 0,
     this.dashLength = 5,
     this.dashSpacing = 5,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/modules/pages/entry_detail_page.dart';
 import 'package:follow_read/modules/widgets/artiad/artiad_form.dart';
+import 'package:follow_read/modules/widgets/me/login.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/utils/logger.dart';
@@ -43,7 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
           path: '/profile',
           name: RouteNames.profile,
-          builder: (context, state) => const GeneralPage()
+          builder: (context, state) => const Login()
       ),
       GoRoute(
         path: '/entry/:type/:id',

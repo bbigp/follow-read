@@ -106,5 +106,7 @@ class Svgicons {
   static const String book = "assets/svg/book.svg";
   static const String page = "assets/svg/page.svg";
 
+  static const String apple = "assets/svg/apple.svg";
+
   static const String avatar = "assets/png/avatar.png";
 }
