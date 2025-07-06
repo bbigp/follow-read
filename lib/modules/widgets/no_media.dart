@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/svg_icons.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
 
-import '../../config/svgicons.dart';
 
 class NoMedia extends StatelessWidget {
 
@@ -16,9 +17,9 @@ class NoMedia extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width, height: height,
-      color: AppTheme.black4,
+      color: AppColors.black04,
       alignment: Alignment.center,
-      child: SvgPicture.asset(Svgicons.noMedia,),
+      child: SvgPicture.asset(SvgIcons.noMedia,),
     );
   }
 

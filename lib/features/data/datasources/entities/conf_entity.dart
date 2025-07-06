@@ -25,14 +25,14 @@ class ConfTable extends Table {
 
 }
 
-extension ConfEntityConversion on ConfEntity {
-  Conf toModel() {
-    return Conf(
-      name: name,
-      value: value,
-      userId: userId.toInt(),
-    );
-  }
-}
+// extension ConfEntityConversion on ConfEntity {
+//   Conf toModel() {
+//     return Conf(
+//       name: name,
+//       value: value,
+//       userId: userId.toInt(),
+//     );
+//   }
+// }
 
 

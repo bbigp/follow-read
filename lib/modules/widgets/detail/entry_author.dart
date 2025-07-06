@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
+import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
-import 'package:follow_read/theme/text_styles.dart';
 
 class EntryAuthor extends StatelessWidget {
 
@@ -23,7 +24,7 @@ class EntryAuthor extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8,),
-        Container(width: 1, height: 6, color: AppTheme.black8,),
+        Container(width: 1, height: 6, color: AppColors.black08,),
         const SizedBox(width: 8,),
       ],
       Expanded(child: Text(entry.feed.title, maxLines: 1,

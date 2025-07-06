@@ -5,7 +5,7 @@ import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:follow_read/features/domain/models/folder.dart';
 import 'package:follow_read/features/presentation/providers/app_container.dart';
-import 'package:follow_read/modules/controller/home/home_controller.dart';
+import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:get/get.dart';
 
 abstract class MetaViewData {
@@ -31,7 +31,7 @@ class ArtiadMeta extends MetaDatax {
 
   @override
   Future<Cluster> getMeta() async {
-    return await artiadRepository.getById(id);
+    return Cluster();//await artiadRepository.getById(id);
   }
 
 }
@@ -48,7 +48,7 @@ class FolderMeta extends MetaDatax {
 
   @override
   Future<Category> getMeta() async {
-    final folder = await folderRepository.getCategoryById(id);
+    final folder = null;//await folderRepository.getCategoryById(id);
     final controller = Get.find<HomeController>();
     return folder.copyWith(feeds: controller.state.feedMap[folder.id] ?? []);
   }
@@ -66,7 +66,8 @@ class FeedMeta extends MetaDatax {
 
   @override
   Future<Feed> getMeta() async {
-    return await feedRepository.getFeedById(id);
+    // return await feedRepository.getFeedById(id);
+    return Feed.empty;
   }
 
 }

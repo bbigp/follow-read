@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
 
 import '../../config/theme.dart';
 
@@ -29,7 +30,7 @@ class SmartModal {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Material(
-                      color: AppTheme.white95,
+                      color: AppColors.white95,
                       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                       child: SafeArea(
                         top: false,

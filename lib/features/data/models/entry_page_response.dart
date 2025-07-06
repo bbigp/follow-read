@@ -70,25 +70,25 @@ class EntryResponse with EntryResponseMappable{
 
 }
 
-extension EntryResponseConversion on EntryResponse {
-  EntriesTableCompanion toCompanion() {
-    return EntriesTableCompanion.insert(
-      id: Value(BigInt.from(id)),
-      title: title,
-      hash: hash,
-      userId: BigInt.from(userId),
-      feedId: BigInt.from(feedId),
-      status: Value(status),
-      url: url,
-      publishedAt: Value(publishedAt),
-      content: Value(content),
-      author: Value(author),
-      starred: Value(starred),
-      readingTime: Value(readingTime),
-      summary: Value(""),
-      createdAt: Value(createdAt),
-    );
-  }
+// extension EntryResponseConversion on EntryResponse {
+//   EntriesTableCompanion toCompanion() {
+//     return EntriesTableCompanion.insert(
+//       id: Value(BigInt.from(id)),
+//       title: title,
+//       hash: hash,
+//       userId: BigInt.from(userId),
+//       feedId: BigInt.from(feedId),
+//       status: Value(status),
+//       url: url,
+//       publishedAt: Value(publishedAt),
+//       content: Value(content),
+//       author: Value(author),
+//       starred: Value(starred),
+//       readingTime: Value(readingTime),
+//       summary: Value(""),
+//       createdAt: Value(createdAt),
+//     );
+//   }
 
   // Entry toModel() {
   //   return Entry(
@@ -107,4 +107,4 @@ extension EntryResponseConversion on EntryResponse {
   //     feed: feed.toModel(),
   //   );
   // }
-}
+// }

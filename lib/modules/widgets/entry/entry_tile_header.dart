@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
-import 'package:follow_read/theme/text_styles.dart';
 
 ///
 class EntryTileHeader extends StatelessWidget {
@@ -33,7 +33,7 @@ class EntryTileHeader extends StatelessWidget {
           time.toShowTime(),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.hint13500,
+          style: AppTextStyles.M13B25,
         ),
       ],
     );

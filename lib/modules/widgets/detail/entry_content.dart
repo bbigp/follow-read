@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
-import 'package:follow_read/app_route.dart';
 import 'package:html/dom.dart' as dom;
 
 import 'entry_image.dart';
@@ -25,9 +24,9 @@ class EntryContent extends ConsumerWidget {
               final element = context.node as dom.Element;
               final src = element.attributes['src'] ?? '';
               return EntryImage(url: src, onTap: (){
-                ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
-                  "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(src),
-                });
+                // ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
+                //   "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(src),
+                // });
               },);
             }
         )

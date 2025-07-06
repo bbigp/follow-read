@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:follow_read/config/svgicons.dart';
+import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/theme/text_styles.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
+import 'package:follow_read/core/themes/app_text_styles.dart';
 
 class FeedStateTag extends StatelessWidget {
 
@@ -16,12 +17,12 @@ class FeedStateTag extends StatelessWidget {
       height: 24,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(99),
-        color: AppTheme.red10,
+        color: AppColors.red10,
       ),
       child: Row(children: [
         const SizedBox(width: 6,),
-        SvgPicture.asset(Svgicons.rss_slash, width: 12, height: 12, fit: BoxFit.contain,
-          colorFilter: ColorFilter.mode(AppTheme.red, BlendMode.srcIn),
+        SvgPicture.asset(SvgIcons.rss_slash, width: 12, height: 12, fit: BoxFit.contain,
+          colorFilter: ColorFilter.mode(AppColors.red00, BlendMode.srcIn),
         ),
         const SizedBox(width: 2,),
 

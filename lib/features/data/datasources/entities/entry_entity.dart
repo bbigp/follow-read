@@ -45,25 +45,25 @@ class EntriesTable extends Table {
 
 }
 
-extension EntryEntityConversion on EntryEntity {
-  Entry toModel() {
-    return Entry(
-      id: id.toInt(),
-      title: title,
-      hash: hash,
-      userId: userId.toInt(),
-      feedId: feedId.toInt(),
-      status: status,
-      url: url,
-      publishedAt: publishedAt,
-      content: content,
-      author: author,
-      starred: starred,
-      readingTime: readingTime,
-      summary: summary,
-      createdAt: createdAt,
-    );
-  }
-}
-
+// extension EntryEntityConversion on EntryEntity {
+//   Entry toModel() {
+//     return Entry(
+//       id: id.toInt(),
+//       title: title,
+//       hash: hash,
+//       userId: userId.toInt(),
+//       feedId: feedId.toInt(),
+//       status: status,
+//       url: url,
+//       publishedAt: publishedAt,
+//       content: content,
+//       author: author,
+//       starred: starred,
+//       readingTime: readingTime,
+//       summary: summary,
+//       createdAt: createdAt,
+//     );
+//   }
+// }
+//
 

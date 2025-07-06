@@ -11,11 +11,11 @@ class EntryDetail extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final entryAsync = ref.watch(entryProvider(id));
-    if (entryAsync.isLoading) {
-      return const SizedBox.shrink();
-    }
-    final entry = entryAsync.requireValue;
+    // final entryAsync = ref.watch(entryProvider(id));
+    // if (entryAsync.isLoading) {
+    //   return const SizedBox.shrink();
+    // }
+    // final entry = entryAsync.requireValue;
 
     return const SizedBox.shrink();
   }

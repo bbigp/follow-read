@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/theme/text_styles.dart';
+import 'package:follow_read/core/svg_icons.dart';
+import 'package:follow_read/core/themes/app_text_styles.dart';
 
 class NoSearchHistory extends StatelessWidget {
 
@@ -17,7 +17,7 @@ class NoSearchHistory extends StatelessWidget {
       child: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SvgPicture.asset(Svgicons.search_1, width: 56, height: 56, fit: BoxFit.contain,),
+          SvgPicture.asset(SvgIcons.search_1, width: 56, height: 56, fit: BoxFit.contain,),
           Text(value, maxLines: 1, style: AppTextStyles.hint500,),
         ],
       ),),

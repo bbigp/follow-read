@@ -33,16 +33,16 @@ class CategoriesTable extends Table {
 }
 
 
-extension CategoryEntityConversion on CategoryEntity {
-  Category toModel() {
-    return Category(
-      id: id.toInt(),
-      title: title,
-      userId: userId.toInt(),
-      hideGlobally: hideGlobally,
-      onlyShowUnread: onlyShowUnread,
-      showReadingTime: showReadingTime,
-      order: orderx,
-    );
-  }
-}
+// extension CategoryEntityConversion on CategoryEntity {
+//   Category toModel() {
+//     return Category(
+//       id: id.toInt(),
+//       title: title,
+//       userId: userId.toInt(),
+//       hideGlobally: hideGlobally,
+//       onlyShowUnread: onlyShowUnread,
+//       showReadingTime: showReadingTime,
+//       order: orderx,
+//     );
+//   }
+// }

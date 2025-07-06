@@ -1,16 +1,34 @@
 
 
 lib/
-├── features/
-│   └── auth/
-│       ├── domain/                  # 领域层
-│       │   ├── entities/            # 业务实体（如 UserEntity）
-│       │   └── use_cases/           # 业务逻辑（如 LoginUseCase）  具体的用户用例
-│       └── data/                    # 数据层
-│           ├── datasources/         # 数据源（API/DB 实现）  单表实现
-│           ├── models/              # 数据模型（JSON/DB 结构）
-│           └── repositories/        # ✅ 仓库具体实现     同一数据的多数据源组合
-
+├── main.dart
+├── routes/
+│   └── app_pages.dart        # 所有路由注册表
+│   └── app_routes.dart       # 路由路径常量
+├── core/                     # 核心功能模块（全局通用）
+│   ├── bindings/             # 全局绑定
+│   ├── services/             # 全局服务（如网络、数据库）
+│   ├── utils/                # 工具类
+│   └── themes/               # 主题配置
+├── data/                     # 数据处理层（如 API、model）
+│   ├── models/
+│   ├── providers/            # API调用
+│   └── repositories/         # 数据仓库（封装业务逻辑）
+├── modules/                  # 按功能模块划分
+│   ├── home/
+│   │   ├── bindings/         # home_binding.dart
+│   │   ├── controllers/      # home_controller.dart
+│   │   ├── views/            # home_view.dart
+│   │   └── widgets/          # home模块专属组件
+│   ├── login/
+│   │   ├── bindings/
+│   │   ├── controllers/
+│   │   ├── views/
+│   │   └── widgets/
+│   └── ... 更多模块
+├── global/                  # 全局组件/控制器
+│   ├── controllers/         # 例如全局 AuthController
+│   └── widgets/             # 通用组件（按钮、弹窗等）
 
 
 

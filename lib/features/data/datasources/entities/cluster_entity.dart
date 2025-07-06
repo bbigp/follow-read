@@ -44,25 +44,25 @@ class ClustersTable extends Table {
 
 }
 
-extension ClusterEntityConversion on ClusterEntity {
-  Cluster toModel(){
-    return Cluster(
-      id: id, icon: icon, name: name, feedIds: parseFeedIds(feedIds),
-      recentTime: recentTime, statuses: parseStatuses(statuses), deleted: deleted,
-      createdAt: createdAt, changedAt: changedAt,
-      hideGlobally: hideGlobally, onlyShowUnread: onlyShowUnread,
-      showReadingTime: showReadingTime, order: orderx,
-      starred: starred, recentAddTime: recentAddTime,
-    );
-  }
-
-  static List<int>parseFeedIds(String str) {
-    if(str == "") return [];
-    return str.split(",").where((s) => s.isNotEmpty).map(int.parse).toList();
-  }
-
-  static List<String>parseStatuses(String str) {
-    if(str == "") return [];
-    return str.split(",");
-  }
-}
+// extension ClusterEntityConversion on ClusterEntity {
+//   Cluster toModel(){
+//     return Cluster(
+//       id: id, icon: icon, name: name, feedIds: parseFeedIds(feedIds),
+//       recentTime: recentTime, statuses: parseStatuses(statuses), deleted: deleted,
+//       createdAt: createdAt, changedAt: changedAt,
+//       hideGlobally: hideGlobally, onlyShowUnread: onlyShowUnread,
+//       showReadingTime: showReadingTime, order: orderx,
+//       starred: starred, recentAddTime: recentAddTime,
+//     );
+//   }
+//
+//   static List<int>parseFeedIds(String str) {
+//     if(str == "") return [];
+//     return str.split(",").where((s) => s.isNotEmpty).map(int.parse).toList();
+//   }
+//
+//   static List<String>parseStatuses(String str) {
+//     if(str == "") return [];
+//     return str.split(",");
+//   }
+// }

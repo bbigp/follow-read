@@ -2,6 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:shimmer/shimmer.dart';
 
 class EntryImage extends StatelessWidget {
@@ -19,7 +20,7 @@ class EntryImage extends StatelessWidget {
     Widget widget = Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(width: 1, color: AppTheme.black8),
+        border: Border.all(width: 1, color: AppColors.black08),
       ),
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ClipRRect(

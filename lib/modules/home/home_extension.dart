@@ -1,0 +1,72 @@
+
+
+import 'package:flutter/material.dart';
+import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
+import 'package:follow_read/global/widgets/dashed_line.dart';
+import 'package:follow_read/modules/home/cluster_tile.dart';
+import 'package:follow_read/modules/home/feed_tile.dart';
+import 'package:follow_read/modules/home/group_tile.dart';
+import 'package:get/get.dart';
+
+import 'home_controller.dart';
+import 'home_screen.dart';
+
+
+
+extension HomeExtension on HomeScreen {
+
+  // Widget get folderView => Obx(() {
+  //   final home = Get.find<HomeController>();
+  //   return SliverList(delegate: SliverChildBuilderDelegate(
+  //     childCount: home.state.folderLen, (context, index) {
+  //
+  //   return GetBuilder<HomeController>(builder: (controller) {
+  //     final folder = controller.state.folders[index];
+  //     return FolderTile(folder: folder);
+  //   }, id: 'folder_tile:$index',);
+  // }
+  // ));});
+
+
+  // Widget get feedView => Obx(() {
+  //   final home = Get.find<HomeController>();
+  //   return SliverList(delegate: SliverChildBuilderDelegate(
+  //       childCount: home.state.feedLen, (context, index) {
+  //
+  //     return GetBuilder<HomeController>(builder: (controller) {
+  //       final feed = controller.state.feeds[index];
+  //       return FeedTile(feed: feed);
+  //     }, id: 'feed_tile:$index',);
+  //   }
+  //   ));
+  // });
+
+  // Widget get artiadView => Obx((){
+  //   final home = Get.find<HomeController>();
+  //   return SliverList(delegate: SliverChildBuilderDelegate(
+  //       childCount: home.state.artiadLen, (context, index) {
+  //
+  //     return GetBuilder<HomeController>(builder: (controller){
+  //       final artiad = controller.state.artiads[index];
+  //       return ClusterTile(artiad: artiad);
+  //     }, id: "artiad_tile:$index}",);
+  //   }
+  //   ));
+  // });
+
+  Widget get smartGroupView => SliverToBoxAdapter(
+    child: GroupTile(title: '智能视图', trailing: AddTrailing(onTap: () {
+      // ref.read(routerProvider).pushNamed(RouteNames.cluster,);
+    })),
+  );
+  Widget get dividerView => SliverToBoxAdapter(
+    child: Padding(
+      padding: EdgeInsets.only(top: 12, bottom: 8, left: 16, right: 16),
+      child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0, color: AppColors.black08,),
+    ),
+  );
+
+
+
+}

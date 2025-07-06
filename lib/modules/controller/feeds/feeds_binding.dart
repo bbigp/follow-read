@@ -5,6 +5,5 @@ import 'feeds_controller.dart';
 class FeedsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => FeedsController());
   }
 }

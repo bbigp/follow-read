@@ -3,10 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/cluster_icons.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
-import 'package:follow_read/modules/widgets/acx/buttonx.dart';
-import 'package:follow_read/modules/widgets/acx/card_viewx.dart';
-import 'package:follow_read/modules/widgets/acx/text_fieldx.dart';
+import 'package:follow_read/global/widgets/buttonx.dart';
+import 'package:follow_read/global/widgets/card_viewx.dart';
+import 'package:follow_read/global/widgets/text_fieldx.dart';
 import 'package:get/get.dart';
 
 import 'artiad_icon.dart';
@@ -26,7 +27,7 @@ class BasicView extends StatelessWidget {
             CardView(
               width: 44, height: 44,
               borderRadius: 12,
-              border: Border.all(width: 1, color: AppTheme.black8),
+              border: Border.all(width: 1, color: AppColors.black08),
               child: SizedBox(width: 40, height: 40, child: Obx((){
                 final icon = addArtiad.state.icon;
                 return ArtiadIcon(icon: icon.isNotEmpty ? icon : allIcons[0]);
@@ -61,7 +62,7 @@ class BasicView extends StatelessWidget {
               child: Obx((){
                 return Container(
                   decoration: BoxDecoration(
-                    color: icon == addArtiad.state.icon ? AppTheme.black8 : Colors.transparent,
+                    color: icon == addArtiad.state.icon ? AppColors.black08 : Colors.transparent,
                     borderRadius: BorderRadius.circular(99),
                   ),
                   child: SizedBox(width: 40, height: 40, child: ArtiadIcon(icon: icon),),

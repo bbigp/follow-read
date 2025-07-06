@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
 
 class ContextMenuWrapper extends StatefulWidget {
   final Widget child; //长按组件
@@ -46,7 +47,7 @@ class _ContextMenuWrapperState extends State<ContextMenuWrapper> {
           GestureDetector(
             onTap: _hideOverlay,
             child: Container(
-              color: AppTheme.white6, // 看起来会更接近设计图
+              color: AppColors.white06, // 看起来会更接近设计图
             ),
           ),
 

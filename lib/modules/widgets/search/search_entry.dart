@@ -9,7 +9,7 @@
 // import 'package:follow_read/features/presentation/widgets/components/no_more.dart';
 // import 'package:follow_read/features/presentation/widgets/entry/entry_tile.dart';
 // import 'package:follow_read/features/presentation/widgets/search/no_search_history.dart';
-// import 'package:follow_read/theme/text_styles.dart';
+// import 'package:follow_read/theme/app_text_styles.dart';
 //
 // class SearchEntry extends ConsumerStatefulWidget {
 //   final MetaDatax metaDatax;
@@ -61,7 +61,7 @@
 //     // int total = 0;
 //     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 //       Padding(padding: EdgeInsets.only(left: 18, right: 16, top: 8, bottom: 4),
-//         child: Text('Results', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.caption13,),
+//         child: Text('Results', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.R13B50,),
 //       ),
 //       Expanded(child: RefreshIndicator(
 //         onRefresh: _refreshData,

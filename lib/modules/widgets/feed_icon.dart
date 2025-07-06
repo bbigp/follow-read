@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:follow_read/config/theme.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/features/presentation/providers/auth_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
@@ -34,14 +35,14 @@ class FeedIcon extends HookConsumerWidget {
       fontWeight: FontWeight.w500,
       color: Colors.white,
     ),
-    this.beginBackgroundColor = AppTheme.black25, // 50% 透明度 (0x80 = 128)
-    this.endBackgroundColor = AppTheme.black75, // 75% 透明度 (0xBF = 191)
+    this.beginBackgroundColor = AppColors.black25, // 50% 透明度 (0x80 = 128)
+    this.endBackgroundColor = AppColors.black75, // 75% 透明度 (0xBF = 191)
     this.radius = 6,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authProvider.select((state) => state.user));
+    final user = null;//ref.watch(authProvider.select((state) => state.user));
     final cachedImageFuture = useMemoized(() {
       if (iconUrl.isEmpty || user == null) return null;
       return _ImageRequestCache.getImage(
@@ -57,8 +58,8 @@ class FeedIcon extends HookConsumerWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Shimmer.fromColors(
-              baseColor: AppTheme.black4,
-              highlightColor: AppTheme.black8,
+              baseColor: AppColors.black04,
+              highlightColor: AppColors.black08,
               child: Container(width: size, height: size, color: Colors.white,),
             );
           }

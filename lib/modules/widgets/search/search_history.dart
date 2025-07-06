@@ -2,7 +2,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:follow_read/config/svgicons.dart';
+// import 'package:follow_read/config/svg_icons.dart';
 // import 'package:follow_read/config/theme.dart';
 // import 'package:follow_read/features/domain/cases/base.dart';
 // import 'package:follow_read/features/presentation/providers/search_provier.dart';
@@ -10,7 +10,7 @@
 // import 'package:follow_read/features/presentation/widgets/components/padded_svg_icon.dart';
 // import 'package:follow_read/features/presentation/widgets/components/spacer_divider.dart';
 // import 'package:follow_read/features/presentation/widgets/search/no_search_history.dart';
-// import 'package:follow_read/theme/text_styles.dart';
+// import 'package:follow_read/theme/app_text_styles.dart';
 //
 // ///
 // class SearchHistory extends ConsumerWidget {
@@ -32,7 +32,7 @@
 //       Padding(
 //         padding: EdgeInsets.only(left: 16, right: 12, top: 4, bottom: 8),
 //         child: Row(children: [
-//           Expanded(child: Text('最近搜索', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.caption13,)),
+//           Expanded(child: Text('最近搜索', maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.R13B50,)),
 //           const SizedBox(width: 10, height: 24,),
 //           InkWell(onTap: (){
 //             ref.read(searchHistoriesProvider.notifier).clear();

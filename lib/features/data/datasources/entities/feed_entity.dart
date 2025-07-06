@@ -45,24 +45,24 @@ class FeedsTable extends Table {
 
 }
 
-extension FeedEntityConversion on FeedEntity {
-  Feed toModel() {
-    return Feed(
-      id: id.toInt(),
-      title: title,
-      userId: userId.toInt(),
-      feedUrl: feedUrl,
-      siteUrl: siteUrl,
-      read: read,
-      unread: unread,
-      iconUrl: iconUrl,
-      onlyShowUnread: onlyShowUnread,
-      showReadingTime: showReadingTime,
-      errorMsg: errorMsg,
-      errorCount: errorCount,
-      categoryId: categoryId.toInt(),
-      order: orderx,
-      hideGlobally: hideGlobally,
-    );
-  }
-}
+// extension FeedEntityConversion on FeedEntity {
+//   Feed toModel() {
+//     return Feed(
+//       id: id.toInt(),
+//       title: title,
+//       userId: userId.toInt(),
+//       feedUrl: feedUrl,
+//       siteUrl: siteUrl,
+//       read: read,
+//       unread: unread,
+//       iconUrl: iconUrl,
+//       onlyShowUnread: onlyShowUnread,
+//       showReadingTime: showReadingTime,
+//       errorMsg: errorMsg,
+//       errorCount: errorCount,
+//       categoryId: categoryId.toInt(),
+//       order: orderx,
+//       hideGlobally: hideGlobally,
+//     );
+//   }
+// }

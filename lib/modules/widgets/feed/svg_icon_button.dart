@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:follow_read/config/svgicons.dart';
-import 'package:follow_read/config/theme.dart';
-import 'package:follow_read/theme/text_styles.dart';
+import 'package:follow_read/core/svg_icons.dart';
+import 'package:follow_read/core/themes/app_colors.dart';
+import 'package:follow_read/core/themes/app_text_styles.dart';
 
 class SvgIconButton extends StatefulWidget {
 
@@ -20,10 +20,10 @@ class SvgIconButton extends StatefulWidget {
 
   const SvgIconButton({
     super.key, this.onPressed, this.height = 44, required this.label,
-    this.icon = Svgicons.plusWhite, this.iconSize = 20,
+    this.icon = SvgIcons.plusWhite, this.iconSize = 20,
     this.textStyle = AppTextStyles.white500,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.backgroundColor = AppTheme.black95,
+    this.backgroundColor = AppColors.black95,
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
   });
 

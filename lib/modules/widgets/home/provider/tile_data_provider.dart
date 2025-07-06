@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
-import 'package:follow_read/modules/widgets/home/count_badge.dart';
 
 abstract class TileDataProvider {
   String get title;
@@ -10,7 +9,6 @@ abstract class TileDataProvider {
   // 所以传入widget和onTap,构建的时候重新组合
   WidgetxBuilder get leadingIndicator;
   Widget get icon;
-  Counter get counter;
   int get id;
   List<ContextMenuEntry> get contextMenus;
   GestureTapCallback? get onTap;

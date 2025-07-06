@@ -107,30 +107,30 @@ class FeedResponse with FeedResponseMappable {
   static const fromJson = FeedResponseMapper.fromJson;
 }
 
-extension FeedResponseConversion on FeedResponse {
-  FeedsTableCompanion toCompanion(String baseUrl) {
-    String iconUrl = "";
-    final icon = this.icon;
-    if (icon != null) {
-      iconUrl = '${baseUrl}icons/${icon.iconId}';
-    }
-    return FeedsTableCompanion.insert(
-      userId: BigInt.from(userId),
-      feedUrl: feedUrl,
-      siteUrl: siteUrl,
-      title: title,
-      id: Value(BigInt.from(id)),
-      iconUrl: Value(iconUrl),
-      errorCount: Value(parsingErrorCount),
-      errorMsg: Value(parsingErrorMessage),
-      categoryId: Value(BigInt.from(category.id)),
-      onlyShowUnread: Value.absent(),
-      showReadingTime: Value.absent(),
-      hideGlobally: Value(hideGlobally ?? false),
-    );
-  }
-
-}
+// extension FeedResponseConversion on FeedResponse {
+//   FeedsTableCompanion toCompanion(String baseUrl) {
+//     String iconUrl = "";
+//     final icon = this.icon;
+//     if (icon != null) {
+//       iconUrl = '${baseUrl}icons/${icon.iconId}';
+//     }
+//     return FeedsTableCompanion.insert(
+//       userId: BigInt.from(userId),
+//       feedUrl: feedUrl,
+//       siteUrl: siteUrl,
+//       title: title,
+//       id: Value(BigInt.from(id)),
+//       iconUrl: Value(iconUrl),
+//       errorCount: Value(parsingErrorCount),
+//       errorMsg: Value(parsingErrorMessage),
+//       categoryId: Value(BigInt.from(category.id)),
+//       onlyShowUnread: Value.absent(),
+//       showReadingTime: Value.absent(),
+//       hideGlobally: Value(hideGlobally ?? false),
+//     );
+//   }
+//
+// }
 
 
 @MappableClass()
@@ -160,19 +160,19 @@ class CategoryResponse with CategoryResponseMappable {
   int get hashCode => id.hashCode;
 }
 
-extension CategoryResponseConversion on CategoryResponse {
-
-  CategoriesTableCompanion toCompanion(){
-    return CategoriesTableCompanion.insert(
-      id: Value(BigInt.from(id)),
-      title: title,
-      userId: BigInt.from(userId),
-      hideGlobally: Value(hideGlobally),
-      onlyShowUnread: Value.absent(),
-      showReadingTime: Value.absent(),
-    );
-  }
-}
+// extension CategoryResponseConversion on CategoryResponse {
+//
+//   CategoriesTableCompanion toCompanion(){
+//     return CategoriesTableCompanion.insert(
+//       id: Value(BigInt.from(id)),
+//       title: title,
+//       userId: BigInt.from(userId),
+//       hideGlobally: Value(hideGlobally),
+//       onlyShowUnread: Value.absent(),
+//       showReadingTime: Value.absent(),
+//     );
+//   }
+// }
 
 @MappableClass()
 class FeedIconResponse with FeedIconResponseMappable {
