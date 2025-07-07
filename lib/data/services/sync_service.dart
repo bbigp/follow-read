@@ -4,9 +4,11 @@
 import 'package:follow_read/core/prefs_keys.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
+import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/sync_record.dart';
 import 'package:follow_read/data/providers/miniflux/api.dart';
 import 'package:follow_read/data/repositories/feed_dao.dart';
+import 'package:follow_read/data/repositories/folder_dao.dart';
 import 'package:follow_read/data/repositories/sync_record_dao.dart';
 import 'package:follow_read/di.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,7 @@ class SyncService extends GetxService {
 
   late final FeedDao _feeDao;
   late final SyncRecordDao _syncRecordDao;
+  late final FolderDao _folderDao;
   final _box = GetStorage();
 
   @override
@@ -23,6 +26,7 @@ class SyncService extends GetxService {
     super.onInit();
     final db = Get.find<DBService>().db;
     _feeDao = FeedDao(db);
+    _folderDao = FolderDao(db);
     _syncRecordDao = SyncRecordDao(db);
   }
 
@@ -38,7 +42,8 @@ class SyncService extends GetxService {
     DateTime localMaxTime = now.add(Duration(days: -365));
     final record = SyncRecord(time: now, status: "run", startTime: localMaxTime, endTime: now);
     final id = await _syncRecordDao.save(record);
-    Map<int, Feed> feedMap = {};
+    Map<BigInt, Feed> feedMap = {};
+    Map<BigInt, Folder> folderMap = {};
     int entry = 0;
     while(true) {
       var result = await MinifluxApi.entries(page: page, size: size);
@@ -56,6 +61,7 @@ class SyncService extends GetxService {
       entry += entries.length;
       for (var e in entries) {
         feedMap[e.feedId] = e.feed;
+        folderMap[e.folder.id] = e.folder;
       }
 
       var minTime = entries.last.changedAt;
@@ -67,7 +73,9 @@ class SyncService extends GetxService {
 
     final feeds = feedMap.values.toList();
     await _feeDao.batchSave(feeds);
-    await _syncRecordDao.updateFinish(id, 'ok', entry: entry, feed: feeds.length);
+    final folders = folderMap.values.toList();
+    await _folderDao.batchSave(folders);
+    await _syncRecordDao.updateFinish(id, 'ok', entry: entry, feed: feeds.length, folder: folders.length);
     await _box.write(PrefsKeys.isSyncing, false);
   }
 

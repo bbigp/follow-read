@@ -20,20 +20,20 @@ class SyncRecordDao extends DatabaseAccessor<AppDatabase> {
       startTime: record.startTime == null ? const Value.absent() : Value(record.startTime!),
       endTime: record.endTime == null ? const Value.absent() : Value(record.endTime!),
       entry: Value(record.entry),
-      feed: Value(record.feed), category: Value(record.category),
+      feed: Value(record.feed), folder: Value(record.folder),
     ));
     return row.id;
   }
 
   Future<bool> updateFinish(BigInt id, String status, {
-    int? entry, int? feed, int? category, String errorMsg = ""
+    int? entry, int? feed, int? folder, String errorMsg = ""
   }) async {
     var query = update(syncRecordsTable)..where((t) => t.id.equals(id));
     final affectedRows = await query.write(SyncRecordsTableCompanion(
       status: Value(status),
       entry: entry == null ? const Value.absent() : Value(entry),
       feed: feed == null ? const Value.absent() : Value(feed),
-      category: category == null ? const Value.absent() : Value(category),
+      folder: folder == null ? const Value.absent() : Value(folder),
       errorMsg: Value(errorMsg),
     ));
     return affectedRows > 0;

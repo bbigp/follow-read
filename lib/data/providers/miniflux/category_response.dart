@@ -8,10 +8,10 @@ part 'category_response.mapper.dart';
 
 @MappableClass()
 class CategoryResponse with CategoryResponseMappable {
-  final int id;
+  final BigInt id;
   final String title;
   @MappableField(key: 'user_id')
-  final int userId;
+  final BigInt userId;
   @MappableField(key: 'hide_globally')
   final bool? hideGlobally;
   // 根据实际数据结构补充字段

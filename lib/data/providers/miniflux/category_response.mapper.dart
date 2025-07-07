@@ -20,13 +20,13 @@ class CategoryResponseMapper extends ClassMapperBase<CategoryResponse> {
   @override
   final String id = 'CategoryResponse';
 
-  static int _$id(CategoryResponse v) => v.id;
-  static const Field<CategoryResponse, int> _f$id = Field('id', _$id);
+  static BigInt _$id(CategoryResponse v) => v.id;
+  static const Field<CategoryResponse, BigInt> _f$id = Field('id', _$id);
   static String _$title(CategoryResponse v) => v.title;
   static const Field<CategoryResponse, String> _f$title =
       Field('title', _$title);
-  static int _$userId(CategoryResponse v) => v.userId;
-  static const Field<CategoryResponse, int> _f$userId =
+  static BigInt _$userId(CategoryResponse v) => v.userId;
+  static const Field<CategoryResponse, BigInt> _f$userId =
       Field('userId', _$userId, key: r'user_id');
   static bool? _$hideGlobally(CategoryResponse v) => v.hideGlobally;
   static const Field<CategoryResponse, bool> _f$hideGlobally =
@@ -103,7 +103,7 @@ extension CategoryResponseValueCopy<$R, $Out>
 
 abstract class CategoryResponseCopyWith<$R, $In extends CategoryResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({int? id, String? title, int? userId, bool? hideGlobally});
+  $R call({BigInt? id, String? title, BigInt? userId, bool? hideGlobally});
   CategoryResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -118,9 +118,9 @@ class _CategoryResponseCopyWithImpl<$R, $Out>
       CategoryResponseMapper.ensureInitialized();
   @override
   $R call(
-          {int? id,
+          {BigInt? id,
           String? title,
-          int? userId,
+          BigInt? userId,
           Object? hideGlobally = $none}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,

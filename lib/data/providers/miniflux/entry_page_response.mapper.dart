@@ -146,13 +146,13 @@ class EntryResponseMapper extends ClassMapperBase<EntryResponse> {
   @override
   final String id = 'EntryResponse';
 
-  static int _$id(EntryResponse v) => v.id;
-  static const Field<EntryResponse, int> _f$id = Field('id', _$id);
-  static int _$userId(EntryResponse v) => v.userId;
-  static const Field<EntryResponse, int> _f$userId =
+  static BigInt _$id(EntryResponse v) => v.id;
+  static const Field<EntryResponse, BigInt> _f$id = Field('id', _$id);
+  static BigInt _$userId(EntryResponse v) => v.userId;
+  static const Field<EntryResponse, BigInt> _f$userId =
       Field('userId', _$userId, key: r'user_id');
-  static int _$feedId(EntryResponse v) => v.feedId;
-  static const Field<EntryResponse, int> _f$feedId =
+  static BigInt _$feedId(EntryResponse v) => v.feedId;
+  static const Field<EntryResponse, BigInt> _f$feedId =
       Field('feedId', _$feedId, key: r'feed_id');
   static String _$status(EntryResponse v) => v.status;
   static const Field<EntryResponse, String> _f$status =
@@ -291,9 +291,9 @@ abstract class EntryResponseCopyWith<$R, $In extends EntryResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   FeedResponseCopyWith<$R, FeedResponse, FeedResponse>? get feed;
   $R call(
-      {int? id,
-      int? userId,
-      int? feedId,
+      {BigInt? id,
+      BigInt? userId,
+      BigInt? feedId,
       String? status,
       String? hash,
       String? title,
@@ -324,9 +324,9 @@ class _EntryResponseCopyWithImpl<$R, $Out>
       $value.feed?.copyWith.$chain((v) => call(feed: v));
   @override
   $R call(
-          {int? id,
-          int? userId,
-          int? feedId,
+          {BigInt? id,
+          BigInt? userId,
+          BigInt? feedId,
           String? status,
           String? hash,
           String? title,

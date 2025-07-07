@@ -50,7 +50,7 @@ class FolderMeta extends MetaDatax {
   Future<Category> getMeta() async {
     final folder = null;//await folderRepository.getCategoryById(id);
     final controller = Get.find<HomeController>();
-    return folder.copyWith(feeds: controller.state.feedMap[folder.id] ?? []);
+    return folder.copyWith(feeds: []);
   }
 
 }

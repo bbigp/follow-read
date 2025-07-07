@@ -4,6 +4,7 @@ import 'package:follow_read/data/model/page_info.dart';
 import 'package:follow_read/data/providers/miniflux/entry_page_response.dart';
 
 import 'feed.dart';
+import 'folder.dart';
 
 enum EntryState {
   unread, read, removed;
@@ -22,9 +23,9 @@ enum EntryState {
 }
 
 class Entry {
-  final int id;
-  final int userId;
-  final int feedId;
+  final BigInt id;
+  final BigInt userId;
+  final BigInt feedId;
   final EntryState status;
   final String hash;
   final String title;
@@ -35,6 +36,7 @@ class Entry {
   final bool starred;
   final int readingTime;
   final Feed feed;
+  final Folder folder;
   final String summary;
   final DateTime createdAt;
   final DateTime changedAt;
@@ -42,11 +44,11 @@ class Entry {
   static Entry empty = Entry();
 
   Entry({
-    this.id = 0,
+    BigInt? id,
     this.title = "",
     this.hash = "",
-    int? userId,
-    int? feedId,
+    BigInt? userId,
+    BigInt? feedId,
     EntryState? status,
     String? url,
     DateTime? publishedAt,
@@ -55,11 +57,13 @@ class Entry {
     bool? starred,
     int? readingTime,
     Feed? feed,
+    Folder? folder,
     String? summary,
     DateTime? createdAt,
     DateTime? changedAt,
-  })  : userId = userId ?? 0,
-        feedId = feedId ?? 0,
+  })  : id = id ?? BigInt.zero,
+        userId = userId ?? BigInt.zero,
+        feedId = feedId ?? BigInt.zero,
         status = status ?? EntryState.unread,
         url = url ?? "",
         publishedAt = publishedAt ?? DateTime.now(),
@@ -68,6 +72,7 @@ class Entry {
         starred = starred ?? false,
         readingTime = readingTime ?? 0,
         feed = feed ?? Feed.empty,
+        folder = folder ?? Folder.empty,
         summary = summary ?? "",
         createdAt = createdAt ?? DateTime.now(),
         changedAt = changedAt ?? DateTime.now();
@@ -119,9 +124,9 @@ class Entry {
   }
 
   Entry copyWith({
-    int? id,
-    int? userId,
-    int? feedId,
+    BigInt? id,
+    BigInt? userId,
+    BigInt? feedId,
     EntryState? status,
     String? hash,
     String? title,
@@ -134,6 +139,7 @@ class Entry {
     int? readingTime,
     String? pic,
     Feed? feed,
+    Folder? folder,
     String? summary,
     DateTime? createdAt,
     DateTime? changedAt,
@@ -150,6 +156,7 @@ class Entry {
       starred: starred ?? this.starred,
       readingTime: readingTime ?? this.readingTime,
       feed: feed ?? this.feed,
+      folder: folder ?? this.folder,
       summary: summary ?? this.summary,
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
@@ -164,7 +171,7 @@ extension EntryResponseExtension on EntryResponse {
       url: url, publishedAt: publishedAt, content: content,
       author: author, starred: starred, readingTime: readingTime,
       summary: "", createdAt: createdAt, changedAt: changedAt,
-      feed: feed?.toFeed(),
+      feed: feed?.toFeed(), folder: feed?.category?.toFolder(),
       status: EntryState.fromString(status)
     );
   }

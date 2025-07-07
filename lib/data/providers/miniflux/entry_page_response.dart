@@ -17,11 +17,11 @@ class EntryPageResponse with EntryPageResponseMappable {
 
 @MappableClass()
 class EntryResponse with EntryResponseMappable{
-  final int id;
+  final BigInt id;
   @MappableField(key: 'user_id')
-  final int userId;
+  final BigInt userId;
   @MappableField(key: 'feed_id')
-  final int feedId;
+  final BigInt feedId;
   final String status;
   final String hash;
   final String title;

@@ -1,17 +1,19 @@
 
 
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/providers/miniflux/feed_response.dart';
+import 'package:follow_read/data/repositories/app_database.dart';
 
 class Feed {
 
-  final int id;
-  final int userId;
+  final BigInt id;
+  final BigInt userId;
   final String feedUrl;
   final String siteUrl;
   final String title;
   final int errorCount;
   final String errorMsg;
-  final int categoryId;
+  final BigInt folderId;
   final bool hideGlobally;
 
   final String iconUrl;
@@ -23,9 +25,9 @@ class Feed {
 
   static Feed empty = Feed();
 
-  const Feed({
-    this.id = 0,
-    this.userId = 0,
+  Feed({
+    BigInt? id,
+    BigInt? userId,
     this.feedUrl = "",
     this.siteUrl = "",
     this.title = "",
@@ -35,14 +37,16 @@ class Feed {
     this.onlyShowUnread = false,
     this.errorCount = 0,
     this.errorMsg = "",
-    this.categoryId = 0,
+    BigInt? folderId,
     this.order = "",
     this.hideGlobally = false,
-  });
+  }) :  id = id ?? BigInt.zero,
+        userId = userId ?? BigInt.zero,
+        folderId = folderId ?? BigInt.zero;
 
   Feed copyWith({
-    int? id,
-    int? userId,
+    BigInt? id,
+    BigInt? userId,
     String? feedUrl,
     String? siteUrl,
     String? title,
@@ -53,7 +57,7 @@ class Feed {
     bool? showReadingTime,
     int? errorCount,
     String? errorMsg,
-    int? categoryId,
+    BigInt? folderId,
     String? order,
     bool? hideGlobally,
   }) {
@@ -69,9 +73,20 @@ class Feed {
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
-      categoryId: categoryId ?? this.categoryId,
+      folderId: folderId ?? this.folderId,
       order: order ?? this.order,
       hideGlobally: hideGlobally ?? this.hideGlobally,
+    );
+  }
+}
+
+extension FeedRowExtension on FeedRow {
+  Feed toFeed() {
+    return Feed(
+      id: id, userId: userId, feedUrl: feedUrl, siteUrl: siteUrl,
+      title: title, iconUrl: iconUrl, onlyShowUnread: onlyShowUnread,
+      errorMsg: errorMsg, errorCount: errorCount, folderId: folderId,
+      order: orderx, hideGlobally: hideGlobally,
     );
   }
 }
@@ -81,7 +96,7 @@ extension FeedResponseExtension on FeedResponse {
     return Feed(
       id: id, userId: userId, feedUrl: feedUrl, siteUrl: siteUrl,
       errorMsg: parsingErrorMessage, errorCount: parsingErrorCount,
-      categoryId: category == null ? 0 : category!.id,
+      folderId: category?.id, title: title,
       hideGlobally: hideGlobally ?? false,
 
       onlyShowUnread: false,

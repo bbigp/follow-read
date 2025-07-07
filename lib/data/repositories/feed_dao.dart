@@ -11,12 +11,22 @@ class FeedDao extends DatabaseAccessor<AppDatabase> {
 
   $FeedsTableTable get feedsTable => attachedDatabase.feedsTable;
 
+
+  Future<List<Feed>> getAllFeeds() async {
+    var query = select(feedsTable);
+    query = query..where((t) => t.deleted.equals(0))
+      ..orderBy([(t) => OrderingTerm(expression: feedsTable.id, mode: OrderingMode.asc)]);
+    final rows = await query.get();
+    return rows.map((e) => e.toFeed()).toList();
+  }
+
+
   Future<void> batchSave(List<Feed> feeds) async {
     if (feeds.isEmpty) return;
 
     final buffer = StringBuffer();
     buffer.write('INSERT INTO feeds (id, user_id, feed_url, site_url, title, '
-        'icon_url, error_count, error_msg, category_id, hide_globally, '
+        'icon_url, error_count, error_msg, folder_id, hide_globally, '
         'only_show_unread, orderx, deleted) VALUES '
     );
 
@@ -26,7 +36,7 @@ class FeedDao extends DatabaseAccessor<AppDatabase> {
       if (i < feeds.length - 1) buffer.write(', ');
       args.addAll([
         feeds[i].id, feeds[i].userId, feeds[i].feedUrl, feeds[i].siteUrl, feeds[i].title,
-        feeds[i].iconUrl, feeds[i].errorCount, feeds[i].errorMsg, feeds[i].categoryId, feeds[i].hideGlobally,
+        feeds[i].iconUrl, feeds[i].errorCount, feeds[i].errorMsg, feeds[i].folderId, feeds[i].hideGlobally,
         feeds[i].onlyShowUnread, feeds[i].order, 0,
       ]);
     }
@@ -35,7 +45,7 @@ class FeedDao extends DatabaseAccessor<AppDatabase> {
         'title = excluded.title, '
         'error_count = excluded.error_count, error_msg = excluded.error_msg,'
         'icon_url = excluded.icon_url,'
-        'category_id = excluded.category_id,'
+        'folder_id = excluded.folder_id,'
         'hide_globally = excluded.hide_globally'
     );
     await customStatement(buffer.toString(), args);

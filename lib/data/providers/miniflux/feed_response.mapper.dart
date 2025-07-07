@@ -22,10 +22,10 @@ class FeedResponseMapper extends ClassMapperBase<FeedResponse> {
   @override
   final String id = 'FeedResponse';
 
-  static int _$id(FeedResponse v) => v.id;
-  static const Field<FeedResponse, int> _f$id = Field('id', _$id);
-  static int _$userId(FeedResponse v) => v.userId;
-  static const Field<FeedResponse, int> _f$userId =
+  static BigInt _$id(FeedResponse v) => v.id;
+  static const Field<FeedResponse, BigInt> _f$id = Field('id', _$id);
+  static BigInt _$userId(FeedResponse v) => v.userId;
+  static const Field<FeedResponse, BigInt> _f$userId =
       Field('userId', _$userId, key: r'user_id');
   static String _$feedUrl(FeedResponse v) => v.feedUrl;
   static const Field<FeedResponse, String> _f$feedUrl =
@@ -268,8 +268,8 @@ abstract class FeedResponseCopyWith<$R, $In extends FeedResponse, $Out>
       get category;
   IconResponseCopyWith<$R, IconResponse, IconResponse>? get icon;
   $R call(
-      {int? id,
-      int? userId,
+      {BigInt? id,
+      BigInt? userId,
       String? feedUrl,
       String? siteUrl,
       String? title,
@@ -322,8 +322,8 @@ class _FeedResponseCopyWithImpl<$R, $Out>
       $value.icon?.copyWith.$chain((v) => call(icon: v));
   @override
   $R call(
-          {int? id,
-          int? userId,
+          {BigInt? id,
+          BigInt? userId,
           String? feedUrl,
           String? siteUrl,
           String? title,

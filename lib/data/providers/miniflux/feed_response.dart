@@ -9,9 +9,9 @@ part 'feed_response.mapper.dart';
 
 @MappableClass()
 class FeedResponse with FeedResponseMappable {
-  final int id;
+  final BigInt id;
   @MappableField(key: 'user_id')
-  final int userId;
+  final BigInt userId;
   @MappableField(key: 'feed_url')
   final String feedUrl;
   @MappableField(key: 'site_url')

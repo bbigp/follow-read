@@ -60,11 +60,11 @@ class $FeedsTableTable extends FeedsTable
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: const Constant(""));
-  static const VerificationMeta _categoryIdMeta =
-      const VerificationMeta('categoryId');
+  static const VerificationMeta _folderIdMeta =
+      const VerificationMeta('folderId');
   @override
-  late final GeneratedColumn<BigInt> categoryId = GeneratedColumn<BigInt>(
-      'category_id', aliasedName, false,
+  late final GeneratedColumn<BigInt> folderId = GeneratedColumn<BigInt>(
+      'folder_id', aliasedName, false,
       type: DriftSqlType.bigInt,
       requiredDuringInsert: false,
       defaultValue: Constant(BigInt.zero));
@@ -113,7 +113,7 @@ class $FeedsTableTable extends FeedsTable
         iconUrl,
         errorCount,
         errorMsg,
-        categoryId,
+        folderId,
         onlyShowUnread,
         orderx,
         hideGlobally,
@@ -170,11 +170,9 @@ class $FeedsTableTable extends FeedsTable
       context.handle(_errorMsgMeta,
           errorMsg.isAcceptableOrUnknown(data['error_msg']!, _errorMsgMeta));
     }
-    if (data.containsKey('category_id')) {
-      context.handle(
-          _categoryIdMeta,
-          categoryId.isAcceptableOrUnknown(
-              data['category_id']!, _categoryIdMeta));
+    if (data.containsKey('folder_id')) {
+      context.handle(_folderIdMeta,
+          folderId.isAcceptableOrUnknown(data['folder_id']!, _folderIdMeta));
     }
     if (data.containsKey('only_show_unread')) {
       context.handle(
@@ -221,8 +219,8 @@ class $FeedsTableTable extends FeedsTable
           .read(DriftSqlType.int, data['${effectivePrefix}error_count'])!,
       errorMsg: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}error_msg'])!,
-      categoryId: attachedDatabase.typeMapping
-          .read(DriftSqlType.bigInt, data['${effectivePrefix}category_id'])!,
+      folderId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}folder_id'])!,
       onlyShowUnread: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}only_show_unread'])!,
       orderx: attachedDatabase.typeMapping
@@ -249,7 +247,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
   final String iconUrl;
   final int errorCount;
   final String errorMsg;
-  final BigInt categoryId;
+  final BigInt folderId;
   final bool onlyShowUnread;
   final String orderx;
   final bool hideGlobally;
@@ -263,7 +261,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
       required this.iconUrl,
       required this.errorCount,
       required this.errorMsg,
-      required this.categoryId,
+      required this.folderId,
       required this.onlyShowUnread,
       required this.orderx,
       required this.hideGlobally,
@@ -279,7 +277,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
     map['icon_url'] = Variable<String>(iconUrl);
     map['error_count'] = Variable<int>(errorCount);
     map['error_msg'] = Variable<String>(errorMsg);
-    map['category_id'] = Variable<BigInt>(categoryId);
+    map['folder_id'] = Variable<BigInt>(folderId);
     map['only_show_unread'] = Variable<bool>(onlyShowUnread);
     map['orderx'] = Variable<String>(orderx);
     map['hide_globally'] = Variable<bool>(hideGlobally);
@@ -297,7 +295,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
       iconUrl: Value(iconUrl),
       errorCount: Value(errorCount),
       errorMsg: Value(errorMsg),
-      categoryId: Value(categoryId),
+      folderId: Value(folderId),
       onlyShowUnread: Value(onlyShowUnread),
       orderx: Value(orderx),
       hideGlobally: Value(hideGlobally),
@@ -317,7 +315,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
       iconUrl: serializer.fromJson<String>(json['iconUrl']),
       errorCount: serializer.fromJson<int>(json['errorCount']),
       errorMsg: serializer.fromJson<String>(json['errorMsg']),
-      categoryId: serializer.fromJson<BigInt>(json['categoryId']),
+      folderId: serializer.fromJson<BigInt>(json['folderId']),
       onlyShowUnread: serializer.fromJson<bool>(json['onlyShowUnread']),
       orderx: serializer.fromJson<String>(json['orderx']),
       hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
@@ -336,7 +334,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
       'iconUrl': serializer.toJson<String>(iconUrl),
       'errorCount': serializer.toJson<int>(errorCount),
       'errorMsg': serializer.toJson<String>(errorMsg),
-      'categoryId': serializer.toJson<BigInt>(categoryId),
+      'folderId': serializer.toJson<BigInt>(folderId),
       'onlyShowUnread': serializer.toJson<bool>(onlyShowUnread),
       'orderx': serializer.toJson<String>(orderx),
       'hideGlobally': serializer.toJson<bool>(hideGlobally),
@@ -353,7 +351,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
           String? iconUrl,
           int? errorCount,
           String? errorMsg,
-          BigInt? categoryId,
+          BigInt? folderId,
           bool? onlyShowUnread,
           String? orderx,
           bool? hideGlobally,
@@ -367,7 +365,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
         iconUrl: iconUrl ?? this.iconUrl,
         errorCount: errorCount ?? this.errorCount,
         errorMsg: errorMsg ?? this.errorMsg,
-        categoryId: categoryId ?? this.categoryId,
+        folderId: folderId ?? this.folderId,
         onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
         orderx: orderx ?? this.orderx,
         hideGlobally: hideGlobally ?? this.hideGlobally,
@@ -384,8 +382,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
       errorCount:
           data.errorCount.present ? data.errorCount.value : this.errorCount,
       errorMsg: data.errorMsg.present ? data.errorMsg.value : this.errorMsg,
-      categoryId:
-          data.categoryId.present ? data.categoryId.value : this.categoryId,
+      folderId: data.folderId.present ? data.folderId.value : this.folderId,
       onlyShowUnread: data.onlyShowUnread.present
           ? data.onlyShowUnread.value
           : this.onlyShowUnread,
@@ -408,7 +405,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
           ..write('iconUrl: $iconUrl, ')
           ..write('errorCount: $errorCount, ')
           ..write('errorMsg: $errorMsg, ')
-          ..write('categoryId: $categoryId, ')
+          ..write('folderId: $folderId, ')
           ..write('onlyShowUnread: $onlyShowUnread, ')
           ..write('orderx: $orderx, ')
           ..write('hideGlobally: $hideGlobally, ')
@@ -427,7 +424,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
       iconUrl,
       errorCount,
       errorMsg,
-      categoryId,
+      folderId,
       onlyShowUnread,
       orderx,
       hideGlobally,
@@ -444,7 +441,7 @@ class FeedRow extends DataClass implements Insertable<FeedRow> {
           other.iconUrl == this.iconUrl &&
           other.errorCount == this.errorCount &&
           other.errorMsg == this.errorMsg &&
-          other.categoryId == this.categoryId &&
+          other.folderId == this.folderId &&
           other.onlyShowUnread == this.onlyShowUnread &&
           other.orderx == this.orderx &&
           other.hideGlobally == this.hideGlobally &&
@@ -460,7 +457,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
   final Value<String> iconUrl;
   final Value<int> errorCount;
   final Value<String> errorMsg;
-  final Value<BigInt> categoryId;
+  final Value<BigInt> folderId;
   final Value<bool> onlyShowUnread;
   final Value<String> orderx;
   final Value<bool> hideGlobally;
@@ -474,7 +471,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
     this.iconUrl = const Value.absent(),
     this.errorCount = const Value.absent(),
     this.errorMsg = const Value.absent(),
-    this.categoryId = const Value.absent(),
+    this.folderId = const Value.absent(),
     this.onlyShowUnread = const Value.absent(),
     this.orderx = const Value.absent(),
     this.hideGlobally = const Value.absent(),
@@ -489,7 +486,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
     this.iconUrl = const Value.absent(),
     this.errorCount = const Value.absent(),
     this.errorMsg = const Value.absent(),
-    this.categoryId = const Value.absent(),
+    this.folderId = const Value.absent(),
     this.onlyShowUnread = const Value.absent(),
     this.orderx = const Value.absent(),
     this.hideGlobally = const Value.absent(),
@@ -507,7 +504,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
     Expression<String>? iconUrl,
     Expression<int>? errorCount,
     Expression<String>? errorMsg,
-    Expression<BigInt>? categoryId,
+    Expression<BigInt>? folderId,
     Expression<bool>? onlyShowUnread,
     Expression<String>? orderx,
     Expression<bool>? hideGlobally,
@@ -522,7 +519,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
       if (iconUrl != null) 'icon_url': iconUrl,
       if (errorCount != null) 'error_count': errorCount,
       if (errorMsg != null) 'error_msg': errorMsg,
-      if (categoryId != null) 'category_id': categoryId,
+      if (folderId != null) 'folder_id': folderId,
       if (onlyShowUnread != null) 'only_show_unread': onlyShowUnread,
       if (orderx != null) 'orderx': orderx,
       if (hideGlobally != null) 'hide_globally': hideGlobally,
@@ -539,7 +536,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
       Value<String>? iconUrl,
       Value<int>? errorCount,
       Value<String>? errorMsg,
-      Value<BigInt>? categoryId,
+      Value<BigInt>? folderId,
       Value<bool>? onlyShowUnread,
       Value<String>? orderx,
       Value<bool>? hideGlobally,
@@ -553,7 +550,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
       iconUrl: iconUrl ?? this.iconUrl,
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
-      categoryId: categoryId ?? this.categoryId,
+      folderId: folderId ?? this.folderId,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       orderx: orderx ?? this.orderx,
       hideGlobally: hideGlobally ?? this.hideGlobally,
@@ -588,8 +585,8 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
     if (errorMsg.present) {
       map['error_msg'] = Variable<String>(errorMsg.value);
     }
-    if (categoryId.present) {
-      map['category_id'] = Variable<BigInt>(categoryId.value);
+    if (folderId.present) {
+      map['folder_id'] = Variable<BigInt>(folderId.value);
     }
     if (onlyShowUnread.present) {
       map['only_show_unread'] = Variable<bool>(onlyShowUnread.value);
@@ -617,7 +614,7 @@ class FeedsTableCompanion extends UpdateCompanion<FeedRow> {
           ..write('iconUrl: $iconUrl, ')
           ..write('errorCount: $errorCount, ')
           ..write('errorMsg: $errorMsg, ')
-          ..write('categoryId: $categoryId, ')
+          ..write('folderId: $folderId, ')
           ..write('onlyShowUnread: $onlyShowUnread, ')
           ..write('orderx: $orderx, ')
           ..write('hideGlobally: $hideGlobally, ')
@@ -686,15 +683,14 @@ class $SyncRecordsTableTable extends SyncRecordsTable
   late final GeneratedColumn<int> feed = GeneratedColumn<int>(
       'feed', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _categoryMeta =
-      const VerificationMeta('category');
+  static const VerificationMeta _folderMeta = const VerificationMeta('folder');
   @override
-  late final GeneratedColumn<int> category = GeneratedColumn<int>(
-      'category', aliasedName, false,
+  late final GeneratedColumn<int> folder = GeneratedColumn<int>(
+      'folder', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, status, time, errorMsg, startTime, endTime, entry, feed, category];
+      [id, status, time, errorMsg, startTime, endTime, entry, feed, folder];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -744,11 +740,11 @@ class $SyncRecordsTableTable extends SyncRecordsTable
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    if (data.containsKey('folder')) {
+      context.handle(_folderMeta,
+          folder.isAcceptableOrUnknown(data['folder']!, _folderMeta));
     } else if (isInserting) {
-      context.missing(_categoryMeta);
+      context.missing(_folderMeta);
     }
     return context;
   }
@@ -775,8 +771,8 @@ class $SyncRecordsTableTable extends SyncRecordsTable
           .read(DriftSqlType.int, data['${effectivePrefix}entry'])!,
       feed: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}feed'])!,
-      category: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category'])!,
+      folder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}folder'])!,
     );
   }
 
@@ -795,7 +791,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
   final DateTime endTime;
   final int entry;
   final int feed;
-  final int category;
+  final int folder;
   const SyncRecordRow(
       {required this.id,
       required this.status,
@@ -805,7 +801,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       required this.endTime,
       required this.entry,
       required this.feed,
-      required this.category});
+      required this.folder});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -817,7 +813,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
     map['endTime'] = Variable<DateTime>(endTime);
     map['entry'] = Variable<int>(entry);
     map['feed'] = Variable<int>(feed);
-    map['category'] = Variable<int>(category);
+    map['folder'] = Variable<int>(folder);
     return map;
   }
 
@@ -831,7 +827,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       endTime: Value(endTime),
       entry: Value(entry),
       feed: Value(feed),
-      category: Value(category),
+      folder: Value(folder),
     );
   }
 
@@ -847,7 +843,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       endTime: serializer.fromJson<DateTime>(json['endTime']),
       entry: serializer.fromJson<int>(json['entry']),
       feed: serializer.fromJson<int>(json['feed']),
-      category: serializer.fromJson<int>(json['category']),
+      folder: serializer.fromJson<int>(json['folder']),
     );
   }
   @override
@@ -862,7 +858,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       'endTime': serializer.toJson<DateTime>(endTime),
       'entry': serializer.toJson<int>(entry),
       'feed': serializer.toJson<int>(feed),
-      'category': serializer.toJson<int>(category),
+      'folder': serializer.toJson<int>(folder),
     };
   }
 
@@ -875,7 +871,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
           DateTime? endTime,
           int? entry,
           int? feed,
-          int? category}) =>
+          int? folder}) =>
       SyncRecordRow(
         id: id ?? this.id,
         status: status ?? this.status,
@@ -885,7 +881,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
         endTime: endTime ?? this.endTime,
         entry: entry ?? this.entry,
         feed: feed ?? this.feed,
-        category: category ?? this.category,
+        folder: folder ?? this.folder,
       );
   SyncRecordRow copyWithCompanion(SyncRecordsTableCompanion data) {
     return SyncRecordRow(
@@ -897,7 +893,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
       entry: data.entry.present ? data.entry.value : this.entry,
       feed: data.feed.present ? data.feed.value : this.feed,
-      category: data.category.present ? data.category.value : this.category,
+      folder: data.folder.present ? data.folder.value : this.folder,
     );
   }
 
@@ -912,14 +908,14 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
           ..write('endTime: $endTime, ')
           ..write('entry: $entry, ')
           ..write('feed: $feed, ')
-          ..write('category: $category')
+          ..write('folder: $folder')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(
-      id, status, time, errorMsg, startTime, endTime, entry, feed, category);
+      id, status, time, errorMsg, startTime, endTime, entry, feed, folder);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -932,7 +928,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
           other.endTime == this.endTime &&
           other.entry == this.entry &&
           other.feed == this.feed &&
-          other.category == this.category);
+          other.folder == this.folder);
 }
 
 class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
@@ -944,7 +940,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
   final Value<DateTime> endTime;
   final Value<int> entry;
   final Value<int> feed;
-  final Value<int> category;
+  final Value<int> folder;
   const SyncRecordsTableCompanion({
     this.id = const Value.absent(),
     this.status = const Value.absent(),
@@ -954,7 +950,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     this.endTime = const Value.absent(),
     this.entry = const Value.absent(),
     this.feed = const Value.absent(),
-    this.category = const Value.absent(),
+    this.folder = const Value.absent(),
   });
   SyncRecordsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -965,12 +961,12 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     this.endTime = const Value.absent(),
     required int entry,
     required int feed,
-    required int category,
+    required int folder,
   })  : status = Value(status),
         errorMsg = Value(errorMsg),
         entry = Value(entry),
         feed = Value(feed),
-        category = Value(category);
+        folder = Value(folder);
   static Insertable<SyncRecordRow> custom({
     Expression<BigInt>? id,
     Expression<String>? status,
@@ -980,7 +976,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     Expression<DateTime>? endTime,
     Expression<int>? entry,
     Expression<int>? feed,
-    Expression<int>? category,
+    Expression<int>? folder,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -991,7 +987,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
       if (endTime != null) 'endTime': endTime,
       if (entry != null) 'entry': entry,
       if (feed != null) 'feed': feed,
-      if (category != null) 'category': category,
+      if (folder != null) 'folder': folder,
     });
   }
 
@@ -1004,7 +1000,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
       Value<DateTime>? endTime,
       Value<int>? entry,
       Value<int>? feed,
-      Value<int>? category}) {
+      Value<int>? folder}) {
     return SyncRecordsTableCompanion(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -1014,7 +1010,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
       endTime: endTime ?? this.endTime,
       entry: entry ?? this.entry,
       feed: feed ?? this.feed,
-      category: category ?? this.category,
+      folder: folder ?? this.folder,
     );
   }
 
@@ -1045,8 +1041,8 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     if (feed.present) {
       map['feed'] = Variable<int>(feed.value);
     }
-    if (category.present) {
-      map['category'] = Variable<int>(category.value);
+    if (folder.present) {
+      map['folder'] = Variable<int>(folder.value);
     }
     return map;
   }
@@ -1062,7 +1058,264 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
           ..write('endTime: $endTime, ')
           ..write('entry: $entry, ')
           ..write('feed: $feed, ')
-          ..write('category: $category')
+          ..write('folder: $folder')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FoldersTableTable extends FoldersTable
+    with TableInfo<$FoldersTableTable, FolderRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FoldersTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<BigInt> id = GeneratedColumn<BigInt>(
+      'id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: false);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<BigInt> userId = GeneratedColumn<BigInt>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _hideGloballyMeta =
+      const VerificationMeta('hideGlobally');
+  @override
+  late final GeneratedColumn<bool> hideGlobally = GeneratedColumn<bool>(
+      'hide_globally', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("hide_globally" IN (0, 1))'),
+      defaultValue: Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [id, userId, title, hideGlobally];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'folders';
+  @override
+  VerificationContext validateIntegrity(Insertable<FolderRow> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('hide_globally')) {
+      context.handle(
+          _hideGloballyMeta,
+          hideGlobally.isAcceptableOrUnknown(
+              data['hide_globally']!, _hideGloballyMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FolderRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FolderRow(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      hideGlobally: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}hide_globally'])!,
+    );
+  }
+
+  @override
+  $FoldersTableTable createAlias(String alias) {
+    return $FoldersTableTable(attachedDatabase, alias);
+  }
+}
+
+class FolderRow extends DataClass implements Insertable<FolderRow> {
+  final BigInt id;
+  final BigInt userId;
+  final String title;
+  final bool hideGlobally;
+  const FolderRow(
+      {required this.id,
+      required this.userId,
+      required this.title,
+      required this.hideGlobally});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<BigInt>(id);
+    map['user_id'] = Variable<BigInt>(userId);
+    map['title'] = Variable<String>(title);
+    map['hide_globally'] = Variable<bool>(hideGlobally);
+    return map;
+  }
+
+  FoldersTableCompanion toCompanion(bool nullToAbsent) {
+    return FoldersTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      title: Value(title),
+      hideGlobally: Value(hideGlobally),
+    );
+  }
+
+  factory FolderRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FolderRow(
+      id: serializer.fromJson<BigInt>(json['id']),
+      userId: serializer.fromJson<BigInt>(json['userId']),
+      title: serializer.fromJson<String>(json['title']),
+      hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<BigInt>(id),
+      'userId': serializer.toJson<BigInt>(userId),
+      'title': serializer.toJson<String>(title),
+      'hideGlobally': serializer.toJson<bool>(hideGlobally),
+    };
+  }
+
+  FolderRow copyWith(
+          {BigInt? id, BigInt? userId, String? title, bool? hideGlobally}) =>
+      FolderRow(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        title: title ?? this.title,
+        hideGlobally: hideGlobally ?? this.hideGlobally,
+      );
+  FolderRow copyWithCompanion(FoldersTableCompanion data) {
+    return FolderRow(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      title: data.title.present ? data.title.value : this.title,
+      hideGlobally: data.hideGlobally.present
+          ? data.hideGlobally.value
+          : this.hideGlobally,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FolderRow(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('title: $title, ')
+          ..write('hideGlobally: $hideGlobally')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, userId, title, hideGlobally);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FolderRow &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.title == this.title &&
+          other.hideGlobally == this.hideGlobally);
+}
+
+class FoldersTableCompanion extends UpdateCompanion<FolderRow> {
+  final Value<BigInt> id;
+  final Value<BigInt> userId;
+  final Value<String> title;
+  final Value<bool> hideGlobally;
+  const FoldersTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.hideGlobally = const Value.absent(),
+  });
+  FoldersTableCompanion.insert({
+    this.id = const Value.absent(),
+    required BigInt userId,
+    required String title,
+    this.hideGlobally = const Value.absent(),
+  })  : userId = Value(userId),
+        title = Value(title);
+  static Insertable<FolderRow> custom({
+    Expression<BigInt>? id,
+    Expression<BigInt>? userId,
+    Expression<String>? title,
+    Expression<bool>? hideGlobally,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (title != null) 'title': title,
+      if (hideGlobally != null) 'hide_globally': hideGlobally,
+    });
+  }
+
+  FoldersTableCompanion copyWith(
+      {Value<BigInt>? id,
+      Value<BigInt>? userId,
+      Value<String>? title,
+      Value<bool>? hideGlobally}) {
+    return FoldersTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      title: title ?? this.title,
+      hideGlobally: hideGlobally ?? this.hideGlobally,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<BigInt>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<BigInt>(userId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (hideGlobally.present) {
+      map['hide_globally'] = Variable<bool>(hideGlobally.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FoldersTableCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('title: $title, ')
+          ..write('hideGlobally: $hideGlobally')
           ..write(')'))
         .toString();
   }
@@ -1074,12 +1327,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FeedsTableTable feedsTable = $FeedsTableTable(this);
   late final $SyncRecordsTableTable syncRecordsTable =
       $SyncRecordsTableTable(this);
+  late final $FoldersTableTable foldersTable = $FoldersTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [feedsTable, syncRecordsTable];
+      [feedsTable, syncRecordsTable, foldersTable];
 }
 
 typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
@@ -1091,7 +1345,7 @@ typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
   Value<String> iconUrl,
   Value<int> errorCount,
   Value<String> errorMsg,
-  Value<BigInt> categoryId,
+  Value<BigInt> folderId,
   Value<bool> onlyShowUnread,
   Value<String> orderx,
   Value<bool> hideGlobally,
@@ -1106,7 +1360,7 @@ typedef $$FeedsTableTableUpdateCompanionBuilder = FeedsTableCompanion Function({
   Value<String> iconUrl,
   Value<int> errorCount,
   Value<String> errorMsg,
-  Value<BigInt> categoryId,
+  Value<BigInt> folderId,
   Value<bool> onlyShowUnread,
   Value<String> orderx,
   Value<bool> hideGlobally,
@@ -1146,8 +1400,8 @@ class $$FeedsTableTableFilterComposer
   ColumnFilters<String> get errorMsg => $composableBuilder(
       column: $table.errorMsg, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<BigInt> get categoryId => $composableBuilder(
-      column: $table.categoryId, builder: (column) => ColumnFilters(column));
+  ColumnFilters<BigInt> get folderId => $composableBuilder(
+      column: $table.folderId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<bool> get onlyShowUnread => $composableBuilder(
       column: $table.onlyShowUnread,
@@ -1196,8 +1450,8 @@ class $$FeedsTableTableOrderingComposer
   ColumnOrderings<String> get errorMsg => $composableBuilder(
       column: $table.errorMsg, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<BigInt> get categoryId => $composableBuilder(
-      column: $table.categoryId, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<BigInt> get folderId => $composableBuilder(
+      column: $table.folderId, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<bool> get onlyShowUnread => $composableBuilder(
       column: $table.onlyShowUnread,
@@ -1247,8 +1501,8 @@ class $$FeedsTableTableAnnotationComposer
   GeneratedColumn<String> get errorMsg =>
       $composableBuilder(column: $table.errorMsg, builder: (column) => column);
 
-  GeneratedColumn<BigInt> get categoryId => $composableBuilder(
-      column: $table.categoryId, builder: (column) => column);
+  GeneratedColumn<BigInt> get folderId =>
+      $composableBuilder(column: $table.folderId, builder: (column) => column);
 
   GeneratedColumn<bool> get onlyShowUnread => $composableBuilder(
       column: $table.onlyShowUnread, builder: (column) => column);
@@ -1294,7 +1548,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<String> iconUrl = const Value.absent(),
             Value<int> errorCount = const Value.absent(),
             Value<String> errorMsg = const Value.absent(),
-            Value<BigInt> categoryId = const Value.absent(),
+            Value<BigInt> folderId = const Value.absent(),
             Value<bool> onlyShowUnread = const Value.absent(),
             Value<String> orderx = const Value.absent(),
             Value<bool> hideGlobally = const Value.absent(),
@@ -1309,7 +1563,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             iconUrl: iconUrl,
             errorCount: errorCount,
             errorMsg: errorMsg,
-            categoryId: categoryId,
+            folderId: folderId,
             onlyShowUnread: onlyShowUnread,
             orderx: orderx,
             hideGlobally: hideGlobally,
@@ -1324,7 +1578,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             Value<String> iconUrl = const Value.absent(),
             Value<int> errorCount = const Value.absent(),
             Value<String> errorMsg = const Value.absent(),
-            Value<BigInt> categoryId = const Value.absent(),
+            Value<BigInt> folderId = const Value.absent(),
             Value<bool> onlyShowUnread = const Value.absent(),
             Value<String> orderx = const Value.absent(),
             Value<bool> hideGlobally = const Value.absent(),
@@ -1339,7 +1593,7 @@ class $$FeedsTableTableTableManager extends RootTableManager<
             iconUrl: iconUrl,
             errorCount: errorCount,
             errorMsg: errorMsg,
-            categoryId: categoryId,
+            folderId: folderId,
             onlyShowUnread: onlyShowUnread,
             orderx: orderx,
             hideGlobally: hideGlobally,
@@ -1374,7 +1628,7 @@ typedef $$SyncRecordsTableTableCreateCompanionBuilder
   Value<DateTime> endTime,
   required int entry,
   required int feed,
-  required int category,
+  required int folder,
 });
 typedef $$SyncRecordsTableTableUpdateCompanionBuilder
     = SyncRecordsTableCompanion Function({
@@ -1386,7 +1640,7 @@ typedef $$SyncRecordsTableTableUpdateCompanionBuilder
   Value<DateTime> endTime,
   Value<int> entry,
   Value<int> feed,
-  Value<int> category,
+  Value<int> folder,
 });
 
 class $$SyncRecordsTableTableFilterComposer
@@ -1422,8 +1676,8 @@ class $$SyncRecordsTableTableFilterComposer
   ColumnFilters<int> get feed => $composableBuilder(
       column: $table.feed, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get category => $composableBuilder(
-      column: $table.category, builder: (column) => ColumnFilters(column));
+  ColumnFilters<int> get folder => $composableBuilder(
+      column: $table.folder, builder: (column) => ColumnFilters(column));
 }
 
 class $$SyncRecordsTableTableOrderingComposer
@@ -1459,8 +1713,8 @@ class $$SyncRecordsTableTableOrderingComposer
   ColumnOrderings<int> get feed => $composableBuilder(
       column: $table.feed, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get category => $composableBuilder(
-      column: $table.category, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<int> get folder => $composableBuilder(
+      column: $table.folder, builder: (column) => ColumnOrderings(column));
 }
 
 class $$SyncRecordsTableTableAnnotationComposer
@@ -1496,8 +1750,8 @@ class $$SyncRecordsTableTableAnnotationComposer
   GeneratedColumn<int> get feed =>
       $composableBuilder(column: $table.feed, builder: (column) => column);
 
-  GeneratedColumn<int> get category =>
-      $composableBuilder(column: $table.category, builder: (column) => column);
+  GeneratedColumn<int> get folder =>
+      $composableBuilder(column: $table.folder, builder: (column) => column);
 }
 
 class $$SyncRecordsTableTableTableManager extends RootTableManager<
@@ -1535,7 +1789,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             Value<DateTime> endTime = const Value.absent(),
             Value<int> entry = const Value.absent(),
             Value<int> feed = const Value.absent(),
-            Value<int> category = const Value.absent(),
+            Value<int> folder = const Value.absent(),
           }) =>
               SyncRecordsTableCompanion(
             id: id,
@@ -1546,7 +1800,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             endTime: endTime,
             entry: entry,
             feed: feed,
-            category: category,
+            folder: folder,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -1557,7 +1811,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             Value<DateTime> endTime = const Value.absent(),
             required int entry,
             required int feed,
-            required int category,
+            required int folder,
           }) =>
               SyncRecordsTableCompanion.insert(
             id: id,
@@ -1568,7 +1822,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             endTime: endTime,
             entry: entry,
             feed: feed,
-            category: category,
+            folder: folder,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1592,6 +1846,153 @@ typedef $$SyncRecordsTableTableProcessedTableManager = ProcessedTableManager<
     ),
     SyncRecordRow,
     PrefetchHooks Function()>;
+typedef $$FoldersTableTableCreateCompanionBuilder = FoldersTableCompanion
+    Function({
+  Value<BigInt> id,
+  required BigInt userId,
+  required String title,
+  Value<bool> hideGlobally,
+});
+typedef $$FoldersTableTableUpdateCompanionBuilder = FoldersTableCompanion
+    Function({
+  Value<BigInt> id,
+  Value<BigInt> userId,
+  Value<String> title,
+  Value<bool> hideGlobally,
+});
+
+class $$FoldersTableTableFilterComposer
+    extends Composer<_$AppDatabase, $FoldersTableTable> {
+  $$FoldersTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => ColumnFilters(column));
+}
+
+class $$FoldersTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FoldersTableTable> {
+  $$FoldersTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$FoldersTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FoldersTableTable> {
+  $$FoldersTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<BigInt> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => column);
+}
+
+class $$FoldersTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FoldersTableTable,
+    FolderRow,
+    $$FoldersTableTableFilterComposer,
+    $$FoldersTableTableOrderingComposer,
+    $$FoldersTableTableAnnotationComposer,
+    $$FoldersTableTableCreateCompanionBuilder,
+    $$FoldersTableTableUpdateCompanionBuilder,
+    (FolderRow, BaseReferences<_$AppDatabase, $FoldersTableTable, FolderRow>),
+    FolderRow,
+    PrefetchHooks Function()> {
+  $$FoldersTableTableTableManager(_$AppDatabase db, $FoldersTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FoldersTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FoldersTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FoldersTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            Value<BigInt> userId = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<bool> hideGlobally = const Value.absent(),
+          }) =>
+              FoldersTableCompanion(
+            id: id,
+            userId: userId,
+            title: title,
+            hideGlobally: hideGlobally,
+          ),
+          createCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            required BigInt userId,
+            required String title,
+            Value<bool> hideGlobally = const Value.absent(),
+          }) =>
+              FoldersTableCompanion.insert(
+            id: id,
+            userId: userId,
+            title: title,
+            hideGlobally: hideGlobally,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$FoldersTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FoldersTableTable,
+    FolderRow,
+    $$FoldersTableTableFilterComposer,
+    $$FoldersTableTableOrderingComposer,
+    $$FoldersTableTableAnnotationComposer,
+    $$FoldersTableTableCreateCompanionBuilder,
+    $$FoldersTableTableUpdateCompanionBuilder,
+    (FolderRow, BaseReferences<_$AppDatabase, $FoldersTableTable, FolderRow>),
+    FolderRow,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1600,4 +2001,6 @@ class $AppDatabaseManager {
       $$FeedsTableTableTableManager(_db, _db.feedsTable);
   $$SyncRecordsTableTableTableManager get syncRecordsTable =>
       $$SyncRecordsTableTableTableManager(_db, _db.syncRecordsTable);
+  $$FoldersTableTableTableManager get foldersTable =>
+      $$FoldersTableTableTableManager(_db, _db.foldersTable);
 }

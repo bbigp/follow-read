@@ -16,7 +16,7 @@ class SyncRecordsTable extends Table {
       .withDefault(Constant(DateTime.now()))();
   IntColumn get entry => integer().named("entry")();
   IntColumn get feed => integer().named("feed")();
-  IntColumn get category => integer().named("category")();
+  IntColumn get folder => integer().named("folder")();
 
   @override
   String? get tableName => "sync_records";

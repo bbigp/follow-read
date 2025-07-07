@@ -153,7 +153,9 @@ class ProfilePage extends StatelessWidget {
               SliverToBoxAdapter(child: SizedBox(height: 24,),),
 
 
-
+              // SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
+              //   child: ,
+              // ))),
 
 
               // SliverToBoxAdapter(child: Container(
