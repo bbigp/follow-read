@@ -12,6 +12,7 @@ import 'package:follow_read/global/widgets/cupx_sheet_title.dart';
 import 'package:follow_read/global/widgets/menux.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/global/widgets/open.dart';
+import 'package:follow_read/modules/folder_picker/folder_picker.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +20,7 @@ class ProfilePage extends StatelessWidget {
 
   final GlobalKey _unreadMarkKey = new GlobalKey();
   final GlobalKey _openContentKey = new GlobalKey();
+  final GlobalKey _rootFolderKey = new GlobalKey();
 
   final controller = Get.find<ProfileController>();
 
@@ -153,9 +155,23 @@ class ProfilePage extends StatelessWidget {
               SliverToBoxAdapter(child: SizedBox(height: 24,),),
 
 
-              // SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
-              //   child: ,
-              // ))),
+              SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
+                child: Column(children: [
+                  Obx((){
+                    return ListTilexChevronUpDown(icon: SvgIcons.folder_1,
+                      title: "根文件夹",
+                      additionalInfo: controller.state.rootFolder.title,
+                      onTap: () => Open.modal(context, FolderPicker(
+                        sheetTitle: "根文件夹", value: controller.state.rootFolder.title,
+                        onChanged: (v) {
+                          controller.change(rootFolderId: v);
+                          Get.back();
+                        },
+                      )),
+                    );
+                  }),
+                ],),
+              ))),
 
 
               // SliverToBoxAdapter(child: Container(

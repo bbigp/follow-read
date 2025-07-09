@@ -51,7 +51,6 @@ class FeedTile extends ConsumerWidget {
             // ), hasMargin: true);
           }),
     ];
-    logger.i('${feed.title}');
     return Column(
       children: [
         MainTile(

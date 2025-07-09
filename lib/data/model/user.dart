@@ -11,6 +11,7 @@ class User {
   final bool autoRead;
   final UnreadMark unreadMark;
   final String openContent;
+  final BigInt rootFolderId;
 
   User({
     required this.id,
@@ -20,7 +21,8 @@ class User {
     this.autoRead = true,
     this.unreadMark = UnreadMark.dot,
     this.openContent = "内置阅读器",
-  });
+    BigInt? rootFolderId,
+  }): rootFolderId = rootFolderId ?? BigInt.zero;
 
   static User empty = User(id: 0, username: "", token: "", baseUrl: "");
 

@@ -4,6 +4,7 @@
 import 'package:follow_read/data/repositories/app_database.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
+import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/data/services/sync_service.dart';
 import 'package:follow_read/data/services/user_service.dart';
 import 'package:follow_read/modules/count_badge/count_badge_controller.dart';
@@ -23,6 +24,8 @@ class DI {
     Get.put(SyncService());
     Get.put(FeedService());
     Get.put(FolderService());
+
+    await Get.putAsync(() => MemoryCacheController().load());
 
     Get.put(CountBadgeController());//未读数
   }

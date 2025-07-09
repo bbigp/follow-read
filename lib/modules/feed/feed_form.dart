@@ -11,7 +11,7 @@ import 'package:follow_read/global/widgets/card_viewx.dart';
 import 'package:follow_read/global/widgets/drag_handle.dart';
 import 'package:follow_read/global/widgets/text_fieldx.dart';
 import 'package:follow_read/global/widgets/open.dart';
-import 'package:follow_read/modules/widgets/folder/folder_picker.dart';
+import 'package:follow_read/modules/folder_picker/folder_picker.dart';
 import 'package:get/get.dart';
 
 

@@ -1,29 +1,43 @@
+import 'package:follow_read/core/prefs_keys.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
-import 'package:follow_read/features/presentation/providers/app_container.dart';
+import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/data/services/user_service.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class HomeController extends GetxController {
   final HomeState state = HomeState();
   final _feedService = Get.find<FeedService>();
   final _folderService = Get.find<FolderService>();
+  final _userService = Get.find<UserService>();
+  final _cache = Get.find<MemoryCacheController>();
+  final _box = GetStorage();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _box.listenKey(PrefsKeys.rootFolderId, (v) {
+      init(rootFolderId: BigInt.parse(v ?? '0'));
+    });
+  }
 
   @override
   void onReady() {
     super.onReady();
-    init();
+    init(rootFolderId: _userService.getUser().rootFolderId);
   }
 
-  void init() async {
-    if (state.isLoading) return;
+  void init({required BigInt rootFolderId}) async {
+    // if (state.isLoading) return;
     // 设置里 选择设置root folder  config query root folder id
-    state._isLoading.value = true;
+    // state._isLoading.value = true;
 
-    final allFeeds = await _feedService.getAllFeeds();
-    final allFolders = await _folderService.getAllFolders();
+    final allFeeds = _cache.feeds;
+    final allFolders = _cache.folders;
 
     final feedMap = allFeeds.fold<Map<BigInt, List<Feed>>>(
       {},
@@ -40,7 +54,6 @@ class HomeController extends GetxController {
     // final root = rawFolders.firstWhere((c) => c.id == 1, orElse: () => Category.empty);
 
     // final rawFeeds = await feedRepository.getFeeds();
-    final rootFolderId = BigInt.zero;
     state.folders = allFolders
         .where((item) => item.id != rootFolderId)
         .map((item) => item.copyWith(feeds: feedMap[item.id] ?? [],))
@@ -54,7 +67,7 @@ class HomeController extends GetxController {
     // state.artiads = await artiadRepository.getAll();
     // state.stateArtiadLen.value = state.artiads.length;
 
-    state._isLoading.value = false;
+    // state._isLoading.value = false;
   }
 
 

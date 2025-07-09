@@ -105,13 +105,14 @@ class PlainSheetTitle extends StatelessWidget {
 class CenteredSheetTitle extends StatelessWidget {
   final String title;
   final Color? color;
-  const CenteredSheetTitle({super.key, required this.title, this.color});
+  final Widget? leading;
+  const CenteredSheetTitle({super.key, required this.title, this.color, this.leading});
   @override
   Widget build(BuildContext context) {
     return CupxSheetTitle(
       color: color,
       title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500, textAlign: TextAlign.center,),
-      leading: PaddedSvgIcon(SvgIcons.arrow_left, onTap: () => Navigator.pop(context),),
+      leading: leading ?? PaddedSvgIcon(SvgIcons.arrow_left, onTap: () => Navigator.pop(context)),
       trailing: const SizedBox(width: 28,)
     );
   }

@@ -1,6 +1,7 @@
 
 
 import 'package:follow_read/core/prefs_keys.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/data/providers/miniflux/api.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,9 @@ class UserService extends GetxService {
     return true;
   }
 
-  Future<void> save({bool? autoRead, String? unreadMark, String? openContent}) async {
+  Future<void> save({bool? autoRead, String? unreadMark, String? openContent,
+    BigInt? rootFolderId
+  }) async {
     if (autoRead != null) {
       await _box.write(PrefsKeys.autoRead, autoRead);
     }
@@ -36,9 +39,14 @@ class UserService extends GetxService {
     if (openContent != null) {
       await _box.write(PrefsKeys.openContent, openContent);
     }
+    if (rootFolderId != null) {
+      await _box.write(PrefsKeys.rootFolderId, rootFolderId.toString());
+    }
   }
 
   User getUser() {
+    final rootFolderIdStr = _box.read<String>(PrefsKeys.rootFolderId);
+    final rootFolderId = BigInt.parse(rootFolderIdStr ?? '0');
     return User(
       id: 0,
       username: _box.read(PrefsKeys.username).toString(),
@@ -47,6 +55,7 @@ class UserService extends GetxService {
       autoRead: _box.read<bool>(PrefsKeys.autoRead) ?? true,
       unreadMark: UnreadMark.fromString(_box.read<String>(PrefsKeys.unreadMark) ?? "Dot"),
       openContent: _box.read<String>(PrefsKeys.openContent) ?? "内置阅读器",
+      rootFolderId: rootFolderId,
     );
   }
 
