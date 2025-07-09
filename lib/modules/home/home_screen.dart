@@ -62,8 +62,9 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final widgets = <Widget>[
       SliverToBoxAdapter(
-        child: GroupTile(title: '智能视图', trailing: AddTrailing(onTap: () {
-        })),
+        child: GroupTile(title: '智能视图', trailing: AddTrailing(
+            onTap: () => Get.toNamed(RouteConfig.filter)
+        )),
       ),
       // artiadView,
       // Widget get artiadView => Obx((){
@@ -102,15 +103,11 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ];
     return Scaffold(
       appBar: CupxAppBar(
-        leading: PaddedSvgIcon(SvgIcons.lines_3, onTap: (){
-          Get.toNamed(RouteConfig.profile);
-        },),
+        leading: PaddedSvgIcon(SvgIcons.lines_3, onTap: () => Get.toNamed(RouteConfig.profile),),
         actions: [
           PaddedSvgIcon(SvgIcons.add, onTap: () => Open.modal(context, FeedForm())),
           Obx(() {
-            return SyncIcon(isSyncing: sync.state.isSyncing, onTap: () {
-              sync.sync();
-            },);
+            return SyncIcon(isSyncing: sync.state.isSyncing, onTap: () => sync.sync(),);
           }),
           // PaddedSvgIcon(SvgIcons.more,),
         ],

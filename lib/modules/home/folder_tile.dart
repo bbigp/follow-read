@@ -23,6 +23,7 @@ class FolderTile extends StatelessWidget  {
   Widget build(BuildContext context) {
     return Column(children: [
       MainTile(
+        id: 'o${folder.id}',
         icon: SizedBox(width: 24, height: 24, child: SvgPicture.asset(SvgIcons.group, width: 24, height: 14, fit: BoxFit.contain,),),
         title: folder.title,
         leadingIndicator: SizedBox(
@@ -54,6 +55,7 @@ class FolderTile extends StatelessWidget  {
               final feed = folder.feeds[index];
               return Column(children: [
                 MainTile(
+                  id: 'e${feed.id}',
                   title: feed.title,
                   icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
                   contextMenus: [],

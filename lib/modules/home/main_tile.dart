@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:follow_read/modules/count_badge/count_badge.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 
 
@@ -12,9 +13,10 @@ class MainTile extends StatelessWidget {
   final Widget icon;
   final List<ContextMenuEntry> contextMenus;
   final String title;
+  final String id;
   final GestureTapCallback? leadingIndicatorTap;
   final GestureTapCallback? onTap;
-  const MainTile({super.key, this.onTap,
+  const MainTile({super.key, this.onTap, required this.id,
     required this.leadingIndicator, this.leadingIndicatorTap,
     required this.icon, this.contextMenus = const [], required this.title,
   });
@@ -42,7 +44,7 @@ class MainTile extends StatelessWidget {
         Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,)),
         const SizedBox(width: 12,),
 
-        // CountBadge(id: provider.id, counter: FeedCounter(),),
+        CountBadge(id: id),
 
         const SizedBox(width: 16,), //设计图12
       ],),

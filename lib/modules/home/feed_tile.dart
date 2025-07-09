@@ -54,6 +54,7 @@ class FeedTile extends ConsumerWidget {
     return Column(
       children: [
         MainTile(
+          id: "e${feed.id}",
           leadingIndicator: SizedBox(
             width: 24,
             height: 24,

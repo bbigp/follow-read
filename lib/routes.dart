@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/prefs_keys.dart';
 import 'package:follow_read/features/domain/models/constants.dart';
+import 'package:follow_read/modules/add_filter/add_filter_binding.dart';
+import 'package:follow_read/modules/add_filter/add_filter_view.dart';
 import 'package:follow_read/modules/pages/entry_detail_page.dart';
 import 'package:follow_read/modules/profile/profile_binding.dart';
-import 'package:follow_read/modules/widgets/artiad/artiad_form.dart';
+import 'package:follow_read/deleted/artiad_form.dart';
 import 'package:follow_read/modules/widgets/me/login_1.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -47,7 +49,7 @@ class RouteConfig {
     // GetPage(name: entry, page: () => EntriesPage()),
     // GetPage(name: entryDetail, page: () => EntryDetailPage()),
     // GetPage(name: imageGallery, page: () => ImageGalleryPage(imageUrls: imageUrls)),
-    // GetPage(name: filter, page: page)
+    GetPage(name: filter, page: () => AddFilterForm(), binding: AddFilterBinding(), middlewares: [AuthMiddleware()]),
   ];
 }
 

@@ -2,20 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/config/cluster_icons.dart';
-import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
-import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
+import 'package:follow_read/modules/add_filter/add_filter_controller.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/card_viewx.dart';
 import 'package:follow_read/global/widgets/text_fieldx.dart';
 import 'package:get/get.dart';
 
-import 'artiad_icon.dart';
+import 'filter_icon.dart';
+
 
 class BasicView extends StatelessWidget {
 
-  final AddArtiadController addArtiad;
-  const BasicView({super.key, required this.addArtiad});
+  final AddFilterController controller;
+  const BasicView({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +29,16 @@ class BasicView extends StatelessWidget {
               borderRadius: 12,
               border: Border.all(width: 1, color: AppColors.black08),
               child: SizedBox(width: 40, height: 40, child: Obx((){
-                final icon = addArtiad.state.icon;
-                return ArtiadIcon(icon: icon.isNotEmpty ? icon : allIcons[0]);
+                final icon = controller.state.icon;
+                return FilterIcon(icon: icon.isNotEmpty ? icon : allIcons[0]);
               }),),
             ),
             const SizedBox(width: 12,),//设计图16
             Expanded(child: Obx((){
-              return TextFieldx(sizex: Sizex.custom, value: addArtiad.state.title,
-                onChanged: (v) => addArtiad.change(title: v),
+              return TextFieldx(
+                sizex: Sizex.custom,
+                value: controller.state.title,
+                onChanged: (v) => controller.change(title: v),
               );
             })),
           ],)
@@ -56,16 +58,14 @@ class BasicView extends StatelessWidget {
           itemBuilder: (context, index) {
             String icon = allIcons[index];
             return GestureDetector(
-              onTap: () {
-                addArtiad.change(icon: icon);
-              },
+              onTap: () => controller.change(icon: icon),
               child: Obx((){
                 return Container(
                   decoration: BoxDecoration(
-                    color: icon == addArtiad.state.icon ? AppColors.black08 : Colors.transparent,
+                    color: icon == controller.state.icon ? AppColors.black08 : Colors.transparent,
                     borderRadius: BorderRadius.circular(99),
                   ),
-                  child: SizedBox(width: 40, height: 40, child: ArtiadIcon(icon: icon),),
+                  child: SizedBox(width: 40, height: 40, child: FilterIcon(icon: icon),),
                 );
               }),
             );

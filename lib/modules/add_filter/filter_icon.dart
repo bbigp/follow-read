@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/config/cluster_icons.dart';
 
-class ArtiadIcon extends StatelessWidget {
+class FilterIcon extends StatelessWidget {
   final String icon;
   final double size;
   final BoxFit fit;
-  const ArtiadIcon({super.key,
+  const FilterIcon({super.key,
     required this.icon,
     this.size = 24,
     this.fit = BoxFit.contain,
