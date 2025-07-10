@@ -15,6 +15,7 @@ import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
 import 'feed_tile.dart';
+import 'filter_tile.dart';
 import 'folder_tile.dart';
 import 'group_tile.dart';
 import 'home_controller.dart';
@@ -66,19 +67,13 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             onTap: () => Get.toNamed(RouteConfig.filter)
         )),
       ),
-      // artiadView,
-      // Widget get artiadView => Obx((){
-      //   final home = Get.find<HomeController>();
-      //   return SliverList(delegate: SliverChildBuilderDelegate(
-      //       childCount: home.state.artiadLen, (context, index) {
-      //
-      //     return GetBuilder<HomeController>(builder: (controller){
-      //       final artiad = controller.state.artiads[index];
-      //       return ClusterTile(artiad: artiad);
-      //     }, id: "artiad_tile:$index}",);
-      //   }
-      //   ));
-      // });
+      Obx((){
+        return SliverList(delegate: SliverChildBuilderDelegate(childCount: home.state.filterLen, (context, index) {
+          return GetBuilder<HomeController>(builder: (controller){
+            return FilterTile(filter: controller.state.filters[index]);
+          }, id: "filter_tile:$index",);
+        }));
+      }),
       SliverToBoxAdapter(child: Padding(
           padding: EdgeInsets.only(top: 12, bottom: 8, left: 16, right: 16),
           child: DashedDivider(indent: 0, thickness: 0.5, spacing: 0, color: AppColors.black08,),
@@ -87,16 +82,14 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       Obx(() {
         return SliverList(delegate: SliverChildBuilderDelegate(childCount: home.state.folderLen, (context, index) {
           return GetBuilder<HomeController>(builder: (controller) {
-            final folder = controller.state.folders[index];
-            return FolderTile(folder: folder, controller: controller,);
+            return FolderTile(folder: controller.state.folders[index], controller: controller,);
           }, id: 'folder_tile:$index',);
         }));
       }),
       Obx(() {
         return SliverList(delegate: SliverChildBuilderDelegate(childCount: home.state.feedLen, (context, index) {
           return GetBuilder<HomeController>(builder: (controller) {
-            final feed = controller.state.feeds[index];
-            return FeedTile(feed: feed);
+            return FeedTile(feed: controller.state.feeds[index]);
           }, id: 'feed_tile:$index',);
         }));
       }),
@@ -105,7 +98,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(SvgIcons.lines_3, onTap: () => Get.toNamed(RouteConfig.profile),),
         actions: [
-          PaddedSvgIcon(SvgIcons.add, onTap: () => Open.modal(context, FeedForm())),
+          // PaddedSvgIcon(SvgIcons.add, onTap: () => Open.modal(context, FeedForm())),
           Obx(() {
             return SyncIcon(isSyncing: sync.state.isSyncing, onTap: () => sync.sync(),);
           }),

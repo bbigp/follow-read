@@ -1,6 +1,7 @@
 import 'package:follow_read/core/prefs_keys.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
+import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
@@ -38,6 +39,7 @@ class HomeController extends GetxController {
 
     final allFeeds = _cache.feeds;
     final allFolders = _cache.folders;
+    final allFilters = _cache.filters;
 
     final feedMap = allFeeds.fold<Map<BigInt, List<Feed>>>(
       {},
@@ -50,10 +52,6 @@ class HomeController extends GetxController {
     );
 
 
-    // final rawFolders = await folderRepository.getCategories();
-    // final root = rawFolders.firstWhere((c) => c.id == 1, orElse: () => Category.empty);
-
-    // final rawFeeds = await feedRepository.getFeeds();
     state.folders = allFolders
         .where((item) => item.id != rootFolderId)
         .map((item) => item.copyWith(feeds: feedMap[item.id] ?? [],))
@@ -64,8 +62,8 @@ class HomeController extends GetxController {
     state.stateFeedLen.value = state.feeds.length;
     logger.i('${state.feedLen}');
 
-    // state.artiads = await artiadRepository.getAll();
-    // state.stateArtiadLen.value = state.artiads.length;
+    state.filters = allFilters;
+    state.stateFilterLen.value = state.filters.length;
 
     // state._isLoading.value = false;
   }
@@ -90,14 +88,14 @@ class HomeState {
 
   List<Folder> folders = [];
   List<Feed> feeds = [];
-  // List<Filter> filter = [];
+  List<Filter> filters = [];
 
   final stateFolderLen = 0.obs; //控制组件重建
   final stateFeedLen = 0.obs;
-  final stateArtiadLen = 0.obs;
+  final stateFilterLen = 0.obs;
   int get folderLen => stateFolderLen.value;
   int get feedLen => stateFeedLen.value;
-  int get artiadLen => stateArtiadLen.value;
+  int get filterLen => stateFilterLen.value;
 
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;

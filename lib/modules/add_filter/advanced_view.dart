@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
-import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/global/widgets/cupx_list_tile_chevron.dart';
 import 'package:follow_read/global/widgets/menux.dart';
 import 'package:follow_read/global/widgets/modal_wrapper.dart';
@@ -16,6 +15,8 @@ import 'package:follow_read/modules/feed_picker/feed_picker.dart';
 import 'package:follow_read/modules/add_filter/advanced_tile.dart';
 import 'package:follow_read/modules/feed_picker/feed_picker_controller.dart';
 import 'package:get/get.dart';
+
+import 'status_picker.dart';
 
 
 class AdvancedView extends ConsumerWidget {
@@ -31,13 +32,13 @@ class AdvancedView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Obx((){
       final feedIds = controller.state.feedIds;
-      final releaseTime = controller.state.releaseTime;
+      final publishedTime = controller.state.publishedTime;
       final addTime = controller.state.addTime;
       final statuses = controller.state.statuses;
 
       final releaseTimeMenu = RadioPopupMenu(
-        menus: buildTimeMenu(controller.state.timeMap, (v) => controller.change(releaseTime: v),),
-        groupValue: releaseTime.toString(),
+        menus: buildTimeMenu(controller.state.timeMap, (v) => controller.change(publishedTime: v),),
+        groupValue: publishedTime.toString(),
       );
       final addTimeMenu = RadioPopupMenu(
         menus: buildTimeMenu(controller.state.timeMap, (v) => controller.change(addTime: v),),
@@ -50,20 +51,22 @@ class AdvancedView extends ConsumerWidget {
           isSelected: feedIds.isNotEmpty,
           openTickboxTap: () => Open.modal(context, GetModalWrapper(
             initControllers: (){
-              Get.put(FeedPickerController(initialFeeds: []));
+              Get.put(FeedPickerController(initialFeeds: controller.state.feedIds));
             },
             disposeControllers: () {
               Get.delete<FeedPickerController>();
             },
-            builder: () => FeedPicker(),
+            builder: () => FeedPicker(
+              onPressed: (feedIds) => controller.change(feedIds: feedIds),
+            ),
           )),
           clearTap: () => controller.change(feedIds: []),
         ),
-        SelectableWidget(isSelected: releaseTime > 0, child: ListTilexChevronUpDown(
+        SelectableWidget(isSelected: publishedTime > 0, child: ListTilexChevronUpDown(
           key: _releaseTimeKey,
           icon: SvgIcons.calendar_today,
           title: "发布时间",
-          additionalInfo: controller.state.timeMap[releaseTime] ?? 'Off',
+          additionalInfo: controller.state.timeMap[publishedTime] ?? 'Off',
           onTap: () => Open.menu(context, _releaseTimeKey, releaseTimeMenu),
         ),),
         SelectableWidget(isSelected: addTime > 0, child: ListTilexChevronUpDown(
@@ -73,15 +76,15 @@ class AdvancedView extends ConsumerWidget {
           additionalInfo: controller.state.timeMap[addTime] ?? 'Off',
           onTap: () => Open.menu(context, _addTimeKey, addTimeMenu),
         ),),
-        // AdvancedTile(
-        //   icon: SvgIcons.calendar_today,
-        //   title: '已读未读',
-        //   selectedContent: statuses.join(","),
-        //   localKey: _statusKey,
-        //   isSelected: statuses.isNotEmpty,
-        //   openTickboxTap: () => Open.modal(context, StatusPicker(addArtiad: addArtiad,)),
-        //   clearTap: () => addArtiad.change(statuses: []),
-        // ),
+        AdvancedTile(
+          icon: SvgIcons.calendar_today,
+          title: '已读未读',
+          selectedContent: statuses.join(","),
+          localKey: _statusKey,
+          isSelected: statuses.isNotEmpty,
+          openTickboxTap: () => Open.modal(context, StatusPicker(controller: controller,)),
+          clearTap: () => controller.change(statuses: []),
+        ),
       ];
       final List<List<SelectableInterface>> groups = _groupConditions(items);
 

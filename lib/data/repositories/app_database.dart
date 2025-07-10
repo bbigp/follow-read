@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/table/feed_table.dart';
+import 'package:follow_read/data/table/filter_table.dart';
 import 'package:follow_read/data/table/folder_table.dart';
 import 'package:follow_read/data/table/sync_record_table.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,7 +13,7 @@ import 'package:path/path.dart' as p;
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [FeedsTable, SyncRecordsTable, FoldersTable])
+@DriftDatabase(tables: [FeedsTable, SyncRecordsTable, FoldersTable, FiltersTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

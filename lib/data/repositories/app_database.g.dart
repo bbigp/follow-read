@@ -1321,6 +1321,672 @@ class FoldersTableCompanion extends UpdateCompanion<FolderRow> {
   }
 }
 
+class $FiltersTableTable extends FiltersTable
+    with TableInfo<$FiltersTableTable, FilterRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FiltersTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<BigInt> id = GeneratedColumn<BigInt>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.bigInt,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<BigInt> userId = GeneratedColumn<BigInt>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _feedIdsMeta =
+      const VerificationMeta('feedIds');
+  @override
+  late final GeneratedColumn<String> feedIds = GeneratedColumn<String>(
+      'feed_ids', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _publishedTimeMeta =
+      const VerificationMeta('publishedTime');
+  @override
+  late final GeneratedColumn<int> publishedTime = GeneratedColumn<int>(
+      'published_time', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _addTimeMeta =
+      const VerificationMeta('addTime');
+  @override
+  late final GeneratedColumn<int> addTime = GeneratedColumn<int>(
+      'add_time', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _statusesMeta =
+      const VerificationMeta('statuses');
+  @override
+  late final GeneratedColumn<String> statuses = GeneratedColumn<String>(
+      'statuses', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _changedAtMeta =
+      const VerificationMeta('changedAt');
+  @override
+  late final GeneratedColumn<DateTime> changedAt = GeneratedColumn<DateTime>(
+      'changed_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _orderxMeta = const VerificationMeta('orderx');
+  @override
+  late final GeneratedColumn<String> orderx = GeneratedColumn<String>(
+      'orderx', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: Constant("published_at"));
+  static const VerificationMeta _hideGloballyMeta =
+      const VerificationMeta('hideGlobally');
+  @override
+  late final GeneratedColumn<bool> hideGlobally = GeneratedColumn<bool>(
+      'hide_globally', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("hide_globally" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _onlyShowUnreadMeta =
+      const VerificationMeta('onlyShowUnread');
+  @override
+  late final GeneratedColumn<bool> onlyShowUnread = GeneratedColumn<bool>(
+      'only_show_unread', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("only_show_unread" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _deletedMeta =
+      const VerificationMeta('deleted');
+  @override
+  late final GeneratedColumn<int> deleted = GeneratedColumn<int>(
+      'deleted', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        userId,
+        name,
+        icon,
+        feedIds,
+        publishedTime,
+        addTime,
+        statuses,
+        createdAt,
+        changedAt,
+        orderx,
+        hideGlobally,
+        onlyShowUnread,
+        deleted
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'filters';
+  @override
+  VerificationContext validateIntegrity(Insertable<FilterRow> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    } else if (isInserting) {
+      context.missing(_iconMeta);
+    }
+    if (data.containsKey('feed_ids')) {
+      context.handle(_feedIdsMeta,
+          feedIds.isAcceptableOrUnknown(data['feed_ids']!, _feedIdsMeta));
+    } else if (isInserting) {
+      context.missing(_feedIdsMeta);
+    }
+    if (data.containsKey('published_time')) {
+      context.handle(
+          _publishedTimeMeta,
+          publishedTime.isAcceptableOrUnknown(
+              data['published_time']!, _publishedTimeMeta));
+    }
+    if (data.containsKey('add_time')) {
+      context.handle(_addTimeMeta,
+          addTime.isAcceptableOrUnknown(data['add_time']!, _addTimeMeta));
+    }
+    if (data.containsKey('statuses')) {
+      context.handle(_statusesMeta,
+          statuses.isAcceptableOrUnknown(data['statuses']!, _statusesMeta));
+    } else if (isInserting) {
+      context.missing(_statusesMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('changed_at')) {
+      context.handle(_changedAtMeta,
+          changedAt.isAcceptableOrUnknown(data['changed_at']!, _changedAtMeta));
+    } else if (isInserting) {
+      context.missing(_changedAtMeta);
+    }
+    if (data.containsKey('orderx')) {
+      context.handle(_orderxMeta,
+          orderx.isAcceptableOrUnknown(data['orderx']!, _orderxMeta));
+    }
+    if (data.containsKey('hide_globally')) {
+      context.handle(
+          _hideGloballyMeta,
+          hideGlobally.isAcceptableOrUnknown(
+              data['hide_globally']!, _hideGloballyMeta));
+    }
+    if (data.containsKey('only_show_unread')) {
+      context.handle(
+          _onlyShowUnreadMeta,
+          onlyShowUnread.isAcceptableOrUnknown(
+              data['only_show_unread']!, _onlyShowUnreadMeta));
+    }
+    if (data.containsKey('deleted')) {
+      context.handle(_deletedMeta,
+          deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FilterRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FilterRow(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon'])!,
+      feedIds: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}feed_ids'])!,
+      publishedTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}published_time'])!,
+      addTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}add_time'])!,
+      statuses: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}statuses'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      changedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}changed_at'])!,
+      orderx: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}orderx'])!,
+      hideGlobally: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}hide_globally'])!,
+      onlyShowUnread: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}only_show_unread'])!,
+      deleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}deleted'])!,
+    );
+  }
+
+  @override
+  $FiltersTableTable createAlias(String alias) {
+    return $FiltersTableTable(attachedDatabase, alias);
+  }
+}
+
+class FilterRow extends DataClass implements Insertable<FilterRow> {
+  final BigInt id;
+  final BigInt userId;
+  final String name;
+  final String icon;
+  final String feedIds;
+  final int publishedTime;
+  final int addTime;
+  final String statuses;
+  final DateTime createdAt;
+  final DateTime changedAt;
+  final String orderx;
+  final bool hideGlobally;
+  final bool onlyShowUnread;
+  final int deleted;
+  const FilterRow(
+      {required this.id,
+      required this.userId,
+      required this.name,
+      required this.icon,
+      required this.feedIds,
+      required this.publishedTime,
+      required this.addTime,
+      required this.statuses,
+      required this.createdAt,
+      required this.changedAt,
+      required this.orderx,
+      required this.hideGlobally,
+      required this.onlyShowUnread,
+      required this.deleted});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<BigInt>(id);
+    map['user_id'] = Variable<BigInt>(userId);
+    map['name'] = Variable<String>(name);
+    map['icon'] = Variable<String>(icon);
+    map['feed_ids'] = Variable<String>(feedIds);
+    map['published_time'] = Variable<int>(publishedTime);
+    map['add_time'] = Variable<int>(addTime);
+    map['statuses'] = Variable<String>(statuses);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['changed_at'] = Variable<DateTime>(changedAt);
+    map['orderx'] = Variable<String>(orderx);
+    map['hide_globally'] = Variable<bool>(hideGlobally);
+    map['only_show_unread'] = Variable<bool>(onlyShowUnread);
+    map['deleted'] = Variable<int>(deleted);
+    return map;
+  }
+
+  FiltersTableCompanion toCompanion(bool nullToAbsent) {
+    return FiltersTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      name: Value(name),
+      icon: Value(icon),
+      feedIds: Value(feedIds),
+      publishedTime: Value(publishedTime),
+      addTime: Value(addTime),
+      statuses: Value(statuses),
+      createdAt: Value(createdAt),
+      changedAt: Value(changedAt),
+      orderx: Value(orderx),
+      hideGlobally: Value(hideGlobally),
+      onlyShowUnread: Value(onlyShowUnread),
+      deleted: Value(deleted),
+    );
+  }
+
+  factory FilterRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FilterRow(
+      id: serializer.fromJson<BigInt>(json['id']),
+      userId: serializer.fromJson<BigInt>(json['userId']),
+      name: serializer.fromJson<String>(json['name']),
+      icon: serializer.fromJson<String>(json['icon']),
+      feedIds: serializer.fromJson<String>(json['feedIds']),
+      publishedTime: serializer.fromJson<int>(json['publishedTime']),
+      addTime: serializer.fromJson<int>(json['addTime']),
+      statuses: serializer.fromJson<String>(json['statuses']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      changedAt: serializer.fromJson<DateTime>(json['changedAt']),
+      orderx: serializer.fromJson<String>(json['orderx']),
+      hideGlobally: serializer.fromJson<bool>(json['hideGlobally']),
+      onlyShowUnread: serializer.fromJson<bool>(json['onlyShowUnread']),
+      deleted: serializer.fromJson<int>(json['deleted']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<BigInt>(id),
+      'userId': serializer.toJson<BigInt>(userId),
+      'name': serializer.toJson<String>(name),
+      'icon': serializer.toJson<String>(icon),
+      'feedIds': serializer.toJson<String>(feedIds),
+      'publishedTime': serializer.toJson<int>(publishedTime),
+      'addTime': serializer.toJson<int>(addTime),
+      'statuses': serializer.toJson<String>(statuses),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'changedAt': serializer.toJson<DateTime>(changedAt),
+      'orderx': serializer.toJson<String>(orderx),
+      'hideGlobally': serializer.toJson<bool>(hideGlobally),
+      'onlyShowUnread': serializer.toJson<bool>(onlyShowUnread),
+      'deleted': serializer.toJson<int>(deleted),
+    };
+  }
+
+  FilterRow copyWith(
+          {BigInt? id,
+          BigInt? userId,
+          String? name,
+          String? icon,
+          String? feedIds,
+          int? publishedTime,
+          int? addTime,
+          String? statuses,
+          DateTime? createdAt,
+          DateTime? changedAt,
+          String? orderx,
+          bool? hideGlobally,
+          bool? onlyShowUnread,
+          int? deleted}) =>
+      FilterRow(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        name: name ?? this.name,
+        icon: icon ?? this.icon,
+        feedIds: feedIds ?? this.feedIds,
+        publishedTime: publishedTime ?? this.publishedTime,
+        addTime: addTime ?? this.addTime,
+        statuses: statuses ?? this.statuses,
+        createdAt: createdAt ?? this.createdAt,
+        changedAt: changedAt ?? this.changedAt,
+        orderx: orderx ?? this.orderx,
+        hideGlobally: hideGlobally ?? this.hideGlobally,
+        onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+        deleted: deleted ?? this.deleted,
+      );
+  FilterRow copyWithCompanion(FiltersTableCompanion data) {
+    return FilterRow(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      name: data.name.present ? data.name.value : this.name,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      feedIds: data.feedIds.present ? data.feedIds.value : this.feedIds,
+      publishedTime: data.publishedTime.present
+          ? data.publishedTime.value
+          : this.publishedTime,
+      addTime: data.addTime.present ? data.addTime.value : this.addTime,
+      statuses: data.statuses.present ? data.statuses.value : this.statuses,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      changedAt: data.changedAt.present ? data.changedAt.value : this.changedAt,
+      orderx: data.orderx.present ? data.orderx.value : this.orderx,
+      hideGlobally: data.hideGlobally.present
+          ? data.hideGlobally.value
+          : this.hideGlobally,
+      onlyShowUnread: data.onlyShowUnread.present
+          ? data.onlyShowUnread.value
+          : this.onlyShowUnread,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FilterRow(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('feedIds: $feedIds, ')
+          ..write('publishedTime: $publishedTime, ')
+          ..write('addTime: $addTime, ')
+          ..write('statuses: $statuses, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('changedAt: $changedAt, ')
+          ..write('orderx: $orderx, ')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('onlyShowUnread: $onlyShowUnread, ')
+          ..write('deleted: $deleted')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      userId,
+      name,
+      icon,
+      feedIds,
+      publishedTime,
+      addTime,
+      statuses,
+      createdAt,
+      changedAt,
+      orderx,
+      hideGlobally,
+      onlyShowUnread,
+      deleted);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FilterRow &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.name == this.name &&
+          other.icon == this.icon &&
+          other.feedIds == this.feedIds &&
+          other.publishedTime == this.publishedTime &&
+          other.addTime == this.addTime &&
+          other.statuses == this.statuses &&
+          other.createdAt == this.createdAt &&
+          other.changedAt == this.changedAt &&
+          other.orderx == this.orderx &&
+          other.hideGlobally == this.hideGlobally &&
+          other.onlyShowUnread == this.onlyShowUnread &&
+          other.deleted == this.deleted);
+}
+
+class FiltersTableCompanion extends UpdateCompanion<FilterRow> {
+  final Value<BigInt> id;
+  final Value<BigInt> userId;
+  final Value<String> name;
+  final Value<String> icon;
+  final Value<String> feedIds;
+  final Value<int> publishedTime;
+  final Value<int> addTime;
+  final Value<String> statuses;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> changedAt;
+  final Value<String> orderx;
+  final Value<bool> hideGlobally;
+  final Value<bool> onlyShowUnread;
+  final Value<int> deleted;
+  const FiltersTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.feedIds = const Value.absent(),
+    this.publishedTime = const Value.absent(),
+    this.addTime = const Value.absent(),
+    this.statuses = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.changedAt = const Value.absent(),
+    this.orderx = const Value.absent(),
+    this.hideGlobally = const Value.absent(),
+    this.onlyShowUnread = const Value.absent(),
+    this.deleted = const Value.absent(),
+  });
+  FiltersTableCompanion.insert({
+    this.id = const Value.absent(),
+    required BigInt userId,
+    required String name,
+    required String icon,
+    required String feedIds,
+    this.publishedTime = const Value.absent(),
+    this.addTime = const Value.absent(),
+    required String statuses,
+    required DateTime createdAt,
+    required DateTime changedAt,
+    this.orderx = const Value.absent(),
+    this.hideGlobally = const Value.absent(),
+    this.onlyShowUnread = const Value.absent(),
+    this.deleted = const Value.absent(),
+  })  : userId = Value(userId),
+        name = Value(name),
+        icon = Value(icon),
+        feedIds = Value(feedIds),
+        statuses = Value(statuses),
+        createdAt = Value(createdAt),
+        changedAt = Value(changedAt);
+  static Insertable<FilterRow> custom({
+    Expression<BigInt>? id,
+    Expression<BigInt>? userId,
+    Expression<String>? name,
+    Expression<String>? icon,
+    Expression<String>? feedIds,
+    Expression<int>? publishedTime,
+    Expression<int>? addTime,
+    Expression<String>? statuses,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? changedAt,
+    Expression<String>? orderx,
+    Expression<bool>? hideGlobally,
+    Expression<bool>? onlyShowUnread,
+    Expression<int>? deleted,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (name != null) 'name': name,
+      if (icon != null) 'icon': icon,
+      if (feedIds != null) 'feed_ids': feedIds,
+      if (publishedTime != null) 'published_time': publishedTime,
+      if (addTime != null) 'add_time': addTime,
+      if (statuses != null) 'statuses': statuses,
+      if (createdAt != null) 'created_at': createdAt,
+      if (changedAt != null) 'changed_at': changedAt,
+      if (orderx != null) 'orderx': orderx,
+      if (hideGlobally != null) 'hide_globally': hideGlobally,
+      if (onlyShowUnread != null) 'only_show_unread': onlyShowUnread,
+      if (deleted != null) 'deleted': deleted,
+    });
+  }
+
+  FiltersTableCompanion copyWith(
+      {Value<BigInt>? id,
+      Value<BigInt>? userId,
+      Value<String>? name,
+      Value<String>? icon,
+      Value<String>? feedIds,
+      Value<int>? publishedTime,
+      Value<int>? addTime,
+      Value<String>? statuses,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? changedAt,
+      Value<String>? orderx,
+      Value<bool>? hideGlobally,
+      Value<bool>? onlyShowUnread,
+      Value<int>? deleted}) {
+    return FiltersTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      feedIds: feedIds ?? this.feedIds,
+      publishedTime: publishedTime ?? this.publishedTime,
+      addTime: addTime ?? this.addTime,
+      statuses: statuses ?? this.statuses,
+      createdAt: createdAt ?? this.createdAt,
+      changedAt: changedAt ?? this.changedAt,
+      orderx: orderx ?? this.orderx,
+      hideGlobally: hideGlobally ?? this.hideGlobally,
+      onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+      deleted: deleted ?? this.deleted,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<BigInt>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<BigInt>(userId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (feedIds.present) {
+      map['feed_ids'] = Variable<String>(feedIds.value);
+    }
+    if (publishedTime.present) {
+      map['published_time'] = Variable<int>(publishedTime.value);
+    }
+    if (addTime.present) {
+      map['add_time'] = Variable<int>(addTime.value);
+    }
+    if (statuses.present) {
+      map['statuses'] = Variable<String>(statuses.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (changedAt.present) {
+      map['changed_at'] = Variable<DateTime>(changedAt.value);
+    }
+    if (orderx.present) {
+      map['orderx'] = Variable<String>(orderx.value);
+    }
+    if (hideGlobally.present) {
+      map['hide_globally'] = Variable<bool>(hideGlobally.value);
+    }
+    if (onlyShowUnread.present) {
+      map['only_show_unread'] = Variable<bool>(onlyShowUnread.value);
+    }
+    if (deleted.present) {
+      map['deleted'] = Variable<int>(deleted.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FiltersTableCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('feedIds: $feedIds, ')
+          ..write('publishedTime: $publishedTime, ')
+          ..write('addTime: $addTime, ')
+          ..write('statuses: $statuses, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('changedAt: $changedAt, ')
+          ..write('orderx: $orderx, ')
+          ..write('hideGlobally: $hideGlobally, ')
+          ..write('onlyShowUnread: $onlyShowUnread, ')
+          ..write('deleted: $deleted')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1328,12 +1994,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SyncRecordsTableTable syncRecordsTable =
       $SyncRecordsTableTable(this);
   late final $FoldersTableTable foldersTable = $FoldersTableTable(this);
+  late final $FiltersTableTable filtersTable = $FiltersTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [feedsTable, syncRecordsTable, foldersTable];
+      [feedsTable, syncRecordsTable, foldersTable, filtersTable];
 }
 
 typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
@@ -1993,6 +2660,306 @@ typedef $$FoldersTableTableProcessedTableManager = ProcessedTableManager<
     (FolderRow, BaseReferences<_$AppDatabase, $FoldersTableTable, FolderRow>),
     FolderRow,
     PrefetchHooks Function()>;
+typedef $$FiltersTableTableCreateCompanionBuilder = FiltersTableCompanion
+    Function({
+  Value<BigInt> id,
+  required BigInt userId,
+  required String name,
+  required String icon,
+  required String feedIds,
+  Value<int> publishedTime,
+  Value<int> addTime,
+  required String statuses,
+  required DateTime createdAt,
+  required DateTime changedAt,
+  Value<String> orderx,
+  Value<bool> hideGlobally,
+  Value<bool> onlyShowUnread,
+  Value<int> deleted,
+});
+typedef $$FiltersTableTableUpdateCompanionBuilder = FiltersTableCompanion
+    Function({
+  Value<BigInt> id,
+  Value<BigInt> userId,
+  Value<String> name,
+  Value<String> icon,
+  Value<String> feedIds,
+  Value<int> publishedTime,
+  Value<int> addTime,
+  Value<String> statuses,
+  Value<DateTime> createdAt,
+  Value<DateTime> changedAt,
+  Value<String> orderx,
+  Value<bool> hideGlobally,
+  Value<bool> onlyShowUnread,
+  Value<int> deleted,
+});
+
+class $$FiltersTableTableFilterComposer
+    extends Composer<_$AppDatabase, $FiltersTableTable> {
+  $$FiltersTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get feedIds => $composableBuilder(
+      column: $table.feedIds, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get publishedTime => $composableBuilder(
+      column: $table.publishedTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get addTime => $composableBuilder(
+      column: $table.addTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get statuses => $composableBuilder(
+      column: $table.statuses, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get changedAt => $composableBuilder(
+      column: $table.changedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get deleted => $composableBuilder(
+      column: $table.deleted, builder: (column) => ColumnFilters(column));
+}
+
+class $$FiltersTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $FiltersTableTable> {
+  $$FiltersTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get feedIds => $composableBuilder(
+      column: $table.feedIds, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get publishedTime => $composableBuilder(
+      column: $table.publishedTime,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get addTime => $composableBuilder(
+      column: $table.addTime, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get statuses => $composableBuilder(
+      column: $table.statuses, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get changedAt => $composableBuilder(
+      column: $table.changedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get orderx => $composableBuilder(
+      column: $table.orderx, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get deleted => $composableBuilder(
+      column: $table.deleted, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FiltersTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FiltersTableTable> {
+  $$FiltersTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<BigInt> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get feedIds =>
+      $composableBuilder(column: $table.feedIds, builder: (column) => column);
+
+  GeneratedColumn<int> get publishedTime => $composableBuilder(
+      column: $table.publishedTime, builder: (column) => column);
+
+  GeneratedColumn<int> get addTime =>
+      $composableBuilder(column: $table.addTime, builder: (column) => column);
+
+  GeneratedColumn<String> get statuses =>
+      $composableBuilder(column: $table.statuses, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get changedAt =>
+      $composableBuilder(column: $table.changedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get orderx =>
+      $composableBuilder(column: $table.orderx, builder: (column) => column);
+
+  GeneratedColumn<bool> get hideGlobally => $composableBuilder(
+      column: $table.hideGlobally, builder: (column) => column);
+
+  GeneratedColumn<bool> get onlyShowUnread => $composableBuilder(
+      column: $table.onlyShowUnread, builder: (column) => column);
+
+  GeneratedColumn<int> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
+}
+
+class $$FiltersTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FiltersTableTable,
+    FilterRow,
+    $$FiltersTableTableFilterComposer,
+    $$FiltersTableTableOrderingComposer,
+    $$FiltersTableTableAnnotationComposer,
+    $$FiltersTableTableCreateCompanionBuilder,
+    $$FiltersTableTableUpdateCompanionBuilder,
+    (FilterRow, BaseReferences<_$AppDatabase, $FiltersTableTable, FilterRow>),
+    FilterRow,
+    PrefetchHooks Function()> {
+  $$FiltersTableTableTableManager(_$AppDatabase db, $FiltersTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FiltersTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FiltersTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FiltersTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            Value<BigInt> userId = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> icon = const Value.absent(),
+            Value<String> feedIds = const Value.absent(),
+            Value<int> publishedTime = const Value.absent(),
+            Value<int> addTime = const Value.absent(),
+            Value<String> statuses = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> changedAt = const Value.absent(),
+            Value<String> orderx = const Value.absent(),
+            Value<bool> hideGlobally = const Value.absent(),
+            Value<bool> onlyShowUnread = const Value.absent(),
+            Value<int> deleted = const Value.absent(),
+          }) =>
+              FiltersTableCompanion(
+            id: id,
+            userId: userId,
+            name: name,
+            icon: icon,
+            feedIds: feedIds,
+            publishedTime: publishedTime,
+            addTime: addTime,
+            statuses: statuses,
+            createdAt: createdAt,
+            changedAt: changedAt,
+            orderx: orderx,
+            hideGlobally: hideGlobally,
+            onlyShowUnread: onlyShowUnread,
+            deleted: deleted,
+          ),
+          createCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            required BigInt userId,
+            required String name,
+            required String icon,
+            required String feedIds,
+            Value<int> publishedTime = const Value.absent(),
+            Value<int> addTime = const Value.absent(),
+            required String statuses,
+            required DateTime createdAt,
+            required DateTime changedAt,
+            Value<String> orderx = const Value.absent(),
+            Value<bool> hideGlobally = const Value.absent(),
+            Value<bool> onlyShowUnread = const Value.absent(),
+            Value<int> deleted = const Value.absent(),
+          }) =>
+              FiltersTableCompanion.insert(
+            id: id,
+            userId: userId,
+            name: name,
+            icon: icon,
+            feedIds: feedIds,
+            publishedTime: publishedTime,
+            addTime: addTime,
+            statuses: statuses,
+            createdAt: createdAt,
+            changedAt: changedAt,
+            orderx: orderx,
+            hideGlobally: hideGlobally,
+            onlyShowUnread: onlyShowUnread,
+            deleted: deleted,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$FiltersTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FiltersTableTable,
+    FilterRow,
+    $$FiltersTableTableFilterComposer,
+    $$FiltersTableTableOrderingComposer,
+    $$FiltersTableTableAnnotationComposer,
+    $$FiltersTableTableCreateCompanionBuilder,
+    $$FiltersTableTableUpdateCompanionBuilder,
+    (FilterRow, BaseReferences<_$AppDatabase, $FiltersTableTable, FilterRow>),
+    FilterRow,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2003,4 +2970,6 @@ class $AppDatabaseManager {
       $$SyncRecordsTableTableTableManager(_db, _db.syncRecordsTable);
   $$FoldersTableTableTableManager get foldersTable =>
       $$FoldersTableTableTableManager(_db, _db.foldersTable);
+  $$FiltersTableTableTableManager get filtersTable =>
+      $$FiltersTableTableTableManager(_db, _db.filtersTable);
 }

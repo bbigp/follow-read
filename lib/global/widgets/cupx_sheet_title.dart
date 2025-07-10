@@ -25,7 +25,7 @@ class ActionSheetTitleBar extends StatelessWidget implements PreferredSizeWidget
       bottom: false,
       child: Container(height: height, color: color,
         padding: EdgeInsets.only(top: 10),
-        child: ActionSheetTitle(title: title, enabled: enabled,),
+        child: ActionSheetTitle(title: title, enabled: enabled, onPressed: onPressed,),
       ),
     );
   }

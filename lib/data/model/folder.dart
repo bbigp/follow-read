@@ -10,12 +10,21 @@ class Folder {
   final BigInt userId;
   final String title;
   final bool hideGlobally;
+  final String order;
+  final bool onlyShowUnread;
 
   final bool expanded;
   final List<Feed> feeds;
 
-  Folder({BigInt? id, BigInt? userId, this.title = "", this.hideGlobally = false,
-    this.expanded = false, this.feeds = const [],
+  Folder({
+    BigInt? id, BigInt? userId,
+    this.title = "",
+    this.hideGlobally = false,
+    this.onlyShowUnread = false,
+    this.order = "publishedTime",
+
+    this.expanded = false,
+    this.feeds = const [],
   }) :  id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero;
 
@@ -35,6 +44,8 @@ class Folder {
       title: title ?? this.title,
       userId: userId ?? this.userId,
       hideGlobally: hideGlobally ?? this.hideGlobally,
+      onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+      order: order ?? this.order,
 
       feeds: feeds ?? this.feeds,
       expanded: expanded ?? this.expanded,

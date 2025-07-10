@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/global/widgets/cupx_sheet_title.dart';
 import 'package:follow_read/global/widgets/cupx_sliding_segmented_control.dart';
 import 'package:follow_read/modules/widgets/obx/obx_app_bar.dart';
@@ -33,6 +34,10 @@ class _AddFilterFormState extends State<AddFilterForm> {
         title: 'New Filter',
         enabled: controller.state.title.isNotEmpty,
         color: AppColors.black04,
+        onPressed: () async {
+          await controller.save();
+          Get.back();
+        },
       ),),
       body: Container(
         color: AppColors.black04,

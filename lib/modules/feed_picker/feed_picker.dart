@@ -19,7 +19,7 @@ import 'feed_picker_controller.dart';
 class FeedPicker extends StatelessWidget {
 
   final List<BigInt> initialFeeds;
-  final Future<void> Function(List<BigInt>)? onPressed;
+  final void Function(List<BigInt>)? onPressed;
   FeedPicker({super.key, this.initialFeeds = const [], this.onPressed});
 
   final controller = Get.find<MemoryCacheController>();

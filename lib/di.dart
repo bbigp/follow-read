@@ -4,6 +4,7 @@
 import 'package:follow_read/data/repositories/app_database.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
+import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/data/services/sync_service.dart';
 import 'package:follow_read/data/services/user_service.dart';
@@ -23,6 +24,7 @@ class DI {
     Get.put(SyncService());
     Get.put(FeedService());
     Get.put(FolderService());
+    Get.put(FilterService());
 
     await Get.putAsync(() => MemoryCacheController().load());
   }

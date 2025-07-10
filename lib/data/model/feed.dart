@@ -14,14 +14,14 @@ class Feed {
   final int errorCount;
   final String errorMsg;
   final BigInt folderId;
-  final bool hideGlobally;
 
-  final String iconUrl;
+  final bool hideGlobally;
   final bool onlyShowUnread;
   final String order;
+  final String iconUrl;
 
-  final int unread;
-  final int read;
+  // final int unread;
+  // final int read;
 
   static Feed empty = Feed();
 
@@ -31,14 +31,14 @@ class Feed {
     this.feedUrl = "",
     this.siteUrl = "",
     this.title = "",
-    this.unread = 0,
-    this.read = 0 ,
+    // this.unread = 0,
+    // this.read = 0 ,
     this.iconUrl = "",
     this.onlyShowUnread = false,
     this.errorCount = 0,
     this.errorMsg = "",
     BigInt? folderId,
-    this.order = "",
+    this.order = "publishedTime",
     this.hideGlobally = false,
   }) :  id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero,
@@ -50,8 +50,8 @@ class Feed {
     String? feedUrl,
     String? siteUrl,
     String? title,
-    int? unread,
-    int? read,
+    // int? unread,
+    // int? read,
     String? iconUrl,
     bool? onlyShowUnread,
     bool? showReadingTime,
@@ -67,8 +67,8 @@ class Feed {
       feedUrl: feedUrl ?? this.feedUrl,
       siteUrl: siteUrl ?? this.siteUrl,
       title: title ?? this.title,
-      unread: unread ?? this.unread,
-      read: read ?? this.read,
+      // unread: unread ?? this.unread,
+      // read: read ?? this.read,
       iconUrl: iconUrl ?? this.iconUrl,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       errorCount: errorCount ?? this.errorCount,
@@ -100,7 +100,7 @@ extension FeedResponseExtension on FeedResponse {
       hideGlobally: hideGlobally ?? false,
 
       onlyShowUnread: false,
-      order: "desc",
+      order: "publishedTime",
       iconUrl: icon == null ? "" : "icons/${icon?.iconId}",
     );
   }
