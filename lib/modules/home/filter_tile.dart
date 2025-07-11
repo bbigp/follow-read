@@ -6,6 +6,8 @@ import 'package:follow_read/global/widgets/context_menu.dart';
 import 'package:follow_read/modules/add_filter/filter_icon.dart';
 import 'package:follow_read/modules/count_badge/count_badge.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
+import 'package:follow_read/routes.dart';
+import 'package:get/get.dart';
 
 ///
 class FilterTile extends StatelessWidget {
@@ -17,8 +19,10 @@ class FilterTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContextMenuWrapper(
       menuItems: [
-        ContextMenu(label: '编辑', icon: SvgIcons.edit, onTap: () {
-        }),
+        ContextMenu(
+          label: '编辑', icon: SvgIcons.edit,
+          onTap: () => Get.toNamed(RouteConfig.filter, parameters: {"id": filter.id.toString()}),
+        ),
         const ContextMenuDivider(),
         ContextMenu(label: '删除', icon: SvgIcons.trash, type: ContextMenuType.danger, onTap: () {
         }),

@@ -1,5 +1,5 @@
 
-import 'package:follow_read/config/cluster_icons.dart';
+import 'package:follow_read/core/filter_icons.dart';
 
 // ignore_for_file: constant_identifier_names
 class SvgIcons {
@@ -10,9 +10,9 @@ class SvgIcons {
 
 
   static const String searchInput = "assets/svg/search_input.svg";
-  static const String markRead = ClusterIcons.read;
-  static const String markUnread = ClusterIcons.unread;
-  static const String addCollection = ClusterIcons.collection;
+  static const String markRead = FilterIcons.read;
+  static const String markUnread = FilterIcons.unread;
+  static const String addCollection = FilterIcons.collection;
   static const String removeCollection = "assets/svg/remove_collection.svg";
   static const String expired = "assets/svg/expired.svg";
 

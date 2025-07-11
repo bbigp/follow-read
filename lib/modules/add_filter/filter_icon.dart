@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:follow_read/config/cluster_icons.dart';
+import 'package:follow_read/core/filter_icons.dart';
 
 class FilterIcon extends StatelessWidget {
   final String icon;
@@ -15,12 +15,12 @@ class FilterIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (ClusterIcons.iconMap.keys.contains(icon)) {
-      return Icon(ClusterIcons.iconMap[icon], size: size,);
+    if (FilterIcons.iconMap.keys.contains(icon)) {
+      return Icon(FilterIcons.iconMap[icon], size: size,);
     }
     return Align(
       alignment: Alignment.center,
-      child: SvgPicture.asset(ClusterIcons.icon(icon), width: size, height: size,
+      child: SvgPicture.asset(FilterIcons.icon(icon), width: size, height: size,
         fit: fit,
       ),
     );

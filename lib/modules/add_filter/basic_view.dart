@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:follow_read/config/cluster_icons.dart';
+import 'package:follow_read/core/filter_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/modules/add_filter/add_filter_controller.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
@@ -19,7 +19,7 @@ class BasicView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> allIcons = ClusterIcons.iconMap.keys.toList();
+    List<String> allIcons = FilterIcons.iconMap.keys.toList();
     return Column(children: [
       Padding(padding: EdgeInsets.only(top: 4, left: 16, right: 16), child: CardView(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),

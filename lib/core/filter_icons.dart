@@ -2,8 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 // ignore_for_file: constant_identifier_names
-class ClusterIcons {
-  ClusterIcons._();
+class FilterIcons {
+  FilterIcons._();
 
   static String name(String icon){
     return icon.replaceAll("assets/icons/", "").replaceAll(".svg", "");
