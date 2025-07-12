@@ -2,6 +2,7 @@
 
 import 'package:follow_read/data/model/page_info.dart';
 import 'package:follow_read/data/providers/miniflux/entry_page_response.dart';
+import 'package:follow_read/data/repositories/app_database.dart';
 
 import 'feed.dart';
 import 'folder.dart';
@@ -160,6 +161,19 @@ class Entry {
       summary: summary ?? this.summary,
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
+    );
+  }
+}
+
+extension EntryRowExtension on EntryRow {
+  Entry toEntry() {
+    return Entry(
+      id: id, userId: userId, feedId: feedId,
+      title: title, hash: hash, content: content, summary: summary,
+      status: EntryState.fromString(status),
+      url: url, author: author, readingTime: readingTime,
+      starred: starred,
+      publishedAt: publishedAt, createdAt: createdAt, changedAt: changedAt,
     );
   }
 }

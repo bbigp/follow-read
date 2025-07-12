@@ -242,11 +242,7 @@
 //       return list[0];
 //     });
 //   }
-//
-//   Future<Map<int, int>> countCluster() async {
-//     var all = await _clusterDao.getAll();
-//     return await _dao.countCluster(all);
-//   }
+
 //
 // }
 //

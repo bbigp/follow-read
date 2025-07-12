@@ -1,6 +1,5 @@
 
 
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/repositories/filter_dao.dart';
 import 'package:follow_read/data/services/service_base.dart';
@@ -16,12 +15,16 @@ class FilterService extends ServiceBase {
   }
 
   Future<void> save(Filter f) async {
-    logger.i('dsds ${f.name}');
     await _dao.save(f);
   }
 
   Future<List<Filter>> getAllFilters() async {
     return await _dao.getAllFilters();
+  }
+
+
+  Future<bool> deleteById(BigInt id) async {
+    return await _dao.deleteById(id);
   }
 
 }

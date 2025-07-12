@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 
 class ContextMenuWrapper extends StatefulWidget {

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../config/theme.dart';
 import 'app_colors.dart';
 
 // ignore_for_file: constant_identifier_names

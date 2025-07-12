@@ -15,20 +15,6 @@
 //   EntryDao(super.db);
 //
 //
-//   Future<void> bulkInsertWithTransaction(List<EntriesTableCompanion> entries) async {
-//     if (entries.isEmpty) {
-//       return;
-//     }
-//     await transaction(() async {
-//       await batch((batch) {
-//         batch.insertAll(
-//           entriesTable,
-//           entries,
-//           mode: InsertMode.insertOrReplace,
-//         );
-//       });
-//     });
-//   }
 //
 //   Future<List<EntryEntity>> getEntriesByFeedId(int feedId) async {
 //     return await (select(entriesTable)..where((r) => r.feedId.equals(BigInt.from(feedId)))).get();
@@ -142,119 +128,7 @@
 //     return result?.read(maxChangedAt);
 //   }
 //
-//   Future<int> count() async {
-//     final query = selectOnly(entriesTable);
-//     final countExpr = countAll();
-//     query.addColumns([countExpr]);
-//     final result = await query.getSingle();
-//     return result.read(countAll()) ?? 0;
-//   }
-//
-//   Future<Map<int, int>> countFeed() async {
-//     final query = '''
-//        select feed_id, count(*) filter (where status = 'unread') as unread
-//        from entries
-//        group by feed_id
-//     ''';
-//     final result = await db.customSelect(
-//       query,
-//     ).get();
-//     final map = <int, int>{};
-//     for (final row in result) {
-//       final id = row.read<int>('feed_id');
-//       final count = row.read<int>('unread');
-//       map[id] = count;
-//     }
-//     return map;
-//   }
-//
-//   Future<Map<int, int>> countCluster(List<ClusterEntity> clusters) async {
-//     final parts = clusters.map(buildQuery).join(", ");
-//     final query = "SELECT $parts FROM entries";
-//     logger.i(query);
-//     final result = await db.customSelect(
-//       query,
-//     ).getSingle();
-//     return Map<int, int>.fromEntries(
-//       result.data.entries.map((entry) {
-//         final key = int.parse(entry.key);
-//         final value = entry.value as int;
-//         return MapEntry(key, value);
-//       }),
-//     );
-//   }
-//
-//   String buildQuery(ClusterEntity cluster) {
-//     List<String> cond = [];
-//     if (cluster.feedIds.isNotEmpty) {
-//       cond.add("feed_id in (${cluster.feedIds})");
-//     }
-//     if (cluster.recentTime > 0) {
-//       var time = DateTime.now().add(Duration(minutes: -cluster.recentTime)).millisecondsSinceEpoch ~/ 1000;
-//       cond.add("published_at >= $time");
-//     }
-//     if (cluster.recentAddTime > 0) {
-//       var time = DateTime.now().add(Duration(minutes: -cluster.recentAddTime)).millisecondsSinceEpoch ~/ 1000;
-//       cond.add("created_at >= $time");
-//     }
-//     if (cluster.statuses.isNotEmpty) {
-//       var status = cluster.statuses.split(',').map((status) => "'$status'").toSet().join(",");
-//       cond.add("status in ($status)");
-//     }
-//     bool? starred = switch(cluster.starred) {
-//       1 => true,
-//       0 => false,
-//       _ => null
-//     };
-//     if (starred != null) {
-//       cond.add("starred = $starred");
-//     }
-//     if (cond.isEmpty) {
-//       cond.add("true");
-//     }
-//     var query = "count(*) filter (where ${cond.join(" and ")}) as '${cluster.id}' ";
-//     return query;
-//   }
-//
-//   //
-//   // Future<SmartListCount> countSmartList() async {
-//   //
-//   //   final now = DateTime.now().toUtc();
-//   //   final todayStart = DateTime(now.year, now.month, now.day);
-//   //   // final tomorrowStart = todayStart.add(const Duration(days: 1));
-//   //
-//   //   final query = '''
-//   //   SELECT
-//   //     COUNT(*) AS total,
-//   //     ifnull(SUM(CASE WHEN status = 'read' THEN 1 ELSE 0 END), 0) AS read_count,
-//   //     ifnull(SUM(CASE WHEN status = 'unread' THEN 1 ELSE 0 END), 0) AS unread_count,
-//   //     ifnull(SUM(CASE WHEN starred THEN 1 ELSE 0 END), 0) AS starred_count,
-//   //     ifnull(SUM(CASE WHEN published_at >= ? THEN 1 ELSE 0 END), 0) AS today_count
-//   //   FROM entries;
-//   // ''';
-//   //
-//   //
-//   //
-//   //   final result = await db.customSelect(
-//   //     query,
-//   //     variables: [Variable(todayStart)],
-//   //   ).getSingle();
-//   //
-//   //   return SmartListCount(
-//   //     total: result.read<int>('total'),
-//   //     read: result.read<int>('read_count'),
-//   //     unread: result.read<int>('unread_count'),
-//   //     starred: result.read<int>('starred_count'),
-//   //     today: result.read<int>('today_count'),
-//   //   );
-//   // }
-//
-//   // return result.map((row) {
-//   // return UnreadCount(
-//   // id: row.read<int>('id') ?? 0,
-//   // count: row.read<int>('unread') ?? 0,
-//   // );
-//   // }).toList();
+
 //
 //   Future<bool> deleteByFeedId(int feedId) async {
 //     var query = delete(entriesTable)..where((f) => f.feedId.equals(BigInt.from(feedId)));

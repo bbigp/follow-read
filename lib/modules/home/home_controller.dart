@@ -1,9 +1,9 @@
-import 'package:follow_read/core/prefs_keys.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/services/feed_service.dart';
+import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/data/services/user_service.dart';
@@ -14,6 +14,7 @@ class HomeController extends GetxController {
   final HomeState state = HomeState();
   final _feedService = Get.find<FeedService>();
   final _folderService = Get.find<FolderService>();
+  final _filterService = Get.find<FilterService>();
   final _userService = Get.find<UserService>();
   final _cache = Get.find<MemoryCacheController>();
   final _box = GetStorage();
@@ -21,27 +22,25 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _box.listenKey(PrefsKeys.rootFolderId, (v) {
-      init(rootFolderId: BigInt.parse(v ?? '0'));
-    });
+    everAll(
+        [_cache.changeFeed, _cache.stateRootFolderId],
+        (_) => initFeedAndFolder(_cache.rootFolderId)
+    );
+    ever(_cache.changeFilter, (_) => initFilter());
   }
 
   @override
   void onReady() {
     super.onReady();
-    init(rootFolderId: _userService.getUser().rootFolderId);
+    initFeedAndFolder(_cache.rootFolderId);
+    initFilter();
   }
 
-  void init({required BigInt rootFolderId}) async {
-    // if (state.isLoading) return;
-    // 设置里 选择设置root folder  config query root folder id
-    // state._isLoading.value = true;
-
+  void initFeedAndFolder(BigInt rootFolderId) {
     final allFeeds = _cache.feeds;
     final allFolders = _cache.folders;
-    final allFilters = _cache.filters;
 
-    final feedMap = allFeeds.fold<Map<BigInt, List<Feed>>>(
+    final folderFeedsMap = allFeeds.fold<Map<BigInt, List<Feed>>>(
       {},
           (map, feed) {
         final cid = feed.folderId;
@@ -51,21 +50,31 @@ class HomeController extends GetxController {
       },
     );
 
-
+    final oldExpandedMap = Map<BigInt, bool>.fromEntries(
+        state.folders.map((f) => MapEntry(f.id, f.expanded))
+    );
     state.folders = allFolders
         .where((item) => item.id != rootFolderId)
-        .map((item) => item.copyWith(feeds: feedMap[item.id] ?? [],))
+        .map((item) {
+          final expanded = oldExpandedMap[item.id] ?? false;
+          return item.copyWith(
+            feeds: folderFeedsMap[item.id] ?? [],
+            expanded: expanded,
+          );
+        })
         .toList();
     state.stateFolderLen.value = state.folders.length;
 
-    state.feeds = feedMap[rootFolderId] ?? [];
+    state.feeds = folderFeedsMap[rootFolderId] ?? [];
     state.stateFeedLen.value = state.feeds.length;
     logger.i('${state.feedLen}');
+  }
 
+
+  void initFilter() async {
+    final allFilters = _cache.filters;
     state.filters = allFilters;
     state.stateFilterLen.value = state.filters.length;
-
-    // state._isLoading.value = false;
   }
 
 
@@ -78,6 +87,12 @@ class HomeController extends GetxController {
     final updated = current.copyWith(expanded: !current.expanded);
     state.folders[index] = updated;
     update(['folder_tile:$index']);
+  }
+
+  Future<void> deleteFilter(BigInt id) async {
+    if (await _filterService.deleteById(id)) {
+      await _cache.loadFilter();
+    }
   }
 
 }

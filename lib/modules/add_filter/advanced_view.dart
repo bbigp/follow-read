@@ -47,7 +47,7 @@ class AdvancedView extends ConsumerWidget {
 
       final List<SelectableInterface> items = [
         AdvancedTile(icon: SvgIcons.square_rss, title: '订阅源', localKey: _feedKey,
-          selectedContent: feedIds.join(","),
+          selectedContent: controller.state.selectedFeed.value,
           isSelected: feedIds.isNotEmpty,
           openTickboxTap: () => Open.modal(context, GetModalWrapper(
             initControllers: (){
@@ -79,7 +79,7 @@ class AdvancedView extends ConsumerWidget {
         AdvancedTile(
           icon: SvgIcons.calendar_today,
           title: '已读未读',
-          selectedContent: statuses.join(","),
+          selectedContent: statuses.join(", "),
           localKey: _statusKey,
           isSelected: statuses.isNotEmpty,
           openTickboxTap: () => Open.modal(context, StatusPicker(controller: controller,)),

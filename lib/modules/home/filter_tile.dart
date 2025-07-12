@@ -9,11 +9,13 @@ import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
+import 'home_controller.dart';
+
 ///
 class FilterTile extends StatelessWidget {
   final Filter filter;
-
-  const FilterTile({super.key, required this.filter,});
+  final HomeController controller;
+  const FilterTile({super.key, required this.filter, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +26,10 @@ class FilterTile extends StatelessWidget {
           onTap: () => Get.toNamed(RouteConfig.filter, parameters: {"id": filter.id.toString()}),
         ),
         const ContextMenuDivider(),
-        ContextMenu(label: '删除', icon: SvgIcons.trash, type: ContextMenuType.danger, onTap: () {
-        }),
+        ContextMenu(
+          label: '删除', icon: SvgIcons.trash, type: ContextMenuType.danger,
+          onTap: () => controller.deleteFilter(filter.id),
+        ),
       ],
       child: InkWell(
         onTap: () {
@@ -36,7 +40,7 @@ class FilterTile extends StatelessWidget {
           const SizedBox(width: 16,),
           Expanded(child: Text(filter.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M15,)),
           const SizedBox(width: 16,),
-          CountBadge(id: filter.id.toString()),
+          CountBadge(id: "i${filter.id}"),
           const SizedBox(width: 16,),
         ],),
       )

@@ -1,7 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:shimmer/shimmer.dart';
 

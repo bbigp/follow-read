@@ -5,10 +5,11 @@ import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/dashed_line.dart';
+import 'package:follow_read/global/widgets/modal_wrapper.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/sync_icon.dart';
-import 'package:follow_read/modules/feed/empty_feed_view.dart';
-import 'package:follow_read/modules/feed/feed_form.dart';
+import 'package:follow_read/modules/add_feed/add_feed_controller.dart';
+import 'package:follow_read/modules/add_feed/add_feed_form.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/modules/sync/sync_controller.dart';
 import 'package:follow_read/routes.dart';
@@ -70,7 +71,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       Obx((){
         return SliverList(delegate: SliverChildBuilderDelegate(childCount: home.state.filterLen, (context, index) {
           return GetBuilder<HomeController>(builder: (controller){
-            return FilterTile(filter: controller.state.filters[index]);
+            return FilterTile(filter: controller.state.filters[index], controller: controller,);
           }, id: "filter_tile:$index",);
         }));
       }),
@@ -98,7 +99,13 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(SvgIcons.lines_3, onTap: () => Get.toNamed(RouteConfig.profile),),
         actions: [
-          // PaddedSvgIcon(SvgIcons.add, onTap: () => Open.modal(context, FeedForm())),
+          PaddedSvgIcon(SvgIcons.add, onTap: () => Open.modal(context, GetModalWrapper(
+            initControllers: () {
+              Get.put(AddFeedController(id: BigInt.zero));
+            },
+            disposeControllers: () => Get.delete<AddFeedController>(),
+            builder: () => AddFeedForm(),
+          ))),
           Obx(() {
             return SyncIcon(isSyncing: sync.state.isSyncing, onTap: () => sync.sync(),);
           }),

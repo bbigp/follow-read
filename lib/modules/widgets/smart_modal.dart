@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 
-import '../../config/theme.dart';
 
 class SmartModal {
 

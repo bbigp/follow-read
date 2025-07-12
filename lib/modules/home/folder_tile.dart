@@ -58,7 +58,7 @@ class FolderTile extends StatelessWidget  {
                   id: 'e${feed.id}',
                   title: feed.title,
                   icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
-                  contextMenus: [],
+                  contextMenus: feed.contextMenus(context),
                   leadingIndicator: SizedBox(width: 24,),
                 ),
                 Padding(

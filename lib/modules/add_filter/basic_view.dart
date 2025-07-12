@@ -30,7 +30,7 @@ class BasicView extends StatelessWidget {
               border: Border.all(width: 1, color: AppColors.black08),
               child: SizedBox(width: 40, height: 40, child: Obx((){
                 final icon = controller.state.icon;
-                return FilterIcon(icon: icon.isNotEmpty ? icon : allIcons[0]);
+                return FilterIcon(icon: icon);
               }),),
             ),
             const SizedBox(width: 12,),//设计图16

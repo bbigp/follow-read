@@ -3,9 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:follow_read/config/theme.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
-import 'package:follow_read/features/presentation/providers/auth_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/foundation.dart';

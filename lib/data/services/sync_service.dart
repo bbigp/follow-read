@@ -7,6 +7,7 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/sync_record.dart';
 import 'package:follow_read/data/providers/miniflux/api.dart';
+import 'package:follow_read/data/repositories/entry_dao.dart';
 import 'package:follow_read/data/repositories/feed_dao.dart';
 import 'package:follow_read/data/repositories/folder_dao.dart';
 import 'package:follow_read/data/repositories/sync_record_dao.dart';
@@ -19,6 +20,7 @@ class SyncService extends GetxService {
   late final FeedDao _feeDao;
   late final SyncRecordDao _syncRecordDao;
   late final FolderDao _folderDao;
+  late final EntryDao _entryDao;
   final _box = GetStorage();
 
   @override
@@ -28,6 +30,7 @@ class SyncService extends GetxService {
     _feeDao = FeedDao(db);
     _folderDao = FolderDao(db);
     _syncRecordDao = SyncRecordDao(db);
+    _entryDao = EntryDao(db);
   }
 
   bool getState(){
@@ -63,7 +66,7 @@ class SyncService extends GetxService {
         feedMap[e.feedId] = e.feed;
         folderMap[e.folder.id] = e.folder;
       }
-
+      await _entryDao.bulkInsertWithTransaction(entries);
       var minTime = entries.last.changedAt;
       if (entries.length < size || minTime.isBefore(localMaxTime)) {
         break;

@@ -1,6 +1,5 @@
 
 
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
@@ -24,6 +23,11 @@ class AddFilterController extends GetxController{
       state._publishedTime.value = state._filter.publishedTime;
       state._addTime.value = state._filter.addTime;
       state.feedIds.value = state._filter.feedIds;
+      if (state._filter.feedIds.length > 3) {
+        state.selectedFeed.value = "${state._filter.feedIds.length} Selected";
+      } else {
+        state.selectedFeed.value = state._filter.feedIds.map((e) => _cache.getFeed(e)!.title).join(", ");
+      }
       state.statuses.value = state._filter.statuses;
     }
   }
@@ -50,6 +54,11 @@ class AddFilterController extends GetxController{
     }
     if (feedIds != null) {
       state.feedIds.value = feedIds;
+      if (feedIds.length > 3) {
+        state.selectedFeed.value = "${feedIds.length} Selected";
+      } else {
+        state.selectedFeed.value = feedIds.map((e) => _cache.getFeed(e)!.title).join(", ");
+      }
     }
   }
 
@@ -58,7 +67,7 @@ class AddFilterController extends GetxController{
       publishedTime: state.publishedTime, addTime: state.addTime,
       feedIds: state.feedIds, statuses: state.statuses,
     ));
-    await _cache.load();
+    await _cache.loadFilter();
   }
 
 }
@@ -67,7 +76,7 @@ class AddFilterState {
 
   Filter _filter = Filter();
 
-  final _icon = "".obs;
+  final _icon = "list_bullet".obs;
   String get icon => _icon.value;
 
   final _title = "".obs;
@@ -80,6 +89,8 @@ class AddFilterState {
   int get addTime => _addTime.value;
 
   final feedIds = <BigInt>[].obs;
+  final selectedFeed = "".obs;
+
   final statuses = <String>[].obs;
 
 

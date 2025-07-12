@@ -1,8 +1,17 @@
 
 
+import 'package:flutter/material.dart';
+import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/providers/miniflux/feed_response.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
+import 'package:follow_read/global/widgets/context_menu.dart';
+import 'package:follow_read/global/widgets/modal_wrapper.dart';
+import 'package:follow_read/global/widgets/open.dart';
+import 'package:follow_read/modules/add_feed/add_feed_controller.dart';
+import 'package:follow_read/modules/add_feed/add_feed_form.dart';
+import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
+import 'package:get/get.dart';
 
 class Feed {
 
@@ -78,6 +87,39 @@ class Feed {
       hideGlobally: hideGlobally ?? this.hideGlobally,
     );
   }
+
+  List<ContextMenuEntry> contextMenus(BuildContext context) => [
+    ContextMenu(
+        label: '编辑',
+        icon: SvgIcons.edit,
+        onTap: () => Open.modal(context, GetModalWrapper(
+          initControllers: () {
+            Get.put(AddFeedController(id: id));
+          },
+          disposeControllers: () => Get.delete<AddFeedController>(),
+          builder: () => AddFeedForm(),
+        ))
+    ),
+    const ContextMenuDivider(),
+    ContextMenu(
+        label: "取消订阅",
+        icon: SvgIcons.reduce_o,
+        type: ContextMenuType.danger,
+        onTap: () {
+          // OpenModal.open(context, AlertSheet(
+          //   title: "确认取消订阅?",
+          //   msg: "该订阅将从所有文件夹和列表中删除",
+          //   onPressed: () async {
+          //     var success = await ref.read(feedRepositoryProvider).removeFeed(feed.id);
+          //     if (success) {
+          //       // final _ = ref.refresh(homeProvider);
+          //       Navigator.of(context).pop();
+          //     }
+          //   },
+          // ), hasMargin: true);
+        }),
+  ];
+
 }
 
 extension FeedRowExtension on FeedRow {

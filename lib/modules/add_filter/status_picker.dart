@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/global/widgets/card_tickbox_list_tile.dart';
 import 'package:follow_read/global/widgets/cupx_sheet_title.dart';
-import 'package:follow_read/modules/controller/add_artiad/add_artiad_controller.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/drag_handle.dart';
 import 'package:get/get.dart';

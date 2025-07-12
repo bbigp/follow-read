@@ -112,17 +112,20 @@ class ListTilex extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget child = Row(children: [
       const SizedBox(width: 16, height: 48,),
-      icon ?? const SizedBox(width: 24, height: 24,),
-      const SizedBox(width: 12,),
+      if (icon != null) ...[
+        icon!,
+        const SizedBox(width: 12,),
+      ],
       if (title != null) ...[
         Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
         const SizedBox(width: 12,),
       ],
 
       if (additionalInfo != "") ...[
-        const SizedBox(width: 4,),
+        const SizedBox(width: 4),
         Expanded(child: Text(additionalInfo, maxLines: 1, overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.caption, textAlign: TextAlign.right,)
+          style: AppTextStyles.caption,
+          textAlign: TextAlign.right,)
         ),
         const SizedBox(width: 4,),
       ],

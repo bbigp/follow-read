@@ -3,9 +3,12 @@
 import 'package:follow_read/core/utils/api_result.dart';
 import 'package:follow_read/core/utils/http_client.dart';
 import 'package:follow_read/data/model/entry.dart';
+import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/page_info.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/data/providers/miniflux/entry_page_response.dart';
+import 'package:follow_read/data/providers/miniflux/feed_response.dart';
+import 'package:follow_read/features/data/models/add_feed_response.dart';
 
 import 'me_response.dart';
 
@@ -34,5 +37,29 @@ class MinifluxApi {
     return result.map((resp) => resp.toPageInfo());
   }
 
+  static Future<ApiResult<BigInt>> postFeed(String url, BigInt folderId) async {
+    final result = await HttpClient.post("feeds", AddFeedResponseMapper.fromMap, data: {
+      'feed_url': url,
+      'category_id': folderId,
+    });
+    return result.map((resp) => resp.feedId);
+  }
+
+  static Future<ApiResult<Feed>> getFeed(BigInt feedId) async {
+    final result = await HttpClient.get("feeds/$feedId", FeedResponseMapper.fromMap,);
+    return result.map((resp) => resp.toFeed());
+  }
+
+  static Future<ApiResult<Feed>> putFeed(BigInt feedId, {String? title, BigInt? folderId}) async {
+    final result =  await HttpClient.put("feeds/$feedId", FeedResponseMapper.fromMap, data: {
+      'title': title,
+      'category_id': folderId,
+    });
+    return result.map((resp) => resp.toFeed());
+  }
+
 }
+
+
+class EmptyObject {}
 

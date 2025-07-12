@@ -163,10 +163,7 @@ class ProfilePage extends StatelessWidget {
                       additionalInfo: controller.state.rootFolder.title,
                       onTap: () => Open.modal(context, FolderPicker(
                         sheetTitle: "根文件夹", value: controller.state.rootFolder.title,
-                        onChanged: (v) {
-                          controller.change(rootFolderId: v);
-                          Get.back();
-                        },
+                        onChanged: (v) => controller.change(rootFolderId: v),
                       )),
                     );
                   }),

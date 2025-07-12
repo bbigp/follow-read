@@ -38,5 +38,13 @@ class FilterDao extends DatabaseAccessor<AppDatabase> {
     return rows.map((e) => e.toFilter()).toList();
   }
 
+  Future<bool> deleteById(BigInt id) async {
+    final affectedRows = await (update(filtersTable)
+      ..where((r) => r.id.equals(id))
+    ).write(FiltersTableCompanion(
+      deleted: Value(1)
+    ));
+    return affectedRows > 0;
+  }
 
 }

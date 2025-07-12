@@ -18,7 +18,9 @@ class HttpClient {
         options.baseUrl = baseURL;
         options.headers["X-Auth-Token"] = token;
         options.headers["Content-Type"] = "application/json";
-
+        if (options.data != null) {
+          options.data = _normalize(options.data);
+        }
         logger.i('''
             === ➡️ [REQUEST] ===
             ${options.method} ${options.baseUrl}${options.path}
@@ -39,6 +41,7 @@ class HttpClient {
         return handler.next(response); //继续返回响应
       },
       onError: (DioException err, handler) {
+        print(err);
         logger.i('''
             === ❌ [ERROR] ===
             ${err.response?.statusCode} ${err.requestOptions.method} ${err.requestOptions.path}
@@ -118,7 +121,24 @@ class HttpClient {
     return ApiResult.failure(message);
   }
 
-
+  static Future<ApiResult<T>> put<T>(String path, T Function(Map<String, dynamic>) fromJson, {
+    dynamic data,
+    Map<String, dynamic>? query,
+    String? baseUrl, String? token,
+  }) async {
+    final response = await _configureDio(baseUrl, token).put(path, queryParameters: query, data: data);
+    final json = response.data;
+    if (response.isSuccess) {
+      return ApiResult.success(fromJson(json));
+    }
+    String message = "未知错误";
+    if (json is Map<String, dynamic> && json.containsKey('error_message')) {
+      message = json['error_message'];
+    } else if (json is String) {
+      message = json;
+    }
+    return ApiResult.failure(message);
+  }
 
   static Future<ApiResult<T>> post<T>(String path, T Function(Map<String, dynamic>) fromJson, {
     dynamic data,
@@ -137,6 +157,18 @@ class HttpClient {
       message = json;
     }
     return ApiResult.failure(message);
+  }
+
+
+  static dynamic _normalize(dynamic input) {
+    if (input is BigInt) {
+      return input.toInt();
+    } else if (input is Map) {
+      return input.map((key, value) => MapEntry(key, _normalize(value)));
+    } else if (input is Iterable) {
+      return input.map(_normalize).toList();
+    }
+    return input;
   }
 
 }

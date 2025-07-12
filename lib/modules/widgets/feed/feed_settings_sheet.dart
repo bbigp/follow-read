@@ -10,7 +10,7 @@
 // import 'package:follow_read/global/widgets/card_viewx.dart';
 // import 'package:follow_read/global/widgets/cupx_sliding_segmented_control.dart';
 // import 'package:follow_read/global/widgets/drag_handle.dart';
-// import 'package:follow_read/modules/widgets/feed/feed_form.dart';
+// import 'package:follow_read/modules/widgets/feed/add_feed_form.dart';
 // import 'package:follow_read/modules/widgets/feed_icon.dart';
 // import 'package:follow_read/modules/widgets/feed_switch.dart';
 // import 'package:follow_read/modules/widgets/open_modal.dart';

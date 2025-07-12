@@ -37,6 +37,7 @@ class FolderPicker extends StatelessWidget {
             final folder = controller.folders[index];
             return RadioxListTile(icon: SvgIcons.group, title: folder.title, groupValue: value, onChanged: (v){
               onChanged?.call(folder.id);
+              Get.back();
             },);
           },
         )),

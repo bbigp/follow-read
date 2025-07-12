@@ -20,8 +20,8 @@ class AddFeedResponseMapper extends ClassMapperBase<AddFeedResponse> {
   @override
   final String id = 'AddFeedResponse';
 
-  static int _$feedId(AddFeedResponse v) => v.feedId;
-  static const Field<AddFeedResponse, int> _f$feedId =
+  static BigInt _$feedId(AddFeedResponse v) => v.feedId;
+  static const Field<AddFeedResponse, BigInt> _f$feedId =
       Field('feedId', _$feedId, key: r'feed_id');
 
   @override
@@ -87,7 +87,7 @@ extension AddFeedResponseValueCopy<$R, $Out>
 
 abstract class AddFeedResponseCopyWith<$R, $In extends AddFeedResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({int? feedId});
+  $R call({BigInt? feedId});
   AddFeedResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -101,7 +101,7 @@ class _AddFeedResponseCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AddFeedResponse> $mapper =
       AddFeedResponseMapper.ensureInitialized();
   @override
-  $R call({int? feedId}) =>
+  $R call({BigInt? feedId}) =>
       $apply(FieldCopyWithData({if (feedId != null) #feedId: feedId}));
   @override
   AddFeedResponse $make(CopyWithData data) =>
