@@ -38,9 +38,9 @@ class EntryPage extends StatelessWidget{
           child: Padding(
             padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 48),
             child: Column(children: [
-              if (controller.state.entry.pic.isNotEmpty) ...[
+              if (controller.entry.pic.isNotEmpty) ...[
                 Obx(() {
-                  final entry = controller.state.entry;
+                  final entry = controller.entry;
                   return EntryImage(url: entry.pic, height: 241, onTap: (){
                     // ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
                     //   "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(entry.pic),
@@ -49,16 +49,16 @@ class EntryPage extends StatelessWidget{
                 }),
                 const SizedBox(height: 12,),
               ],
-              Obx(() => EntryTitle(entry: controller.state.entry)),
+              Obx(() => EntryTitle(entry: controller.entry)),
               const SizedBox(height: 12,),
-              Obx(() => EntryContent(entry: controller.state.entry)),
+              Obx(() => EntryContent(entry: controller.entry)),
               const SizedBox(height: 12,),
               const NoMore(),
               const SizedBox(height: 12,),
 
               const SizedBox(height: 8,),
               Obx(() {
-                final entry = controller.state.entry;
+                final entry = controller.entry;
                 return IconButtonx(
                   child: "View Website", icon: SvgIcons.out_o,
                   isLeftIcon: false,
@@ -75,7 +75,7 @@ class EntryPage extends StatelessWidget{
           ),
         )),
         Obx((){
-          final entry = controller.state.entry;
+          final entry = controller.entry;
           return TabBarx(tabs: [
             BottomBarItem(
                 icon: entry.starred ? SvgIcons.star_fill : SvgIcons.star,

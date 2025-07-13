@@ -12,7 +12,7 @@ import 'entry_tile_header.dart';
 
 ///
 class EntryTile extends StatelessWidget {
-  final Entry entry;
+  final Rx<Entry> entry;
 
   const EntryTile({super.key, required this.entry,});
 
@@ -28,15 +28,17 @@ class EntryTile extends StatelessWidget {
     Widget child = Container(
         padding: EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          EntryTileHeader(title: entry.feed.title, iconUrl: entry.feed.iconUrl, time: entry.createdAt,),
+          EntryTileHeader(title: entry.value.feed.title, iconUrl: entry.value.feed.iconUrl, time: entry.value.createdAt,),
           const SizedBox(height: 8,),
-          entry.pic.isEmpty ? EntryTileBodyTextOnly(entry: entry)
-              : EntryTileBodySingleImage(entry: entry),
+          entry.value.pic.isEmpty ? EntryTileBodyTextOnly(entry: entry.value)
+              : EntryTileBodySingleImage(entry: entry.value),
         ],)
     );
     return InkWell(
-        onTap: () => Get.toNamed(RouteConfig.entry, parameters: {"id": entry.id.toString()}),
-        child: entry.isUnread ? child : Opacity(opacity: 0.5, child: child,),
+        onTap: () => Get.toNamed(RouteConfig.entry, parameters: {"id": entry.value.id.toString()}),
+        child: Obx((){
+          return entry.value.isUnread ? child : Opacity(opacity: 0.5, child: child,);
+        })
     );
   }
 }
