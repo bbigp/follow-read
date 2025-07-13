@@ -64,6 +64,8 @@ class EntriesController extends GetxController {
     state.isLoadingMore = false;
   }
 
+  Rx<Entry> get(BigInt id) => state.entries.firstWhere((e) => e.value.id == id);
+
 }
 
 
@@ -78,7 +80,7 @@ class EntriesState {
   final _hasMore = false.obs;
   bool get hasMore => _hasMore.value;
 
-  List<Entry> entries = [];
+  List<Rx<Entry>> entries = [];
 
   final _entriesLen = 0.obs;
   int get entriesLen => _entriesLen.value;
@@ -89,10 +91,10 @@ class EntriesState {
 
   void addEntries(List<Entry> addList, {bool reset = false}){
     if (reset) {
-      entries = addList;
+      entries = addList.map((item) => item.obs).toList();
       page = 1;
     } else {
-      entries = [...entries, ...addList];
+      entries = [...entries, ...addList.map((item) => item.obs)];
       page = page + 1;
     }
     _hasMore.value = addList.length >= size;

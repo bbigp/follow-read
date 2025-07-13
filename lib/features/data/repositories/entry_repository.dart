@@ -131,56 +131,9 @@
 //     });
 //   }
 //
-//   Future<List<Entry>> fetchEntries(int page, int size, SQLQueryBuilder builder) async {
-//     final entries = await _dao.fetch(page, size, builder);
-//     final feedIds = entries.map((item) => int.parse(item.feedId.toString())).toSet().toList();
-//     final feeds = await _feedDao.getFeedsByIds(feedIds);
-//     final feedMap = {for (var feed in feeds) feed.id: feed};
-//     return entries.map((entry) {
-//       final feed = feedMap[entry.feedId];
-//       if (feed != null) {
-//         return entry.toModel().copyWith(feed: feed.toModel());
-//       }
-//       return entry.toModel();
-//     }).toList();
-//   }
+
 //
-//
-//   Future<List<Entry>> getEntries(int page, { List<int> feedIds = const [],
-//     int size = 10, List<String> status = const ["unread", "read"],
-//     bool? starred, DateTime? minPublishedTime, String? word,
-//     String? order, DateTime? minAddTime,
-//   }) async {
-//     final entries = await _dao.paginateEntries(feedIds: feedIds,
-//         status: status, size: size,
-//         page: page, starred: starred, minPublishedTime: minPublishedTime,
-//         order: order, word: word, minAddTime: minAddTime,
-//     );
-//     if (feedIds.isEmpty) feedIds = entries.map((item) => int.parse(item.feedId.toString())).toSet().toList();
-//     final feeds = await _feedDao.getFeedsByIds(feedIds);
-//     final feedMap = {for (var feed in feeds) feed.id: feed};
-//     return entries.map((entry) {
-//       final feed = feedMap[entry.feedId];
-//       if (feed != null) {
-//         return entry.toModel().copyWith(feed: feed.toModel());
-//       }
-//       return entry.toModel();
-//     }).toList();
-//   }
-//
-//   Future<List<Entry>> getEntriesByFeedId(int feedId) async {
-//     final entries = await _dao.getEntriesByFeedId(feedId);
-//     final feedIds = entries.map((e) => int.parse(e.feedId.toString())).toSet().toList();
-//     final feeds = await _feedDao.getFeedsByIds(feedIds);
-//     final feedMap = {for (var feed in feeds) feed.id: feed};
-//     return entries.map((entry) {
-//       final feed = feedMap[entry.feedId];
-//       if (feed != null) {
-//         return entry.toModel().copyWith(feed: feed.toModel());
-//       }
-//       return entry.toModel();
-//     }).toList();
-//   }
+
 //
 //   Future<List<Entry>> saveAndReturnData(List<EntryResponse> list, {bool needReturn = true}) async {
 //     if (list.isEmpty) {
@@ -206,15 +159,6 @@
 //     }).toList();
 //   }
 //
-//   Future<bool> updateStatus(int entryId, String status) async {
-//     final result = await ApiClient.putEntry(entryId, status);
-//     return result.fold((_){
-//       return false;
-//     }, (_) async {
-//       await _dao.updateStatus(entryId, status: status);
-//       return true;
-//     });
-//   }
 //
 //   Future<bool> starred(int entryId, bool starred) async {
 //     final result = await ApiClient.starred(entryId);

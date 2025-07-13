@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
-import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/data/model/entry.dart';
 
 class EntryAuthor extends StatelessWidget {
 
@@ -18,7 +18,7 @@ class EntryAuthor extends StatelessWidget {
           constraints: BoxConstraints(
             maxWidth: 122,
           ),
-          child: Text(entry.author, maxLines: 1, overflow: TextOverflow.ellipsis,
+          child: Text(entry.author, maxLines: 2, overflow: TextOverflow.ellipsis,
             style: AppTextStyles.caption11500,
           ),
         ),
@@ -26,7 +26,7 @@ class EntryAuthor extends StatelessWidget {
         Container(width: 1, height: 6, color: AppColors.black08,),
         const SizedBox(width: 8,),
       ],
-      Expanded(child: Text(entry.feed.title, maxLines: 1,
+      Expanded(child: Text(entry.feed.title, maxLines: 2,
         overflow: TextOverflow.ellipsis, style: AppTextStyles.caption11500,
       )),
     ],);

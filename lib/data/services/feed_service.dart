@@ -47,7 +47,7 @@ class FeedService extends ServiceBase implements MetaRow{
   @override
   Future<List<Entry>> entries(Meta meta, {int? page, int? size}) async {
     final feed = meta as Feed;
-    final statuses = feed.onlyShowUnread ? [EntryState.unread.name] : [EntryState.unread.name, EntryState.read.name];
+    final statuses = feed.onlyShowUnread ? [EntryStatus.unread.name] : [EntryStatus.unread.name, EntryStatus.read.name];
     final entries = await _entryDao.entries(feedIds: [feed.id], statuses: statuses,
       order: feed.order,
       page: page, size: size,

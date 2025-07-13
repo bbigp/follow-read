@@ -34,6 +34,24 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     });
   }
 
+  Future<Entry> getEntry(BigInt id) async {
+    var query = select(entriesTable);
+    query = query..where((t) => t.id.equals(id));
+    final rows = await query.getSingle();
+    return rows.toEntry();
+  }
+
+  Future<bool> updateStatus(List<BigInt> entryIds, EntryStatus state) async {
+    if (entryIds.isEmpty) return true;
+    var query = update(entriesTable)
+      ..where((r) => r.id.isIn(entryIds));
+
+    final affectedRows = await query.write(EntriesTableCompanion(
+      status: Value(state.name),
+    ));
+    return affectedRows > 0;
+  }
+
   Future<List<Entry>> entries({
     List<BigInt>? feedIds, List<String>? statuses,
     int? publishedTime, int? addTime,

@@ -7,18 +7,18 @@ import 'package:follow_read/data/repositories/app_database.dart';
 import 'feed.dart';
 import 'folder.dart';
 
-enum EntryState {
+enum EntryStatus {
   unread, read, removed;
 
-  static EntryState fromString(String value) {
+  static EntryStatus fromString(String value) {
     switch (value) {
       case 'removed':
-        return EntryState.removed;
+        return EntryStatus.removed;
       case 'read':
-        return EntryState.read;
+        return EntryStatus.read;
       case 'unread':
       default:
-        return EntryState.unread;
+        return EntryStatus.unread;
     }
   }
 }
@@ -27,7 +27,7 @@ class Entry {
   final BigInt id;
   final BigInt userId;
   final BigInt feedId;
-  final EntryState status;
+  final EntryStatus status;
   final String hash;
   final String title;
   final String url;
@@ -44,13 +44,15 @@ class Entry {
 
   static Entry empty = Entry();
 
+  bool get isUnread => status == EntryStatus.unread;
+
   Entry({
     BigInt? id,
     this.title = "",
     this.hash = "",
     BigInt? userId,
     BigInt? feedId,
-    EntryState? status,
+    EntryStatus? status,
     String? url,
     DateTime? publishedAt,
     String? content,
@@ -65,7 +67,7 @@ class Entry {
   })  : id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero,
         feedId = feedId ?? BigInt.zero,
-        status = status ?? EntryState.unread,
+        status = status ?? EntryStatus.unread,
         url = url ?? "",
         publishedAt = publishedAt ?? DateTime.now(),
         content = content ?? "<div></div>",
@@ -92,10 +94,6 @@ class Entry {
     // } catch (e) {
       return "";
     // }
-  }
-
-  bool get isUnread {
-    return status == EntryState.unread;
   }
 
   List<String> get allImageUrls {
@@ -128,7 +126,7 @@ class Entry {
     BigInt? id,
     BigInt? userId,
     BigInt? feedId,
-    EntryState? status,
+    EntryStatus? status,
     String? hash,
     String? title,
     String? description,
@@ -170,7 +168,7 @@ extension EntryRowExtension on EntryRow {
     return Entry(
       id: id, userId: userId, feedId: feedId,
       title: title, hash: hash, content: content, summary: summary,
-      status: EntryState.fromString(status),
+      status: EntryStatus.fromString(status),
       url: url, author: author, readingTime: readingTime,
       starred: starred,
       publishedAt: publishedAt, createdAt: createdAt, changedAt: changedAt,
@@ -186,7 +184,7 @@ extension EntryResponseExtension on EntryResponse {
       author: author, starred: starred, readingTime: readingTime,
       summary: "", createdAt: createdAt, changedAt: changedAt,
       feed: feed?.toFeed(), folder: feed?.category?.toFolder(),
-      status: EntryState.fromString(status)
+      status: EntryStatus.fromString(status)
     );
   }
 }

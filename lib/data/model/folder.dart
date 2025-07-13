@@ -11,6 +11,7 @@ import 'meta.dart';
 class Folder implements Meta {
   final BigInt id;
   final BigInt userId;
+  @override
   final String title;
   final bool hideGlobally;
   final String order;
@@ -18,6 +19,9 @@ class Folder implements Meta {
 
   final bool expanded;
   final List<Feed> feeds;
+
+  @override
+  String get metaId => "o$id";
 
   Folder({
     BigInt? id, BigInt? userId,
@@ -56,8 +60,8 @@ class Folder implements Meta {
   }
 
   List<String> get statuses => onlyShowUnread
-      ? [EntryState.unread.name]
-      : [EntryState.unread.name, EntryState.read.name];
+      ? [EntryStatus.unread.name]
+      : [EntryStatus.unread.name, EntryStatus.read.name];
 
   static Folder empty = Folder();
 }

@@ -58,6 +58,17 @@ class MinifluxApi {
     return result.map((resp) => resp.toFeed());
   }
 
+
+  static Future<ApiResult<EmptyObject>> setEntryStatus(List<BigInt> entryIds, EntryStatus status) async {
+    return await HttpClient.put("entries", (v) => EmptyObject(), data: {
+      'entry_ids': entryIds,
+      'status': status.name
+    });
+  }
+
+
+
+
 }
 
 

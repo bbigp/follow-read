@@ -127,7 +127,8 @@ class HttpClient {
     String? baseUrl, String? token,
   }) async {
     final response = await _configureDio(baseUrl, token).put(path, queryParameters: query, data: data);
-    final json = response.data;
+    // final json = response == null ?? {} : response.data;
+    final json = response.data ?? <String, dynamic>{};
     if (response.isSuccess) {
       return ApiResult.success(fromJson(json));
     }

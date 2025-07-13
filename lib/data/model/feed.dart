@@ -22,6 +22,7 @@ class Feed implements Meta {
   final BigInt userId;
   final String feedUrl;
   final String siteUrl;
+  @override
   final String title;
   final int errorCount;
   final String errorMsg;
@@ -31,6 +32,9 @@ class Feed implements Meta {
   final bool onlyShowUnread;
   final String order;
   final String iconUrl;
+
+  @override
+  String get metaId => "e$id";
 
   // final int unread;
   // final int read;
@@ -57,8 +61,8 @@ class Feed implements Meta {
         folderId = folderId ?? BigInt.zero;
 
   List<String> get statuses => onlyShowUnread
-      ? [EntryState.unread.name]
-      : [EntryState.unread.name, EntryState.read.name];
+      ? [EntryStatus.unread.name]
+      : [EntryStatus.unread.name, EntryStatus.read.name];
 
   Feed copyWith({
     BigInt? id,

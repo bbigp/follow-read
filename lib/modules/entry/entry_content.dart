@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/data/model/entry.dart';
 import 'package:html/dom.dart' as dom;
 
 import 'entry_image.dart';
+
 
 
 class EntryContent extends ConsumerWidget {

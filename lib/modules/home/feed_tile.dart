@@ -25,7 +25,7 @@ class FeedTile extends StatelessWidget {
     return Column(
       children: [
         MainTile(
-          id: "e${feed.id}",
+          id: feed.metaId,
           leadingIndicator: SizedBox(
             width: 24,
             height: 24,
@@ -39,7 +39,7 @@ class FeedTile extends StatelessWidget {
           icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
           contextMenus: feed.contextMenus(context),
           title: feed.title,
-          onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": "e${feed.id}"}),
+          onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": feed.metaId}),
         ),
         Padding(
           padding: EdgeInsets.only(left: 12 + 24 + 4, right: 16),

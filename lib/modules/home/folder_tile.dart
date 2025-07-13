@@ -25,7 +25,7 @@ class FolderTile extends StatelessWidget  {
   Widget build(BuildContext context) {
     return Column(children: [
       MainTile(
-        id: 'o${folder.id}',
+        id: folder.metaId,
         icon: SizedBox(width: 24, height: 24, child: SvgPicture.asset(SvgIcons.group, width: 24, height: 14, fit: BoxFit.contain,),),
         title: folder.title,
         leadingIndicator: SizedBox(
@@ -41,7 +41,7 @@ class FolderTile extends StatelessWidget  {
             ),
           ),
         leadingIndicatorTap: () => controller.expanded(folder.id),
-        onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": "o${folder.id}"}),
+        onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": folder.metaId}),
       ),
       Padding(
         padding: EdgeInsets.only(left: 12 + 24 + 4, right: 16),
@@ -62,7 +62,7 @@ class FolderTile extends StatelessWidget  {
                   icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
                   contextMenus: feed.contextMenus(context),
                   leadingIndicator: SizedBox(width: 24,),
-                  onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": "e${feed.id}"}),
+                  onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": feed.metaId}),
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 12 + 24 + 4, right: 16),

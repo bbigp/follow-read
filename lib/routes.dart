@@ -1,21 +1,16 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/core/prefs_keys.dart';
-import 'package:follow_read/features/domain/models/constants.dart';
 import 'package:follow_read/modules/add_filter/add_filter_binding.dart';
 import 'package:follow_read/modules/add_filter/add_filter_view.dart';
-import 'package:follow_read/modules/pages/entry_detail_page.dart';
+import 'package:follow_read/modules/entry/entry_page.dart';
 import 'package:follow_read/modules/profile/profile_binding.dart';
-import 'package:follow_read/deleted/artiad_form.dart';
-import 'package:follow_read/modules/widgets/me/login_1.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:go_router/go_router.dart';
 
 import 'core/utils/logger.dart';
-import 'features/presentation/providers/auth_provider.dart';
 import 'modules/entries/entries_binding.dart';
 import 'modules/entries/entries_page.dart';
+import 'modules/entry/entry_binding.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/home/home_screen.dart';
 import 'modules/login/login_controller.dart';
@@ -32,7 +27,7 @@ class RouteConfig {
   static const settings = '/settings';
   static const login = '/login';
   static const entries = '/entries';
-  static const entryDetail = '/entryDetail';
+  static const entry = '/entry';
   static const imageGallery = '/imageGallery';
   static const search = '/search';
   static const filter = '/filter';
@@ -45,7 +40,7 @@ class RouteConfig {
     // GetPage(name: home, page: () => HomeScreen()),
     GetPage(name: profile, page: () => ProfilePage(), binding: ProfileBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: entries, page: () => EntriesPage(), binding: EntriesBinding(), middlewares: [AuthMiddleware()]),
-    // GetPage(name: entryDetail, page: () => EntryDetailPage()),
+    GetPage(name: entry, page: () => EntryPage(), binding: EntryBinding(), middlewares: [AuthMiddleware()]),
     // GetPage(name: imageGallery, page: () => ImageGalleryPage(imageUrls: imageUrls)),
     GetPage(name: filter, page: () => AddFilterForm(), binding: AddFilterBinding(), middlewares: [AuthMiddleware()]),
   ];

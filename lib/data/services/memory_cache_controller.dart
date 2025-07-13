@@ -105,7 +105,7 @@ class MemoryCacheController extends GetxService {
     Map<String, int> folderUnreadMap = {};
     for (var feed in feeds) {
       final key = "o${feed.folderId}";
-      folderUnreadMap[key] = (folderUnreadMap[key] ?? 0) + unread('e${feed.id}');
+      folderUnreadMap[key] = (folderUnreadMap[key] ?? 0) + unread(feed.metaId);
     }
     for (var item in folderUnreadMap.entries) {
       final key = item.key;

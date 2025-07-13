@@ -11,7 +11,8 @@ import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry_tile/entry_tile.dart';
-import 'package:follow_read/modules/widgets/entry/feed_summary.dart';
+import 'package:follow_read/modules/entries/entries_summary.dart';
+import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -66,7 +67,7 @@ class _EntriesPageState extends State<EntriesPage> {
           Navigator.of(context).pop();
         },),
         actions: [
-          InkWell(onTap: (){
+          InkWell(onTap: () => {
             // ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
             //   'id': widget.metaDatax.id.toString(), 'type': widget.metaDatax.type,
             // });
@@ -96,11 +97,11 @@ class _EntriesPageState extends State<EntriesPage> {
         child: CustomScrollView(
             controller: _scrollController,
             slivers: [
-              // SliverToBoxAdapter(child: FeedSummary(meta: controller.state.meta),), //滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
+              SliverToBoxAdapter(child: EntriesSummary(meta: controller.state.meta),), //滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
               Obx(() {
                 return SliverList(delegate: SliverChildBuilderDelegate(childCount: controller.state.entriesLen, (context, index) {
                   return GetBuilder<EntriesController>(builder: (controller) {
-                    return EntryTile(entry: controller.state.entries[index]);
+                    return EntryTile(entry: controller.state.entries[index].value);
                     }, id: "entry_tile:$index",);
                 }));
               }),
@@ -130,7 +131,7 @@ class _EntriesPageState extends State<EntriesPage> {
             ? const SizedBox.shrink()
             : const SpacerDivider(indent: 16, spacing: 1, thickness: 0.5, color: Colors.white,),
         itemBuilder: (context, index) => index == 0
-            ? FeedSummarySkeleton()
+            ? EntriesSummarySkeleton()
             : EntryTileSkeleton(),
       ),
     );

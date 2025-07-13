@@ -1,7 +1,5 @@
 
 import 'package:drift/drift.dart';
-import 'package:follow_read/features/data/datasources/database.dart';
-import 'package:follow_read/features/domain/models/feed.dart';
 
 
 @DataClassName("FeedEntity")

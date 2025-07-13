@@ -24,6 +24,12 @@ class Filter implements Meta {
 
   final List<Feed> feeds;
 
+  @override
+  String get title => name;
+
+  @override
+  String get metaId => "i$id";
+
   Filter({
     BigInt? id,
     BigInt? userId,

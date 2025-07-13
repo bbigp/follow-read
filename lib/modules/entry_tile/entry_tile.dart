@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
+import 'package:follow_read/routes.dart';
+import 'package:get/get.dart';
 
 import 'entry_tile_body_single_image.dart';
 import 'entry_tile_body_text_only.dart';
@@ -9,20 +11,20 @@ import 'entry_tile_header.dart';
 
 
 ///
-class EntryTile extends ConsumerWidget {
+class EntryTile extends StatelessWidget {
   final Entry entry;
 
   const EntryTile({super.key, required this.entry,});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Column(children: [
-      _buildContent(ref),
+      _buildContent(),
       const SpacerDivider(indent: 16, spacing: 1, thickness: 0.5,),
     ],);
   }
 
-  Widget _buildContent(WidgetRef ref) {
+  Widget _buildContent() {
     Widget child = Container(
         padding: EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -32,11 +34,10 @@ class EntryTile extends ConsumerWidget {
               : EntryTileBodySingleImage(entry: entry),
         ],)
     );
-    return InkWell(onTap: (){
-      // ref.read(routerProvider).pushNamed(RouteNames.entryDetail, pathParameters: {
-      //   'entryId': entry.id.toString(),
-      // });
-    }, child: child,);
+    return InkWell(
+        onTap: () => Get.toNamed(RouteConfig.entry, parameters: {"id": entry.id.toString()}),
+        child: entry.isUnread ? child : Opacity(opacity: 0.5, child: child,),
+    );
   }
 }
 
@@ -86,13 +87,3 @@ class EntryTileSkeleton extends StatelessWidget {
     );
   }
 }
-
-
-
-//已读加一个透明度百分之50的遮罩
-// return entry.isUnread
-//     ? EntryItem(entry: entry, tile: tile)
-//     : Opacity(opacity: 0.5,
-//         child: EntryItem(entry: entry, tile: tile),
-//       );
-

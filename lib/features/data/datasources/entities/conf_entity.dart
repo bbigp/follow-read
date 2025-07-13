@@ -1,11 +1,8 @@
 
 
 import 'package:drift/drift.dart';
-import 'package:follow_read/features/domain/models/conf.dart';
 
-import '../database.dart';
 
-@DataClassName("ConfEntity")
 class ConfTable extends Table {
 
   IntColumn get id => integer().autoIncrement()();

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
-import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/data/model/entry.dart';
 
 import 'entry_author.dart';
 
@@ -19,7 +19,7 @@ class EntryTitle extends StatelessWidget {
       const SizedBox(height: 8,),
       EntryAuthor(entry: entry),
       const SizedBox(height: 8,),
-      Text(entry.publishedAt.toShowTime(), maxLines: 1,
+      Text(entry.publishedAt.toString(), maxLines: 1,
         overflow: TextOverflow.ellipsis, style: AppTextStyles.caption11500,
       ),
       const SizedBox(height: 8,),

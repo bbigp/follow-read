@@ -39,30 +39,9 @@ class ApiClient {
     );
   }
 
-  static Future<Either<Failure, AddFeedResponse>> saveFeed(String url, int categoryId) async {
-    return await httpUtil.safeRequest(
-        path: 'feeds',
-        body: {
-          'feed_url': url,
-          'category_id': categoryId,
-        },
-        method: HttpMethod.post,
-        fromJson: (json) => AddFeedResponseMapper.fromJson(json),
-    );
-  }
 
-  static Future<Either<Failure, FeedResponse>> updateFeed(int feedId,
-      String title, int categoryId) async {
-    return await httpUtil.safeRequest(
-      path: 'feeds/$feedId',
-      body: {
-        'title': title,
-        'category_id': categoryId,
-      },
-      method: HttpMethod.put,
-      fromJson: (json) => FeedResponseMapper.fromJson(json),
-    );
-  }
+
+
 
   static Future<Either<Failure, Success>> removeFeed(int feedId) async {
     return await httpUtil.safeRequest(
@@ -72,40 +51,7 @@ class ApiClient {
     );
   }
 
-  static Future<Either<Failure, EntryPageResponse>> getEntriesByFeedId(int feedId, {
-    int page = 1, int size = 10, List<String> status = const ["unread"],
-    String order = "published_at", String direction = "desc",
-  }) async {
-    return await httpUtil.safeRequest(
-        path: 'feeds/$feedId/entries' ,
-        method: HttpMethod.get,
-        queryParams: {
-          'limit': size, 'offset': (page -1) * size,
-          'status': status,
-          'order': order,//"id", "status", "changed_at", "published_at", "created_at", "category_title", "category_id", "title", "author"
-          'direction': direction, //desc asc
-          // 'category_id': null,
-          // 'feed_id': feedId,
-          // 'tags': null,
-          'globally_visible': false,
-        },
-        fromJson: (json) => EntryPageResponseMapper.fromJson(json)
-    );
-  }
 
-
-  static Future<Either<Failure, EntryPageResponse>> getEntries({
-    int page = 1, int size = 10, List<String> status = const ["unread", "read", "removed"],
-    String order = "changed_at", String direction = "asc",
-  }) async {
-    return await httpUtil.safeRequest(path: 'entries', method: HttpMethod.get,
-        queryParams: {
-          'limit': size, 'offset': (page -1) * size, 'status': status, 'order': order,
-          'direction': direction, 'globally_visible': false,
-        },
-        fromJson: (json) => EntryPageResponseMapper.fromJson(json)
-    );
-  }
 
   static Future<Either<Failure, EntryResponse>> getEntry(int entryId) async {
     return await httpUtil.safeRequest(path: 'entries/$entryId',

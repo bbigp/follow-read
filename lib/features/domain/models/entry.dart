@@ -1,4 +1,3 @@
-import 'package:follow_read/features/domain/models/feed.dart';
 import 'package:html/parser.dart' as html;
 
 class Entry  {
@@ -14,7 +13,6 @@ class Entry  {
   final String author;
   final bool starred;
   final int readingTime;
-  final Feed feed;
   final String summary;
   final DateTime createdAt;
 
@@ -33,7 +31,6 @@ class Entry  {
     String? author,
     bool? starred,
     int? readingTime,
-    Feed? feed,
     String? summary,
     DateTime? createdAt,
   })  : userId = userId ?? 0,
@@ -45,7 +42,6 @@ class Entry  {
         author = author ?? "",
         starred = starred ?? false,
         readingTime = readingTime ?? 0,
-        feed = feed ?? Feed.empty,
         summary = summary ?? "",
         createdAt = createdAt ?? DateTime.now();
 
@@ -118,7 +114,6 @@ class Entry  {
     bool? starred,
     int? readingTime,
     String? pic,
-    Feed? feed,
     String? summary,
     DateTime? createdAt,
   }) {
@@ -135,7 +130,6 @@ class Entry  {
       author: author ?? this.author,
       starred: starred ?? this.starred,
       readingTime: readingTime ?? this.readingTime,
-      feed: feed ?? this.feed,
       summary: summary ?? this.summary,
       createdAt: createdAt ?? this.createdAt,
     );
