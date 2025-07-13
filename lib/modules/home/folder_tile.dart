@@ -8,6 +8,8 @@ import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
+import 'package:follow_read/routes.dart';
+import 'package:get/get.dart';
 
 import 'main_tile.dart';
 
@@ -39,7 +41,7 @@ class FolderTile extends StatelessWidget  {
             ),
           ),
         leadingIndicatorTap: () => controller.expanded(folder.id),
-        onTap: null,
+        onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": "o${folder.id}"}),
       ),
       Padding(
         padding: EdgeInsets.only(left: 12 + 24 + 4, right: 16),
@@ -60,6 +62,7 @@ class FolderTile extends StatelessWidget  {
                   icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
                   contextMenus: feed.contextMenus(context),
                   leadingIndicator: SizedBox(width: 24,),
+                  onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": "e${feed.id}"}),
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 12 + 24 + 4, right: 16),

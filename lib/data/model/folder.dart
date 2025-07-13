@@ -5,7 +5,10 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/providers/miniflux/category_response.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
 
-class Folder {
+import 'entry.dart';
+import 'meta.dart';
+
+class Folder implements Meta {
   final BigInt id;
   final BigInt userId;
   final String title;
@@ -51,6 +54,10 @@ class Folder {
       expanded: expanded ?? this.expanded,
     );
   }
+
+  List<String> get statuses => onlyShowUnread
+      ? [EntryState.unread.name]
+      : [EntryState.unread.name, EntryState.read.name];
 
   static Folder empty = Folder();
 }

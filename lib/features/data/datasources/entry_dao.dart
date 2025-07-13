@@ -54,46 +54,7 @@
 //     return await query.get();
 //   }
 //
-//   Future<List<EntryEntity>> paginateEntries({
-//     List<int> feedIds = const[],
-//     int page = 1,
-//     int size = 20, List<String> status = const ['unread'],
-//     String? order, String direction = "desc",
-//     bool? starred, DateTime? minPublishedTime, String? word,
-//     DateTime? minAddTime,
-//   }) async {
-//     var query = select(entriesTable)..where((t) => entriesTable.status.isIn(status));
-//     if (feedIds.isNotEmpty){
-//       query = query..where((t) => t.feedId.isIn(feedIds.map((i) => BigInt.from(i)).toList()));
-//     }
-//     if (starred != null) {
-//       query = query..where((t) => t.starred.equals(starred));
-//     }
-//     if (minPublishedTime != null) {
-//       query = query..where((t) => t.publishedAt.isBiggerOrEqualValue(minPublishedTime));
-//     }
-//     if (minAddTime != null) {
-//       query = query..where((t) => t.createdAt.isBiggerOrEqualValue(minAddTime));
-//     }
-//     if (word != null && word != "") {
-//       final keyword = '%$word%';
-//       query = query..where((t) => t.title.like(keyword) | t.content.like(keyword) | t.summary.like(keyword));
-//     }
-//
-//     final orderByColumn = switch(order) {
-//       Model.orderxCreatedAt => entriesTable.createdAt,
-//       _ => entriesTable.publishedAt,
-//     };
-//
-//     final ordering = direction.toLowerCase() == 'asc'
-//         ? OrderingMode.asc
-//         : OrderingMode.desc;
-//
-//     query..orderBy([(t) => OrderingTerm(expression: orderByColumn, mode: ordering)])
-//     ..limit(size, offset: (page - 1) * size);
-//
-//     return await query.get();
-//   }
+
 //
 //   Future<List<EntryEntity>> getAllEntries() async {
 //     return await select(entriesTable).get();

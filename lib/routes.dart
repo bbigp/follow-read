@@ -14,18 +14,16 @@ import 'package:go_router/go_router.dart';
 
 import 'core/utils/logger.dart';
 import 'features/presentation/providers/auth_provider.dart';
+import 'modules/entries/entries_binding.dart';
+import 'modules/entries/entries_page.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/home/home_screen.dart';
 import 'modules/login/login_controller.dart';
 import 'modules/login/login_view.dart';
-import 'modules/pages/entries/entries_page.dart';
-import 'modules/pages/entries/meta_data.dart';
-import 'deleted/home_screen.dart';
-import 'modules/pages/image_gallery_page.dart';
-import 'modules/pages/login_screen.dart';
 import 'modules/profile/profile_page.dart';
 
 class RouteConfig {
+  RouteConfig._();
 
   static const String main = "/";
 
@@ -33,7 +31,7 @@ class RouteConfig {
   static const profile = '/profile';
   static const settings = '/settings';
   static const login = '/login';
-  static const entry = '/entry';
+  static const entries = '/entries';
   static const entryDetail = '/entryDetail';
   static const imageGallery = '/imageGallery';
   static const search = '/search';
@@ -46,7 +44,7 @@ class RouteConfig {
     GetPage(name: main, page: () => HomeScreen(), binding: HomeBinding(), middlewares: [AuthMiddleware()]),
     // GetPage(name: home, page: () => HomeScreen()),
     GetPage(name: profile, page: () => ProfilePage(), binding: ProfileBinding(), middlewares: [AuthMiddleware()]),
-    // GetPage(name: entry, page: () => EntriesPage()),
+    GetPage(name: entries, page: () => EntriesPage(), binding: EntriesBinding(), middlewares: [AuthMiddleware()]),
     // GetPage(name: entryDetail, page: () => EntryDetailPage()),
     // GetPage(name: imageGallery, page: () => ImageGalleryPage(imageUrls: imageUrls)),
     GetPage(name: filter, page: () => AddFilterForm(), binding: AddFilterBinding(), middlewares: [AuthMiddleware()]),

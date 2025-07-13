@@ -4,13 +4,7 @@ import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
-import 'package:follow_read/global/widgets/context_menu.dart';
-import 'package:follow_read/global/widgets/modal_wrapper.dart';
-import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
-import 'package:follow_read/modules/add_feed/add_feed_controller.dart';
-import 'package:follow_read/modules/add_feed/add_feed_form.dart';
-import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
@@ -45,7 +39,7 @@ class FeedTile extends StatelessWidget {
           icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
           contextMenus: feed.contextMenus(context),
           title: feed.title,
-          onTap: () => Get.toNamed(RouteConfig.entry),
+          onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": "e${feed.id}"}),
         ),
         Padding(
           padding: EdgeInsets.only(left: 12 + 24 + 4, right: 16),

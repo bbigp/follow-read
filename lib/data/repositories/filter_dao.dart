@@ -29,6 +29,14 @@ class FilterDao extends DatabaseAccessor<AppDatabase> {
     ));
   }
 
+  Future<Filter> getFilter(BigInt id) async {
+    var query = select(filtersTable);
+    query = query..where((t) => t.deleted.equals(0))
+      ..where((t) => t.id.equals(id));
+    final rows = await query.getSingle();
+    return rows.toFilter();
+  }
+
 
   Future<List<Filter>> getAllFilters() async {
     var query = select(filtersTable);

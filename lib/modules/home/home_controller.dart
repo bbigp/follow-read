@@ -23,7 +23,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     everAll(
-        [_cache.changeFeed, _cache.stateRootFolderId],
+        [_cache.changeFeed, _cache.changeFolder, _cache.stateRootFolderId],
         (_) => initFeedAndFolder(_cache.rootFolderId)
     );
     ever(_cache.changeFilter, (_) => initFilter());
@@ -37,18 +37,7 @@ class HomeController extends GetxController {
   }
 
   void initFeedAndFolder(BigInt rootFolderId) {
-    final allFeeds = _cache.feeds;
     final allFolders = _cache.folders;
-
-    final folderFeedsMap = allFeeds.fold<Map<BigInt, List<Feed>>>(
-      {},
-          (map, feed) {
-        final cid = feed.folderId;
-        map.putIfAbsent(cid, () => []);
-        map[cid]!.add(feed);
-        return map;
-      },
-    );
 
     final oldExpandedMap = Map<BigInt, bool>.fromEntries(
         state.folders.map((f) => MapEntry(f.id, f.expanded))
@@ -57,15 +46,12 @@ class HomeController extends GetxController {
         .where((item) => item.id != rootFolderId)
         .map((item) {
           final expanded = oldExpandedMap[item.id] ?? false;
-          return item.copyWith(
-            feeds: folderFeedsMap[item.id] ?? [],
-            expanded: expanded,
-          );
+          return item.copyWith(expanded: expanded,);
         })
         .toList();
     state.stateFolderLen.value = state.folders.length;
 
-    state.feeds = folderFeedsMap[rootFolderId] ?? [];
+    state.feeds = allFolders.firstWhere((e) => e.id == rootFolderId).feeds;
     state.stateFeedLen.value = state.feeds.length;
     logger.i('${state.feedLen}');
   }

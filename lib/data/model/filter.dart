@@ -1,8 +1,11 @@
 
 
+import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
 
-class Filter {
+import 'meta.dart';
+
+class Filter implements Meta {
 
   final BigInt id;
   final String name;
@@ -19,6 +22,8 @@ class Filter {
   final String order;
   final bool onlyShowUnread;
 
+  final List<Feed> feeds;
+
   Filter({
     BigInt? id,
     BigInt? userId,
@@ -33,6 +38,7 @@ class Filter {
     this.hideGlobally = false,
     this.order = "publishedTime",
     this.onlyShowUnread = false,
+    this.feeds = const [],
   }) : id = id ?? BigInt.zero,
       userId = userId ?? BigInt.zero,
       createdAt = createdAt ?? DateTime.now(),
@@ -56,6 +62,7 @@ class Filter {
     bool? showReadingTime,
     bool? onlyShowUnread,
     int? starred,
+    List<Feed>? feeds,
   }) {
     return Filter(
       id: id ?? this.id,
@@ -72,6 +79,7 @@ class Filter {
       hideGlobally: hideGlobally ?? this.hideGlobally,
       order: order ?? this.order,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
+      feeds: feeds ?? this.feeds,
     );
   }
 

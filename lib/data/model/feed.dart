@@ -13,7 +13,10 @@ import 'package:follow_read/modules/add_feed/add_feed_form.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 import 'package:get/get.dart';
 
-class Feed {
+import 'entry.dart';
+import 'meta.dart';
+
+class Feed implements Meta {
 
   final BigInt id;
   final BigInt userId;
@@ -52,6 +55,10 @@ class Feed {
   }) :  id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero,
         folderId = folderId ?? BigInt.zero;
+
+  List<String> get statuses => onlyShowUnread
+      ? [EntryState.unread.name]
+      : [EntryState.unread.name, EntryState.read.name];
 
   Feed copyWith({
     BigInt? id,

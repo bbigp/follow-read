@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../features/domain/models/user.dart';
 import 'failure.dart';
 import 'follow_request.dart';
 
@@ -37,13 +36,13 @@ class HttpUtil {
 
 
   Future<(String, String)> _getAuthInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final json = prefs.getString('cachedUser');
-    if (json == null) {
+    // final prefs = await SharedPreferences.getInstance();
+    // final json = prefs.getString('cachedUser');
+    // if (json == null) {
       return ("", "");
-    }
-    final user = UserMapper.fromJson(jsonDecode(json));
-    return (user.baseUrl, user.token);
+    // }
+    // final user = UserMapper.fromJson(jsonDecode(json));
+    // return (user.baseUrl, user.token);
   }
 
   Future<Either<Failure, T>> safeRequest<T>({

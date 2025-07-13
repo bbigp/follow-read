@@ -32,8 +32,7 @@ class FilterTile extends StatelessWidget {
         ),
       ],
       child: InkWell(
-        onTap: () {
-        },
+        onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": "i${filter.id}"}),
         child: Row(children: [
           const SizedBox(width: 16, height: 44,),
           SizedBox(width: 24, height: 24, child: FilterIcon(icon: filter.icon, size: 24,),),

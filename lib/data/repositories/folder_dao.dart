@@ -21,6 +21,12 @@ class FolderDao extends DatabaseAccessor<AppDatabase> {
     return rows.map((e) => e.toFolder()).toList();
   }
 
+  Future<Folder> getFolder(BigInt id) async {
+    var query = select(foldersTable);
+    query = query..where((t) => t.id.equals(id));
+    final rows = await query.getSingle();
+    return rows.toFolder();
+  }
 
 
   Future<void> batchSave(List<Folder> folders) async {

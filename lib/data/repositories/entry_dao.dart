@@ -34,6 +34,37 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     });
   }
 
+  Future<List<Entry>> entries({
+    List<BigInt>? feedIds, List<String>? statuses,
+    int? publishedTime, int? addTime,
+    int? page, int? size,
+    String? order, String direction = "desc",
+  }) async {
+    page = page ?? 1;
+    size = size ?? 20;
+    final whereClause = buildQuery(feedIds: feedIds, statuses: statuses, publishedTime: publishedTime,
+      addTime: addTime,
+    ).join(" and ");
+    final orderByColumn = switch(order) {
+      "createdAt" => "created_at",
+      _ => "published_at",
+    };
+    final ordering = direction.toLowerCase() == 'asc'
+        ? OrderingMode.asc.name
+        : OrderingMode.desc.name;
+
+
+    final query = '''
+      select * from entries where $whereClause
+      order by $orderByColumn $ordering
+      limit $size offset ${(page-1)*size}
+    ''';
+    final result = await db.customSelect(query, readsFrom: {entriesTable}).get();
+    return result.map((r) => entriesTable.map(r.data).toEntry()).toList();
+    // final keyword = '%$word%';
+   // query = query..where((t) => t.title.like(keyword) | t.content.like(keyword) | t.summary.like(keyword));
+
+  }
 
   Future<Map<BigInt, int>> countFeed() async {
     final query = '''
@@ -54,7 +85,17 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
   }
 
   Future<Map<BigInt, int>> countFilter(List<Filter> filters) async {
-    final parts = filters.map(buildQuery).join(", ");
+    // final parts = filters.map(buildQuery).join(", ");
+    final parts = filters
+        .map((e) =>
+              "count(*) filter (where ${buildQuery(
+                feedIds: e.feedIds,
+                statuses: e.statuses,
+                publishedTime: e.publishedTime,
+                addTime: e.addTime,
+              ).join(" and ")}) as '${e.id}' "
+            )
+        .join(", ");
     final query = "SELECT $parts FROM entries";
     logger.i(query);
     final result = await db.customSelect(
@@ -67,23 +108,26 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     );
   }
 
-  String buildQuery(Filter filter) {
+  List<String> buildQuery({
+    List<BigInt>? feedIds, int? publishedTime, int? addTime,
+    List<String>? statuses,
+  }) {
     List<String> cond = [];
     var now = DateTime.now();
-    if (filter.feedIds.isNotEmpty) {
-      final ids = filter.feedIds.map((id) => id.toString()).join(", ");
+    if (feedIds != null && feedIds.isNotEmpty) {
+      final ids = feedIds.map((id) => id.toString()).join(", ");
       cond.add("feed_id in ($ids)");
     }
-    if (filter.publishedTime > 0) {
-      var time = now.add(Duration(minutes: -filter.publishedTime)).millisecondsSinceEpoch ~/ 1000;
+    if (publishedTime != null && publishedTime > 0) {
+      var time = now.add(Duration(minutes: -publishedTime)).millisecondsSinceEpoch ~/ 1000;
       cond.add("published_at >= $time");
     }
-    if (filter.addTime > 0) {
-      var time = now.add(Duration(minutes: -filter.addTime)).millisecondsSinceEpoch ~/ 1000;
+    if (addTime != null && addTime > 0) {
+      var time = now.add(Duration(minutes: -addTime)).millisecondsSinceEpoch ~/ 1000;
       cond.add("created_at >= $time");
     }
-    if (filter.statuses.isNotEmpty) {
-      var status = filter.statuses.map((status) => "'$status'").toSet().join(",");
+    if (statuses != null && statuses.isNotEmpty) {
+      var status = statuses.map((status) => "'$status'").toSet().join(",");
       cond.add("status in ($status)");
     }
     // bool? starred = switch(filter.starred) {
@@ -94,8 +138,6 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     if (cond.isEmpty) {
       cond.add("true");
     }
-    var query = "count(*) filter (where ${cond.join(" and ")}) as '${filter.id}' ";
-    return query;
+    return cond;
   }
-
 }

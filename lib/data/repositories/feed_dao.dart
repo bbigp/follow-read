@@ -20,6 +20,30 @@ class FeedDao extends DatabaseAccessor<AppDatabase> {
     return rows.map((e) => e.toFeed()).toList();
   }
 
+  Future<Feed> getFeed(BigInt id) async {
+    var query = select(feedsTable);
+    query = query..where((t) => t.deleted.equals(0))
+      ..where((t) => t.id.equals(id));
+    final rows = await query.getSingle();
+    return rows.toFeed();
+  }
+
+  Future<List<Feed>> getFeedsByFolderId(BigInt folderId) async {
+    var query = select(feedsTable);
+    query = query..where((t) => t.deleted.equals(0))
+      ..where((t) => t.folderId.equals(folderId));
+    final rows = await query.get();
+    return rows.map((e) => e.toFeed()).toList();
+  }
+
+
+  Future<List<Feed>> getFeedByIds(List<BigInt> ids) async {
+    var query = select(feedsTable);
+    query = query..where((t) => t.deleted.equals(0))
+      ..where((t) => t.id.isIn(ids));
+    final rows = await query.get();
+    return rows.map((e) => e.toFeed()).toList();
+  }
 
   Future<void> batchSave(List<Feed> feeds) async {
     if (feeds.isEmpty) return;

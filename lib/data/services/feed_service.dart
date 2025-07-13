@@ -1,19 +1,24 @@
 
 
+import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/feed.dart';
+import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/data/providers/miniflux/api.dart';
+import 'package:follow_read/data/repositories/entry_dao.dart';
 import 'package:follow_read/data/repositories/feed_dao.dart';
 
 import 'service_base.dart';
 
-class FeedService extends ServiceBase {
+class FeedService extends ServiceBase implements MetaRow{
 
   late final FeedDao _feeDao;
+  late final EntryDao _entryDao;
 
   @override
   void onInit() {
     super.onInit();
     _feeDao = FeedDao(db);
+    _entryDao = EntryDao(db);
   }
 
   Future<List<Feed>> getAllFeeds() async {
@@ -38,5 +43,17 @@ class FeedService extends ServiceBase {
     }
     return result.success;
   }
+
+  @override
+  Future<List<Entry>> entries(Meta meta, {int? page, int? size}) async {
+    final feed = meta as Feed;
+    final statuses = feed.onlyShowUnread ? [EntryState.unread.name] : [EntryState.unread.name, EntryState.read.name];
+    final entries = await _entryDao.entries(feedIds: [feed.id], statuses: statuses,
+      order: feed.order,
+      page: page, size: size,
+    );
+    return entries.map((e) => e.copyWith(feed: feed)).toList();
+  }
+
 
 }

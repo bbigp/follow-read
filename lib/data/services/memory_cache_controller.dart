@@ -30,6 +30,7 @@ class MemoryCacheController extends GetxService {
 
   final changeFeed = 0.obs;
   final changeFilter = 0.obs;
+  final changeFolder = 0.obs;
 
   final _feedLen = 0.obs;
   int get feedLen => _feedLen.value;
@@ -45,9 +46,11 @@ class MemoryCacheController extends GetxService {
   final stateRootFolderId = BigInt.zero.obs;
   BigInt get rootFolderId => stateRootFolderId.value;
 
-
   bool _listening = false;
-  void listen() {
+  Future<void> loadUser() async {
+    final user = _userService.getUser();
+    stateRootFolderId.value = user.rootFolderId;
+    _unreadMark.value = user.unreadMark;
     if (_listening) return;
     _listening = true;
     _box.listenKey(PrefsKeys.unreadMark, (v) {
@@ -58,25 +61,12 @@ class MemoryCacheController extends GetxService {
     });
   }
 
-  Future<void> loadUser() async {
-    final user = _userService.getUser();
-    stateRootFolderId.value = user.rootFolderId;
-    _unreadMark.value = user.unreadMark;
-    listen();
-  }
-
   Future<void> loadFeed() async {
     final feeds = await _feedService.getAllFeeds();
-    final folders = await _folderService.getAllFolders();
     _feedMap
       ..clear()
       ..addEntries(feeds.map((f) => MapEntry(f.id, f)));
-    _folderMap
-      ..clear()
-      ..addEntries(folders.map((f) => MapEntry(f.id, f)));
     _feedLen.value = feeds.length;
-    _folderLen.value = folders.length;
-
 
     final feedMap = await _entryService.countFeed();
     for (var entry in feedMap.entries) {
@@ -89,6 +79,29 @@ class MemoryCacheController extends GetxService {
         countMap[key] = value.obs;
       }
     }
+
+    await loadFolder();
+    await loadFilter();
+    changeFeed.value++;
+  }
+
+
+  Future<void> loadFolder() async {
+    final folderFeedsMap = feeds.fold<Map<BigInt, List<Feed>>>(
+      {},
+          (map, feed) {
+        final cid = feed.folderId;
+        map.putIfAbsent(cid, () => []);
+        map[cid]!.add(feed);
+        return map;
+      },
+    );
+    final folders = await _folderService.getAllFolders();
+    _folderMap
+      ..clear()
+      ..addEntries(folders.map((f) => MapEntry(f.id, f.copyWith(feeds: folderFeedsMap[f.id]))));
+    _folderLen.value = folders.length;
+
     Map<String, int> folderUnreadMap = {};
     for (var feed in feeds) {
       final key = "o${feed.folderId}";
@@ -103,15 +116,17 @@ class MemoryCacheController extends GetxService {
         countMap[key] = value.obs;
       }
     }
-
-    changeFeed.value++;
+    changeFolder.value++;
   }
 
   Future<void> loadFilter() async {
     final filters = await _filterService.getAllFilters();
     _filterMap
       ..clear()
-      ..addEntries(filters.map((f) => MapEntry(f.id, f)));
+      ..addEntries(filters.map((f){
+        final filterFeeds = f.feedIds.isEmpty ? feeds : f.feedIds.map((e) => _feedMap[e] ?? Feed()).toList();
+        return MapEntry(f.id, f.copyWith(feeds: filterFeeds));
+      }));
     _filterLen.value = filters.length;
 
     final filterUnreadMap = await _entryService.countFilter(filters);
@@ -124,7 +139,6 @@ class MemoryCacheController extends GetxService {
         countMap[key] = value.obs;
       }
     }
-
     changeFilter.value++;
   }
 
