@@ -41,6 +41,8 @@ class MemoryCacheController extends GetxService {
 
   final _unreadMark = UnreadMark.dot.obs;
   UnreadMark get unreadMark => _unreadMark.value;
+
+  final currentUser = User.empty.obs;
   final countMap = <String, RxInt>{};
 
   final stateRootFolderId = BigInt.zero.obs;
@@ -49,6 +51,7 @@ class MemoryCacheController extends GetxService {
   bool _listening = false;
   Future<void> loadUser() async {
     final user = _userService.getUser();
+    currentUser.value = user;
     stateRootFolderId.value = user.rootFolderId;
     _unreadMark.value = user.unreadMark;
     if (_listening) return;

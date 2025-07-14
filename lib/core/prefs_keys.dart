@@ -6,6 +6,7 @@ class PrefsKeys {
   static const baseUrl = 'base_url';
   static const token = 'token';
 
+  static const userId = "user_id";
   static const username = "username";
   static const autoRead = "auto_read";
   static const unreadMark = "unread_mark";

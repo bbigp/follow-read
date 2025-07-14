@@ -43,7 +43,7 @@ class HomeController extends GetxController {
         state.folders.map((f) => MapEntry(f.id, f.expanded))
     );
     state.folders = allFolders
-        .where((item) => item.id != rootFolderId)
+        .where((item) => item.id != rootFolderId && item.feeds.isNotEmpty)
         .map((item) {
           final expanded = oldExpandedMap[item.id] ?? false;
           return item.copyWith(expanded: expanded,);
@@ -51,7 +51,7 @@ class HomeController extends GetxController {
         .toList();
     state.stateFolderLen.value = state.folders.length;
 
-    state.feeds = allFolders.firstWhere((e) => e.id == rootFolderId).feeds;
+    state.feeds = rootFolderId == BigInt.zero ? [] : allFolders.firstWhere((e) => e.id == rootFolderId).feeds;
     state.stateFeedLen.value = state.feeds.length;
     logger.i('${state.feedLen}');
   }

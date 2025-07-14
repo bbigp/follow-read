@@ -4,7 +4,10 @@ import 'dart:convert';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/global/widgets/buttonx.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,45 +15,48 @@ import 'package:follow_read/core/utils/logger.dart';
 import 'package:http/http.dart' show BaseClient, Client, StreamedResponse, BaseRequest;
 
 
-class FeedIcon extends HookConsumerWidget {
+class FeedIcon extends HookWidget {
 
   final String title;
   final String iconUrl;
-  final double size;
-  final TextStyle textStyle;
-  final Color beginBackgroundColor;
-  final Color endBackgroundColor;
-  final double radius;
+  final Sizex sizex;
+  final controller = Get.find<MemoryCacheController>();
 
-  const FeedIcon({
+  FeedIcon({
     super.key,
     required this.title,
     required this.iconUrl,
-    this.size = 24,
-    this.textStyle = const TextStyle(
-      fontSize: 15,
-      height: 1.33,
-      fontWeight: FontWeight.w500,
-      color: Colors.white,
-    ),
-    this.beginBackgroundColor = AppColors.black25, // 50% 透明度 (0x80 = 128)
-    this.endBackgroundColor = AppColors.black75, // 75% 透明度 (0xBF = 191)
-    this.radius = 6,
+    this.sizex = Sizex.medium,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = null;//ref.watch(authProvider.select((state) => state.user));
+  Widget build(BuildContext context) {
+    TextStyle textStyle;
+    double size;
+    double radius;
+    switch(sizex) {
+      case Sizex.small:
+        size = 18;
+        radius = 4;
+        textStyle = AppTextStyles.M11White00;
+        break;
+      case Sizex.medium:
+      default:
+        size = 24;
+        radius = 6;
+        textStyle = AppTextStyles.M15White00;
+        break;
+    }
+    final user = controller.currentUser.value;
+    final feedIcon = user.baseUrl + iconUrl;
     final cachedImageFuture = useMemoized(() {
-      if (iconUrl.isEmpty || user == null) return null;
-      return _ImageRequestCache.getImage(
-        iconUrl,
-        {"X-Auth-Token": user.token},
+      if (feedIcon.isEmpty || user.isNull) return null;
+      return _ImageRequestCache.getImage(feedIcon, {"X-Auth-Token": user.token},
         Base64IconManager(),
       );
-    }, [iconUrl, user?.token]);
+    }, [feedIcon, user.token]);
 
-    return iconUrl.isNotEmpty == true && user != null
+    return feedIcon.isNotEmpty == true && !user.isNull
       ? FutureBuilder<Uint8List?>(
         future: cachedImageFuture,
         builder: (context, snapshot) {
@@ -62,7 +68,7 @@ class FeedIcon extends HookConsumerWidget {
             );
           }
           if (snapshot.hasError || !snapshot.hasData) {
-            return _buildInitialsAvatar();
+            return _buildInitialsAvatar(size, textStyle, radius);
           }
           return Container(
             decoration: BoxDecoration(
@@ -80,34 +86,24 @@ class FeedIcon extends HookConsumerWidget {
           );
         }
     )
-     :  _buildInitialsAvatar();
+     :  _buildInitialsAvatar(size, textStyle, radius);
   }
 
 
-  Widget _buildInitialsAvatar() {
+  Widget _buildInitialsAvatar(double size, TextStyle textStyle, double radius) {
     final initials = _getInitials(title);
-    return Container(
-      width: size,
-      height: size,
+    return Container(width: size, height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
+        // color: AppColors.black50,
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            beginBackgroundColor,
-            endBackgroundColor,
-          ],
+          colors: [Color(0x80555555), Color(0xBF555555)]
         ),
       ),
-      child: Text(
-        initials,
-        style: textStyle,
-        textAlign: TextAlign.center,
-        maxLines: 1,
-        overflow: TextOverflow.visible,
-      ),
+      child: Text(initials, style: textStyle, textAlign: TextAlign.center, maxLines: 1),
     );
   }
 
@@ -127,6 +123,11 @@ class FeedIcon extends HookConsumerWidget {
 class _ImageRequestCache {
   static final Map<String, Future<Uint8List?>> _pendingRequests = {};
   static final Map<String, Uint8List> _memoryCache = {};
+
+  static void clearMemoryCache() {
+    _memoryCache.clear();
+    _pendingRequests.clear();
+  }
 
   static Future<Uint8List?> getImage(
       String url,
@@ -220,6 +221,10 @@ class Base64IconManager extends CacheManager {
     maxNrOfCacheObjects: 100,
     repo: JsonCacheInfoRepository(databaseName: key),
   ));
+
+  static Future<void> clearDiskCache() async {
+    await Base64IconManager().emptyCache();
+  }
 }
 
 class _AuthenticatedHttpClient extends BaseClient {

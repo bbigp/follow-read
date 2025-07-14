@@ -36,7 +36,7 @@ class FeedTile extends StatelessWidget {
               ), //设计图black8
             ),
           ),
-          icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
+          icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl),
           contextMenus: feed.contextMenus(context),
           title: feed.title,
           onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": feed.metaId}),

@@ -102,6 +102,9 @@ class AppTextStyles {
   );
 
 
+  static const TextStyle M11White00 = TextStyle(
+    fontSize: 11, fontWeight: FontWeight.w500, height: 1.18, color: Colors.white,
+  );
   static const TextStyle M15White00 = TextStyle(
     fontSize: 15, fontWeight: FontWeight.w500, height: 1.33, color: Colors.white,
   );

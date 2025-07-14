@@ -26,6 +26,7 @@ class User {
 
   static User empty = User(id: 0, username: "", token: "", baseUrl: "");
 
+  bool get isNull => id == 0;
 }
 
 enum UnreadMark {

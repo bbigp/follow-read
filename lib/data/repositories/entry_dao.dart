@@ -103,6 +103,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
   }
 
   Future<Map<BigInt, int>> countFilter(List<Filter> filters) async {
+    if (filters.isEmpty) return {};
     // final parts = filters.map(buildQuery).join(", ");
     final parts = filters
         .map((e) =>

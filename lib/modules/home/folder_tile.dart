@@ -59,7 +59,7 @@ class FolderTile extends StatelessWidget  {
                 MainTile(
                   id: 'e${feed.id}',
                   title: feed.title,
-                  icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
+                  icon: FeedIcon(title: feed.title, iconUrl: feed.iconUrl),
                   contextMenus: feed.contextMenus(context),
                   leadingIndicator: SizedBox(width: 24,),
                   onTap: () => Get.toNamed(RouteConfig.entries, parameters: {"id": feed.metaId}),

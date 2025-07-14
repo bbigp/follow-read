@@ -68,7 +68,9 @@ class EntriesController extends GetxController {
   }
 
   Future<void> autoRead(BigInt entryId) async {
-    await read(entryId, status: EntryStatus.read);
+    if (_cache.currentUser.value.autoRead) {
+      await read(entryId, status: EntryStatus.read);
+    }
   }
 
   Future<void> read(BigInt entryId, {EntryStatus? status}) async {
@@ -80,10 +82,19 @@ class EntriesController extends GetxController {
     };
     logger.i("$status   ${entry.status}");
     if (entry.status != status) {
-      state.getObs(id).value = entry.copyWith(status: status);
-      await _entryService.setEntryStatus([id], status);
+      state.getObs(entryId).value = entry.copyWith(status: status);
+      await _entryService.setEntryStatus([entryId], status);
     }
   }
+
+//   Future<void> starred() async {
+//     final entry = state.entry;
+//     final success = await entryRepository.starred(entryId, !entry.starred);
+//     if (success) {
+//       entry.copyWith(starred: !entry.starred);
+//       return;
+//     }
+//   }
 
 }
 

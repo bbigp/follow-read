@@ -38,34 +38,31 @@ class EntryPage extends StatelessWidget{
             padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 48),
             child: Column(children: [
               if (entry.pic.isNotEmpty) ...[
-                Obx(() {
-                  return EntryImage(url: entry.pic, height: 241, onTap: (){
-                    // ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
-                    //   "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(entry.pic),
-                    // });
-                  },);
-                }),
+                EntryImage(url: entry.pic, height: 241, onTap: (){
+                  // ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
+                  //   "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(entry.pic),
+                  // });
+                },),
                 const SizedBox(height: 12,),
               ],
-              Obx(() => EntryTitle(entry: entry)),
+              EntryTitle(entry: entry),
               const SizedBox(height: 12,),
-              Obx(() => EntryContent(entry: entry)),
+              EntryContent(entry: entry),
               const SizedBox(height: 12,),
               const NoMore(),
               const SizedBox(height: 12,),
 
               const SizedBox(height: 8,),
-              Obx(() {
-                return IconButtonx(
-                  child: "View Website", icon: SvgIcons.out_o,
-                  isLeftIcon: false,
-                  size: Sizex.custom,
-                  buttonSize: mediumCompact().copyWith(padding: 32,),
-                  type: ButtonxType.secondary,
-                  enabled: true,
-                  onPressed: () => Open.browser(context, entry.url),
-                );
-              }),
+
+              IconButtonx(
+                child: "View Website", icon: SvgIcons.out_o,
+                isLeftIcon: false,
+                size: Sizex.custom,
+                buttonSize: mediumCompact().copyWith(padding: 32,),
+                type: ButtonxType.secondary,
+                enabled: true,
+                onPressed: () => Open.browser(context, entry.url),
+              ),
               // const SizedBox(height: 8,),//设计图8
               const SizedBox(height: 12,), //设计图48
             ],),

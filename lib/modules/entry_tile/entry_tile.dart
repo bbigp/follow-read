@@ -12,9 +12,9 @@ import 'entry_tile_header.dart';
 
 ///
 class EntryTile extends StatelessWidget {
-  final Entry entry;
+  final Rx<Entry> entryObs;
 
-  const EntryTile({super.key, required this.entry,});
+  const EntryTile({super.key, required this.entryObs,});
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +25,22 @@ class EntryTile extends StatelessWidget {
   }
 
   Widget _buildContent() {
-    Widget child = Container(
-        padding: EdgeInsets.all(16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          EntryTileHeader(title: entry.feed.title, iconUrl: entry.feed.iconUrl, time: entry.createdAt,),
-          const SizedBox(height: 8,),
-          entry.pic.isEmpty ? EntryTileBodyTextOnly(entry: entry)
-              : EntryTileBodySingleImage(entry: entry),
-        ],)
-    );
     return InkWell(
-        onTap: () => Get.toNamed(RouteConfig.entry, parameters: {"id": entry.id.toString()}),
+        onTap: () => Get.toNamed(RouteConfig.entry, parameters: {"id": entryObs.value.id.toString()}),
         child: Obx((){
-          return entry.isUnread ? child : Opacity(opacity: 0.5, child: child,);
+          final entry = entryObs.value;
+          Widget child = Container(
+              padding: EdgeInsets.all(16),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                EntryTileHeader(title: entry.feed.title, iconUrl: entry.feed.iconUrl, time: entry.createdAt,),
+                const SizedBox(height: 8,),
+                entry.pic.isEmpty ? EntryTileBodyTextOnly(entry: entry)
+                    : EntryTileBodySingleImage(entry: entry),
+              ],)
+          );
+          return entry.isUnread
+              ? child
+              : Opacity(opacity: 0.5, child: child,);
         })
     );
   }

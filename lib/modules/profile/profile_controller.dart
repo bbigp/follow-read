@@ -27,6 +27,7 @@ class ProfileController extends GetxController {
       openContent: openContent, rootFolderId: rootFolderId,
     );
     onInit();
+    _cache.loadUser();
   }
 
 }

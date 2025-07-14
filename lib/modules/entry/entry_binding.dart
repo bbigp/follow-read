@@ -1,6 +1,5 @@
 
 
-import 'package:follow_read/modules/entry/entry_controller.dart';
 import 'package:get/get.dart';
 
 class EntryBinding extends Bindings {

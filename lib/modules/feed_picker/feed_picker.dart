@@ -35,7 +35,7 @@ class FeedPicker extends StatelessWidget {
           final feed = controller.feeds[index];
           return TickboxListTile(
             title: Row(children: [
-              FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: 24,),
+              FeedIcon(title: feed.title, iconUrl: feed.iconUrl),
               const SizedBox(width: 12,),
               Expanded(child: Text(feed.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,)),
               const SizedBox(width: 8,),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
 
 ///
@@ -20,7 +21,7 @@ class EntryTileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        FeedIcon(title: title, iconUrl: iconUrl, size: 18, radius: 4,),
+        FeedIcon(title: title, iconUrl: iconUrl, sizex: Sizex.small,),
         const SizedBox(width: 6,),
         Expanded(child: Text(
           title,
