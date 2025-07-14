@@ -1,10 +1,12 @@
 
 
+import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/meta.dart';
+import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
@@ -20,6 +22,7 @@ class EntriesController extends GetxController {
   final _feedService = Get.find<FeedService>();
   final _folderService = Get.find<FolderService>();
   final _filterService = Get.find<FilterService>();
+  final _entryService = Get.find<EntryService>();
   late final MetaRow metaRow;
 
   @override
@@ -64,7 +67,23 @@ class EntriesController extends GetxController {
     state.isLoadingMore = false;
   }
 
-  Rx<Entry> get(BigInt id) => state.entries.firstWhere((e) => e.value.id == id);
+  Future<void> autoRead(BigInt entryId) async {
+    await read(entryId, status: EntryStatus.read);
+  }
+
+  Future<void> read(BigInt entryId, {EntryStatus? status}) async {
+    final entry = state.get(entryId);
+    status = status ?? switch(entry.status) {
+      EntryStatus.read => EntryStatus.unread,
+      EntryStatus.unread => EntryStatus.read,
+      _ => EntryStatus.read,
+    };
+    logger.i("$status   ${entry.status}");
+    if (entry.status != status) {
+      state.getObs(id).value = entry.copyWith(status: status);
+      await _entryService.setEntryStatus([id], status);
+    }
+  }
 
 }
 
@@ -88,6 +107,8 @@ class EntriesState {
   int page = 0;
   int size = 20;
 
+  Rx<Entry> getObs(BigInt id) => entries.firstWhere((e) => e.value.id == id);
+  Entry get(BigInt id) => getObs(id).value;
 
   void addEntries(List<Entry> addList, {bool reset = false}){
     if (reset) {

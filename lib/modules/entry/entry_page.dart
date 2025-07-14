@@ -9,7 +9,7 @@ import 'package:follow_read/global/widgets/no_more.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/tab_barx.dart';
-import 'package:follow_read/modules/entry/entry_controller.dart';
+import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -21,13 +21,12 @@ class EntryPage extends StatelessWidget{
 
   EntryPage({super.key});
 
-  final controller = Get.find<EntryController>();
+  final controller = Get.find<EntriesController>();
 
   @override
   Widget build(BuildContext context) {
-    // if (controller.state.isLoading) {
-    //   return CupertinoActivityIndicator(radius: 10,);
-    // }
+    final entryId = BigInt.parse(Get.parameters['id'] ?? "0");
+    final entry = controller.state.get(entryId);
     Widget child = Scaffold(
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(SvgIcons.arrow_left, onTap: () => Get.back()),
@@ -38,9 +37,8 @@ class EntryPage extends StatelessWidget{
           child: Padding(
             padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 48),
             child: Column(children: [
-              if (controller.entry.pic.isNotEmpty) ...[
+              if (entry.pic.isNotEmpty) ...[
                 Obx(() {
-                  final entry = controller.entry;
                   return EntryImage(url: entry.pic, height: 241, onTap: (){
                     // ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
                     //   "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(entry.pic),
@@ -49,16 +47,15 @@ class EntryPage extends StatelessWidget{
                 }),
                 const SizedBox(height: 12,),
               ],
-              Obx(() => EntryTitle(entry: controller.entry)),
+              Obx(() => EntryTitle(entry: entry)),
               const SizedBox(height: 12,),
-              Obx(() => EntryContent(entry: controller.entry)),
+              Obx(() => EntryContent(entry: entry)),
               const SizedBox(height: 12,),
               const NoMore(),
               const SizedBox(height: 12,),
 
               const SizedBox(height: 8,),
               Obx(() {
-                final entry = controller.entry;
                 return IconButtonx(
                   child: "View Website", icon: SvgIcons.out_o,
                   isLeftIcon: false,
@@ -75,7 +72,7 @@ class EntryPage extends StatelessWidget{
           ),
         )),
         Obx((){
-          final entry = controller.entry;
+          final entry = controller.state.get(entryId);
           return TabBarx(tabs: [
             BottomBarItem(
                 icon: entry.starred ? SvgIcons.star_fill : SvgIcons.star,
@@ -86,7 +83,7 @@ class EntryPage extends StatelessWidget{
             BottomBarItem(
               icon: entry.isUnread ? SvgIcons.check_o : SvgIcons.check_fill,
               onPressed: () async {
-                await controller.read();
+                await controller.read(entryId);
               },
             ),
             BottomBarItem(icon: SvgIcons.chevron_down,),
@@ -104,7 +101,7 @@ class EntryPage extends StatelessWidget{
       canPop: true,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) {
-          controller.autoRead();
+          controller.autoRead(entryId);
         }
       },
       child: child,

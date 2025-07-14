@@ -21,30 +21,13 @@ class EntryController extends GetxController {
     load();
   }
 
-  Rx<Entry> get _entry => _entries.get(id);
-  Entry get entry => _entry.value;
+
 
   Future<void> load() async {
     // state._entry = _entries.get(id);
   }
 
-  Future<void> autoRead() async {
-    await read(status: EntryStatus.read);
-  }
 
-  Future<void> read({EntryStatus? status}) async {
-    status = status ?? switch(entry.status) {
-      EntryStatus.read => EntryStatus.unread,
-      EntryStatus.unread => EntryStatus.read,
-      _ => EntryStatus.read,
-    };
-    logger.i("$status   ${entry.status}");
-    if (entry.status != status) {
-      if (await _entryService.setEntryStatus([id], status)) {
-        _entry.value = _entry.value.copyWith(status: status);
-      }
-    }
-  }
 
 }
 

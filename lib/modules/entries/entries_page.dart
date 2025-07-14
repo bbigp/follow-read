@@ -101,7 +101,7 @@ class _EntriesPageState extends State<EntriesPage> {
               Obx(() {
                 return SliverList(delegate: SliverChildBuilderDelegate(childCount: controller.state.entriesLen, (context, index) {
                   return GetBuilder<EntriesController>(builder: (controller) {
-                    return EntryTile(entry: controller.state.entries[index]);
+                    return EntryTile(entry: controller.state.entries[index].value);
                     }, id: "entry_tile:$index",);
                 }));
               }),
