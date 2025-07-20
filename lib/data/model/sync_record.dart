@@ -11,10 +11,11 @@ class SyncRecord {
   final int entry;
   final int feed;
   final int folder;
+  final int media;
 
   SyncRecord({this.id=0, this.status = "ok", this.errorMsg = "",
     DateTime? time,
     this.startTime, this.endTime,
-    this.entry = 0, this.feed = 0, this.folder = 0,
+    this.entry = 0, this.feed = 0, this.folder = 0, this.media = 0,
   }) : time = time ?? DateTime.now();
 }

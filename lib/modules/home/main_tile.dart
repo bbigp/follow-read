@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/modules/count_badge/count_badge.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 
@@ -41,7 +42,7 @@ class MainTile extends StatelessWidget {
         icon,
 
         const SizedBox(width: 12, height: 52,),
-        Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,)),
+        Expanded(child: PgText(title, maxLines: 1, style: AppTextStyles.text,)),
         const SizedBox(width: 12,),
 
         CountBadge(id: id),

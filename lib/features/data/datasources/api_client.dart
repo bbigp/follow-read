@@ -59,18 +59,7 @@ class ApiClient {
         fromJson: (json) => EntryResponseMapper.fromJson(json));
   }
 
-  //'unread' read removed
-  static Future<Either<Failure, Success>> putEntry(int entryId, String status) async {
-    return await httpUtil.safeRequest(
-        path: 'entries',
-        method: HttpMethod.put,
-        body: {
-          'entry_ids': [entryId],
-          'status': status
-        },
-        fromJson: (json) => Success.fromJson(json)
-    );
-  }
+
 
   static Future<Either<Failure, Success>> starred(int entryId) async {
     return await httpUtil.safeRequest(
@@ -79,7 +68,6 @@ class ApiClient {
         fromJson: (json) => Success.fromJson(json)
     );
   }
-
 
 
 

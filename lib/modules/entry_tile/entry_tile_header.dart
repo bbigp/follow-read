@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/features/domain/models/entry.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
 
 ///
@@ -23,17 +24,17 @@ class EntryTileHeader extends StatelessWidget {
       children: [
         FeedIcon(title: title, iconUrl: iconUrl, sizex: Sizex.small,),
         const SizedBox(width: 6,),
-        Expanded(child: Text(
+        Expanded(child: PgText(
           title,
           maxLines: 1,
-          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.text13500,
-        )),
+        ),),
         const SizedBox(width: 6,),
-        Text(
+        PgText(
           time.toShowTime(),
           maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          maxWidth: 80,
+          textAlign: TextAlign.right,
           style: AppTextStyles.M13B25,
         ),
       ],

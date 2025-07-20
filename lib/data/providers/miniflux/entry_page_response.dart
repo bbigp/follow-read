@@ -3,6 +3,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
 import 'feed_response.dart';
+import 'media.dart';
 
 part 'entry_page_response.mapper.dart';
 
@@ -41,7 +42,7 @@ class EntryResponse with EntryResponseMappable{
   final bool starred;
   @MappableField(key: 'reading_time')
   final int readingTime;
-  // final List<dynamic>? enclosures;
+  final List<MediaResponse>? enclosures;
   final FeedResponse? feed;
   // final dynamic tags;
 
@@ -62,7 +63,7 @@ class EntryResponse with EntryResponseMappable{
     required this.shareCode,
     required this.starred,
     required this.readingTime,
-    // required this.enclosures,
+    this.enclosures,
     required this.feed,
     // required this.tags,
   });

@@ -8,8 +8,8 @@ abstract class Meta {
   String get metaId;
 }
 
-abstract class MetaRow {
-
-  Future<List<Entry>> entries(Meta meta, {int? page, int? size});
-
-}
+// abstract class MetaRow {
+//
+//   Future<List<Entry>> entries(Meta meta, {int? page, int? size});
+//
+// }

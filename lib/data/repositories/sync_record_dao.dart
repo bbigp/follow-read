@@ -21,12 +21,14 @@ class SyncRecordDao extends DatabaseAccessor<AppDatabase> {
       endTime: record.endTime == null ? const Value.absent() : Value(record.endTime!),
       entry: Value(record.entry),
       feed: Value(record.feed), folder: Value(record.folder),
+      media: Value(record.media),
     ));
     return row.id;
   }
 
   Future<bool> updateFinish(BigInt id, String status, {
-    int? entry, int? feed, int? folder, String errorMsg = ""
+    int? entry, int? feed, int? folder, int? media,
+    String errorMsg = ""
   }) async {
     var query = update(syncRecordsTable)..where((t) => t.id.equals(id));
     final affectedRows = await query.write(SyncRecordsTableCompanion(
@@ -34,6 +36,7 @@ class SyncRecordDao extends DatabaseAccessor<AppDatabase> {
       entry: entry == null ? const Value.absent() : Value(entry),
       feed: feed == null ? const Value.absent() : Value(feed),
       folder: folder == null ? const Value.absent() : Value(folder),
+      media: media == null ? const Value.absent() : Value(media),
       errorMsg: Value(errorMsg),
     ));
     return affectedRows > 0;

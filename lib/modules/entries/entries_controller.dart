@@ -23,7 +23,6 @@ class EntriesController extends GetxController {
   final _folderService = Get.find<FolderService>();
   final _filterService = Get.find<FilterService>();
   final _entryService = Get.find<EntryService>();
-  late final MetaRow metaRow;
 
   @override
   void onInit() {
@@ -33,12 +32,6 @@ class EntriesController extends GetxController {
       "o" => _cache.getFolder(id) ?? Folder(),
       "i" => _cache.getFilter(id) ?? Filter(),
       _ => _cache.getFeed(id) ?? Feed(),
-    };
-    metaRow = switch(type) {
-      "e" => _feedService,
-      "o" => _folderService,
-      "i" => _filterService,
-      _ => _feedService,
     };
   }
 
@@ -53,7 +46,7 @@ class EntriesController extends GetxController {
     state._isLoading.value = true;
 
     await Future.delayed(Duration(milliseconds: 200));
-    final entries = await metaRow.entries(state.meta, page: 1, size: state.size);
+    final entries = await _entryService.entries(state.meta, page: 1, size: state.size);
     state.addEntries(entries, reset: true);
     state._isLoading.value = false;
   }
@@ -62,7 +55,7 @@ class EntriesController extends GetxController {
     if (state.isLoadingMore) return;
     await Future.delayed(Duration(milliseconds: 500));
     state.isLoadingMore = true;
-    final entries = await metaRow.entries(state.meta, page: state.page + 1, size: state.size);
+    final entries = await _entryService.entries(state.meta, page: state.page + 1, size: state.size);
     state.addEntries(entries);
     state.isLoadingMore = false;
   }

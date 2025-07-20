@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:follow_read/core/prefs_keys.dart';
+import 'package:follow_read/data/model/user.dart';
+import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/modules/add_filter/add_filter_binding.dart';
 import 'package:follow_read/modules/add_filter/add_filter_view.dart';
+import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry/entry_page.dart';
 import 'package:follow_read/modules/profile/profile_binding.dart';
 import 'package:get/get.dart';

@@ -17,6 +17,7 @@ class SyncRecordsTable extends Table {
   IntColumn get entry => integer().named("entry")();
   IntColumn get feed => integer().named("feed")();
   IntColumn get folder => integer().named("folder")();
+  IntColumn get media => integer().named("media")();
 
   @override
   String? get tableName => "sync_records";

@@ -4,6 +4,7 @@ import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:get/get.dart';
 
 
@@ -46,8 +47,8 @@ Widget numberBadgeBuilder(BuildContext context, int count) {
   return Row(children: [
     SizedBox(width: 40, child: Align(
       alignment: Alignment.centerRight,
-      child: Text(count == 0 ? '' : '$count', maxLines: 1,
-        overflow: TextOverflow.ellipsis, style: AppTextStyles.M13B25,
+      child: PgText(count == 0 ? '' : '$count', maxLines: 1, style: AppTextStyles.M13B25,
+        textAlign: TextAlign.right,
       ), //设计图height 1.38
     ),),
     const SizedBox(width: 4,),

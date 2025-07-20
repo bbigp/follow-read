@@ -688,9 +688,24 @@ class $SyncRecordsTableTable extends SyncRecordsTable
   late final GeneratedColumn<int> folder = GeneratedColumn<int>(
       'folder', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _mediaMeta = const VerificationMeta('media');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, status, time, errorMsg, startTime, endTime, entry, feed, folder];
+  late final GeneratedColumn<int> media = GeneratedColumn<int>(
+      'media', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        status,
+        time,
+        errorMsg,
+        startTime,
+        endTime,
+        entry,
+        feed,
+        folder,
+        media
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -746,6 +761,12 @@ class $SyncRecordsTableTable extends SyncRecordsTable
     } else if (isInserting) {
       context.missing(_folderMeta);
     }
+    if (data.containsKey('media')) {
+      context.handle(
+          _mediaMeta, media.isAcceptableOrUnknown(data['media']!, _mediaMeta));
+    } else if (isInserting) {
+      context.missing(_mediaMeta);
+    }
     return context;
   }
 
@@ -773,6 +794,8 @@ class $SyncRecordsTableTable extends SyncRecordsTable
           .read(DriftSqlType.int, data['${effectivePrefix}feed'])!,
       folder: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}folder'])!,
+      media: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}media'])!,
     );
   }
 
@@ -792,6 +815,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
   final int entry;
   final int feed;
   final int folder;
+  final int media;
   const SyncRecordRow(
       {required this.id,
       required this.status,
@@ -801,7 +825,8 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       required this.endTime,
       required this.entry,
       required this.feed,
-      required this.folder});
+      required this.folder,
+      required this.media});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -814,6 +839,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
     map['entry'] = Variable<int>(entry);
     map['feed'] = Variable<int>(feed);
     map['folder'] = Variable<int>(folder);
+    map['media'] = Variable<int>(media);
     return map;
   }
 
@@ -828,6 +854,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       entry: Value(entry),
       feed: Value(feed),
       folder: Value(folder),
+      media: Value(media),
     );
   }
 
@@ -844,6 +871,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       entry: serializer.fromJson<int>(json['entry']),
       feed: serializer.fromJson<int>(json['feed']),
       folder: serializer.fromJson<int>(json['folder']),
+      media: serializer.fromJson<int>(json['media']),
     );
   }
   @override
@@ -859,6 +887,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       'entry': serializer.toJson<int>(entry),
       'feed': serializer.toJson<int>(feed),
       'folder': serializer.toJson<int>(folder),
+      'media': serializer.toJson<int>(media),
     };
   }
 
@@ -871,7 +900,8 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
           DateTime? endTime,
           int? entry,
           int? feed,
-          int? folder}) =>
+          int? folder,
+          int? media}) =>
       SyncRecordRow(
         id: id ?? this.id,
         status: status ?? this.status,
@@ -882,6 +912,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
         entry: entry ?? this.entry,
         feed: feed ?? this.feed,
         folder: folder ?? this.folder,
+        media: media ?? this.media,
       );
   SyncRecordRow copyWithCompanion(SyncRecordsTableCompanion data) {
     return SyncRecordRow(
@@ -894,6 +925,7 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
       entry: data.entry.present ? data.entry.value : this.entry,
       feed: data.feed.present ? data.feed.value : this.feed,
       folder: data.folder.present ? data.folder.value : this.folder,
+      media: data.media.present ? data.media.value : this.media,
     );
   }
 
@@ -908,14 +940,15 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
           ..write('endTime: $endTime, ')
           ..write('entry: $entry, ')
           ..write('feed: $feed, ')
-          ..write('folder: $folder')
+          ..write('folder: $folder, ')
+          ..write('media: $media')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, status, time, errorMsg, startTime, endTime, entry, feed, folder);
+  int get hashCode => Object.hash(id, status, time, errorMsg, startTime,
+      endTime, entry, feed, folder, media);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -928,7 +961,8 @@ class SyncRecordRow extends DataClass implements Insertable<SyncRecordRow> {
           other.endTime == this.endTime &&
           other.entry == this.entry &&
           other.feed == this.feed &&
-          other.folder == this.folder);
+          other.folder == this.folder &&
+          other.media == this.media);
 }
 
 class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
@@ -941,6 +975,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
   final Value<int> entry;
   final Value<int> feed;
   final Value<int> folder;
+  final Value<int> media;
   const SyncRecordsTableCompanion({
     this.id = const Value.absent(),
     this.status = const Value.absent(),
@@ -951,6 +986,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     this.entry = const Value.absent(),
     this.feed = const Value.absent(),
     this.folder = const Value.absent(),
+    this.media = const Value.absent(),
   });
   SyncRecordsTableCompanion.insert({
     this.id = const Value.absent(),
@@ -962,11 +998,13 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     required int entry,
     required int feed,
     required int folder,
+    required int media,
   })  : status = Value(status),
         errorMsg = Value(errorMsg),
         entry = Value(entry),
         feed = Value(feed),
-        folder = Value(folder);
+        folder = Value(folder),
+        media = Value(media);
   static Insertable<SyncRecordRow> custom({
     Expression<BigInt>? id,
     Expression<String>? status,
@@ -977,6 +1015,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     Expression<int>? entry,
     Expression<int>? feed,
     Expression<int>? folder,
+    Expression<int>? media,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -988,6 +1027,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
       if (entry != null) 'entry': entry,
       if (feed != null) 'feed': feed,
       if (folder != null) 'folder': folder,
+      if (media != null) 'media': media,
     });
   }
 
@@ -1000,7 +1040,8 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
       Value<DateTime>? endTime,
       Value<int>? entry,
       Value<int>? feed,
-      Value<int>? folder}) {
+      Value<int>? folder,
+      Value<int>? media}) {
     return SyncRecordsTableCompanion(
       id: id ?? this.id,
       status: status ?? this.status,
@@ -1011,6 +1052,7 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
       entry: entry ?? this.entry,
       feed: feed ?? this.feed,
       folder: folder ?? this.folder,
+      media: media ?? this.media,
     );
   }
 
@@ -1044,6 +1086,9 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
     if (folder.present) {
       map['folder'] = Variable<int>(folder.value);
     }
+    if (media.present) {
+      map['media'] = Variable<int>(media.value);
+    }
     return map;
   }
 
@@ -1058,7 +1103,8 @@ class SyncRecordsTableCompanion extends UpdateCompanion<SyncRecordRow> {
           ..write('endTime: $endTime, ')
           ..write('entry: $entry, ')
           ..write('feed: $feed, ')
-          ..write('folder: $folder')
+          ..write('folder: $folder, ')
+          ..write('media: $media')
           ..write(')'))
         .toString();
   }
@@ -2674,6 +2720,335 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
   }
 }
 
+class $MediasTableTable extends MediasTable
+    with TableInfo<$MediasTableTable, MediaRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MediasTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<BigInt> id = GeneratedColumn<BigInt>(
+      'id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: false);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<BigInt> userId = GeneratedColumn<BigInt>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  static const VerificationMeta _entryIdMeta =
+      const VerificationMeta('entryId');
+  @override
+  late final GeneratedColumn<BigInt> entryId = GeneratedColumn<BigInt>(
+      'entry_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  static const VerificationMeta _urlMeta = const VerificationMeta('url');
+  @override
+  late final GeneratedColumn<String> url = GeneratedColumn<String>(
+      'url', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _mimeTypeMeta =
+      const VerificationMeta('mimeType');
+  @override
+  late final GeneratedColumn<String> mimeType = GeneratedColumn<String>(
+      'mime_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _sizeMeta = const VerificationMeta('size');
+  @override
+  late final GeneratedColumn<int> size = GeneratedColumn<int>(
+      'size', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, userId, entryId, url, mimeType, size];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'medias';
+  @override
+  VerificationContext validateIntegrity(Insertable<MediaRow> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('entry_id')) {
+      context.handle(_entryIdMeta,
+          entryId.isAcceptableOrUnknown(data['entry_id']!, _entryIdMeta));
+    } else if (isInserting) {
+      context.missing(_entryIdMeta);
+    }
+    if (data.containsKey('url')) {
+      context.handle(
+          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+    } else if (isInserting) {
+      context.missing(_urlMeta);
+    }
+    if (data.containsKey('mime_type')) {
+      context.handle(_mimeTypeMeta,
+          mimeType.isAcceptableOrUnknown(data['mime_type']!, _mimeTypeMeta));
+    } else if (isInserting) {
+      context.missing(_mimeTypeMeta);
+    }
+    if (data.containsKey('size')) {
+      context.handle(
+          _sizeMeta, size.isAcceptableOrUnknown(data['size']!, _sizeMeta));
+    } else if (isInserting) {
+      context.missing(_sizeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MediaRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MediaRow(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
+      entryId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}entry_id'])!,
+      url: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
+      mimeType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mime_type'])!,
+      size: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}size'])!,
+    );
+  }
+
+  @override
+  $MediasTableTable createAlias(String alias) {
+    return $MediasTableTable(attachedDatabase, alias);
+  }
+}
+
+class MediaRow extends DataClass implements Insertable<MediaRow> {
+  final BigInt id;
+  final BigInt userId;
+  final BigInt entryId;
+  final String url;
+  final String mimeType;
+  final int size;
+  const MediaRow(
+      {required this.id,
+      required this.userId,
+      required this.entryId,
+      required this.url,
+      required this.mimeType,
+      required this.size});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<BigInt>(id);
+    map['user_id'] = Variable<BigInt>(userId);
+    map['entry_id'] = Variable<BigInt>(entryId);
+    map['url'] = Variable<String>(url);
+    map['mime_type'] = Variable<String>(mimeType);
+    map['size'] = Variable<int>(size);
+    return map;
+  }
+
+  MediasTableCompanion toCompanion(bool nullToAbsent) {
+    return MediasTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      entryId: Value(entryId),
+      url: Value(url),
+      mimeType: Value(mimeType),
+      size: Value(size),
+    );
+  }
+
+  factory MediaRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MediaRow(
+      id: serializer.fromJson<BigInt>(json['id']),
+      userId: serializer.fromJson<BigInt>(json['userId']),
+      entryId: serializer.fromJson<BigInt>(json['entryId']),
+      url: serializer.fromJson<String>(json['url']),
+      mimeType: serializer.fromJson<String>(json['mimeType']),
+      size: serializer.fromJson<int>(json['size']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<BigInt>(id),
+      'userId': serializer.toJson<BigInt>(userId),
+      'entryId': serializer.toJson<BigInt>(entryId),
+      'url': serializer.toJson<String>(url),
+      'mimeType': serializer.toJson<String>(mimeType),
+      'size': serializer.toJson<int>(size),
+    };
+  }
+
+  MediaRow copyWith(
+          {BigInt? id,
+          BigInt? userId,
+          BigInt? entryId,
+          String? url,
+          String? mimeType,
+          int? size}) =>
+      MediaRow(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        entryId: entryId ?? this.entryId,
+        url: url ?? this.url,
+        mimeType: mimeType ?? this.mimeType,
+        size: size ?? this.size,
+      );
+  MediaRow copyWithCompanion(MediasTableCompanion data) {
+    return MediaRow(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      entryId: data.entryId.present ? data.entryId.value : this.entryId,
+      url: data.url.present ? data.url.value : this.url,
+      mimeType: data.mimeType.present ? data.mimeType.value : this.mimeType,
+      size: data.size.present ? data.size.value : this.size,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MediaRow(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('entryId: $entryId, ')
+          ..write('url: $url, ')
+          ..write('mimeType: $mimeType, ')
+          ..write('size: $size')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, userId, entryId, url, mimeType, size);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MediaRow &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.entryId == this.entryId &&
+          other.url == this.url &&
+          other.mimeType == this.mimeType &&
+          other.size == this.size);
+}
+
+class MediasTableCompanion extends UpdateCompanion<MediaRow> {
+  final Value<BigInt> id;
+  final Value<BigInt> userId;
+  final Value<BigInt> entryId;
+  final Value<String> url;
+  final Value<String> mimeType;
+  final Value<int> size;
+  const MediasTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.entryId = const Value.absent(),
+    this.url = const Value.absent(),
+    this.mimeType = const Value.absent(),
+    this.size = const Value.absent(),
+  });
+  MediasTableCompanion.insert({
+    this.id = const Value.absent(),
+    required BigInt userId,
+    required BigInt entryId,
+    required String url,
+    required String mimeType,
+    required int size,
+  })  : userId = Value(userId),
+        entryId = Value(entryId),
+        url = Value(url),
+        mimeType = Value(mimeType),
+        size = Value(size);
+  static Insertable<MediaRow> custom({
+    Expression<BigInt>? id,
+    Expression<BigInt>? userId,
+    Expression<BigInt>? entryId,
+    Expression<String>? url,
+    Expression<String>? mimeType,
+    Expression<int>? size,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (entryId != null) 'entry_id': entryId,
+      if (url != null) 'url': url,
+      if (mimeType != null) 'mime_type': mimeType,
+      if (size != null) 'size': size,
+    });
+  }
+
+  MediasTableCompanion copyWith(
+      {Value<BigInt>? id,
+      Value<BigInt>? userId,
+      Value<BigInt>? entryId,
+      Value<String>? url,
+      Value<String>? mimeType,
+      Value<int>? size}) {
+    return MediasTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      entryId: entryId ?? this.entryId,
+      url: url ?? this.url,
+      mimeType: mimeType ?? this.mimeType,
+      size: size ?? this.size,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<BigInt>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<BigInt>(userId.value);
+    }
+    if (entryId.present) {
+      map['entry_id'] = Variable<BigInt>(entryId.value);
+    }
+    if (url.present) {
+      map['url'] = Variable<String>(url.value);
+    }
+    if (mimeType.present) {
+      map['mime_type'] = Variable<String>(mimeType.value);
+    }
+    if (size.present) {
+      map['size'] = Variable<int>(size.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MediasTableCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('entryId: $entryId, ')
+          ..write('url: $url, ')
+          ..write('mimeType: $mimeType, ')
+          ..write('size: $size')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2683,12 +3058,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FoldersTableTable foldersTable = $FoldersTableTable(this);
   late final $FiltersTableTable filtersTable = $FiltersTableTable(this);
   late final $EntriesTableTable entriesTable = $EntriesTableTable(this);
+  late final $MediasTableTable mediasTable = $MediasTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [feedsTable, syncRecordsTable, foldersTable, filtersTable, entriesTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        feedsTable,
+        syncRecordsTable,
+        foldersTable,
+        filtersTable,
+        entriesTable,
+        mediasTable
+      ];
 }
 
 typedef $$FeedsTableTableCreateCompanionBuilder = FeedsTableCompanion Function({
@@ -2984,6 +3366,7 @@ typedef $$SyncRecordsTableTableCreateCompanionBuilder
   required int entry,
   required int feed,
   required int folder,
+  required int media,
 });
 typedef $$SyncRecordsTableTableUpdateCompanionBuilder
     = SyncRecordsTableCompanion Function({
@@ -2996,6 +3379,7 @@ typedef $$SyncRecordsTableTableUpdateCompanionBuilder
   Value<int> entry,
   Value<int> feed,
   Value<int> folder,
+  Value<int> media,
 });
 
 class $$SyncRecordsTableTableFilterComposer
@@ -3033,6 +3417,9 @@ class $$SyncRecordsTableTableFilterComposer
 
   ColumnFilters<int> get folder => $composableBuilder(
       column: $table.folder, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get media => $composableBuilder(
+      column: $table.media, builder: (column) => ColumnFilters(column));
 }
 
 class $$SyncRecordsTableTableOrderingComposer
@@ -3070,6 +3457,9 @@ class $$SyncRecordsTableTableOrderingComposer
 
   ColumnOrderings<int> get folder => $composableBuilder(
       column: $table.folder, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get media => $composableBuilder(
+      column: $table.media, builder: (column) => ColumnOrderings(column));
 }
 
 class $$SyncRecordsTableTableAnnotationComposer
@@ -3107,6 +3497,9 @@ class $$SyncRecordsTableTableAnnotationComposer
 
   GeneratedColumn<int> get folder =>
       $composableBuilder(column: $table.folder, builder: (column) => column);
+
+  GeneratedColumn<int> get media =>
+      $composableBuilder(column: $table.media, builder: (column) => column);
 }
 
 class $$SyncRecordsTableTableTableManager extends RootTableManager<
@@ -3145,6 +3538,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             Value<int> entry = const Value.absent(),
             Value<int> feed = const Value.absent(),
             Value<int> folder = const Value.absent(),
+            Value<int> media = const Value.absent(),
           }) =>
               SyncRecordsTableCompanion(
             id: id,
@@ -3156,6 +3550,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             entry: entry,
             feed: feed,
             folder: folder,
+            media: media,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -3167,6 +3562,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             required int entry,
             required int feed,
             required int folder,
+            required int media,
           }) =>
               SyncRecordsTableCompanion.insert(
             id: id,
@@ -3178,6 +3574,7 @@ class $$SyncRecordsTableTableTableManager extends RootTableManager<
             entry: entry,
             feed: feed,
             folder: folder,
+            media: media,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -3959,6 +4356,182 @@ typedef $$EntriesTableTableProcessedTableManager = ProcessedTableManager<
     (EntryRow, BaseReferences<_$AppDatabase, $EntriesTableTable, EntryRow>),
     EntryRow,
     PrefetchHooks Function()>;
+typedef $$MediasTableTableCreateCompanionBuilder = MediasTableCompanion
+    Function({
+  Value<BigInt> id,
+  required BigInt userId,
+  required BigInt entryId,
+  required String url,
+  required String mimeType,
+  required int size,
+});
+typedef $$MediasTableTableUpdateCompanionBuilder = MediasTableCompanion
+    Function({
+  Value<BigInt> id,
+  Value<BigInt> userId,
+  Value<BigInt> entryId,
+  Value<String> url,
+  Value<String> mimeType,
+  Value<int> size,
+});
+
+class $$MediasTableTableFilterComposer
+    extends Composer<_$AppDatabase, $MediasTableTable> {
+  $$MediasTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get entryId => $composableBuilder(
+      column: $table.entryId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get mimeType => $composableBuilder(
+      column: $table.mimeType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnFilters(column));
+}
+
+class $$MediasTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $MediasTableTable> {
+  $$MediasTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<BigInt> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get entryId => $composableBuilder(
+      column: $table.entryId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get mimeType => $composableBuilder(
+      column: $table.mimeType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnOrderings(column));
+}
+
+class $$MediasTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MediasTableTable> {
+  $$MediasTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<BigInt> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get entryId =>
+      $composableBuilder(column: $table.entryId, builder: (column) => column);
+
+  GeneratedColumn<String> get url =>
+      $composableBuilder(column: $table.url, builder: (column) => column);
+
+  GeneratedColumn<String> get mimeType =>
+      $composableBuilder(column: $table.mimeType, builder: (column) => column);
+
+  GeneratedColumn<int> get size =>
+      $composableBuilder(column: $table.size, builder: (column) => column);
+}
+
+class $$MediasTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $MediasTableTable,
+    MediaRow,
+    $$MediasTableTableFilterComposer,
+    $$MediasTableTableOrderingComposer,
+    $$MediasTableTableAnnotationComposer,
+    $$MediasTableTableCreateCompanionBuilder,
+    $$MediasTableTableUpdateCompanionBuilder,
+    (MediaRow, BaseReferences<_$AppDatabase, $MediasTableTable, MediaRow>),
+    MediaRow,
+    PrefetchHooks Function()> {
+  $$MediasTableTableTableManager(_$AppDatabase db, $MediasTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MediasTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MediasTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MediasTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            Value<BigInt> userId = const Value.absent(),
+            Value<BigInt> entryId = const Value.absent(),
+            Value<String> url = const Value.absent(),
+            Value<String> mimeType = const Value.absent(),
+            Value<int> size = const Value.absent(),
+          }) =>
+              MediasTableCompanion(
+            id: id,
+            userId: userId,
+            entryId: entryId,
+            url: url,
+            mimeType: mimeType,
+            size: size,
+          ),
+          createCompanionCallback: ({
+            Value<BigInt> id = const Value.absent(),
+            required BigInt userId,
+            required BigInt entryId,
+            required String url,
+            required String mimeType,
+            required int size,
+          }) =>
+              MediasTableCompanion.insert(
+            id: id,
+            userId: userId,
+            entryId: entryId,
+            url: url,
+            mimeType: mimeType,
+            size: size,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$MediasTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $MediasTableTable,
+    MediaRow,
+    $$MediasTableTableFilterComposer,
+    $$MediasTableTableOrderingComposer,
+    $$MediasTableTableAnnotationComposer,
+    $$MediasTableTableCreateCompanionBuilder,
+    $$MediasTableTableUpdateCompanionBuilder,
+    (MediaRow, BaseReferences<_$AppDatabase, $MediasTableTable, MediaRow>),
+    MediaRow,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3973,4 +4546,6 @@ class $AppDatabaseManager {
       $$FiltersTableTableTableManager(_db, _db.filtersTable);
   $$EntriesTableTableTableManager get entriesTable =>
       $$EntriesTableTableTableManager(_db, _db.entriesTable);
+  $$MediasTableTableTableManager get mediasTable =>
+      $$MediasTableTableTableManager(_db, _db.mediasTable);
 }

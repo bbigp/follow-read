@@ -138,6 +138,7 @@ class EntryResponseMapper extends ClassMapperBase<EntryResponse> {
   static EntryResponseMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = EntryResponseMapper._());
+      MediaResponseMapper.ensureInitialized();
       FeedResponseMapper.ensureInitialized();
     }
     return _instance!;
@@ -190,6 +191,9 @@ class EntryResponseMapper extends ClassMapperBase<EntryResponse> {
   static int _$readingTime(EntryResponse v) => v.readingTime;
   static const Field<EntryResponse, int> _f$readingTime =
       Field('readingTime', _$readingTime, key: r'reading_time');
+  static List<MediaResponse>? _$enclosures(EntryResponse v) => v.enclosures;
+  static const Field<EntryResponse, List<MediaResponse>> _f$enclosures =
+      Field('enclosures', _$enclosures, opt: true);
   static FeedResponse? _$feed(EntryResponse v) => v.feed;
   static const Field<EntryResponse, FeedResponse> _f$feed =
       Field('feed', _$feed);
@@ -212,6 +216,7 @@ class EntryResponseMapper extends ClassMapperBase<EntryResponse> {
     #shareCode: _f$shareCode,
     #starred: _f$starred,
     #readingTime: _f$readingTime,
+    #enclosures: _f$enclosures,
     #feed: _f$feed,
   };
 
@@ -233,6 +238,7 @@ class EntryResponseMapper extends ClassMapperBase<EntryResponse> {
         shareCode: data.dec(_f$shareCode),
         starred: data.dec(_f$starred),
         readingTime: data.dec(_f$readingTime),
+        enclosures: data.dec(_f$enclosures),
         feed: data.dec(_f$feed));
   }
 
@@ -289,6 +295,8 @@ extension EntryResponseValueCopy<$R, $Out>
 
 abstract class EntryResponseCopyWith<$R, $In extends EntryResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  ListCopyWith<$R, MediaResponse,
+      MediaResponseCopyWith<$R, MediaResponse, MediaResponse>>? get enclosures;
   FeedResponseCopyWith<$R, FeedResponse, FeedResponse>? get feed;
   $R call(
       {BigInt? id,
@@ -307,6 +315,7 @@ abstract class EntryResponseCopyWith<$R, $In extends EntryResponse, $Out>
       String? shareCode,
       bool? starred,
       int? readingTime,
+      List<MediaResponse>? enclosures,
       FeedResponse? feed});
   EntryResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -319,6 +328,13 @@ class _EntryResponseCopyWithImpl<$R, $Out>
   @override
   late final ClassMapperBase<EntryResponse> $mapper =
       EntryResponseMapper.ensureInitialized();
+  @override
+  ListCopyWith<$R, MediaResponse,
+          MediaResponseCopyWith<$R, MediaResponse, MediaResponse>>?
+      get enclosures => $value.enclosures != null
+          ? ListCopyWith($value.enclosures!, (v, t) => v.copyWith.$chain(t),
+              (v) => call(enclosures: v))
+          : null;
   @override
   FeedResponseCopyWith<$R, FeedResponse, FeedResponse>? get feed =>
       $value.feed?.copyWith.$chain((v) => call(feed: v));
@@ -340,6 +356,7 @@ class _EntryResponseCopyWithImpl<$R, $Out>
           Object? shareCode = $none,
           bool? starred,
           int? readingTime,
+          Object? enclosures = $none,
           Object? feed = $none}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,
@@ -358,6 +375,7 @@ class _EntryResponseCopyWithImpl<$R, $Out>
         if (shareCode != $none) #shareCode: shareCode,
         if (starred != null) #starred: starred,
         if (readingTime != null) #readingTime: readingTime,
+        if (enclosures != $none) #enclosures: enclosures,
         if (feed != $none) #feed: feed
       }));
   @override
@@ -378,6 +396,7 @@ class _EntryResponseCopyWithImpl<$R, $Out>
       shareCode: data.get(#shareCode, or: $value.shareCode),
       starred: data.get(#starred, or: $value.starred),
       readingTime: data.get(#readingTime, or: $value.readingTime),
+      enclosures: data.get(#enclosures, or: $value.enclosures),
       feed: data.get(#feed, or: $value.feed));
 
   @override

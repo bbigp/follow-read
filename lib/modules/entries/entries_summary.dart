@@ -6,6 +6,7 @@ import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/global/widgets/dashed_line.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:get/get.dart';
 
 ///
@@ -22,7 +23,7 @@ class EntriesSummary extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 14),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const SizedBox(height: 8,),
-        Text(meta.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M28,),
+        PgText(meta.title, maxLines: 1, style: AppTextStyles.M28,),
         Obx(() {
           final unread = controller.unread(meta.metaId);
           return unread > 0
@@ -31,9 +32,10 @@ class EntriesSummary extends StatelessWidget {
                   const SizedBox(height: 2,),
                   Row(children: [
                     const SizedBox(width: 4,),
-                    Text('$unread未读', maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.M11B25,),
+                    PgText('$unread未读', maxLines: 1,
+                      style: AppTextStyles.M11B25,
+                      maxWidth: 50,
+                    ),
                     const SizedBox(width: 4,),
                   ],)
               ],)

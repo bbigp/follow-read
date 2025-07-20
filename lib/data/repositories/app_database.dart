@@ -8,6 +8,7 @@ import 'package:follow_read/data/table/entry_table.dart';
 import 'package:follow_read/data/table/feed_table.dart';
 import 'package:follow_read/data/table/filter_table.dart';
 import 'package:follow_read/data/table/folder_table.dart';
+import 'package:follow_read/data/table/media_table.dart';
 import 'package:follow_read/data/table/sync_record_table.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -15,7 +16,7 @@ import 'package:path/path.dart' as p;
 part 'app_database.g.dart';
 
 @DriftDatabase(tables: [FeedsTable, SyncRecordsTable, FoldersTable, FiltersTable,
-  EntriesTable,
+  EntriesTable, MediasTable,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());

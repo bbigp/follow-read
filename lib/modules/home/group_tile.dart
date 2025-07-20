@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 
 ///
 class GroupTile extends StatelessWidget {
@@ -18,7 +19,7 @@ class GroupTile extends StatelessWidget {
     return Row(children: [
       const SizedBox(width: 16, height: 28 + 8 + 8,),
       const SizedBox(width: 2,),
-      Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500,)),
+      Expanded(child: PgText(title, maxLines: 1, style: AppTextStyles.text17500,)),
       const SizedBox(width: 2,),
       if (trailing case final Widget trailing) ...[
         const SizedBox(width: 12,),

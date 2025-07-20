@@ -2,7 +2,12 @@
 
 import 'package:follow_read/data/providers/miniflux/me_response.dart';
 
+// ignore_for_file: constant_identifier_names
 class User {
+
+  static final String OPEN_CONTENT_VIEW = "内置阅读器";
+  static final String OPEN_CONTENT_WEBVIEW = "应用内浏览器";
+  static final String OPEN_CONTENT_BROWSER = "系统浏览器";
 
   final int id;
   final String username;

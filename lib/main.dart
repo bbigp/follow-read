@@ -42,6 +42,7 @@ void main() async {
       getPages: RouteConfig.getPages,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'DMSans',
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),

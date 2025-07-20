@@ -30,5 +30,7 @@ class AppColors {
   static const blueBackground = Color(0x1A007EFF);
 
   static const grep = Color(0x0fF5F5F5);
-
+  static const softPeach40 = Color(0x66D6B966);
+  static const darkSurface = Color(0xFF0D0D0D);
+  static const dark = Color(0xFF262626);
 }

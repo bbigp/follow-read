@@ -7,6 +7,7 @@ import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/foundation.dart';
@@ -103,7 +104,7 @@ class FeedIcon extends HookWidget {
           colors: [Color(0x80555555), Color(0xBF555555)]
         ),
       ),
-      child: Text(initials, style: textStyle, textAlign: TextAlign.center, maxLines: 1),
+      child: PgText(initials, style: textStyle, textAlign: TextAlign.center, maxLines: 1),
     );
   }
 

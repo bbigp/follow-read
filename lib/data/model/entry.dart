@@ -1,8 +1,11 @@
 
 
+import 'package:flutter/cupertino.dart';
+import 'package:follow_read/data/model/media.dart';
 import 'package:follow_read/data/model/page_info.dart';
 import 'package:follow_read/data/providers/miniflux/entry_page_response.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
+import 'package:html/parser.dart' as html;
 
 import 'feed.dart';
 import 'folder.dart';
@@ -41,6 +44,7 @@ class Entry {
   final String summary;
   final DateTime createdAt;
   final DateTime changedAt;
+  final List<Media> medias;
 
   static Entry empty = Entry();
 
@@ -64,6 +68,7 @@ class Entry {
     String? summary,
     DateTime? createdAt,
     DateTime? changedAt,
+    this.medias = const [],
   })  : id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero,
         feedId = feedId ?? BigInt.zero,
@@ -82,18 +87,7 @@ class Entry {
 
   //封面图
   String get pic {
-    // try {
-    //   final document = html.parse(content);
-    //   final imgs = document.getElementsByTagName('img');
-    //   if (imgs.isEmpty) return "";
-    //
-    //   final firstImg = imgs.first;
-    //   return firstImg.attributes['data-src'] ??
-    //       firstImg.attributes['srcset']?.split(',').first.trim().split(' ').first ??
-    //       firstImg.attributes['src'] ?? "";
-    // } catch (e) {
-      return "";
-    // }
+    return medias.firstWhere((e) => e.isImage, orElse: () => Media.empty).url;
   }
 
   List<String> get allImageUrls {
@@ -106,20 +100,20 @@ class Entry {
 
   //描述
   String get description {
-    // try {
-    //   final document = html.parse(content);
-    //   final element = document.body ?? document.documentElement;
-    //   String text = element?.text ?? '';
-    //   text = text
-    //       .replaceAll(RegExp(r'\s+'), ' ')
-    //       .trim();
-    //   return text.isEmpty
-    //       ? ''
-    //       : text.substring(0, text.length.clamp(0, 200)) +
-    //       (text.length > 200 ? '...' : '');
-    // } catch (e) {
+    try {
+      final document = html.parse(content);
+      final element = document.body ?? document.documentElement;
+      String text = element?.text ?? '';
+      text = text
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .trim();
+      return text.isEmpty
+          ? ''
+          : text.substring(0, text.length.clamp(0, 200)) +
+          (text.length > 200 ? '...' : '');
+    } catch (e) {
       return "";
-    // }
+    }
   }
 
   Entry copyWith({
@@ -142,6 +136,7 @@ class Entry {
     String? summary,
     DateTime? createdAt,
     DateTime? changedAt,
+    List<Media>? medias,
   }) {
     return Entry(id: id ?? this.id, title: title ?? this.title,
       hash: hash ?? this.hash,
@@ -159,6 +154,7 @@ class Entry {
       summary: summary ?? this.summary,
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
+      medias: medias ?? this.medias,
     );
   }
 }
@@ -184,7 +180,8 @@ extension EntryResponseExtension on EntryResponse {
       author: author, starred: starred, readingTime: readingTime,
       summary: "", createdAt: createdAt, changedAt: changedAt,
       feed: feed?.toFeed(), folder: feed?.category?.toFolder(),
-      status: EntryStatus.fromString(status)
+      status: EntryStatus.fromString(status),
+      medias: (enclosures ?? []).map((e) => e.toMedia()).toList(),
     );
   }
 }

@@ -55,7 +55,7 @@ class UserService extends GetxService {
       token: _box.read(PrefsKeys.token).toString(),
       autoRead: _box.read<bool>(PrefsKeys.autoRead) ?? false,
       unreadMark: UnreadMark.fromString(_box.read<String>(PrefsKeys.unreadMark) ?? "Dot"),
-      openContent: _box.read<String>(PrefsKeys.openContent) ?? "内置阅读器",
+      openContent: _box.read<String>(PrefsKeys.openContent) ?? User.OPEN_CONTENT_VIEW,
       rootFolderId: rootFolderId,
     );
   }

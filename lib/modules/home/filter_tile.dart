@@ -3,6 +3,7 @@ import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/global/widgets/context_menu.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/modules/add_filter/filter_icon.dart';
 import 'package:follow_read/modules/count_badge/count_badge.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
@@ -37,7 +38,7 @@ class FilterTile extends StatelessWidget {
           const SizedBox(width: 16, height: 44,),
           SizedBox(width: 24, height: 24, child: FilterIcon(icon: filter.icon, size: 24,),),
           const SizedBox(width: 16,),
-          Expanded(child: Text(filter.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M15,)),
+          Expanded(child: PgText(filter.name, maxLines: 1, style: AppTextStyles.M15,)),
           const SizedBox(width: 16,),
           CountBadge(id: filter.metaId),
           const SizedBox(width: 16,),

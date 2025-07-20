@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/model/entry.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 
 ///
 class EntryTileBodyTextOnly extends StatelessWidget {
@@ -12,7 +13,7 @@ class EntryTileBodyTextOnly extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(entry.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.M15,);
+    return PgText(entry.title, maxLines: 2, style: AppTextStyles.M15,);
   }
 
 }

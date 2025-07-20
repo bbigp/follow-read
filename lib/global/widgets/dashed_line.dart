@@ -16,7 +16,7 @@ class DashedDivider extends StatelessWidget {
     super.key,
     this.color = AppColors.black08, // 默认改为纯黑色
     this.thickness = 1, // 默认粗细调整为 2
-    this.spacing = 16, //空白模块总高度
+    this.spacing = 16,
     this.indent = 0,
     this.dashLength = 5,
     this.dashSpacing = 5,

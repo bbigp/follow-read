@@ -102,6 +102,7 @@ class PlainSheetTitle extends StatelessWidget {
   }
 }
 
+//文字居中 左侧是箭头
 class CenteredSheetTitle extends StatelessWidget {
   final String title;
   final Color? color;
@@ -152,7 +153,7 @@ class CupxSheetTitle extends StatelessWidget {
 
 }
 
-///
+///  圆圈中间带个x的按钮
 class CupxSheetTitleCloseButton extends StatelessWidget {
 
   const CupxSheetTitleCloseButton({super.key});

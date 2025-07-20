@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/data/model/entry.dart';
+import 'package:follow_read/data/model/user.dart';
+import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
@@ -13,8 +16,9 @@ import 'entry_tile_header.dart';
 ///
 class EntryTile extends StatelessWidget {
   final Rx<Entry> entryObs;
+  final cache = Get.find<MemoryCacheController>();
 
-  const EntryTile({super.key, required this.entryObs,});
+  EntryTile({super.key, required this.entryObs,});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,13 @@ class EntryTile extends StatelessWidget {
 
   Widget _buildContent() {
     return InkWell(
-        onTap: () => Get.toNamed(RouteConfig.entry, parameters: {"id": entryObs.value.id.toString()}),
+        onTap: () {
+          if (cache.currentUser.value.openContent == User.OPEN_CONTENT_BROWSER) {
+            Open.browser(entryObs.value.url);
+            return;
+          }
+          Get.toNamed(RouteConfig.entry, parameters: {"id": entryObs.value.id.toString()});
+        },
         child: Obx((){
           final entry = entryObs.value;
           Widget child = Container(

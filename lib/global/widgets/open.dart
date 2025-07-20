@@ -16,8 +16,8 @@ class Open {
     PopupWrapper.show(context: context, targetKey: key, child: view);
   }
 
-  static Future<void> browser(BuildContext context, String url) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
+  static Future<void> browser(String url) async {
+    // final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       final uri = Uri.parse(url);
       if (!await canLaunchUrl(uri)) {
@@ -29,12 +29,12 @@ class Open {
         webOnlyWindowName: '_blank', // Web 专用：新标签页打开
       );
     } catch (e) {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text('无法打开链接: ${e.toString()}'),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+      // scaffoldMessenger.showSnackBar(
+      //   SnackBar(
+      //     content: Text('无法打开链接: ${e.toString()}'),
+      //     duration: const Duration(seconds: 3),
+      //   ),
+      // );
     }
   }
 

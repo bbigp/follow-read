@@ -15,27 +15,30 @@ class TabBarx extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: Column(children: [
-        SpacerDivider(spacing: 1, thickness: 1, indent: 0,),
-        const SizedBox(height: 12,),
-        Padding(padding: EdgeInsets.symmetric(horizontal: 20),
-          child: LayoutBuilder(builder: (context, constraints){
-            final totalSpacing = constraints.maxWidth - 36 * tabs.length;
-            final eachSpacing = totalSpacing / (tabs.length - 1);
-            List<Widget> widgets = [];
-            for (var tab in tabs) {
-              widgets.add(tab);
-              widgets.add(SizedBox(width: eachSpacing,));
-            }
-            widgets.removeAt(widgets.length - 1);
-            return Row(children: [
-              ...widgets
-            ],);
-          }),
-        ),
-        // const SizedBox(height: 4,),
-        const SizedBox(height: 12,),
-      ],)
+      child: Container(
+        color: Colors.white,
+        child: Column(children: [
+          SpacerDivider(spacing: 1, thickness: 1, indent: 0,),
+          const SizedBox(height: 12,),
+          Padding(padding: EdgeInsets.symmetric(horizontal: 20),
+            child: LayoutBuilder(builder: (context, constraints){
+              final totalSpacing = constraints.maxWidth - 36 * tabs.length;
+              final eachSpacing = totalSpacing / (tabs.length - 1);
+              List<Widget> widgets = [];
+              for (var tab in tabs) {
+                widgets.add(tab);
+                widgets.add(SizedBox(width: eachSpacing,));
+              }
+              widgets.removeAt(widgets.length - 1);
+              return Row(children: [
+                ...widgets
+              ],);
+            }),
+          ),
+          // const SizedBox(height: 4,),
+          const SizedBox(height: 12,),
+        ],),
+      )
     );
 
   }

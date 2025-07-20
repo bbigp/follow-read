@@ -62,7 +62,7 @@ class ProfilePage extends StatelessWidget {
 
     final openContentView = Obx(() {
       return RadioPopupMenu(
-        menus: buildMenu(['内置阅读器', '应用内浏览器', '系统浏览器'], (v) {
+        menus: buildMenu([User.OPEN_CONTENT_VIEW, User.OPEN_CONTENT_WEBVIEW, User.OPEN_CONTENT_BROWSER], (v) {
           controller.change(openContent: v);
         }),
         groupValue: controller.state.user.openContent,
