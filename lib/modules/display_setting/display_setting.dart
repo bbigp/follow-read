@@ -18,7 +18,8 @@ class DisplaySetting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       const SheetGrabber(),
-      const CenteredSheetTitle(title: "显示设置",),
+      // const CenteredSheetTitle(title: "显示设置",),
+      const SizedBox(height: 8,),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: PgText("背景色", maxLines: 1, style: AppTextStyles.M15B50),
