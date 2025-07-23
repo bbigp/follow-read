@@ -7,11 +7,13 @@ import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/loading_more.dart';
 import 'package:follow_read/global/widgets/no_more.dart';
+import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry_tile/entry_tile.dart';
 import 'package:follow_read/modules/entries/entries_summary.dart';
+import 'package:follow_read/modules/home_tile/tile_settings.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -72,8 +74,7 @@ class _EntriesPageState extends State<EntriesPage> {
             //   'id': widget.metaDatax.id.toString(), 'type': widget.metaDatax.type,
             // });
           }, child: PaddedSvgIcon(SvgIcons.search),),
-          InkWell(onTap: (){
-          }, child: PaddedSvgIcon(SvgIcons.more),)
+          InkWell(onTap: () => Open.modal(context, TileSettings()), child: PaddedSvgIcon(SvgIcons.more),)
         ],
       ),
       body: Obx((){

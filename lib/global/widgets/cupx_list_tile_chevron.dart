@@ -8,6 +8,7 @@ import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 
 import 'cupx_switch.dart';
+import 'pg_text.dart';
 
 class ListTilexSwitch extends StatelessWidget {
   final String? icon;
@@ -26,12 +27,11 @@ class ListTilexSwitch extends StatelessWidget {
       ),
       const SizedBox(width: 12,),
       if (title != null) ...[
-        Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
+        Expanded(child: PgText(title!, maxLines: 1, style: AppTextStyles.text,),),
         const SizedBox(width: 12,),
       ],
 
       const SizedBox(width: 4,),
-      Expanded(child: Text("", maxLines: 1, overflow: TextOverflow.ellipsis,)),
       Switchx(value: value, onChanged: onChanged),
       const SizedBox(width: 4,),
       const SizedBox(width: 12,),

@@ -15,10 +15,10 @@ import 'package:follow_read/modules/sync/sync_controller.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
-import 'feed_tile.dart';
-import 'filter_tile.dart';
-import 'folder_tile.dart';
-import 'group_tile.dart';
+import '../home_tile/feed_tile.dart';
+import '../home_tile/filter_tile.dart';
+import '../home_tile/folder_tile.dart';
+import '../home_tile/group_tile.dart';
 import 'home_controller.dart';
 import 'loading_page.dart';
 

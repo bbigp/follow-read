@@ -10,7 +10,7 @@ import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
-import 'home_controller.dart';
+import '../home/home_controller.dart';
 
 ///
 class FilterTile extends StatelessWidget {

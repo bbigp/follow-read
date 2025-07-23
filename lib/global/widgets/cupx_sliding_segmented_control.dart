@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 
+import 'pg_text.dart';
+
 ///
 class CupxSlidingSegmentedControl extends StatelessWidget {
 
@@ -66,7 +68,7 @@ class CupxSlidingSegmentedControl extends StatelessWidget {
               borderRadius: segmentedBorderRadius,
               color: Colors.white,
             ) : null ,
-            child: Text(item, style: groupValue == item ? AppTextStyles.M15 :  AppTextStyles.caption500),
+            child: PgText(item, textAlign: TextAlign.center, style: groupValue == item ? AppTextStyles.M15 :  AppTextStyles.caption500),
           ),
       };
 
