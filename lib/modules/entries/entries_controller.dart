@@ -80,6 +80,10 @@ class EntriesController extends GetxController {
     }
   }
 
+  Future<void> changeMate({String? order}) async {
+
+  }
+
 //   Future<void> starred() async {
 //     final entry = state.entry;
 //     final success = await entryRepository.starred(entryId, !entry.starred);

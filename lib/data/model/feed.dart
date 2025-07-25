@@ -13,6 +13,7 @@ import 'package:follow_read/modules/add_feed/add_feed_form.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 import 'package:get/get.dart';
 
+import 'constant.dart';
 import 'entry.dart';
 import 'meta.dart';
 
@@ -30,6 +31,7 @@ class Feed implements Meta {
 
   final bool hideGlobally;
   final bool onlyShowUnread;
+  @override
   final String order;
   final String iconUrl;
 
@@ -54,7 +56,7 @@ class Feed implements Meta {
     this.errorCount = 0,
     this.errorMsg = "",
     BigInt? folderId,
-    this.order = "publishedTime",
+    this.order = Model.orderPublishedAt,
     this.hideGlobally = false,
   }) :  id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero,
@@ -153,7 +155,7 @@ extension FeedResponseExtension on FeedResponse {
       hideGlobally: hideGlobally ?? false,
 
       onlyShowUnread: false,
-      order: "publishedTime",
+      order: Model.orderPublishedAt,
       iconUrl: icon == null ? "" : "icons/${icon?.iconId}",
     );
   }

@@ -6,7 +6,6 @@ class SvgIcons {
   const SvgIcons._();
 
   static const String readingTime = "assets/svg/time.svg";
-  static const String onlyUnread = "assets/svg/eyes.svg";
 
 
   static const String searchInput = "assets/svg/search_input.svg";
@@ -83,6 +82,7 @@ class SvgIcons {
   static const String lines_3 = "assets/svg/lines_3.svg";
   static const String play = "assets/svg/play.svg";
   static const String file = "assets/svg/file.svg";
+  static const String eyes = "assets/svg/eyes.svg";
 
   static const String check = "assets/svg/check.svg";
   static const String check_o = "assets/svg/check_o.svg";

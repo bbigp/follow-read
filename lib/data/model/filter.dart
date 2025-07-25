@@ -3,6 +3,7 @@
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
 
+import 'constant.dart';
 import 'meta.dart';
 
 class Filter implements Meta {
@@ -19,6 +20,7 @@ class Filter implements Meta {
   final DateTime createdAt;
   final DateTime changedAt;
   final bool hideGlobally;
+  @override
   final String order;
   final bool onlyShowUnread;
 
@@ -42,7 +44,7 @@ class Filter implements Meta {
     DateTime? createdAt,
     DateTime? changedAt,
     this.hideGlobally = false,
-    this.order = "publishedTime",
+    this.order = Model.orderPublishedAt,
     this.onlyShowUnread = false,
     this.feeds = const [],
   }) : id = id ?? BigInt.zero,

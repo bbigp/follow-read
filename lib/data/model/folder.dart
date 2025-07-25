@@ -5,6 +5,7 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/providers/miniflux/category_response.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
 
+import 'constant.dart';
 import 'entry.dart';
 import 'meta.dart';
 
@@ -14,6 +15,7 @@ class Folder implements Meta {
   @override
   final String title;
   final bool hideGlobally;
+  @override
   final String order;
   final bool onlyShowUnread;
 
@@ -28,7 +30,7 @@ class Folder implements Meta {
     this.title = "",
     this.hideGlobally = false,
     this.onlyShowUnread = false,
-    this.order = "publishedTime",
+    this.order = Model.orderPublishedAt,
 
     this.expanded = false,
     this.feeds = const [],
