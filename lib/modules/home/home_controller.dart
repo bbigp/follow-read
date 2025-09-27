@@ -14,13 +14,15 @@ class HomeController extends GetxController {
   final _folderService = Get.find<FolderService>();
   final _filterService = Get.find<FilterService>();
   final _userService = Get.find<UserService>();
-  BigInt rootFolderId = BigInt.zero;
 
   @override
   void onInit() {
     super.onInit();
-    final user = _userService.getUser();
-    rootFolderId = user.rootFolderId;
+    // everAll(
+    //     [_cache.changeFeed, _cache.changeFolder, _cache.stateRootFolderId],
+    //         (_) => initFeedAndFolder(_cache.rootFolderId)
+    // );
+    // ever(_cache.changeFilter, (_) => initFilter());
   }
 
   @override
@@ -30,7 +32,9 @@ class HomeController extends GetxController {
   }
 
 
-  void loadHomeData({bool loadAll = false, bool loadFeeds = false, bool loadFolders = false, bool loadFilters = false}) async {
+  Future<void> loadHomeData({bool loadAll = false, bool loadFeeds = false, bool loadFolders = false, bool loadFilters = false}) async {
+    logger.i('loadHomeData');
+    final rootFolderId = _userService.getUser().rootFolderId;
     final results = await Future.wait([
       _feedService.getAllFeeds(),
       // 只有当需要加载 Folders 或 Filters 时，才去加载它们对应的原始数据
@@ -41,7 +45,7 @@ class HomeController extends GetxController {
 
     if (loadAll || loadFolders) {
       final List<Folder> folders = results.removeAt(0) as List<Folder>;
-      state.folders = _associateFeedsWithFolders(feeds, folders);
+      state.folders = _associateFeedsWithFolders(feeds, folders, rootFolderId);
       state.stateFolderLen.value = state.folders.length;
     }
     if (loadAll || loadFilters) {
@@ -75,7 +79,7 @@ class HomeController extends GetxController {
     }).toList();
   }
 
-  List<Folder> _associateFeedsWithFolders(List<Feed> feeds, List<Folder> folders) {
+  List<Folder> _associateFeedsWithFolders(List<Feed> feeds, List<Folder> folders, BigInt rootFolderId) {
     final folderFeedsMap = feeds.fold<Map<BigInt, List<Feed>>>(
       {},
           (map, feed) {
@@ -112,7 +116,7 @@ class HomeController extends GetxController {
 
   Future<void> deleteFilter(BigInt id) async {
     if (await _filterService.deleteById(id)) {
-       loadHomeData(loadFilters: true);
+       await loadHomeData(loadFilters: true);
     }
   }
 

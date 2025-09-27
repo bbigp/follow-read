@@ -24,4 +24,8 @@ class FolderService extends ServiceBase {
     return await _dao.getAllFolders();
   }
 
+  Future<Folder?> getFolder(BigInt id) async {
+    return await _dao.getFolder(id);
+  }
+
 }

@@ -2,21 +2,33 @@
 
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/user.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/data/services/folder_service.dart';
 import 'package:follow_read/data/services/user_service.dart';
+import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
   final state = ProfileState();
 
   final userService = Get.find<UserService>();
-  final _cache = Get.find<MemoryCacheController>();
+  final folderService = Get.find<FolderService>();
+  final _cache = Get.find<HomeController>();
 
   @override
   void onInit() {
     super.onInit();
-    state._stateUser.value = userService.getUser();
-    state._rootFolder.value = _cache.getFolder(state.user.rootFolderId) ?? Folder(title: "None");
+    final user = userService.getUser();
+    state._stateUser.value = user;
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    loading();
+  }
+
+  void loading() async {
+    state._rootFolder.value = await folderService.getFolder(state.user.rootFolderId) ?? Folder(title: "None");
   }
 
 
@@ -27,7 +39,8 @@ class ProfileController extends GetxController {
       openContent: openContent, rootFolderId: rootFolderId,
     );
     onInit();
-    _cache.loadUser();
+    onReady();
+    await _cache.loadHomeData(loadAll: true);
   }
 
 }
@@ -37,7 +50,7 @@ class ProfileState {
   final _stateUser = User.empty.obs;
   User get user => _stateUser.value;
 
-  final _rootFolder = Folder().obs;
+  final _rootFolder = Folder(title: "None").obs;
   Folder get rootFolder => _rootFolder.value;
 
 }
