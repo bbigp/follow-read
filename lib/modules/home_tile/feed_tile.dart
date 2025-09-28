@@ -31,7 +31,7 @@ class FeedTile extends StatelessWidget {
             height: 24,
             child: SvgPicture.asset(SvgIcons.dot_s, width: 24, height: 24, fit: BoxFit.contain, //设计图dot_s半径1.5
               colorFilter: ColorFilter.mode(
-                AppColors.black50,
+                AppColors.black25,
                 BlendMode.srcIn,
               ), //设计图black8
             ),
