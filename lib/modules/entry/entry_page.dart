@@ -3,9 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/user.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/no_more.dart';
@@ -17,6 +15,7 @@ import 'package:follow_read/modules/display_setting/display_setting.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry/entry_file.dart';
 import 'package:follow_read/modules/entry/entry_video.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -29,14 +28,14 @@ class EntryPage extends StatelessWidget{
   EntryPage({super.key});
 
   final controller = Get.find<EntriesController>();
-  final cache = Get.find<MemoryCacheController>();
+  final profile = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
     final entryId = BigInt.parse(Get.parameters['id'] ?? "0");
     final entry = controller.state.get(entryId);
 
-    Widget view = cache.currentUser.value.openContent == User.OPEN_CONTENT_WEBVIEW
+    Widget view = profile.state.user.openContent == User.OPEN_CONTENT_WEBVIEW
         ? WebView(url: entry.url)
         : Column(children: [
       Expanded(child: SingleChildScrollView(
