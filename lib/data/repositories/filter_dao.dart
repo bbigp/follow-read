@@ -29,12 +29,12 @@ class FilterDao extends DatabaseAccessor<AppDatabase> {
     ));
   }
 
-  Future<Filter> getFilter(BigInt id) async {
+  Future<Filter?> getFilter(BigInt id) async {
     var query = select(filtersTable);
     query = query..where((t) => t.deleted.equals(0))
       ..where((t) => t.id.equals(id));
-    final rows = await query.getSingle();
-    return rows.toFilter();
+    final rows = await query.getSingleOrNull();
+    return rows?.toFilter();
   }
 
 

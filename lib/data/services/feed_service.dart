@@ -26,6 +26,10 @@ class FeedService extends ServiceBase {
     return await _feeDao.getAllFeeds();
   }
 
+  Future<Feed?> getFeed(BigInt id) async {
+    return await _feeDao.getFeed(id);
+  }
+
 
   Future<bool> save(String feedUrl, BigInt folderId) async {
     final result = await MinifluxApi.postFeed(feedUrl, folderId);

@@ -158,6 +158,7 @@ class MemoryCacheController extends GetxService {
   List<Feed> get feeds => _feedMap.values.toList();
   List<Folder> get folders => _folderMap.values.toList();
   List<Filter> get filters => _filterMap.values.toList();
-  int unread(String id) => countMap[id] == null ? 0 : countMap[id]!.value;
+  int unread(String id) => countMap[id] == null ? zero.value : countMap[id]!.value;
 
+  final zero = 0.obs;
 }

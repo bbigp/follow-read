@@ -28,6 +28,10 @@ class FilterService extends ServiceBase {
     return await _dao.getAllFilters();
   }
 
+  Future<Filter?> getFilter(BigInt id) async {
+    return await _dao.getFilter(id);
+  }
+
 
   Future<bool> deleteById(BigInt id) async {
     return await _dao.deleteById(id);

@@ -24,16 +24,6 @@ class EntriesController extends GetxController {
   final _filterService = Get.find<FilterService>();
   final _entryService = Get.find<EntryService>();
 
-  @override
-  void onInit() {
-    super.onInit();
-    state.meta = switch(type) {
-      "e" => _cache.getFeed(id) ?? Feed(),
-      "o" => _cache.getFolder(id) ?? Folder(),
-      "i" => _cache.getFilter(id) ?? Filter(),
-      _ => _cache.getFeed(id) ?? Feed(),
-    };
-  }
 
   @override
   void onReady() {
@@ -45,8 +35,14 @@ class EntriesController extends GetxController {
     if (state.isLoading) return;
     state._isLoading.value = true;
 
+    state.meta = switch(type) {
+      "e" => await _feedService.getFeed(id) ?? Feed(),
+      "o" => await _folderService.getFolder(id) ?? Folder(),
+      "i" => await _filterService.getFilter(id) ?? Filter(),
+      _ => await _feedService.getFeed(id) ?? Feed(),
+    };
     await Future.delayed(Duration(milliseconds: 200));
-    final entries = await _entryService.entries(state.meta, page: 1, size: state.size);
+    final entries = await _entryService.entries(state.meta!, page: 1, size: state.size);
     state.addEntries(entries, reset: true);
     state._isLoading.value = false;
   }
@@ -97,8 +93,7 @@ class EntriesController extends GetxController {
 
 
 class EntriesState {
-
-  late final Meta meta;
+  Meta meta = Feed();
 
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;

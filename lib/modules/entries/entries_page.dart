@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
+import 'package:follow_read/data/model/feed.dart';
+import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/loading_more.dart';
 import 'package:follow_read/global/widgets/no_more.dart';
@@ -98,7 +100,7 @@ class _EntriesPageState extends State<EntriesPage> {
         child: CustomScrollView(
             controller: _scrollController,
             slivers: [
-              SliverToBoxAdapter(child: EntriesSummary(meta: controller.state.meta),), //滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
+              SliverToBoxAdapter(child: EntriesSummary(meta:  controller.state.meta)),//滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
               Obx(() {
                 return SliverList(delegate: SliverChildBuilderDelegate(childCount: controller.state.entriesLen, (context, index) {
                   return GetBuilder<EntriesController>(builder: (controller) {
