@@ -13,6 +13,7 @@ import 'package:follow_read/global/widgets/menux.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/modules/folder_picker/folder_picker.dart';
+import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,7 @@ class ProfilePage extends StatelessWidget {
   final GlobalKey _rootFolderKey = new GlobalKey();
 
   final controller = Get.find<ProfileController>();
+  final homePage = Get.find<HomeController>();
 
   List<MenuData> buildIconMenu(Map<String, String> menuValues, void Function(String) onTap) {
     return menuValues.entries.map((item) {
@@ -163,7 +165,10 @@ class ProfilePage extends StatelessWidget {
                       additionalInfo: controller.state.rootFolder.title,
                       onTap: () => Open.modal(context, FolderPicker(
                         sheetTitle: "根文件夹", value: controller.state.rootFolder.title,
-                        onChanged: (v) => controller.change(rootFolderId: v),
+                        onChanged: (v) async {
+                          await controller.change(rootFolderId: v);
+                          await homePage.loadHomeData(loadAll: true);
+                        },
                       )),
                     );
                   }),

@@ -4,15 +4,8 @@ import 'dart:ui';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/presentation/providers/auth_provider.dart';
-import 'package:follow_read/features/presentation/providers/sync_data_provider.dart';
-import 'package:follow_read/deleted/home_screen.dart';
 import 'package:follow_read/routes.dart';
-import 'package:follow_read/service/background_service.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workmanager/workmanager.dart';
 
 import 'core/utils/bigint_mapper.dart';
 import 'di.dart';

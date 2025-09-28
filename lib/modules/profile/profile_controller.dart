@@ -4,21 +4,24 @@ import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/data/services/folder_service.dart';
 import 'package:follow_read/data/services/user_service.dart';
-import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:get/get.dart';
 
-class ProfileController extends GetxController {
+class ProfileController extends GetxService {
   final state = ProfileState();
 
   final userService = Get.find<UserService>();
   final folderService = Get.find<FolderService>();
-  final _cache = Get.find<HomeController>();
+  bool isInitialized = true;
 
   @override
   void onInit() {
     super.onInit();
     final user = userService.getUser();
     state._stateUser.value = user;
+    if (isInitialized) {//onInit的时候先设置rootFolder，保证home controller能正常加载数据
+      state._rootFolder.value = Folder(id: user.rootFolderId);
+      isInitialized = false;
+    }
   }
 
   @override
@@ -32,7 +35,7 @@ class ProfileController extends GetxController {
   }
 
 
-  void change({bool? autoRead, String? unreadMark, String? openContent,
+  Future<void> change({bool? autoRead, String? unreadMark, String? openContent,
     BigInt? rootFolderId,
   }) async {
     await userService.save(autoRead: autoRead, unreadMark: unreadMark,
@@ -40,7 +43,6 @@ class ProfileController extends GetxController {
     );
     onInit();
     onReady();
-    await _cache.loadHomeData(loadAll: true);
   }
 
 }

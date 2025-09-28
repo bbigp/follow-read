@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
@@ -6,6 +7,7 @@ import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
 import 'package:follow_read/data/services/user_service.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -14,6 +16,7 @@ class HomeController extends GetxController {
   final _folderService = Get.find<FolderService>();
   final _filterService = Get.find<FilterService>();
   final _userService = Get.find<UserService>();
+  final profile = Get.find<ProfileController>();
 
   @override
   void onInit() {
@@ -34,7 +37,7 @@ class HomeController extends GetxController {
 
   Future<void> loadHomeData({bool loadAll = false, bool loadFeeds = false, bool loadFolders = false, bool loadFilters = false}) async {
     logger.i('loadHomeData');
-    final rootFolderId = _userService.getUser().rootFolderId;
+    final rootFolderId = profile.state.user.rootFolderId;
     final results = await Future.wait([
       _feedService.getAllFeeds(),
       // 只有当需要加载 Folders 或 Filters 时，才去加载它们对应的原始数据
