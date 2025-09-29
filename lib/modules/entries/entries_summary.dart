@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/model/meta.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/global/widgets/dashed_line.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
+import 'package:follow_read/modules/count_badge/unread_controller.dart';
 import 'package:get/get.dart';
 
 ///
 class EntriesSummary extends StatelessWidget {
 
-  final controller = Get.find<MemoryCacheController>();
+  final controller = Get.find<UnreadController>();
 
   final Meta meta;
   EntriesSummary({super.key, required this.meta});

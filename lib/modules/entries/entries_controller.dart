@@ -10,7 +10,7 @@ import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
 class EntriesController extends GetxController {
@@ -18,7 +18,7 @@ class EntriesController extends GetxController {
   final String type;
   EntriesController(this.id, this.type);
   final state = EntriesState();
-  final _cache = Get.find<MemoryCacheController>();
+  final profile = Get.find<ProfileController>();
   final _feedService = Get.find<FeedService>();
   final _folderService = Get.find<FolderService>();
   final _filterService = Get.find<FilterService>();
@@ -57,7 +57,7 @@ class EntriesController extends GetxController {
   }
 
   Future<void> autoRead(BigInt entryId) async {
-    if (_cache.currentUser.value.autoRead) {
+    if (profile.state.user.autoRead) {
       await read(entryId, status: EntryStatus.read);
     }
   }

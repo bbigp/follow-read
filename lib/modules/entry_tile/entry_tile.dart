@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/user.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +16,7 @@ import 'entry_tile_header.dart';
 ///
 class EntryTile extends StatelessWidget {
   final Rx<Entry> entryObs;
-  final cache = Get.find<MemoryCacheController>();
+  final profile = Get.find<ProfileController>();
 
   EntryTile({super.key, required this.entryObs,});
 
@@ -31,7 +31,7 @@ class EntryTile extends StatelessWidget {
   Widget _buildContent() {
     return InkWell(
         onTap: () {
-          if (cache.currentUser.value.openContent == User.OPEN_CONTENT_BROWSER) {
+          if (profile.state.user.openContent == User.OPEN_CONTENT_BROWSER) {
             Open.browser(entryObs.value.url);
             return;
           }

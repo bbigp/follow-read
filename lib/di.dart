@@ -8,6 +8,7 @@ import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/data/services/sync_service.dart';
 import 'package:follow_read/data/services/user_service.dart';
+import 'package:follow_read/modules/count_badge/unread_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -27,6 +28,7 @@ class DI {
     Get.put(FolderService());
     Get.put(FilterService());
     Get.put(ProfileController());
+    Get.put(UnreadController());
 
     await Get.putAsync(() => MemoryCacheController().load());
   }

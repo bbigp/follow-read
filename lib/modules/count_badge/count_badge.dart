@@ -3,13 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/model/user.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
+import 'package:follow_read/modules/count_badge/unread_controller.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
 
 class CountBadge extends StatelessWidget {
-  final controller = Get.find<MemoryCacheController>();
+  final controller = Get.find<UnreadController>();
+  final profile = Get.find<ProfileController>();
 
   final String id;
 
@@ -18,7 +20,7 @@ class CountBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      CountBadgeBuilder builder = switch(controller.unreadMark) {
+      CountBadgeBuilder builder = switch(profile.state.unreadMark) {
         UnreadMark.none => noneBadgeBuilder,
         UnreadMark.dot => dotBadgeBuilder,
         _ => numberBadgeBuilder,
