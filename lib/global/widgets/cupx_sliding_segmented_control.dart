@@ -68,7 +68,7 @@ class CupxSlidingSegmentedControl extends StatelessWidget {
               borderRadius: segmentedBorderRadius,
               color: Colors.white,
             ) : null ,
-            child: PgText(item, textAlign: TextAlign.center, style: groupValue == item ? AppTextStyles.M15 :  AppTextStyles.caption500),
+            child: Text(item, textAlign: TextAlign.center, style: groupValue == item ? AppTextStyles.M15 :  AppTextStyles.M15B50),
           ),
       };
 

@@ -11,6 +11,7 @@ import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
+import 'package:follow_read/modules/widgets/me/me.dart';
 import 'package:get/get.dart';
 
 class EntriesController extends GetxController {
@@ -35,14 +36,14 @@ class EntriesController extends GetxController {
     if (state.isLoading) return;
     state._isLoading.value = true;
 
-    state.meta = switch(type) {
+    state._meta.value = switch(type) {
       "e" => await _feedService.getFeed(id) ?? Feed(),
       "o" => await _folderService.getFolder(id) ?? Folder(),
       "i" => await _filterService.getFilter(id) ?? Filter(),
       _ => await _feedService.getFeed(id) ?? Feed(),
     };
     await Future.delayed(Duration(milliseconds: 200));
-    final entries = await _entryService.entries(state.meta!, page: 1, size: state.size);
+    final entries = await _entryService.entries(state.meta, page: 1, size: state.size);
     state.addEntries(entries, reset: true);
     state._isLoading.value = false;
   }
@@ -76,8 +77,11 @@ class EntriesController extends GetxController {
     }
   }
 
-  Future<void> changeMate({String? order}) async {
-
+  Future<void> changeMate({String? order, bool? unreadOnly}) async {
+    if (type == "e") {
+      await _feedService.saveLocal(id, unreadOnly: unreadOnly, orderx: order);
+    }
+    await init();
   }
 
 //   Future<void> starred() async {
@@ -93,7 +97,8 @@ class EntriesController extends GetxController {
 
 
 class EntriesState {
-  Meta meta = Feed();
+  final Rx<Meta> _meta = Feed().obs;
+  Meta get meta => _meta.value;
 
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;

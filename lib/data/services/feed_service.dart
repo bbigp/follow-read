@@ -50,4 +50,9 @@ class FeedService extends ServiceBase {
   }
 
 
+  Future<bool> saveLocal(BigInt feedId, {bool? unreadOnly, String? orderx}) async {
+    return await _feeDao.updateById(feedId, unreadOnly: unreadOnly, orderx: orderx);
+  }
+
+
 }

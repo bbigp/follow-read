@@ -25,6 +25,12 @@ class Folder implements Meta {
   @override
   String get metaId => "o$id";
 
+  @override
+  String get siteUrl => "";
+
+  @override
+  String get url => "";
+
   Folder({
     BigInt? id, BigInt? userId,
     this.title = "",

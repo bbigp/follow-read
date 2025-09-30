@@ -7,6 +7,10 @@ abstract class Meta {
   String get title;
   String get metaId;
   String get order;
+  bool get onlyShowUnread;
+  bool get hideGlobally;
+  String get siteUrl;
+  String get url;
 }
 
 // abstract class MetaRow {

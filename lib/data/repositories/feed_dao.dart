@@ -45,6 +45,27 @@ class FeedDao extends DatabaseAccessor<AppDatabase> {
     return rows.map((e) => e.toFeed()).toList();
   }
 
+
+  Future<bool> updateById(BigInt feedId, {bool? unreadOnly,
+    String? orderx,
+    // bool? hideGlobally,
+    // String? title, int? categoryId,
+  }) async {
+    final affectedRows = await (update(feedsTable)
+      ..where((t) => t.id.equals(feedId))
+    ).write(
+      FeedsTableCompanion(
+        // title: title != null && title != "" ? Value(title) : const Value.absent(),
+        // categoryId: categoryId != null ? Value(BigInt.from(categoryId)) : const Value.absent(),
+        onlyShowUnread: unreadOnly != null ? Value(unreadOnly) : const Value.absent(),
+        // showReadingTime: showReadingTime != null ? Value(showReadingTime) : const Value.absent(),
+        orderx: orderx != null && orderx != "" ? Value(orderx) : const Value.absent(),
+        // hideGlobally: hideGlobally != null ? Value(hideGlobally) : const Value.absent(),
+      ),
+    );
+    return affectedRows > 0;
+  }
+
   Future<void> batchSave(List<Feed> feeds) async {
     if (feeds.isEmpty) return;
 

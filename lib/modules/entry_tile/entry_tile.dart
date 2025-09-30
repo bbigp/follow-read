@@ -42,7 +42,7 @@ class EntryTile extends StatelessWidget {
           Widget child = Container(
               padding: EdgeInsets.all(16),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                EntryTileHeader(title: entry.feed.title, iconUrl: entry.feed.iconUrl, time: entry.createdAt,),
+                EntryTileHeader(title: entry.feed.title, iconUrl: entry.feed.iconUrl, time: entry.publishedAt,),
                 const SizedBox(height: 8,),
                 entry.pic.isEmpty ? EntryTileBodyTextOnly(entry: entry)
                     : EntryTileBodySingleImage(entry: entry),

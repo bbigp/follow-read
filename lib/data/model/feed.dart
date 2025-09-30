@@ -22,6 +22,7 @@ class Feed implements Meta {
   final BigInt id;
   final BigInt userId;
   final String feedUrl;
+  @override
   final String siteUrl;
   @override
   final String title;
@@ -37,6 +38,9 @@ class Feed implements Meta {
 
   @override
   String get metaId => "e$id";
+
+  @override
+  String get url => feedUrl;
 
   // final int unread;
   // final int read;

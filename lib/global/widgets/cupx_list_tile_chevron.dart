@@ -27,7 +27,7 @@ class ListTilexSwitch extends StatelessWidget {
       ),
       const SizedBox(width: 12,),
       if (title != null) ...[
-        Expanded(child: PgText(title!, maxLines: 1, style: AppTextStyles.text,),),
+        Expanded(child: Text(title!, maxLines: 1, style: AppTextStyles.text,),),
         const SizedBox(width: 12,),
       ],
 

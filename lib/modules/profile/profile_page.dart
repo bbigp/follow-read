@@ -85,14 +85,14 @@ class ProfilePage extends StatelessWidget {
                   child: Column(children: [
                     Obx((){
                       return ListTilexChevronUpDown(key: _unreadMarkKey, icon: SvgIcons.unread_dashed,
-                        title: "未读标记",
+                        title: "Unread Mark",
                         additionalInfo: controller.state.user.unreadMark.asString,
                         onTap: () => Open.menu(context, _unreadMarkKey, unreadMarkView),
                       );
                     }),
                     Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
                     Obx((){
-                      return ListTilexSwitch(title: "自动已读", value: controller.state.user.autoRead,
+                      return ListTilexSwitch(title: "Auto Mark Read", value: controller.state.user.autoRead,
                         icon: SvgIcons.book, onChanged: (v) {
                           controller.change(autoRead: v);
                       },);
@@ -100,7 +100,7 @@ class ProfilePage extends StatelessWidget {
                     Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
                     Obx((){
                       return ListTilexChevronUpDown(key: _openContentKey, icon: SvgIcons.page,
-                        title: "内容打开方式",
+                        title: "Open Content with",
                         additionalInfo: controller.state.user.openContent,
                         onTap: () => Open.menu(context, _openContentKey, openContentView),
                       );
@@ -148,7 +148,7 @@ class ProfilePage extends StatelessWidget {
                         icon: SvgPicture.asset(SvgIcons.page, width: 24, height: 24, fit: BoxFit.contain,
                           colorFilter: ColorFilter.mode(AppColors.black50, BlendMode.srcIn
                         ),
-                      ), title: "令牌",
+                      ), title: "Token",
                         additionalInfo: controller.state.user.token,
                       );
                     })
@@ -161,7 +161,7 @@ class ProfilePage extends StatelessWidget {
                 child: Column(children: [
                   Obx((){
                     return ListTilexChevronUpDown(icon: SvgIcons.folder_1,
-                      title: "根文件夹",
+                      title: "Root Folder",
                       additionalInfo: controller.state.rootFolder.title,
                       onTap: () => Open.modal(context, FolderPicker(
                         sheetTitle: "根文件夹", value: controller.state.rootFolder.title,

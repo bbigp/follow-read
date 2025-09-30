@@ -41,6 +41,11 @@ class FeedIcon extends HookWidget {
         radius = 4;
         textStyle = AppTextStyles.M11White00;
         break;
+      case Sizex.large:
+        size = 36;
+        radius = 8;
+        textStyle = AppTextStyles.M15White00;
+        break;
       case Sizex.medium:
       default:
         size = 24;

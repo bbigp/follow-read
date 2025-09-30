@@ -1,6 +1,7 @@
 
 
 import 'package:drift/drift.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/filter.dart';
@@ -77,6 +78,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
       order by $orderByColumn $ordering
       limit $size offset ${(page-1)*size}
     ''';
+    debugPrint(query);
     final result = await db.customSelect(query, readsFrom: {entriesTable}).get();
     return result.map((r) => entriesTable.map(r.data).toEntry()).toList();
     // final keyword = '%$word%';

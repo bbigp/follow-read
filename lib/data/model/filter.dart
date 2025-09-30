@@ -32,6 +32,12 @@ class Filter implements Meta {
   @override
   String get metaId => "i$id";
 
+  @override
+  String get siteUrl => "";
+
+  @override
+  String get url => "";
+
   Filter({
     BigInt? id,
     BigInt? userId,
