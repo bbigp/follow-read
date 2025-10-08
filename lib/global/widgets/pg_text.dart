@@ -7,6 +7,7 @@ class PgText extends LeafRenderObjectWidget {
   final TextStyle style;
   final TextAlign textAlign;
   final double? maxWidth;
+  final TextOverflow? overflow;//无用字段，兼容Text组件属性
 
 
   const PgText(this.text, {
@@ -15,6 +16,7 @@ class PgText extends LeafRenderObjectWidget {
     required this.style,
     this.textAlign = TextAlign.start,
     this.maxWidth,
+    this.overflow,
   });
 
   @override

@@ -27,7 +27,7 @@ class ListTilexSwitch extends StatelessWidget {
       ),
       const SizedBox(width: 12,),
       if (title != null) ...[
-        Expanded(child: Text(title!, maxLines: 1, style: AppTextStyles.text,),),
+        Expanded(child: PgText(title!, maxLines: 1, style: AppTextStyles.text,),),
         const SizedBox(width: 12,),
       ],
 
@@ -117,15 +117,15 @@ class ListTilex extends StatelessWidget {
         const SizedBox(width: 12,),
       ],
       if (title != null) ...[
-        Text(title!, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text,),
+        PgText(title!, maxLines: 1, maxWidth: 300, overflow: TextOverflow.ellipsis, style: AppTextStyles.R15,),
         const SizedBox(width: 12,),
       ],
 
       if (additionalInfo != "") ...[
         const SizedBox(width: 4),
-        Expanded(child: Text(additionalInfo, maxLines: 1, overflow: TextOverflow.ellipsis,
+        Expanded(child: PgText(additionalInfo, maxLines: 1, overflow: TextOverflow.ellipsis,
           style: AppTextStyles.caption,
-          textAlign: TextAlign.right,)
+          textAlign: icon == null && title == null ? TextAlign.start : TextAlign.right,)
         ),
         const SizedBox(width: 4,),
       ],

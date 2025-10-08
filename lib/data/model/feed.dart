@@ -29,8 +29,11 @@ class Feed implements Meta {
   final int errorCount;
   final String errorMsg;
   final BigInt folderId;
+  final String desc;
 
+  @override
   final bool hideGlobally;
+  @override
   final bool onlyShowUnread;
   @override
   final String order;
@@ -56,6 +59,7 @@ class Feed implements Meta {
     // this.unread = 0,
     // this.read = 0 ,
     this.iconUrl = "",
+    this.desc = "",
     this.onlyShowUnread = false,
     this.errorCount = 0,
     this.errorMsg = "",
@@ -79,6 +83,7 @@ class Feed implements Meta {
     // int? unread,
     // int? read,
     String? iconUrl,
+    String? desc,
     bool? onlyShowUnread,
     bool? showReadingTime,
     int? errorCount,
@@ -96,6 +101,7 @@ class Feed implements Meta {
       // unread: unread ?? this.unread,
       // read: read ?? this.read,
       iconUrl: iconUrl ?? this.iconUrl,
+      desc: desc ?? this.desc,
       onlyShowUnread: onlyShowUnread ?? this.onlyShowUnread,
       errorCount: errorCount ?? this.errorCount,
       errorMsg: errorMsg ?? this.errorMsg,
@@ -145,7 +151,7 @@ extension FeedRowExtension on FeedRow {
       id: id, userId: userId, feedUrl: feedUrl, siteUrl: siteUrl,
       title: title, iconUrl: iconUrl, onlyShowUnread: onlyShowUnread,
       errorMsg: errorMsg, errorCount: errorCount, folderId: folderId,
-      order: orderx, hideGlobally: hideGlobally,
+      order: orderx, hideGlobally: hideGlobally, desc: "",
     );
   }
 }
@@ -161,6 +167,7 @@ extension FeedResponseExtension on FeedResponse {
       onlyShowUnread: false,
       order: Model.orderPublishedAt,
       iconUrl: icon == null ? "" : "icons/${icon?.iconId}",
+      desc: "",
     );
   }
 }

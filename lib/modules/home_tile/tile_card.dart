@@ -11,6 +11,8 @@ import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/card_viewx.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
+import 'package:follow_read/routes.dart';
+import 'package:get/get.dart';
 
 class TileCard extends StatelessWidget {
 
@@ -31,7 +33,7 @@ class TileCard extends StatelessWidget {
             FeedIcon(title: feed.title, iconUrl: feed.iconUrl, sizex: Sizex.large,),
 
             const SizedBox(width: 12,),
-            Expanded(child: Text(feed.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M15),),
+            Expanded(child: PgText(feed.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M15),),
             const SizedBox(width: 6,),
 
             const SizedBox(width: 8,),
@@ -43,6 +45,11 @@ class TileCard extends StatelessWidget {
                 height: 48, padding: 20,
                 borderRadius: BorderRadius.circular(12),
               ),
+              enabled: true,
+              onPressed: () async {
+                Get.back();
+                Get.toNamed(RouteConfig.addFeed, parameters: {"id": feed.id.toString()});
+              },
             )
           ],));
     }

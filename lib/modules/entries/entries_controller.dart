@@ -97,8 +97,8 @@ class EntriesController extends GetxController {
 
 
 class EntriesState {
-  final Rx<Meta> _meta = Feed().obs;
-  Meta get meta => _meta.value;
+  final Rx<Meta?> _meta = Rx<Meta?>(null);
+  Meta get meta => _meta.value ?? Feed();
 
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;

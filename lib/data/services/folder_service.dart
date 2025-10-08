@@ -25,7 +25,10 @@ class FolderService extends ServiceBase {
   }
 
   Future<Folder?> getFolder(BigInt id) async {
-    return await _dao.getFolder(id);
+    final folder = await _dao.getFolder(id);
+    if (folder == null) return folder;
+    var feeds = await _feedDao.getFeedsByFolderId(folder.id);
+    return folder.copyWith(feeds: feeds);
   }
 
 }

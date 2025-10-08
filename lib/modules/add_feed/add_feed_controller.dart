@@ -5,7 +5,9 @@
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/services/feed_service.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
+import 'package:follow_read/data/services/folder_service.dart';
+import 'package:follow_read/modules/home/home_controller.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:follow_read/modules/sync/sync_controller.dart';
 import 'package:get/get.dart';
 
@@ -13,21 +15,29 @@ class AddFeedController extends GetxController {
   final BigInt id;
   AddFeedController({required this.id});
   final state = AddFeedState();
-  final _cache = Get.find<MemoryCacheController>();
   final _feedService = Get.find<FeedService>();
+  final _folderService = Get.find<FolderService>();
   final _syncService = Get.find<SyncController>();
+  final profile = Get.find<ProfileController>();
+  final homePage = Get.find<HomeController>();
 
 
   @override
   void onReady() {
     super.onReady();
+    load();
+  }
+
+  Future<void> load() async {
+    state._allFolders = await _folderService.getAllFolders();
     if (id != BigInt.zero) {
-      final feed = _cache.getFeed(id) ?? Feed();
+      final feed = await _feedService.getFeed(id) ?? Feed();
       state._feedTitle.value = feed.title;
       state._feedUrl.value = feed.feedUrl;
-      state._folder.value = _cache.getFolder(feed.folderId) ?? Folder();
+      state._folder.value = state._getFolderById(feed.folderId);
+      state._feed.value = feed;
     } else {
-      state._folder.value = _cache.getFolder(_cache.rootFolderId) ?? Folder();
+      state._folder.value = state._getFolderById(profile.state.user.rootFolderId);
     }
   }
 
@@ -40,7 +50,7 @@ class AddFeedController extends GetxController {
       state._feedUrl.value = url;
     }
     if (folderId != null){
-      state._folder.value = _cache.getFolder(folderId) ?? Folder();
+      state._folder.value = state._getFolderById(folderId);
     }
   }
 
@@ -48,9 +58,9 @@ class AddFeedController extends GetxController {
     final success = id == BigInt.zero
         ? await _feedService.save(state.feedUrl, state.folder.id)
         : await _feedService.updateFeed(id, title: state.feedTitle, folderId: state.folder.id);
-    await _cache.loadFeed();
+    await homePage.loadHomeData(loadAll: true);
     if (id == BigInt.zero && success) {
-      _syncService.sync();
+      // _syncService.sync();
     }
     return success;
   }
@@ -59,7 +69,12 @@ class AddFeedController extends GetxController {
 
 class AddFeedState {
 
-  // Feed feed = Feed.empty;
+  List<Folder> _allFolders = [];
+  Folder _getFolderById(BigInt folderId) {
+    return _allFolders.firstWhere((i) => i.id == folderId, orElse: () => Folder());
+  }
+  final _feed = Feed.empty.obs;
+  Feed get feed => _feed.value;
 
   final _feedUrl = "".obs;
   String get feedUrl => _feedUrl.value;

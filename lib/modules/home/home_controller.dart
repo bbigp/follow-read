@@ -37,6 +37,7 @@ class HomeController extends GetxController {
 
   Future<void> loadHomeData({bool loadAll = false, bool loadFeeds = false, bool loadFolders = false, bool loadFilters = false}) async {
     logger.i('loadHomeData');
+    //直接调用state.user.rootFolderId, 直接调用state.rootFolder可能还在加载,是空值
     final rootFolderId = profile.state.user.rootFolderId;
     final results = await Future.wait([
       _feedService.getAllFeeds(),

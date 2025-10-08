@@ -32,7 +32,7 @@ class EntriesSummary extends StatelessWidget {
                   const SizedBox(height: 2,),
                   Row(children: [
                     const SizedBox(width: 4,),
-                    PgText('$unread未读', maxLines: 1,
+                    PgText('${unread > 999 ? "999+" : "$unread"}未读', maxLines: 1,
                       style: AppTextStyles.M11B25,
                       maxWidth: 50,
                     ),

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_read/core/svg_icons.dart';
-import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/data/model/constant.dart';
 import 'package:follow_read/data/model/feed.dart';
@@ -29,10 +28,12 @@ class TileSettings extends StatelessWidget {
     Widget view = Column(children: [
       const DragHandle(),
       const SizedBox(height: 8,),
-      Padding(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16), 
-        child: TileCard(meta: meta),
-      ),
+      if (meta is Feed) ...[
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: TileCard(meta: meta),
+        ),
+      ],
 
       const SizedBox(height: 12,),
       Padding(padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
@@ -97,7 +98,7 @@ class TileSettings extends StatelessWidget {
                   const SizedBox(height: 8,),
                   Row(children: [
                     Expanded(child: InkWell(onTap: () => copyToClipboard(meta.siteUrl),
-                      child: Text(meta.siteUrl, maxLines: 1, style: AppTextStyles.R15,)
+                      child: PgText(meta.siteUrl, maxLines: 1, style: AppTextStyles.R15,)
                     )),
                   ],),
                   const SizedBox(height: 8,),
@@ -106,7 +107,7 @@ class TileSettings extends StatelessWidget {
                     const SizedBox(height: 8,),
                     Row(children: [
                       Expanded(child: InkWell(onTap: () => copyToClipboard(meta.url),
-                          child: Text(meta.url, maxLines: 1, style: AppTextStyles.R15,)
+                          child: PgText(meta.url, maxLines: 1, style: AppTextStyles.R15,)
                       )),
                     ],),
                     const SizedBox(height: 8,),

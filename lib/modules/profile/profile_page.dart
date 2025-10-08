@@ -10,6 +10,7 @@ import 'package:follow_read/global/widgets/card_viewx.dart';
 import 'package:follow_read/global/widgets/cupx_list_tile_chevron.dart';
 import 'package:follow_read/global/widgets/cupx_sheet_title.dart';
 import 'package:follow_read/global/widgets/menux.dart';
+import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/modules/folder_picker/folder_picker.dart';
@@ -126,32 +127,19 @@ class ProfilePage extends StatelessWidget {
               ),),
               SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
                   child: Column(children: [
-                    Row(children: [
-                      const SizedBox(width: 16, height: 48,),
-                      SvgPicture.asset(SvgIcons.check_fill, width: 24, height: 24, fit: BoxFit.contain,
-                        colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),
-                      ),
-                      const SizedBox(width: 12,),
-                      Expanded(
-                        child: Obx(() {
-                          return Text(controller.state.user.baseUrl, maxLines: 3,
-                            overflow: TextOverflow.ellipsis, style: AppTextStyles.text,
-                            textAlign: TextAlign.center,
-                          );
-                        })
-                      ),
-                      const SizedBox(width: 16,),
-                    ],),
-                    Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+                    const SizedBox(height: 4,),
                     Obx((){
-                      return ListTilex(
-                        icon: SvgPicture.asset(SvgIcons.page, width: 24, height: 24, fit: BoxFit.contain,
-                          colorFilter: ColorFilter.mode(AppColors.black50, BlendMode.srcIn
-                        ),
-                      ), title: "Token",
-                        additionalInfo: controller.state.user.token,
+                      return Padding(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24), child:
+                        PgText(controller.state.user.baseUrl, maxLines: 1, style: AppTextStyles.R15,)
                       );
-                    })
+                    }),
+                    Padding(padding: EdgeInsets.only(right: 24, left: 24,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+                    Obx((){
+                      return Padding(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24), child:
+                        PgText(controller.state.user.token, maxLines: 1, style: AppTextStyles.R15,)
+                      );
+                    }),
+                    const SizedBox(height: 4,),
                   ],)
               ),),),
               SliverToBoxAdapter(child: SizedBox(height: 24,),),
