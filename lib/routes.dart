@@ -23,6 +23,8 @@ import 'modules/home/home_screen.dart';
 import 'modules/login/login_controller.dart';
 import 'modules/login/login_view.dart';
 import 'modules/profile/profile_page.dart';
+import 'modules/search/search_binding.dart';
+import 'modules/search/search_page.dart';
 
 class RouteConfig {
   RouteConfig._();
@@ -51,6 +53,7 @@ class RouteConfig {
     // GetPage(name: imageGallery, page: () => ImageGalleryPage(imageUrls: imageUrls)),
     GetPage(name: filter, page: () => AddFilterForm(), binding: AddFilterBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: addFeed, page: () => AddFeedPage(), binding: AddFeedBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(name: search, page: () => SearchPage(), binding: SearchBinding(), middlewares: [AuthMiddleware()]),
   ];
 }
 

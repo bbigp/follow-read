@@ -3049,6 +3049,299 @@ class MediasTableCompanion extends UpdateCompanion<MediaRow> {
   }
 }
 
+class $SearchHistoryTableTable extends SearchHistoryTable
+    with TableInfo<$SearchHistoryTableTable, SearchHistoryRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SearchHistoryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _wordMeta = const VerificationMeta('word');
+  @override
+  late final GeneratedColumn<String> word = GeneratedColumn<String>(
+      'word', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _metaIdMeta = const VerificationMeta('metaId');
+  @override
+  late final GeneratedColumn<String> metaId = GeneratedColumn<String>(
+      'meta_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<BigInt> userId = GeneratedColumn<BigInt>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, word, createdAt, metaId, userId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'search_histories';
+  @override
+  VerificationContext validateIntegrity(Insertable<SearchHistoryRow> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('word')) {
+      context.handle(
+          _wordMeta, word.isAcceptableOrUnknown(data['word']!, _wordMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('meta_id')) {
+      context.handle(_metaIdMeta,
+          metaId.isAcceptableOrUnknown(data['meta_id']!, _metaIdMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SearchHistoryRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SearchHistoryRow(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      word: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}word'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      metaId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}meta_id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
+    );
+  }
+
+  @override
+  $SearchHistoryTableTable createAlias(String alias) {
+    return $SearchHistoryTableTable(attachedDatabase, alias);
+  }
+}
+
+class SearchHistoryRow extends DataClass
+    implements Insertable<SearchHistoryRow> {
+  final int id;
+  final String word;
+  final DateTime createdAt;
+  final String metaId;
+  final BigInt userId;
+  const SearchHistoryRow(
+      {required this.id,
+      required this.word,
+      required this.createdAt,
+      required this.metaId,
+      required this.userId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['word'] = Variable<String>(word);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['meta_id'] = Variable<String>(metaId);
+    map['user_id'] = Variable<BigInt>(userId);
+    return map;
+  }
+
+  SearchHistoryTableCompanion toCompanion(bool nullToAbsent) {
+    return SearchHistoryTableCompanion(
+      id: Value(id),
+      word: Value(word),
+      createdAt: Value(createdAt),
+      metaId: Value(metaId),
+      userId: Value(userId),
+    );
+  }
+
+  factory SearchHistoryRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SearchHistoryRow(
+      id: serializer.fromJson<int>(json['id']),
+      word: serializer.fromJson<String>(json['word']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      metaId: serializer.fromJson<String>(json['metaId']),
+      userId: serializer.fromJson<BigInt>(json['userId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'word': serializer.toJson<String>(word),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'metaId': serializer.toJson<String>(metaId),
+      'userId': serializer.toJson<BigInt>(userId),
+    };
+  }
+
+  SearchHistoryRow copyWith(
+          {int? id,
+          String? word,
+          DateTime? createdAt,
+          String? metaId,
+          BigInt? userId}) =>
+      SearchHistoryRow(
+        id: id ?? this.id,
+        word: word ?? this.word,
+        createdAt: createdAt ?? this.createdAt,
+        metaId: metaId ?? this.metaId,
+        userId: userId ?? this.userId,
+      );
+  SearchHistoryRow copyWithCompanion(SearchHistoryTableCompanion data) {
+    return SearchHistoryRow(
+      id: data.id.present ? data.id.value : this.id,
+      word: data.word.present ? data.word.value : this.word,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      metaId: data.metaId.present ? data.metaId.value : this.metaId,
+      userId: data.userId.present ? data.userId.value : this.userId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchHistoryRow(')
+          ..write('id: $id, ')
+          ..write('word: $word, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('metaId: $metaId, ')
+          ..write('userId: $userId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, word, createdAt, metaId, userId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SearchHistoryRow &&
+          other.id == this.id &&
+          other.word == this.word &&
+          other.createdAt == this.createdAt &&
+          other.metaId == this.metaId &&
+          other.userId == this.userId);
+}
+
+class SearchHistoryTableCompanion extends UpdateCompanion<SearchHistoryRow> {
+  final Value<int> id;
+  final Value<String> word;
+  final Value<DateTime> createdAt;
+  final Value<String> metaId;
+  final Value<BigInt> userId;
+  const SearchHistoryTableCompanion({
+    this.id = const Value.absent(),
+    this.word = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.metaId = const Value.absent(),
+    this.userId = const Value.absent(),
+  });
+  SearchHistoryTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.word = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.metaId = const Value.absent(),
+    required BigInt userId,
+  }) : userId = Value(userId);
+  static Insertable<SearchHistoryRow> custom({
+    Expression<int>? id,
+    Expression<String>? word,
+    Expression<DateTime>? createdAt,
+    Expression<String>? metaId,
+    Expression<BigInt>? userId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (word != null) 'word': word,
+      if (createdAt != null) 'created_at': createdAt,
+      if (metaId != null) 'meta_id': metaId,
+      if (userId != null) 'user_id': userId,
+    });
+  }
+
+  SearchHistoryTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? word,
+      Value<DateTime>? createdAt,
+      Value<String>? metaId,
+      Value<BigInt>? userId}) {
+    return SearchHistoryTableCompanion(
+      id: id ?? this.id,
+      word: word ?? this.word,
+      createdAt: createdAt ?? this.createdAt,
+      metaId: metaId ?? this.metaId,
+      userId: userId ?? this.userId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (word.present) {
+      map['word'] = Variable<String>(word.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (metaId.present) {
+      map['meta_id'] = Variable<String>(metaId.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<BigInt>(userId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SearchHistoryTableCompanion(')
+          ..write('id: $id, ')
+          ..write('word: $word, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('metaId: $metaId, ')
+          ..write('userId: $userId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3059,6 +3352,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FiltersTableTable filtersTable = $FiltersTableTable(this);
   late final $EntriesTableTable entriesTable = $EntriesTableTable(this);
   late final $MediasTableTable mediasTable = $MediasTableTable(this);
+  late final $SearchHistoryTableTable searchHistoryTable =
+      $SearchHistoryTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3069,7 +3364,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         foldersTable,
         filtersTable,
         entriesTable,
-        mediasTable
+        mediasTable,
+        searchHistoryTable
       ];
 }
 
@@ -4532,6 +4828,175 @@ typedef $$MediasTableTableProcessedTableManager = ProcessedTableManager<
     (MediaRow, BaseReferences<_$AppDatabase, $MediasTableTable, MediaRow>),
     MediaRow,
     PrefetchHooks Function()>;
+typedef $$SearchHistoryTableTableCreateCompanionBuilder
+    = SearchHistoryTableCompanion Function({
+  Value<int> id,
+  Value<String> word,
+  Value<DateTime> createdAt,
+  Value<String> metaId,
+  required BigInt userId,
+});
+typedef $$SearchHistoryTableTableUpdateCompanionBuilder
+    = SearchHistoryTableCompanion Function({
+  Value<int> id,
+  Value<String> word,
+  Value<DateTime> createdAt,
+  Value<String> metaId,
+  Value<BigInt> userId,
+});
+
+class $$SearchHistoryTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SearchHistoryTableTable> {
+  $$SearchHistoryTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get word => $composableBuilder(
+      column: $table.word, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get metaId => $composableBuilder(
+      column: $table.metaId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+}
+
+class $$SearchHistoryTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SearchHistoryTableTable> {
+  $$SearchHistoryTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get word => $composableBuilder(
+      column: $table.word, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get metaId => $composableBuilder(
+      column: $table.metaId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SearchHistoryTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SearchHistoryTableTable> {
+  $$SearchHistoryTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get word =>
+      $composableBuilder(column: $table.word, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get metaId =>
+      $composableBuilder(column: $table.metaId, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+}
+
+class $$SearchHistoryTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SearchHistoryTableTable,
+    SearchHistoryRow,
+    $$SearchHistoryTableTableFilterComposer,
+    $$SearchHistoryTableTableOrderingComposer,
+    $$SearchHistoryTableTableAnnotationComposer,
+    $$SearchHistoryTableTableCreateCompanionBuilder,
+    $$SearchHistoryTableTableUpdateCompanionBuilder,
+    (
+      SearchHistoryRow,
+      BaseReferences<_$AppDatabase, $SearchHistoryTableTable, SearchHistoryRow>
+    ),
+    SearchHistoryRow,
+    PrefetchHooks Function()> {
+  $$SearchHistoryTableTableTableManager(
+      _$AppDatabase db, $SearchHistoryTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SearchHistoryTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SearchHistoryTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SearchHistoryTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> word = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<String> metaId = const Value.absent(),
+            Value<BigInt> userId = const Value.absent(),
+          }) =>
+              SearchHistoryTableCompanion(
+            id: id,
+            word: word,
+            createdAt: createdAt,
+            metaId: metaId,
+            userId: userId,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> word = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<String> metaId = const Value.absent(),
+            required BigInt userId,
+          }) =>
+              SearchHistoryTableCompanion.insert(
+            id: id,
+            word: word,
+            createdAt: createdAt,
+            metaId: metaId,
+            userId: userId,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SearchHistoryTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SearchHistoryTableTable,
+    SearchHistoryRow,
+    $$SearchHistoryTableTableFilterComposer,
+    $$SearchHistoryTableTableOrderingComposer,
+    $$SearchHistoryTableTableAnnotationComposer,
+    $$SearchHistoryTableTableCreateCompanionBuilder,
+    $$SearchHistoryTableTableUpdateCompanionBuilder,
+    (
+      SearchHistoryRow,
+      BaseReferences<_$AppDatabase, $SearchHistoryTableTable, SearchHistoryRow>
+    ),
+    SearchHistoryRow,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4548,4 +5013,6 @@ class $AppDatabaseManager {
       $$EntriesTableTableTableManager(_db, _db.entriesTable);
   $$MediasTableTableTableManager get mediasTable =>
       $$MediasTableTableTableManager(_db, _db.mediasTable);
+  $$SearchHistoryTableTableTableManager get searchHistoryTable =>
+      $$SearchHistoryTableTableTableManager(_db, _db.searchHistoryTable);
 }

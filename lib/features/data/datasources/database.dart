@@ -11,7 +11,7 @@
 // import 'entities/conf_entity.dart';
 // import 'entities/entry_entity.dart';
 // import 'entities/feed_entity.dart';
-// import 'entities/search_entity.dart';
+// import 'entities/search_history_table.dart';
 //
 // part 'database.g.dart';
 //

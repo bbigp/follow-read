@@ -71,11 +71,9 @@ class _EntriesPageState extends State<EntriesPage> {
           Navigator.of(context).pop();
         },),
         actions: [
-          InkWell(onTap: () => {
-            // ref.read(routerProvider).pushNamed(RouteNames.search, pathParameters: {
-            //   'id': widget.metaDatax.id.toString(), 'type': widget.metaDatax.type,
-            // });
-          }, child: PaddedSvgIcon(SvgIcons.search),),
+          InkWell(onTap: () => Get.toNamed(RouteConfig.search, parameters: {"id": controller.state.meta.metaId}),
+            child: PaddedSvgIcon(SvgIcons.search),
+          ),
           InkWell(onTap: () => Open.modal(context, TileSettings()), child: PaddedSvgIcon(SvgIcons.more),)
         ],
       ),
