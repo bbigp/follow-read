@@ -129,6 +129,9 @@ class ListTilex extends StatelessWidget {
         ),
         const SizedBox(width: 4,),
       ],
+      if (additionalInfo == "")
+        Expanded(child: const SizedBox()),
+
 
       if (trailing != null) ...[
         const SizedBox(width: 4,),
