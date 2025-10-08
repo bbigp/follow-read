@@ -12,6 +12,10 @@ class Open {
     OpenModal.open(context, view);
   }
 
+  static dialogModal(BuildContext context, Widget view){
+    OpenModal.open(context, view, hasMargin: true);
+  }
+
   static menu(BuildContext context, GlobalKey key, Widget view) {
     PopupWrapper.show(context: context, targetKey: key, child: view);
   }

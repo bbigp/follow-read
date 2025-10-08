@@ -32,13 +32,13 @@ class OpenModal {
         return SafeArea(
             bottom: false,
             child: Padding(
-              padding: hasMargin ? const EdgeInsets.only(left: 16, right: 16, bottom: 16,) : EdgeInsets.zero,
+              padding: hasMargin ? const EdgeInsets.only(left: 16, right: 16, bottom: 21,) : EdgeInsets.zero,
               child: Material(
                 elevation: 0,
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
                   borderRadius: hasMargin
-                      ? BorderRadius.circular(16)
+                      ? BorderRadius.circular(24)
                       : const BorderRadius.vertical(top: Radius.circular(16)),
                 ),
                 child: GestureDetector(

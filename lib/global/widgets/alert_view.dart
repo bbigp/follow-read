@@ -5,6 +5,7 @@ import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 
 import 'buttonx.dart';
+import 'element_type.dart';
 import 'padded_svg_icon.dart';
 
 
@@ -153,7 +154,7 @@ class AlertTipActionButton {
       icon: icon,
       size: Sizex.custom,
       buttonSize: buttonSize,
-      type: ButtonxType.skeleton,
+      type: ElementType.skeleton,
       enabled: false,
     );
   }
@@ -176,8 +177,8 @@ class AlertTipActionButton {
         size: Sizex.custom,
         buttonSize: buttonSize,
         type: type == AlertTipType.danger
-            ? ButtonxType.danger
-            : ButtonxType.info,
+            ? ElementType.danger
+            : ElementType.info,
         enabled: true,
       );
     }

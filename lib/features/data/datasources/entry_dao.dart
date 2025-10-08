@@ -91,10 +91,6 @@
 //
 
 //
-//   Future<bool> deleteByFeedId(int feedId) async {
-//     var query = delete(entriesTable)..where((f) => f.feedId.equals(BigInt.from(feedId)));
-//     var affectedRows = await query.go();
-//     return affectedRows > 0;
-//   }
+
 //
 // }

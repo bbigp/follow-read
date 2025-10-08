@@ -49,6 +49,15 @@ class FeedService extends ServiceBase {
     return result.success;
   }
 
+  Future<bool> removeFeed(BigInt feedId) async {
+    final result = await MinifluxApi.removeFeed(feedId);
+    if (result.success) {
+      await _feeDao.deleteById(feedId);
+      await _entryDao.deleteByFeedId(feedId);
+    }
+    return result.success;
+  }
+
 
   Future<bool> saveLocal(BigInt feedId, {bool? unreadOnly, String? orderx}) async {
     return await _feeDao.updateById(feedId, unreadOnly: unreadOnly, orderx: orderx);

@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:follow_read/global/widgets/element_type.dart';
 
 ///
 enum ButtonState { enabled, disabled, loading }
-enum ButtonxType {
-  primary, secondary, ghost, stroked, danger, dangerGhost, info, skeleton,
-}
 enum Sizex {
   small, smallCompact, medium, mediumCompact, large, largeCompact, custom,
 }
@@ -22,10 +20,10 @@ class TextButtonx extends StatelessWidget {
   final Future<void> Function()? onPressed;
   final bool enabled;
   final Sizex size;
-  final ButtonxType type;
+  final ElementType type;
   final ButtonxSize? buttonSize;
   const TextButtonx({super.key, required this.child, this.onPressed,
-    this.enabled = false, required this.size, this.type = ButtonxType.primary,
+    this.enabled = false, required this.size, this.type = ElementType.primary,
     this.buttonSize,
   });
 
@@ -45,7 +43,7 @@ class IconButtonx extends StatelessWidget {
   final bool enabled;
   final Sizex size;
   final ButtonxSize? buttonSize;
-  final ButtonxType type;
+  final ElementType type;
   final String icon;
   final bool isLeftIcon;
   const IconButtonx({super.key, this.child = "", required this.icon, this.onPressed,
@@ -70,7 +68,7 @@ class Buttonx extends StatefulWidget {
   final ButtonState state;
   final Sizex size;
   final ButtonxSize? buttonSize;
-  final ButtonxType type;
+  final ElementType type;
 
   final String? leftIcon;
   final String child;
@@ -152,13 +150,13 @@ class _ButtonxState extends State<Buttonx> with SingleTickerProviderStateMixin {
     final bool loading = _buttonState == ButtonState.loading;
 
     ButtonxColor color = switch(widget.type) {
-      ButtonxType.secondary => secondary(),
-      ButtonxType.ghost => ghost(),
-      ButtonxType.stroked => stroked(),
-      ButtonxType.danger => danger(),
-      ButtonxType.dangerGhost => dangerGhost(),
-      ButtonxType.info => info(),
-      ButtonxType.skeleton => skeleton(),
+      ElementType.secondary => secondary(),
+      ElementType.ghost => ghost(),
+      ElementType.stroked => stroked(),
+      ElementType.danger => danger(),
+      ElementType.dangerGhost => dangerGhost(),
+      ElementType.info => info(),
+      ElementType.skeleton => skeleton(),
       _ => primary(),
     };
     ButtonxSize size = switch(widget.size) {

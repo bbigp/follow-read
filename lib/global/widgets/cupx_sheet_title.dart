@@ -8,6 +8,7 @@ import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 
 import '../../../global/widgets/padded_svg_icon.dart';
+import 'element_type.dart';
 
 class ActionSheetTitleBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -70,7 +71,7 @@ class ActionSheetTitle extends StatelessWidget {
           title: const SizedBox.shrink(),
           leading: CupxSheetTitleCloseButton(),
           trailing: Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: TextButtonx(
-            size: Sizex.custom, type: ButtonxType.primary, child: 'Done',
+            size: Sizex.custom, type: ElementType.primary, child: 'Done',
             onPressed: onPressed, enabled: enabled,
             buttonSize: smallCompact().copyWith(borderRadius: BorderRadius.circular(10)),
           ),)

@@ -17,3 +17,23 @@ class Model {
   static const String rootFolderName = "All";
 
 }
+
+extension DateTimeConversion on DateTime{
+
+  String toShowTime() {
+    final now = DateTime.now();
+    final difference = now.difference(this);
+    final units = [
+      (value: difference.inDays, unit: "天"),
+      (value: difference.inHours % 24, unit: "小时"),
+      (value: difference.inMinutes % 60, unit: "分钟"),
+    ];
+
+    for (var u in units) {
+      if (u.value > 0) {
+        return "${u.value}${u.unit}前";
+      }
+    }
+    return "刚刚";
+  }
+}

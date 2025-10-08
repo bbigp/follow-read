@@ -83,11 +83,7 @@
 //     });
 //   }
 //
-//   Future<bool> deleteById(int feedId) async {
-//     var query = delete(feedsTable)..where((r) => r.id.equals(BigInt.from(feedId)));
-//     var affectedRows = await query.go();
-//     return affectedRows > 0;
-//   }
+
 //
 //   Future<bool> updateShow(int feedId, {bool? onlyShowUnread, bool? showReadingTime,
 //     String? orderx, bool? hideGlobally,

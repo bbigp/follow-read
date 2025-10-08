@@ -83,15 +83,6 @@
 //     return false;
 //   }
 //
-//   Future<bool> removeFeed(int feedId) async {
-//     var either = await ApiClient.removeFeed(feedId);
-//     var success = either.fold((_) => false, (ifRight) => true);
-//     if (success) {
-//       await feedDao.deleteById(feedId);
-//       await entryDao.deleteByFeedId(feedId);
-//       return true;
-//     }
-//     return false;
-//   }
+
 //
 // }

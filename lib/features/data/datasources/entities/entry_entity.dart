@@ -1,8 +1,6 @@
 
 import 'package:drift/drift.dart';
 
-import '../../../domain/models/entry.dart';
-import '../database.dart';
 
 @DataClassName("EntryEntity")
 class EntriesTable extends Table {

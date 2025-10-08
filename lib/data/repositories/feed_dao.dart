@@ -66,6 +66,12 @@ class FeedDao extends DatabaseAccessor<AppDatabase> {
     return affectedRows > 0;
   }
 
+  Future<bool> deleteById(BigInt feedId) async {
+    var query = delete(feedsTable)..where((r) => r.id.equals(feedId));
+    var affectedRows = await query.go();
+    return affectedRows > 0;
+  }
+
   Future<void> batchSave(List<Feed> feeds) async {
     if (feeds.isEmpty) return;
 

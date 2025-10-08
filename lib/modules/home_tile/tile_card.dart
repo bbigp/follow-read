@@ -9,7 +9,9 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/card_viewx.dart';
+import 'package:follow_read/global/widgets/element_type.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
+import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
@@ -39,7 +41,7 @@ class TileCard extends StatelessWidget {
             const SizedBox(width: 8,),
             IconButtonx(
               icon: SvgIcons.edit,
-              type: ButtonxType.secondary,
+              type: ElementType.secondary,
               size: Sizex.custom,
               buttonSize: mediumCompact().copyWith(
                 height: 48, padding: 20,
@@ -47,8 +49,11 @@ class TileCard extends StatelessWidget {
               ),
               enabled: true,
               onPressed: () async {
+                final result = await Get.toNamed(RouteConfig.addFeed, parameters: {"id": feed.id.toString()});
+                if (result is bool && result == true) {
+                  Get.find<EntriesController>().init();
+                }
                 Get.back();
-                Get.toNamed(RouteConfig.addFeed, parameters: {"id": feed.id.toString()});
               },
             )
           ],));

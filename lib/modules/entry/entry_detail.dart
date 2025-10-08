@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:follow_read/features/presentation/providers/entry_provider.dart';
 
 class EntryDetail extends ConsumerWidget {
 

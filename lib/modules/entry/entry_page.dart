@@ -6,6 +6,7 @@ import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
+import 'package:follow_read/global/widgets/element_type.dart';
 import 'package:follow_read/global/widgets/no_more.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
@@ -85,7 +86,7 @@ class EntryPage extends StatelessWidget{
               isLeftIcon: false,
               size: Sizex.custom,
               buttonSize: mediumCompact().copyWith(padding: 32,),
-              type: ButtonxType.secondary,
+              type: ElementType.secondary,
               enabled: true,
               onPressed: () => Open.browser(entry.url),
             ),

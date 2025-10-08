@@ -141,6 +141,26 @@ class HttpClient {
     return ApiResult.failure(message);
   }
 
+  static Future<ApiResult<T>> delete<T>(String path, T Function(Map<String, dynamic>) fromJson, {
+    dynamic data,
+    Map<String, dynamic>? query,
+    String? baseUrl, String? token,
+  }) async {
+    final response = await _configureDio(baseUrl, token).delete(path, queryParameters: query, data: data);
+    // final json = response == null ?? {} : response.data;
+    final json = response.data ?? <String, dynamic>{};
+    if (response.isSuccess) {
+      return ApiResult.success(fromJson(json));
+    }
+    String message = "未知错误";
+    if (json is Map<String, dynamic> && json.containsKey('error_message')) {
+      message = json['error_message'];
+    } else if (json is String) {
+      message = json;
+    }
+    return ApiResult.failure(message);
+  }
+
   static Future<ApiResult<T>> post<T>(String path, T Function(Map<String, dynamic>) fromJson, {
     dynamic data,
     Map<String, dynamic>? query,

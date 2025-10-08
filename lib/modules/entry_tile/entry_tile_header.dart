@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
-import 'package:follow_read/features/domain/models/entry.dart';
+import 'package:follow_read/data/model/constant.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';

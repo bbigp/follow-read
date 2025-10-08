@@ -65,6 +65,15 @@ class AddFeedController extends GetxController {
     return success;
   }
 
+
+  Future<bool> removeFeed() async {
+    var result = await _feedService.removeFeed(id);
+    if (result) {
+      await homePage.loadHomeData(loadAll: true);
+    }
+    return result;
+  }
+
 }
 
 class AddFeedState {

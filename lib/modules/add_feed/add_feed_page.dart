@@ -5,15 +5,17 @@ import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/card_viewx.dart';
+import 'package:follow_read/global/widgets/confirm_sheet.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/cupx_list_tile_chevron.dart';
+import 'package:follow_read/global/widgets/element_type.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/global/widgets/text_fieldx.dart';
 import 'package:follow_read/modules/folder_picker/folder_picker.dart';
-import 'package:follow_read/modules/home_tile/tile_card.dart';
 import 'package:follow_read/modules/widgets/feed_icon.dart';
+import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
 import 'add_feed_controller.dart';
@@ -90,26 +92,26 @@ class AddFeedPage extends StatelessWidget {
               });
               final success = await controller.save();
               if (success) {
-                Get.back();
+                Get.back(result: true);
               }
             },
           )),
           if (controller.id > BigInt.zero) ...[
             const SizedBox(height: 8,),
-            IconButtonx(child: '取消订阅', icon: SvgIcons.reduce_o,
-              size: Sizex.medium, type: ButtonxType.dangerGhost, enabled: true,
+            IconButtonx(child: '取消订阅', icon: SvgIcons.reduce_o, size: Sizex.medium,
+              type: ElementType.dangerGhost, enabled: true,
               onPressed: () async {
-                // OpenModal.open(context, AlertSheet(
-                //   title: "确认取消订阅?",
-                //   msg: "该订阅将从所有文件夹和列表中删除",
-                //   onPressed: () async {
-                //     var success = await ref.read(feedRepositoryProvider).removeFeed(add.feed.id);
-                //     if (success) {
-                //       // final _ = ref.refresh(homePageProvider);
-                //       OpenModal.closeMultiple(context, count: widget.shouldPop ? 3 : 2);
-                //     }
-                //   },
-                // ), scrollable: false, hasMargin: true);
+                Open.dialogModal(context, ConfirmSheet(title: "确认取消订阅?",
+                  msg: "该订阅将从所有文件夹和列表中删除.", type: ElementType.danger,
+                  onPressed: () async {
+                    var success = await controller.removeFeed();
+                    if (success) {
+                      Get.offNamedUntil(
+                        RouteConfig.home, (route) => route.settings.name == RouteConfig.home,
+                      );
+                    }
+                  },
+                ));
               },
             ),
           ],

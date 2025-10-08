@@ -42,6 +42,12 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     return rows.toEntry();
   }
 
+  Future<bool> deleteByFeedId(BigInt feedId) async {
+    var query = delete(entriesTable)..where((f) => f.feedId.equals(feedId));
+    var affectedRows = await query.go();
+    return affectedRows > 0;
+  }
+
   Future<bool> updateStatus(List<BigInt> entryIds, EntryStatus state) async {
     if (entryIds.isEmpty) return true;
     var query = update(entriesTable)

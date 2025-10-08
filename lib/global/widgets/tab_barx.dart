@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'buttonx.dart';
+import 'element_type.dart';
 import 'spacer_divider.dart';
 
 ///
@@ -53,7 +54,7 @@ class BottomBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButtonx(icon: icon,
       size: Sizex.custom, buttonSize: smallCompact().copyWith(padding: 0, width: 36, iconSize: 24),
-      type: ButtonxType.ghost, enabled: onPressed != null,
+      type: ElementType.ghost, enabled: onPressed != null,
       onPressed: onPressed,
     );
   }

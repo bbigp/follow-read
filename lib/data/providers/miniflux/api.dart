@@ -58,6 +58,9 @@ class MinifluxApi {
     return result.map((resp) => resp.toFeed());
   }
 
+  static Future<ApiResult<EmptyObject>> removeFeed(BigInt feedId) async {
+    return await HttpClient.delete('feeds/$feedId', (v) => EmptyObject());
+  }
 
   static Future<ApiResult<EmptyObject>> setEntryStatus(List<BigInt> entryIds, EntryStatus status) async {
     return await HttpClient.put("entries", (v) => EmptyObject(), data: {

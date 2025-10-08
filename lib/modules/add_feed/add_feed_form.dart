@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/global/widgets/cupx_list_tile_chevron.dart';
 import 'package:follow_read/global/widgets/cupx_sheet_title.dart';
+import 'package:follow_read/global/widgets/element_type.dart';
 import 'package:follow_read/modules/add_feed/add_feed_controller.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/card_viewx.dart';
@@ -63,7 +64,7 @@ class AddFeedForm extends StatelessWidget {
           if (controller.id > BigInt.zero) ...[
             const SizedBox(height: 8,),
             IconButtonx(child: '取消订阅', icon: SvgIcons.reduce_o,
-              size: Sizex.medium, type: ButtonxType.dangerGhost, enabled: true,
+              size: Sizex.medium, type: ElementType.dangerGhost, enabled: true,
               onPressed: () async {
                 // OpenModal.open(context, AlertSheet(
                 //   title: "确认取消订阅?",
