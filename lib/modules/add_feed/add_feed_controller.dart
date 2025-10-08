@@ -6,6 +6,7 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
+import 'package:follow_read/modules/count_badge/unread_controller.dart';
 import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:follow_read/modules/sync/sync_controller.dart';
@@ -20,6 +21,7 @@ class AddFeedController extends GetxController {
   final _syncService = Get.find<SyncController>();
   final profile = Get.find<ProfileController>();
   final homePage = Get.find<HomeController>();
+  final unread = Get.find<UnreadController>();
 
 
   @override
@@ -59,6 +61,7 @@ class AddFeedController extends GetxController {
         ? await _feedService.save(state.feedUrl, state.folder.id)
         : await _feedService.updateFeed(id, title: state.feedTitle, folderId: state.folder.id);
     await homePage.loadHomeData(loadAll: true);
+    await unread.init();
     if (id == BigInt.zero && success) {
       // _syncService.sync();
     }
@@ -70,6 +73,7 @@ class AddFeedController extends GetxController {
     var result = await _feedService.removeFeed(id);
     if (result) {
       await homePage.loadHomeData(loadAll: true);
+      await unread.init();
     }
     return result;
   }

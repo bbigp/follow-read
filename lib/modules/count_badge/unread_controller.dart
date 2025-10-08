@@ -23,7 +23,7 @@ class UnreadController extends GetxService {
     init();
   }
 
-  void init() async {
+  Future<void> init() async {
     final feedMap = await _entryService.countFeed();
     for (var entry in feedMap.entries) {
       final key = 'e${entry.key}';
