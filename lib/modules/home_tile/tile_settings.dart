@@ -95,22 +95,10 @@ class TileSettings extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                 borderRadius: 16,
                 child: Column(children: [
-                  const SizedBox(height: 12,),
-                  Row(children: [
-                    Expanded(child: InkWell(onTap: () => copyToClipboard(meta.siteUrl),
-                      child: PgText(meta.siteUrl, maxLines: 1, style: AppTextStyles.R15,)
-                    )),
-                  ],),
-                  const SizedBox(height: 12,),
+                  ListTilexText(title: meta.siteUrl, onTap: () => copyToClipboard(meta.siteUrl)),
                   if (meta.siteUrl != meta.url) ...[
                     SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),
-                    const SizedBox(height: 12,),
-                    Row(children: [
-                      Expanded(child: InkWell(onTap: () => copyToClipboard(meta.url),
-                          child: PgText(meta.url, maxLines: 1, style: AppTextStyles.R15,)
-                      )),
-                    ],),
-                    const SizedBox(height: 12,),
+                    ListTilexText(title: meta.url, onTap: () => copyToClipboard(meta.url)),
                   ]
                 ],)
             ),

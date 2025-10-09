@@ -10,6 +10,29 @@ import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'cupx_switch.dart';
 import 'pg_text.dart';
 
+class ListTilexText extends StatelessWidget {
+
+  final GestureTapCallback? onTap;
+  final String title;
+
+  const ListTilexText({super.key, this.onTap, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      const SizedBox(height: 12,),
+      Row(children: [
+        Expanded(child: InkWell(onTap: onTap,
+            child: PgText(title, maxLines: 1, style: AppTextStyles.R15,)
+        )),
+      ],),
+      const SizedBox(height: 12,),
+    ],);
+  }
+
+}
+
+
 class ListTilexSwitch extends StatelessWidget {
   final String? icon;
   final String? title;

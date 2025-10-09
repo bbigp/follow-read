@@ -80,7 +80,6 @@ class ProfilePage extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               // SliverToBoxAdapter(child: SizedBox(height: 8,),),
-
               SliverToBoxAdapter(child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
                   child: Column(children: [
@@ -93,18 +92,18 @@ class ProfilePage extends StatelessWidget {
                     }),
                     Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
                     Obx((){
-                      return ListTilexSwitch(title: "Auto Mark Read", value: controller.state.user.autoRead,
-                        icon: SvgIcons.book, onChanged: (v) {
-                          controller.change(autoRead: v);
-                      },);
-                    }),
-                    Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
-                    Obx((){
                       return ListTilexChevronUpDown(key: _openContentKey, icon: SvgIcons.page,
                         title: "Open Content with",
                         additionalInfo: controller.state.user.openContent,
                         onTap: () => Open.menu(context, _openContentKey, openContentView),
                       );
+                    }),
+                    Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+                    Obx((){
+                      return ListTilexSwitch(title: "Auto Mark Read", value: controller.state.user.autoRead,
+                        icon: SvgIcons.book, onChanged: (v) {
+                          controller.change(autoRead: v);
+                      },);
                     }),
                   ],)
               ),),),
@@ -126,20 +125,16 @@ class ProfilePage extends StatelessWidget {
                 child: Text("当前服务器地址", maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M11B25,),
               ),),
               SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                   child: Column(children: [
-                    const SizedBox(height: 4,),
                     Obx((){
-                      return Padding(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24), child:
-                        PgText(controller.state.user.baseUrl, maxLines: 1, style: AppTextStyles.R15,)
-                      );
+                      return ListTilexText(title: controller.state.user.baseUrl);
                     }),
-                    Padding(padding: EdgeInsets.only(right: 24, left: 24,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
+                    SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),
                     Obx((){
-                      return Padding(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24), child:
-                        PgText(controller.state.user.token, maxLines: 1, style: AppTextStyles.R15,)
-                      );
-                    }),
-                    const SizedBox(height: 4,),
+                      return ListTilexText(title: controller.state.user.token);
+                    })
+
                   ],)
               ),),),
               SliverToBoxAdapter(child: SizedBox(height: 24,),),
