@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:get/get.dart';
 
 import 'buttonx.dart';
 import 'element_type.dart';
@@ -15,8 +16,8 @@ class SearchBarx extends StatelessWidget implements PreferredSizeWidget {
 
   final ValueChanged<String>? onSubmitted;
   final void Function(String)? onChanged;
-  final String value;
-  const SearchBarx({super.key, this.onSubmitted, this.onChanged, this.value = ""});
+  final String Function() valueGetter;
+  const SearchBarx({super.key, this.onSubmitted, this.onChanged, required this.valueGetter});
 
   @override
   Size get preferredSize => Size.fromHeight(54);
@@ -29,17 +30,20 @@ class SearchBarx extends StatelessWidget implements PreferredSizeWidget {
         height: 54, color: Colors.white,
         child: Row(children: [
           const SizedBox(width: 16,),
-          Expanded(child: TextFieldx(
-            sizex: Sizex.small,
-            icon: SvgPicture.asset(SvgIcons.search, width: 20, height: 20,
-              fit: BoxFit.contain,
-              colorFilter: ColorFilter.mode(AppColors.black25, BlendMode.srcIn),
-            ),
-            hint: '搜索',
-            onSubmitted: onSubmitted,
-            onChanged: onChanged,
-            value: value,
-          ),),
+          Expanded(child: Obx((){
+            final value = valueGetter();
+            return TextFieldx(
+              sizex: Sizex.small,
+              icon: SvgPicture.asset(SvgIcons.search, width: 20, height: 20,
+                fit: BoxFit.contain,
+                colorFilter: ColorFilter.mode(AppColors.black25, BlendMode.srcIn),
+              ),
+              hint: '搜索',
+              onSubmitted: onSubmitted,
+              onChanged: onChanged,
+              value: value,
+            );
+          })),
           TextButtonx(child: '取消',
             size: Sizex.custom, type: ElementType.ghost, enabled: true,
             buttonSize: smallCompact().copyWith(textSize: AppTextStyles.M15),

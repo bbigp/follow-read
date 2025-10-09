@@ -58,7 +58,9 @@ class SearchHistoryController extends GetxController {
     state.isLoadingMore = false;
   }
 
-  void clearEntries() {
+  Future<void> clearEntries() async {
+    await load();
+    state._word.value = "";
     state._loadingEntries.value = false;
     state.entries = [];
     state._page.value = 0;

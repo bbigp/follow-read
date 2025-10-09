@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
@@ -55,25 +54,6 @@ class SearchHistoryView extends StatelessWidget {
                 search.loadEntries(word);
               },
             );
-            // return InkWell(onTap: (){
-            //   WidgetsBinding.instance.addPostFrameCallback((_) {
-            //     FocusScope.of(context).unfocus(); // 收起键盘
-            //   });
-            //   // metaDatax.loadMore(ref, word: word);
-            // }, child: Container(
-            //   height: 48,
-            //   padding: EdgeInsets.only(left: 16, right: 12),
-            //   child: Row(children: [
-            //     Expanded(child: Text(word, maxLines: 1, overflow: TextOverflow.ellipsis,
-            //       style: AppTextStyles.text,
-            //     )),
-            //     const SizedBox(width: 38 + 4 + 4,),
-            //     const SizedBox(width: 4,),
-            //     SvgPicture.asset(SvgIcons.chevron_right, width: 20, height: 20, fit: BoxFit.contain,
-            //       colorFilter: ColorFilter.mode(AppColors.black25, BlendMode.srcIn),
-            //     )
-            //   ],),
-            // ));
           },
           separatorBuilder: (_, index) {
             return SpacerDivider(thickness: 0.5,spacing: 1,indent: 16,);

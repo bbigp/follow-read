@@ -20,16 +20,16 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: SearchBarx(
-        value: "",
+        valueGetter: () => search.state.word,
         onSubmitted: (value) async {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             FocusScope.of(context).unfocus(); // 收起键盘
           });
           await search.loadEntries(value);
         },
-        onChanged: (value) {
+        onChanged: (value) async {
           if (value == "") {
-            search.clearEntries();
+            await search.clearEntries();
           }
         },
       ),

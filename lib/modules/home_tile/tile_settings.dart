@@ -92,25 +92,25 @@ class TileSettings extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 6),
             child: CardView(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
                 borderRadius: 16,
                 child: Column(children: [
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 12,),
                   Row(children: [
                     Expanded(child: InkWell(onTap: () => copyToClipboard(meta.siteUrl),
                       child: PgText(meta.siteUrl, maxLines: 1, style: AppTextStyles.R15,)
                     )),
                   ],),
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 12,),
                   if (meta.siteUrl != meta.url) ...[
                     SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),
-                    const SizedBox(height: 8,),
+                    const SizedBox(height: 12,),
                     Row(children: [
                       Expanded(child: InkWell(onTap: () => copyToClipboard(meta.url),
                           child: PgText(meta.url, maxLines: 1, style: AppTextStyles.R15,)
                       )),
                     ],),
-                    const SizedBox(height: 8,),
+                    const SizedBox(height: 12,),
                   ]
                 ],)
             ),
