@@ -1,17 +1,24 @@
 
 
 
+import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/repositories/search_history_dao.dart';
+import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/di.dart';
+import 'package:follow_read/modules/entries/entries_controller.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
 class SearchHistoryController extends GetxController {
 
-  final BigInt id;
-  final String type;
+  // final BigInt id;
+  // final String type;
   final state = SearchState();
   final searchDao = SearchHistoryDao(Get.find<DBService>().db);
-  SearchHistoryController(this.id, this.type);
+  final entryService = Get.find<EntryService>();
+  final entriesPage = Get.find<EntriesController>();
+  final profilePage = Get.find<ProfileController>();
+  SearchHistoryController();
 
   @override
   void onReady() {
@@ -21,8 +28,7 @@ class SearchHistoryController extends GetxController {
 
   Future<void> load() async {
     state._loadingHistories.value = true;
-    state.histories.value = await searchDao.getAll(metaId: "$type$id");
-    state.histories.value = ['dsds', 'dsds'];
+    state.histories.value = await searchDao.getAll(metaId: entriesPage.metaId);
     state._loadingHistories.value = false;
   }
 
@@ -31,12 +37,63 @@ class SearchHistoryController extends GetxController {
     await load();
   }
 
+  Future<void> loadEntries(String word) async {
+    state._word.value = word;
+    state._loadingEntries.value = true;
+    await searchDao.save(word, entriesPage.metaId, BigInt.from(profilePage.state.user.id));
+    final entries = await entryService.entries(entriesPage.state.meta,
+        page: 1, size: state.size, search: state.word
+    );
+    state.addEntries(entries, reset: true);
+    state._loadingEntries.value = false;
+  }
+
+  Future<void> nextPage() async {
+    state.isLoadingMore = true;
+    final page = state.page + 1;
+    final entries = await entryService.entries(entriesPage.state.meta,
+        page: page, size: state.size, search: state.word
+    );
+    state.addEntries(entries);
+    state.isLoadingMore = false;
+  }
+
+  void clearEntries() {
+    state._loadingEntries.value = false;
+    state.entries = [];
+    state._page.value = 0;
+    state._hasMore.value = false;
+    state.isLoadingMore = false;
+  }
+
 }
 
 class SearchState {
 
-  final histories = <String>[].obs;
+  final _word = "".obs;
+  String get word => _word.value;
 
+  final _loadingEntries = false.obs;
+  bool get loadingEntries => _loadingEntries.value;
+  List<Rx<Entry>> entries = [];
+  final _page = 0.obs;
+  int get page => _page.value;
+  int size = 20;
+  final _hasMore = false.obs;
+  bool get hasMore => _hasMore.value;
+  bool isLoadingMore = false;
+  void addEntries(List<Entry> addList, {bool reset = false}){
+    if (reset) {
+      entries = addList.map((item) => item.obs).toList();
+      _page.value = 1;
+    } else {
+      entries = [...entries, ...addList.map((item) => item.obs)];
+      _page.value = page + 1;
+    }
+    _hasMore.value = addList.length >= size;
+  }
+
+  final histories = <String>[].obs;
   final _loadingHistories = false.obs;
   bool get loadingHistories => _loadingHistories.value;
 

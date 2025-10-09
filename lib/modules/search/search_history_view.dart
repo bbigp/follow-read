@@ -9,7 +9,7 @@ import 'package:follow_read/global/widgets/no_more.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
-import 'package:follow_read/modules/search/no_search_history.dart';
+import 'package:follow_read/global/widgets/empty_state_view.dart';
 import 'package:follow_read/modules/search/search_controller.dart';
 import 'package:get/get.dart';
 
@@ -49,7 +49,10 @@ class SearchHistoryView extends StatelessWidget {
             return ListTilexChevron(
               title: word,
               onTap: () {
-
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  FocusScope.of(context).unfocus(); // 收起键盘
+                });
+                search.loadEntries(word);
               },
             );
             // return InkWell(onTap: (){
@@ -83,7 +86,7 @@ class SearchHistoryView extends StatelessWidget {
 
     return Obx(() {
       return search.state.loadingHistories || search.state.histories.isEmpty
-          ? NoSearchHistory()
+          ? EmptyStateView()
           : view;
     });
   }

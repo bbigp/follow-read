@@ -10,7 +10,7 @@ class SearchHistoryDao extends DatabaseAccessor<AppDatabase> {
 
   $SearchHistoryTableTable get searchHistoryTable => attachedDatabase.searchHistoryTable;
 
-  void save(String word, String metaId, BigInt userId) async {
+  Future<void> save(String word, String metaId, BigInt userId) async {
     if (word == "") return;
     await into(searchHistoryTable).insert(SearchHistoryTableCompanion(
       word: Value(word.trim()),

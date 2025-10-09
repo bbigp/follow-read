@@ -4,8 +4,6 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
-import 'package:follow_read/data/model/feed.dart';
-import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/loading_more.dart';
 import 'package:follow_read/global/widgets/no_more.dart';
@@ -71,9 +69,7 @@ class _EntriesPageState extends State<EntriesPage> {
           Navigator.of(context).pop();
         },),
         actions: [
-          InkWell(onTap: () => Get.toNamed(RouteConfig.search, parameters: {"id": controller.state.meta.metaId}),
-            child: PaddedSvgIcon(SvgIcons.search),
-          ),
+          InkWell(onTap: () => Get.toNamed(RouteConfig.search), child: PaddedSvgIcon(SvgIcons.search),),
           InkWell(onTap: () => Open.modal(context, TileSettings()), child: PaddedSvgIcon(SvgIcons.more),)
         ],
       ),

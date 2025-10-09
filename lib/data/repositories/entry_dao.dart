@@ -64,11 +64,12 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     int? publishedTime, int? addTime,
     int? page, int? size,
     String? order, String direction = "desc",
+    String? search,
   }) async {
     page = page ?? 1;
     size = size ?? 20;
     final whereClause = buildQuery(feedIds: feedIds, statuses: statuses, publishedTime: publishedTime,
-      addTime: addTime,
+      addTime: addTime, search: search,
     ).join(" and ");
     final orderByColumn = switch(order) {
       "createdAt" => "created_at",
@@ -137,7 +138,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
 
   List<String> buildQuery({
     List<BigInt>? feedIds, int? publishedTime, int? addTime,
-    List<String>? statuses,
+    List<String>? statuses, String? search,
   }) {
     List<String> cond = [];
     var now = DateTime.now();
@@ -156,6 +157,9 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     if (statuses != null && statuses.isNotEmpty) {
       var status = statuses.map((status) => "'$status'").toSet().join(",");
       cond.add("status in ($status)");
+    }
+    if (search != null && search != "") {
+      cond.add("(title like '%$search%' or content like '%$search%' or summary like '%$search%')");
     }
     // bool? starred = switch(filter.starred) {
     //   1 => true,

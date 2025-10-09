@@ -25,6 +25,7 @@ class EntriesController extends GetxController {
   final _filterService = Get.find<FilterService>();
   final _entryService = Get.find<EntryService>();
 
+  String get metaId => "$type$id";
 
   @override
   void onReady() {

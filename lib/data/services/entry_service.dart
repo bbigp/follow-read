@@ -1,5 +1,6 @@
 
 
+import 'package:follow_read/data/model/constant.dart';
 import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
@@ -8,7 +9,6 @@ import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/data/providers/miniflux/api.dart';
 import 'package:follow_read/data/repositories/entry_dao.dart';
 import 'package:follow_read/data/repositories/media_dao.dart';
-import 'package:follow_read/modules/widgets/me/me.dart';
 
 import 'service_base.dart';
 
@@ -38,7 +38,7 @@ class EntryService extends ServiceBase {
   }
 
 
-  Future<List<Entry>> entries(Meta meta, {int? page, int? size}) async {
+  Future<List<Entry>> entries(Meta meta, {int? page, int? size, String? search}) async {
     var feedIds = <BigInt>[];
     var statuses = <String>[];
     var order = "";
@@ -68,10 +68,17 @@ class EntryService extends ServiceBase {
       addTime = meta.addTime;
     }
 
+    if (search != null && search != "") {
+      statuses = [];
+      order = Model.orderPublishedAt;
+      publishedTime = null;
+      addTime = null;
+    }
+
     final entries = await _dao.entries(feedIds: feedIds, statuses: statuses,
       publishedTime: publishedTime, addTime: addTime,
       order: order,
-      page: page, size: size,
+      page: page, size: size, search: search,
     );
     final mediaMap = await _mediaDao.mediaMapByEntryIds(entries.map((e) => e.id).toList());
     return entries.map((e) => e.copyWith(feed: feedMap[e.feedId], medias: mediaMap[e.id])).toList();

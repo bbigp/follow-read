@@ -6,10 +6,10 @@ import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 
 ///
-class NoSearchHistory extends StatelessWidget {
+class EmptyStateView extends StatelessWidget {
 
   final String value;
-  const NoSearchHistory({super.key, this.value = "Search"});
+  const EmptyStateView({super.key, this.value = "Search"});
 
   @override
   Widget build(BuildContext context) {
