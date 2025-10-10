@@ -22,11 +22,11 @@ class FeedLine extends StatelessWidget {
       child: Row(children: [
         FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: ElementSize.large,),
         const SizedBox(width: 16, height: 40,),
-        Column(children: [
-          PgText(feed.title, style: AppTextStyles.M15, maxLines: 1,),
+        Expanded(child: Column(children: [
+          PgText(feed.title, style: AppTextStyles.M15, maxLines: 1),
           const SizedBox(height: 2,),
-          PgText(feed.feedUrl, style: AppTextStyles.R13B50, maxLines: 1,),
-        ],),
+          PgText(feed.feedUrl, style: AppTextStyles.R13B50, maxLines: 1),
+        ],)),
         // if (1==2) ...[
         //   const SizedBox(width: 16,),
         //   IconButtonx(icon: SvgIcons.add, size: Sizex.custom,

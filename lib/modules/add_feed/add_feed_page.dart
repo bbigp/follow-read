@@ -36,25 +36,27 @@ class AddFeedPage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          CardView(child: Padding(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          CardView(child: Padding(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Obx((){
               final feed = controller.state.feed;
               return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Padding(padding: EdgeInsets.only(top: 2),
                   child: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: ElementSize.large,),
                 ),
-                const SizedBox(width: 8,),
+                const SizedBox(width: 12,),
                 Expanded(child: Column(children: [
                   Row(children: [
-                    Expanded(child: PgText(feed.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M17),),
+                    Expanded(child: PgText(feed.title, maxLines: 1, overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.M17),),
                     const SizedBox(width: 20, height: 8,)
                   ],),
                   Row(children: [
-                    Expanded(child: PgText(feed.feedUrl, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.R13B50),),
+                    Expanded(child: PgText(feed.feedUrl, maxLines: 1, overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.R13B50),),
                     const SizedBox(width: 20, height: 8,)
                   ],),
                   if (feed.desc != "") ...[
-                    const SizedBox(height: 4,),
+                    const SizedBox(height: 8,),
                     Row(children: [
                       Expanded(child: PgText(feed.desc, maxLines: 2,
                           overflow: TextOverflow.ellipsis, style: AppTextStyles.R15),),
@@ -67,14 +69,12 @@ class AddFeedPage extends StatelessWidget {
           )),
           const SizedBox(height: 16,),
           Obx(() => TextFieldx(sizex: Sizex.medium, hint: "Feed链接", value: controller.state.feedUrl,
-            readOnly: controller.feed.id > BigInt.zero, onChanged: (v) => controller.changed(url: v),
+            readOnly: true, onChanged: (v) => controller.changed(url: v),
           )),
-          if (controller.feed.id > BigInt.zero) ...[
-            const SizedBox(height: 8,),
-            Obx(() => TextFieldx(sizex: Sizex.medium, value: controller.state.feedTitle,
-              onChanged: (v) => controller.changed(title: v),
-            )),
-          ],
+          const SizedBox(height: 8,),
+          Obx(() => TextFieldx(sizex: Sizex.medium, value: controller.state.feedTitle,
+            onChanged: (v) => controller.changed(title: v),
+          )),
           const SizedBox(height: 8,),
           CardView(child: Obx(() => ListTilexChevron(icon: SvgIcons.folder_1, title: "文件夹",
             additionalInfo: controller.state.folder.title,

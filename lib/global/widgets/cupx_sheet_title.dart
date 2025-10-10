@@ -9,6 +9,7 @@ import 'package:follow_read/global/widgets/buttonx.dart';
 
 import '../../../global/widgets/padded_svg_icon.dart';
 import 'element_type.dart';
+import 'pg_text.dart';
 
 class ActionSheetTitleBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -78,7 +79,7 @@ class ActionSheetTitle extends StatelessWidget {
       ),
       Positioned(child: SizedBox(height: 34,
         child: Center(
-          child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500, textAlign: TextAlign.center,),
+          child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M17, textAlign: TextAlign.center,),
         ),
       ))
     ],);
@@ -94,7 +95,7 @@ class PlainSheetTitle extends StatelessWidget {
       padding: EdgeInsets.only(left: 16, right: 12, top: 0,),
       child: Row(children: [
         Expanded(child: Padding(padding: EdgeInsets.all(4),
-          child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500,),
+          child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M17,),
         )),
         const SizedBox(width: 8,),
         CupxSheetTitleCloseButton(),
@@ -113,7 +114,7 @@ class CenteredSheetTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupxSheetTitle(
       color: color,
-      title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.text17500, textAlign: TextAlign.center,),
+      title: PgText(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M17, textAlign: TextAlign.center,),
       leading: leading ?? PaddedSvgIcon(SvgIcons.arrow_left, onTap: () => Navigator.pop(context)),
       trailing: const SizedBox(width: 28,)
     );

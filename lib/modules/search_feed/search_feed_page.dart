@@ -2,10 +2,13 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
+import 'package:follow_read/global/widgets/cupx_sheet_title.dart';
 import 'package:follow_read/global/widgets/empty_state_view.dart';
 import 'package:follow_read/global/widgets/loading_more.dart';
 import 'package:follow_read/global/widgets/no_more.dart';
+import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/text_fieldx.dart';
 import 'package:follow_read/modules/feed_line.dart';
 import 'package:follow_read/routes.dart';
@@ -22,7 +25,9 @@ class SearchFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CupxAppBar(),
+      appBar: CenteredSheetTitleBar(
+        title: "RSS/Atom",
+      ),
       body: Column(children: [
         Padding(
           padding: EdgeInsets.only(top: 4, bottom: 12, left: 16, right: 16),
