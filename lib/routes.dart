@@ -10,6 +10,7 @@ import 'package:follow_read/modules/add_filter/add_filter_view.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry/entry_page.dart';
 import 'package:follow_read/modules/profile/profile_binding.dart';
+import 'package:follow_read/modules/search_feed/search_feed_page.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -25,6 +26,7 @@ import 'modules/login/login_view.dart';
 import 'modules/profile/profile_page.dart';
 import 'modules/search/search_binding.dart';
 import 'modules/search/search_page.dart';
+import 'modules/search_feed/search_feed_binding.dart';
 
 class RouteConfig {
   RouteConfig._();
@@ -39,6 +41,7 @@ class RouteConfig {
   static const entry = '/entry';
   static const imageGallery = '/imageGallery';
   static const search = '/search';
+  static const searchFeed = '/searchFeed';
   static const filter = '/filter';
   static const addFeed = '/addFeed';
 
@@ -54,6 +57,7 @@ class RouteConfig {
     GetPage(name: filter, page: () => AddFilterForm(), binding: AddFilterBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: addFeed, page: () => AddFeedPage(), binding: AddFeedBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: search, page: () => SearchPage(), binding: SearchBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(name: searchFeed, page: () => SearchFeedPage(), binding: SearchFeedBinding(), middlewares: [AuthMiddleware()]),
   ];
 }
 

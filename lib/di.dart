@@ -3,6 +3,7 @@
 
 import 'package:follow_read/data/repositories/app_database.dart';
 import 'package:follow_read/data/services/entry_service.dart';
+import 'package:follow_read/data/services/feed_parser_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/memory_cache_controller.dart';
@@ -20,6 +21,7 @@ class DI {
 
   static Future<void> register() async {
     await GetStorage.init();
+    Get.put(FeedParserService());
     Get.put(DBService());
     Get.put(UserService());
     Get.put(EntryService());

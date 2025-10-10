@@ -41,7 +41,7 @@ class AddFeedPage extends StatelessWidget {
               final feed = controller.state.feed;
               return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Padding(padding: EdgeInsets.only(top: 2),
-                  child: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, sizex: Sizex.large,),
+                  child: FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: ElementSize.large,),
                 ),
                 const SizedBox(width: 8,),
                 Expanded(child: Column(children: [
@@ -67,9 +67,9 @@ class AddFeedPage extends StatelessWidget {
           )),
           const SizedBox(height: 16,),
           Obx(() => TextFieldx(sizex: Sizex.medium, hint: "Feed链接", value: controller.state.feedUrl,
-            readOnly: controller.id > BigInt.zero, onChanged: (v) => controller.changed(url: v),
+            readOnly: controller.feed.id > BigInt.zero, onChanged: (v) => controller.changed(url: v),
           )),
-          if (controller.id > BigInt.zero) ...[
+          if (controller.feed.id > BigInt.zero) ...[
             const SizedBox(height: 8,),
             Obx(() => TextFieldx(sizex: Sizex.medium, value: controller.state.feedTitle,
               onChanged: (v) => controller.changed(title: v),
@@ -96,7 +96,7 @@ class AddFeedPage extends StatelessWidget {
               }
             },
           )),
-          if (controller.id > BigInt.zero) ...[
+          if (controller.feed.id > BigInt.zero) ...[
             const SizedBox(height: 8,),
             IconButtonx(child: '取消订阅', icon: SvgIcons.reduce_o, size: Sizex.medium,
               type: ElementType.dangerGhost, enabled: true,

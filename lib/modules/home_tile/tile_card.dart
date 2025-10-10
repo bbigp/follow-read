@@ -32,7 +32,7 @@ class TileCard extends StatelessWidget {
           padding: EdgeInsets.all(6),
           child: Row(children: [
             const SizedBox(width: 6,),
-            FeedIcon(title: feed.title, iconUrl: feed.iconUrl, sizex: Sizex.large,),
+            FeedIcon(title: feed.title, iconUrl: feed.iconUrl, size: ElementSize.large,),
 
             const SizedBox(width: 12,),
             Expanded(child: PgText(feed.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M15),),
@@ -49,7 +49,7 @@ class TileCard extends StatelessWidget {
               ),
               enabled: true,
               onPressed: () async {
-                final result = await Get.toNamed(RouteConfig.addFeed, parameters: {"id": feed.id.toString()});
+                final result = await Get.toNamed(RouteConfig.addFeed, arguments: feed);
                 if (result is bool && result == true) {
                   Get.find<EntriesController>().init();
                 }

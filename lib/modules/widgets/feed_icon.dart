@@ -5,7 +5,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
-import 'package:follow_read/global/widgets/buttonx.dart';
+import 'package:follow_read/global/widgets/element_type.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
@@ -20,35 +20,35 @@ class FeedIcon extends HookWidget {
 
   final String title;
   final String iconUrl;
-  final Sizex sizex;
+  final ElementSize size;
   final profile = Get.find<ProfileController>();
 
   FeedIcon({
     super.key,
     required this.title,
     required this.iconUrl,
-    this.sizex = Sizex.medium,
+    this.size = ElementSize.medium,
   });
 
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle;
-    double size;
+    double iconSize;
     double radius;
-    switch(sizex) {
-      case Sizex.small:
-        size = 18;
+    switch(size) {
+      case ElementSize.small:
+        iconSize = 18;
         radius = 4;
         textStyle = AppTextStyles.M11White00;
         break;
-      case Sizex.large:
-        size = 36;
+      case ElementSize.large:
+        iconSize = 36;
         radius = 8;
         textStyle = AppTextStyles.M15White00;
         break;
-      case Sizex.medium:
+      case ElementSize.medium:
       default:
-        size = 24;
+      iconSize = 24;
         radius = 6;
         textStyle = AppTextStyles.M15White00;
         break;
@@ -70,11 +70,11 @@ class FeedIcon extends HookWidget {
             return Shimmer.fromColors(
               baseColor: AppColors.black04,
               highlightColor: AppColors.black08,
-              child: Container(width: size, height: size, color: Colors.white,),
+              child: Container(width: iconSize, height: iconSize, color: Colors.white,),
             );
           }
           if (snapshot.hasError || !snapshot.hasData) {
-            return _buildInitialsAvatar(size, textStyle, radius);
+            return _buildInitialsAvatar(iconSize, textStyle, radius);
           }
           return Container(
             decoration: BoxDecoration(
@@ -83,8 +83,8 @@ class FeedIcon extends HookWidget {
             clipBehavior: Clip.hardEdge,
             child: Image.memory(
               snapshot.data!,
-              width: size,
-              height: size,
+              width: iconSize,
+              height: iconSize,
               fit: BoxFit.cover,
               filterQuality: FilterQuality.high, // 启用高质量过滤
               isAntiAlias: true, //
@@ -92,7 +92,7 @@ class FeedIcon extends HookWidget {
           );
         }
     )
-     :  _buildInitialsAvatar(size, textStyle, radius);
+     :  _buildInitialsAvatar(iconSize, textStyle, radius);
   }
 
 

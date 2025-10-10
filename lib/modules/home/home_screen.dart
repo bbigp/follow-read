@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
+import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/dashed_line.dart';
 import 'package:follow_read/global/widgets/modal_wrapper.dart';
@@ -99,13 +100,15 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       appBar: CupxAppBar(
         leading: PaddedSvgIcon(SvgIcons.lines_3, onTap: () => Get.toNamed(RouteConfig.profile),),
         actions: [
-          PaddedSvgIcon(SvgIcons.add, onTap: () => Open.modal(context, GetModalWrapper(
-            initControllers: () {
-              Get.put(AddFeedController(id: BigInt.zero));
-            },
-            disposeControllers: () => Get.delete<AddFeedController>(),
-            builder: () => AddFeedForm(),
-          ))),
+          PaddedSvgIcon(SvgIcons.add, onTap: () => Get.toNamed(RouteConfig.searchFeed)
+          //     Open.modal(context, GetModalWrapper(
+          //   initControllers: () {
+          //     Get.put(AddFeedController(id: BigInt.zero));
+          //   },
+          //   disposeControllers: () => Get.delete<AddFeedController>(),
+          //   builder: () => AddFeedForm(),
+          // ))
+          ),
           Obx(() {
             return SyncIcon(isSyncing: sync.state.isSyncing, onTap: () => sync.sync(),);
           }),

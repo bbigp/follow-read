@@ -1,10 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 
 import 'buttonx.dart';
 import 'padded_svg_icon.dart';
+
+
+class SearchTextField extends StatelessWidget {
+
+  final ValueChanged<String>? onSubmitted;
+  final void Function(String)? onChanged;
+  final String value;
+  const SearchTextField({super.key, this.onSubmitted, this.onChanged, this.value = ""});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFieldx(
+      sizex: Sizex.small,
+      icon: SvgPicture.asset(SvgIcons.search, width: 20, height: 20,
+        fit: BoxFit.contain,
+        colorFilter: ColorFilter.mode(AppColors.black25, BlendMode.srcIn),
+      ),
+      hint: '搜索',
+      onSubmitted: onSubmitted,
+      onChanged: onChanged,
+      value: value,
+    );
+  }
+
+}
+
 
 class TextFieldx extends StatefulWidget  {
 

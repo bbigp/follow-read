@@ -13,8 +13,8 @@ import 'package:follow_read/modules/sync/sync_controller.dart';
 import 'package:get/get.dart';
 
 class AddFeedController extends GetxController {
-  final BigInt id;
-  AddFeedController({required this.id});
+  final Feed feed;
+  AddFeedController({required this.feed});
   final state = AddFeedState();
   final _feedService = Get.find<FeedService>();
   final _folderService = Get.find<FolderService>();
@@ -32,15 +32,13 @@ class AddFeedController extends GetxController {
 
   Future<void> load() async {
     state._allFolders = await _folderService.getAllFolders();
-    if (id != BigInt.zero) {
-      final feed = await _feedService.getFeed(id) ?? Feed();
-      state._feedTitle.value = feed.title;
-      state._feedUrl.value = feed.feedUrl;
-      state._folder.value = state._getFolderById(feed.folderId);
-      state._feed.value = feed;
-    } else {
-      state._folder.value = state._getFolderById(profile.state.user.rootFolderId);
-    }
+    state._feed.value = feed;
+    state._feedTitle.value = feed.title;
+    state._feedUrl.value = feed.feedUrl;
+    state._folder.value = state._getFolderById(feed.folderId != BigInt.zero
+        ? feed.folderId
+        : profile.state.user.rootFolderId
+    );
   }
 
 
@@ -57,12 +55,12 @@ class AddFeedController extends GetxController {
   }
 
   Future<bool> save() async {
-    final success = id == BigInt.zero
+    final success = feed.id == BigInt.zero
         ? await _feedService.save(state.feedUrl, state.folder.id)
-        : await _feedService.updateFeed(id, title: state.feedTitle, folderId: state.folder.id);
+        : await _feedService.updateFeed(feed.id, title: state.feedTitle, folderId: state.folder.id);
     await homePage.loadHomeData(loadAll: true);
     await unread.init();
-    if (id == BigInt.zero && success) {
+    if (feed.id == BigInt.zero && success) {
       // _syncService.sync();
     }
     return success;
@@ -70,7 +68,7 @@ class AddFeedController extends GetxController {
 
 
   Future<bool> removeFeed() async {
-    var result = await _feedService.removeFeed(id);
+    var result = await _feedService.removeFeed(feed.id);
     if (result) {
       await homePage.loadHomeData(loadAll: true);
       await unread.init();

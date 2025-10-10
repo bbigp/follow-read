@@ -32,17 +32,7 @@ class SearchBarx extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 16,),
           Expanded(child: Obx((){
             final value = valueGetter();
-            return TextFieldx(
-              sizex: Sizex.small,
-              icon: SvgPicture.asset(SvgIcons.search, width: 20, height: 20,
-                fit: BoxFit.contain,
-                colorFilter: ColorFilter.mode(AppColors.black25, BlendMode.srcIn),
-              ),
-              hint: '搜索',
-              onSubmitted: onSubmitted,
-              onChanged: onChanged,
-              value: value,
-            );
+            return SearchTextField(onSubmitted: onSubmitted, onChanged: onSubmitted, value: value,);
           })),
           TextButtonx(child: '取消',
             size: Sizex.custom, type: ElementType.ghost, enabled: true,

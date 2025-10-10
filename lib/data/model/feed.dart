@@ -11,6 +11,7 @@ import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/modules/add_feed/add_feed_controller.dart';
 import 'package:follow_read/modules/add_feed/add_feed_form.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
+import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
 import 'constant.dart';
@@ -115,13 +116,14 @@ class Feed implements Meta {
     ContextMenu(
         label: '编辑',
         icon: SvgIcons.edit,
-        onTap: () => Open.modal(context, GetModalWrapper(
-          initControllers: () {
-            Get.put(AddFeedController(id: id));
-          },
-          disposeControllers: () => Get.delete<AddFeedController>(),
-          builder: () => AddFeedForm(),
-        ))
+        onTap: () => Get.toNamed(RouteConfig.addFeed, arguments: this)
+        //     Open.modal(context, GetModalWrapper(
+        //   initControllers: () {
+        //     Get.put(AddFeedController(id: id));
+        //   },
+        //   disposeControllers: () => Get.delete<AddFeedController>(),
+        //   builder: () => AddFeedForm(),
+        // ))
     ),
     const ContextMenuDivider(),
     ContextMenu(
