@@ -1,19 +1,22 @@
 
 
 import 'package:follow_read/data/services/feed_parser_service.dart';
+import 'package:follow_read/data/services/feed_service.dart';
 import 'package:get/get.dart';
 
 class SearchFeedController extends GetxController {
 
   final state = SearchFeedState();
   final feedParser = Get.find<FeedParserService>();
+  final feedService = Get.find<FeedService>();
 
 
   Future<void> search(String word) async {
     state._word.value = word;
     state.feeds.value = [];
     state._isSearching.value = true;
-    final feed = await feedParser.parseFeedUrl(word);
+    final feed = await feedService.getFeed(feedUrl: word)
+        ?? await feedParser.parseFeedUrl(word);
     if (feed != null) {
       state.feeds.value = [feed];
     }

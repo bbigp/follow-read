@@ -26,8 +26,8 @@ class FeedService extends ServiceBase {
     return await _feeDao.getAllFeeds();
   }
 
-  Future<Feed?> getFeed(BigInt id) async {
-    return await _feeDao.getFeed(id);
+  Future<Feed?> getFeed({BigInt? id, String? feedUrl}) async {
+    return await _feeDao.getFeed(id: id, feedUrl: feedUrl);
   }
 
 

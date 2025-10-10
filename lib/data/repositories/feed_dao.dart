@@ -20,10 +20,15 @@ class FeedDao extends DatabaseAccessor<AppDatabase> {
     return rows.map((e) => e.toFeed()).toList();
   }
 
-  Future<Feed?> getFeed(BigInt id) async {
+  Future<Feed?> getFeed({BigInt? id, String? feedUrl}) async {
     var query = select(feedsTable);
-    query = query..where((t) => t.deleted.equals(0))
-      ..where((t) => t.id.equals(id));
+    query = query..where((t) => t.deleted.equals(0));
+    if (id != null) {
+      query = query..where((t) => t.id.equals(id));
+    }
+    if (feedUrl != null && feedUrl != "") {
+      query = query..where((t) => t.feedUrl.equals(feedUrl));
+    }
     final rows = await query.getSingleOrNull();
     return rows?.toFeed();
   }

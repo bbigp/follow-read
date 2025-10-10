@@ -38,10 +38,10 @@ class EntriesController extends GetxController {
     state._isLoading.value = true;
 
     state._meta.value = switch(type) {
-      "e" => await _feedService.getFeed(id) ?? Feed(),
+      "e" => await _feedService.getFeed(id: id) ?? Feed(),
       "o" => await _folderService.getFolder(id) ?? Folder(),
       "i" => await _filterService.getFilter(id) ?? Filter(),
-      _ => await _feedService.getFeed(id) ?? Feed(),
+      _ => await _feedService.getFeed(id: id) ?? Feed(),
     };
     await Future.delayed(Duration(milliseconds: 200));
     final entries = await _entryService.entries(state.meta, page: 1, size: state.size);
