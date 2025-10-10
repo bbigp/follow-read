@@ -16,11 +16,24 @@ import 'package:get/get.dart';
 
 import 'search_feed_controller.dart';
 
-class SearchFeedPage extends StatelessWidget {
+class SearchFeedPage extends StatefulWidget {
 
-  SearchFeedPage({super.key});
+  const SearchFeedPage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _SearchFeedPageState();
+}
+
+class _SearchFeedPageState extends State<SearchFeedPage> {
 
   final searchFeed = Get.find<SearchFeedController>();
+  final FocusNode _searchFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +45,14 @@ class SearchFeedPage extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 4, bottom: 12, left: 16, right: 16),
           child: SearchTextField(
+            focusNode: _searchFocusNode,
             onSubmitted: (v) async {
-              await searchFeed.search(v);
+              await searchFeed.search(v.trim());
             },
             onChanged: (v) async {
               if (v == "") {
                 searchFeed.clear();
+                _searchFocusNode.requestFocus();
               }
             },
           ),
@@ -69,5 +84,4 @@ class SearchFeedPage extends StatelessWidget {
       ],),
     );
   }
-
 }

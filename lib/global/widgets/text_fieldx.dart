@@ -13,7 +13,10 @@ class SearchTextField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final void Function(String)? onChanged;
   final String value;
-  const SearchTextField({super.key, this.onSubmitted, this.onChanged, this.value = ""});
+  final FocusNode? focusNode;
+  const SearchTextField({super.key, this.onSubmitted, this.onChanged, this.value = "",
+    this.focusNode,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class SearchTextField extends StatelessWidget {
       onSubmitted: onSubmitted,
       onChanged: onChanged,
       value: value,
+      focusNode: focusNode,
     );
   }
 
@@ -43,6 +47,7 @@ class TextFieldx extends StatefulWidget  {
   final String hint;
   final String value;
   final void Function(String)? onChanged;
+  final FocusNode? focusNode;
 
   const TextFieldx({super.key,
     required this.sizex, this.icon,
@@ -52,6 +57,7 @@ class TextFieldx extends StatefulWidget  {
     this.hint = "",
     this.value = "",
     this.onChanged,
+    this.focusNode,
   });
 
   @override
@@ -147,6 +153,7 @@ class _TextFieldxState extends State<TextFieldx> {
         Expanded(child: TextField(
             readOnly: widget.readOnly,
             controller: _controller,
+            focusNode: widget.focusNode,
             maxLines: 1,
             keyboardType: widget.textInputType, //设置键盘类型
             textInputAction: TextInputAction.done, //决定键盘右下角“完成”按钮的样式
