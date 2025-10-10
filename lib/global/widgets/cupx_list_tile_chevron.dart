@@ -42,7 +42,7 @@ class ListTilexSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Row(children: [
-      const SizedBox(width: 16, height: 48,),
+      const SizedBox(width: 16, height: 44,),
       icon == null
           ? const SizedBox(width: 24, height: 24,)
           : SvgPicture.asset(icon!, width: 24, height: 24, fit: BoxFit.contain,
@@ -134,7 +134,7 @@ class ListTilex extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Row(children: [
-      const SizedBox(width: 16, height: 48,),
+      const SizedBox(width: 16, height: 44,),
       if (icon != null) ...[
         icon!,
         const SizedBox(width: 12,),

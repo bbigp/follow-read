@@ -82,6 +82,7 @@ class ProfilePage extends StatelessWidget {
               // SliverToBoxAdapter(child: SizedBox(height: 8,),),
               SliverToBoxAdapter(child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
+                  padding: EdgeInsets.zero,
                   child: Column(children: [
                     Obx((){
                       return ListTilexChevronUpDown(key: _unreadMarkKey, icon: SvgIcons.unread_dashed,
@@ -125,7 +126,7 @@ class ProfilePage extends StatelessWidget {
                 child: Text("当前服务器地址", maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.M11B25,),
               ),),
               SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   child: Column(children: [
                     Obx((){
                       return ListTilexText(title: controller.state.user.baseUrl);
@@ -141,6 +142,7 @@ class ProfilePage extends StatelessWidget {
 
 
               SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
+                padding: EdgeInsets.zero,
                 child: Column(children: [
                   Obx((){
                     return ListTilexChevronUpDown(icon: SvgIcons.folder_1,

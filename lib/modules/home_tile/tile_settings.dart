@@ -92,7 +92,7 @@ class TileSettings extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 6),
             child: CardView(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                 borderRadius: 16,
                 child: Column(children: [
                   ListTilexText(title: meta.siteUrl, onTap: () => copyToClipboard(meta.siteUrl)),
