@@ -17,7 +17,10 @@ class SearchBarx extends StatelessWidget implements PreferredSizeWidget {
   final ValueChanged<String>? onSubmitted;
   final void Function(String)? onChanged;
   final String Function() valueGetter;
-  const SearchBarx({super.key, this.onSubmitted, this.onChanged, required this.valueGetter});
+  final FocusNode? focusNode;
+  const SearchBarx({super.key, this.onSubmitted, this.onChanged, required this.valueGetter,
+    this.focusNode,
+  });
 
   @override
   Size get preferredSize => Size.fromHeight(54);
@@ -32,7 +35,9 @@ class SearchBarx extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 16,),
           Expanded(child: Obx((){
             final value = valueGetter();
-            return SearchTextField(onSubmitted: onSubmitted, onChanged: onSubmitted, value: value,);
+            return SearchTextField(onSubmitted: onSubmitted, onChanged: onChanged,
+              value: value, focusNode: focusNode,
+            );
           })),
           TextButtonx(child: '取消',
             size: Sizex.custom, type: ElementType.ghost, enabled: true,
