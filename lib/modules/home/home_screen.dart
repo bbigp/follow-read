@@ -3,15 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
-import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
 import 'package:follow_read/global/widgets/dashed_line.dart';
-import 'package:follow_read/global/widgets/modal_wrapper.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/sync_icon.dart';
-import 'package:follow_read/modules/add_feed/add_feed_controller.dart';
-import 'package:follow_read/modules/add_feed/add_feed_form.dart';
-import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/modules/sync/sync_controller.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
