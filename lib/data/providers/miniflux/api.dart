@@ -8,8 +8,8 @@ import 'package:follow_read/data/model/page_info.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/data/providers/miniflux/entry_page_response.dart';
 import 'package:follow_read/data/providers/miniflux/feed_response.dart';
-import 'package:follow_read/features/data/models/add_feed_response.dart';
 
+import 'add_feed_response.dart';
 import 'me_response.dart';
 
 class MinifluxApi {
@@ -77,3 +77,48 @@ class MinifluxApi {
 
 class EmptyObject {}
 
+
+// static Future<Either<Failure, FeedCounterResponse>>  getFeedCounters() async {
+// return await httpUtil.safeRequest(
+// path: 'feeds/counters',
+// method: HttpMethod.get,
+// fromJson: (json) => FeedCounterResponse.fromJson(jsonDecode(json)),
+// );
+// }
+//
+// static Future<Either<Failure, List<FeedResponse>>> getFeeds() async {
+// return await httpUtil.safeRequest<List<FeedResponse>>(
+// path: 'feeds',
+// method: HttpMethod.get,
+// fromJson: (json) {
+// final list = jsonDecode(json) as List<dynamic>;
+// final feeds = list
+//     .map((json) => FeedResponseMapper.fromMap(json))
+//     .toList();
+// return feeds;
+// },
+// );
+// }
+//
+//
+//
+//
+//
+//
+//
+//
+// static Future<Either<Failure, EntryResponse>> getEntry(int entryId) async {
+// return await httpUtil.safeRequest(path: 'entries/$entryId',
+// method: HttpMethod.get,
+// fromJson: (json) => EntryResponseMapper.fromJson(json));
+// }
+//
+//
+//
+// static Future<Either<Failure, Success>> starred(int entryId) async {
+// return await httpUtil.safeRequest(
+// path: 'entries/$entryId/bookmark',
+// method: HttpMethod.put,
+// fromJson: (json) => Success.fromJson(json)
+// );
+// }

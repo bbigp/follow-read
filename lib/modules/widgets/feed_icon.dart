@@ -5,9 +5,9 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
-import 'package:follow_read/data/services/memory_cache_controller.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/foundation.dart';
@@ -21,7 +21,7 @@ class FeedIcon extends HookWidget {
   final String title;
   final String iconUrl;
   final Sizex sizex;
-  final controller = Get.find<MemoryCacheController>();
+  final profile = Get.find<ProfileController>();
 
   FeedIcon({
     super.key,
@@ -53,7 +53,7 @@ class FeedIcon extends HookWidget {
         textStyle = AppTextStyles.M15White00;
         break;
     }
-    final user = controller.currentUser.value;
+    final user = profile.state.user;
     final feedIcon = user.baseUrl + iconUrl;
     final cachedImageFuture = useMemoized(() {
       if (feedIcon.isEmpty || user.isNull) return null;
