@@ -2,14 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
-import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/providers/miniflux/feed_response.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
 import 'package:follow_read/global/widgets/context_menu.dart';
-import 'package:follow_read/global/widgets/modal_wrapper.dart';
-import 'package:follow_read/global/widgets/open.dart';
-import 'package:follow_read/modules/add_feed/add_feed_controller.dart';
-import 'package:follow_read/modules/add_feed/add_feed_form.dart';
 import 'package:follow_read/modules/widgets/context_menu_wrapper.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
