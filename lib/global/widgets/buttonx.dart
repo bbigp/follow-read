@@ -248,12 +248,12 @@ ButtonxSize mediumCompact() {
 }
 ButtonxSize large() {
   return ButtonxSize(height: 52, width: double.infinity,
-    borderRadius: BorderRadius.circular(12), textSize: AppTextStyles.text17500,
+    borderRadius: BorderRadius.circular(12), textSize: AppTextStyles.M17,
   );
 }
 ButtonxSize largeCompact() {
   return ButtonxSize(height: 52, compact: true, padding: 16,
-    borderRadius: BorderRadius.circular(12), textSize: AppTextStyles.text17500,
+    borderRadius: BorderRadius.circular(12), textSize: AppTextStyles.M17,
   );
 }
 

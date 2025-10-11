@@ -113,7 +113,7 @@ import 'package:shimmer/shimmer.dart';
 //   }
 // }
 
-
+///
 class EntryImage extends StatelessWidget {
 
   final String url;

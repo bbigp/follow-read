@@ -42,8 +42,10 @@ class EntryPage extends StatelessWidget{
       Expanded(child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 48),
+          padding: EdgeInsets.only(left: 16, right: 16, bottom: 48),
           child: Column(children: [
+            const SizedBox(height: 8,),
+
             if (entry.pic.isNotEmpty) ...[
               EntryImage(url: entry.pic, height: 241, width: double.infinity, onTap: (){
                 // ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
@@ -52,7 +54,10 @@ class EntryPage extends StatelessWidget{
               },),
               const SizedBox(height: 12,),
             ],
+
             EntryTitle(entry: entry),
+            const SizedBox(height: 12,),
+
             if (entry.medias.isNotEmpty) ...[
               Wrap(
                 children: entry.medias.map((media) {
@@ -71,16 +76,17 @@ class EntryPage extends StatelessWidget{
                   }
                   return EntryFile(url: media.url);
                 }).toList(),
-              )
+              ),
+              const SizedBox(height: 12,),
             ],
-            const SizedBox(height: 12,),
+
             EntryContent(entry: entry),
             const SizedBox(height: 12,),
+
             const NoMore(),
             const SizedBox(height: 12,),
 
             const SizedBox(height: 8,),
-
             IconButtonx(
               child: "View Website", icon: SvgIcons.out_o,
               isLeftIcon: false,
@@ -90,9 +96,10 @@ class EntryPage extends StatelessWidget{
               enabled: true,
               onPressed: () => Open.browser(entry.url),
             ),
-            const SizedBox(height: 8,),//设计图8
-            const SizedBox(height: 48,), //设计图48
-            const SizedBox(height: 36,)
+            const SizedBox(height: 8,),
+            const SizedBox(height: 48,),
+
+            const SizedBox(height: 36,)//底部导航
           ],),
         ),
       )),

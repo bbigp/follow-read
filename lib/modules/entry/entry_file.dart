@@ -10,6 +10,7 @@ import 'package:follow_read/global/widgets/card_viewx.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
 
+///
 class EntryFile extends StatelessWidget {
 
   final String url;
@@ -30,7 +31,6 @@ class EntryFile extends StatelessWidget {
       ],)
     );
     return Column(children: [
-      const SizedBox(height: 8,),
       InkWell(child: view, onTap: () => Open.browser(url),),
       const SizedBox(height: 8,),
     ],);
