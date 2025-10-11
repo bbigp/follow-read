@@ -11,6 +11,7 @@ import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry/entry_page.dart';
 import 'package:follow_read/modules/profile/profile_binding.dart';
 import 'package:follow_read/modules/search_feed/search_feed_page.dart';
+import 'package:follow_read/modules/sync/sync_page.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -44,6 +45,7 @@ class RouteConfig {
   static const searchFeed = '/searchFeed';
   static const filter = '/filter';
   static const addFeed = '/addFeed';
+  static const sync = "/sync";
 
   static final List<GetPage> getPages = [
     GetPage(name: login, page: () => LoginView(), binding: LoginBinding()),
@@ -58,6 +60,7 @@ class RouteConfig {
     GetPage(name: addFeed, page: () => AddFeedPage(), binding: AddFeedBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: search, page: () => SearchPage(), binding: SearchBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: searchFeed, page: () => SearchFeedPage(), binding: SearchFeedBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(name: sync, page: () => SyncPage(), middlewares: [AuthMiddleware()]),
   ];
 }
 

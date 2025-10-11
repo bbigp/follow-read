@@ -12,6 +12,14 @@ class SyncRecordDao extends DatabaseAccessor<AppDatabase> {
 
   $SyncRecordsTableTable get syncRecordsTable => attachedDatabase.syncRecordsTable;
 
+
+  Future<List<SyncRecord>> getSyncRecords(int page, {int size = 20}) async {
+    var query = select(syncRecordsTable)..limit(size, offset: (page - 1) * size)
+      ..orderBy([(t) => OrderingTerm(expression: syncRecordsTable.id, mode: OrderingMode.desc)]);
+    final rows = await query.get();
+    return rows.map((r) => r.to()).toList();
+  }
+
   Future<BigInt> save(SyncRecord record) async {
     final row = await into(syncRecordsTable).insertReturning(SyncRecordsTableCompanion(
       status: Value(record.status),

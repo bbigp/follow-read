@@ -41,6 +41,10 @@ class SyncService extends GetxService {
     return _box.read<bool>(PrefsKeys.isSyncing) ?? false;
   }
 
+  Future<List<SyncRecord>> syncRecords(int page, {int size = 20}) async {
+    return await _syncRecordDao.getSyncRecords(page, size: size);
+  }
+
   Future<void> sync() async {
     await _box.write(PrefsKeys.isSyncing, true);
     int page = 1;

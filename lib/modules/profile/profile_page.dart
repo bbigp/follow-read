@@ -16,6 +16,7 @@ import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/modules/folder_picker/folder_picker.dart';
 import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
+import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -106,6 +107,19 @@ class ProfilePage extends StatelessWidget {
                           controller.change(autoRead: v);
                       },);
                     }),
+                    Obx((){
+                      return ListTilexChevronUpDown(icon: SvgIcons.folder_1,
+                        title: "Root Folder",
+                        additionalInfo: controller.state.rootFolder.title,
+                        onTap: () => Open.modal(context, FolderPicker(
+                          sheetTitle: "根文件夹", value: controller.state.rootFolder.title,
+                          onChanged: (v) async {
+                            await controller.change(rootFolderId: v);
+                            await homePage.loadHomeData(loadAll: true);
+                          },
+                        )),
+                      );
+                    }),
                   ],)
               ),),),
 
@@ -135,7 +149,6 @@ class ProfilePage extends StatelessWidget {
                     Obx((){
                       return ListTilexText(title: controller.state.user.token);
                     })
-
                   ],)
               ),),),
               SliverToBoxAdapter(child: SizedBox(height: 24,),),
@@ -144,19 +157,7 @@ class ProfilePage extends StatelessWidget {
               SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
                 padding: EdgeInsets.zero,
                 child: Column(children: [
-                  Obx((){
-                    return ListTilexChevronUpDown(icon: SvgIcons.folder_1,
-                      title: "Root Folder",
-                      additionalInfo: controller.state.rootFolder.title,
-                      onTap: () => Open.modal(context, FolderPicker(
-                        sheetTitle: "根文件夹", value: controller.state.rootFolder.title,
-                        onChanged: (v) async {
-                          await controller.change(rootFolderId: v);
-                          await homePage.loadHomeData(loadAll: true);
-                        },
-                      )),
-                    );
-                  }),
+                  ListTilexChevron(title: "订阅同步", onTap: () => Get.offNamed(RouteConfig.sync),)
                 ],),
               ))),
 

@@ -88,9 +88,6 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     debugPrint(query);
     final result = await db.customSelect(query, readsFrom: {entriesTable}).get();
     return result.map((r) => entriesTable.map(r.data).toEntry()).toList();
-    // final keyword = '%$word%';
-   // query = query..where((t) => t.title.like(keyword) | t.content.like(keyword) | t.summary.like(keyword));
-
   }
 
   Future<Map<BigInt, int>> countFeed() async {
@@ -144,6 +141,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     var now = DateTime.now();
     if (feedIds != null && feedIds.isNotEmpty) {
       final ids = feedIds.map((id) => id.toString()).join(", ");
+      // query = query..where((t) => t.feedId.isIn(builder.feedIds.map((i) => BigInt.from(i)).toList()));
       cond.add("feed_id in ($ids)");
     }
     if (publishedTime != null && publishedTime > 0) {
@@ -151,6 +149,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
       cond.add("published_at >= $time");
     }
     if (addTime != null && addTime > 0) {
+      // query = query..where((t) => t.createdAt.isBiggerOrEqualValue(builder.minAddTime!));
       var time = now.add(Duration(minutes: -addTime)).millisecondsSinceEpoch ~/ 1000;
       cond.add("created_at >= $time");
     }
@@ -159,6 +158,7 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
       cond.add("status in ($status)");
     }
     if (search != null && search != "") {
+      // query = query..where((t) => t.title.like(keyword) | t.content.like(keyword) | t.summary.like(keyword));
       cond.add("(title like '%$search%' or content like '%$search%' or summary like '%$search%')");
     }
     // bool? starred = switch(filter.starred) {
