@@ -26,15 +26,17 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, WidgetsBindingObserver {
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _scrollController.addListener(_scrollListener);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).unfocus(); // 收起键盘
-    });
+    sync.sync(checkInterval: true);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   FocusScope.of(context).unfocus(); // 收起键盘
+    // });
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -50,7 +52,15 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      sync.sync(checkInterval: true);
+    }
   }
 
   final home = Get.find<HomeController>();

@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
+import 'package:follow_read/global/widgets/cupx_sheet_title.dart';
 import 'package:follow_read/global/widgets/loading_more.dart';
 import 'package:follow_read/global/widgets/no_more.dart';
 import 'package:follow_read/global/widgets/padded_svg_icon.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
+import 'package:follow_read/global/widgets/spacer_divider.dart';
 import 'package:follow_read/modules/sync/sync_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class SyncPage extends StatefulWidget {
 
@@ -50,14 +53,14 @@ class _SyncPageState extends State<SyncPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CupxAppBar(
-        leading: PaddedSvgIcon(SvgIcons.arrow_left, onTap: () => Get.back()),
+      appBar: CenteredSheetTitleBar(
+        title: "同步记录",
       ),
       body: Obx((){
           if (sync.state.isLoading) return const Center(child: LoadingMore(),);
           return RefreshIndicator(
             onRefresh: () => sync.getSyncRecords(),
-            child: ListView.builder(
+            child: ListView.separated(
               controller: _scrollController,
               itemCount: sync.state.records.length + 1,
               itemBuilder: (context, index) {
@@ -65,22 +68,41 @@ class _SyncPageState extends State<SyncPage> {
                   return sync.state.hasMore ? const LoadingMore() : const NoMore();
                 }
                 final record = sync.state.records[index];
-                return Column(children: [
-                  Row(children: [
-                    Expanded(child: PgText("${record.time}", style: AppTextStyles.R15)),
-                    PgText(record.status, style: AppTextStyles.R15),
+                final start = record.startTime == null ? "" : DateFormat('yyyy-MM-dd HH:mm:ss').format(record.startTime!);
+                final end = record.endTime == null ? "" : DateFormat('yyyy-MM-dd HH:mm:ss').format(record.endTime!);
+                final executeTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(record.time);
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Column(children: [
+                    Row(children: [
+                      Expanded(child: PgText("时间: $executeTime", style: AppTextStyles.R15)),
+                    ],),
+                    const SizedBox(height: 4,),
+                    Row(children: [
+                      PgText("状态: ", style: AppTextStyles.R15, maxWidth: 200,),
+                      Expanded(child: PgText(record.status, style: AppTextStyles.R15B50)),
+                    ],),
+                    const SizedBox(height: 4,),
+                    Row(children: [
+                      PgText("数据: ", style: AppTextStyles.R15, maxWidth: 200,),
+                      Expanded(child: PgText("feed:${record.feed} folder:${record.folder} media:${record.media}", style: AppTextStyles.R15B50)),
+                    ],),
+                    const SizedBox(height: 4,),
+                    Row(children: [
+                      Expanded(child: PgText("$start - $end", style: AppTextStyles.R15B50)),
+                    ],),
+                    if (record.errorMsg != "")
+                      Row(children: [
+                        Expanded(child: PgText(record.errorMsg, style: AppTextStyles.R15B50)),
+                      ],)
                   ],),
-                  Row(children: [
-                    Expanded(child: PgText("feed:${record.feed}", style: AppTextStyles.R15)),
-                    Expanded(child: PgText("folder:${record.folder}", style: AppTextStyles.R15)),
-                    Expanded(child: PgText("media:${record.media}", style: AppTextStyles.R15)),
-                  ],),
-                  Row(children: [
-                    Expanded(child: PgText("${record.startTime} ${record.endTime}", style: AppTextStyles.R15)),
-                    Expanded(child: PgText(record.errorMsg, style: AppTextStyles.R15)),
-                  ],)
-                ],);
-              }
+                );
+              }, separatorBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: const SpacerDivider(indent: 0, spacing: 1, thickness: 0.5,),
+                );
+              },
             ),
           );
       }),

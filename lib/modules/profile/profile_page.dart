@@ -87,7 +87,7 @@ class ProfilePage extends StatelessWidget {
                   child: Column(children: [
                     Obx((){
                       return ListTilexChevronUpDown(key: _unreadMarkKey, icon: SvgIcons.unread_dashed,
-                        title: "Unread Mark",
+                        title: "未读标记",
                         additionalInfo: controller.state.user.unreadMark.asString,
                         onTap: () => Open.menu(context, _unreadMarkKey, unreadMarkView),
                       );
@@ -95,21 +95,22 @@ class ProfilePage extends StatelessWidget {
                     Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
                     Obx((){
                       return ListTilexChevronUpDown(key: _openContentKey, icon: SvgIcons.page,
-                        title: "Open Content with",
+                        title: "默认打开方式",
                         additionalInfo: controller.state.user.openContent,
                         onTap: () => Open.menu(context, _openContentKey, openContentView),
                       );
                     }),
                     Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
                     Obx((){
-                      return ListTilexSwitch(title: "Auto Mark Read", value: controller.state.user.autoRead,
+                      return ListTilexSwitch(title: "自动已读", value: controller.state.user.autoRead,
                         icon: SvgIcons.book, onChanged: (v) {
                           controller.change(autoRead: v);
                       },);
                     }),
+                    Padding(padding: EdgeInsets.only(right: 12, left: 16 + 24 + 12,), child: SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),),
                     Obx((){
                       return ListTilexChevronUpDown(icon: SvgIcons.folder_1,
-                        title: "Root Folder",
+                        title: "根文件夹",
                         additionalInfo: controller.state.rootFolder.title,
                         onTap: () => Open.modal(context, FolderPicker(
                           sheetTitle: "根文件夹", value: controller.state.rootFolder.title,
@@ -157,7 +158,10 @@ class ProfilePage extends StatelessWidget {
               SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: CardView(
                 padding: EdgeInsets.zero,
                 child: Column(children: [
-                  ListTilexChevron(title: "订阅同步", onTap: () => Get.offNamed(RouteConfig.sync),)
+                  ListTilexChevron(title: "订阅同步", onTap: () => Get.toNamed(RouteConfig.sync),),
+                  SpacerDivider(thickness: 0.5, spacing: 1, indent: 16,),
+                  ListTilexTextButton(title: "清空数据", action: "一键清空", onTap: () async => await homePage.deleteAllRssData(),),
+
                 ],),
               ))),
 

@@ -37,7 +37,7 @@ class ProfileController extends GetxService {
     loading();
   }
 
-  void loading() async {
+  Future<void> loading() async {
     state._rootFolder.value = await folderService.getFolder(state.user.rootFolderId) ?? Folder(title: "None");
   }
 

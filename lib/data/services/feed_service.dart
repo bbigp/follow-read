@@ -22,6 +22,16 @@ class FeedService extends ServiceBase {
     _mediaDao = MediaDao(db);
   }
 
+  Future<void> deleteAllRssData() async {
+    await db.transaction(() async {
+      await db.delete(db.feedsTable).go();
+      await db.delete(db.foldersTable).go();
+      await db.delete(db.entriesTable).go();
+      await db.delete(db.mediasTable).go();
+    });
+  }
+
+
   Future<List<Feed>> getAllFeeds() async {
     return await _feeDao.getAllFeeds();
   }

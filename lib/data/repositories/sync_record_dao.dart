@@ -20,6 +20,14 @@ class SyncRecordDao extends DatabaseAccessor<AppDatabase> {
     return rows.map((r) => r.to()).toList();
   }
 
+  Future<DateTime?> getLastSyncTime() async {
+    var query = selectOnly(syncRecordsTable)..addColumns([syncRecordsTable.time.max()])
+        ..where(syncRecordsTable.status.equals("ok"));
+    final row = await query.getSingleOrNull();
+    if (row == null) return null;
+    return row.read(syncRecordsTable.time.max());
+  }
+
   Future<BigInt> save(SyncRecord record) async {
     final row = await into(syncRecordsTable).insertReturning(SyncRecordsTableCompanion(
       status: Value(record.status),

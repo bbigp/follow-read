@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_colors.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:follow_read/global/widgets/buttonx.dart';
+import 'package:follow_read/global/widgets/element_type.dart';
 
 import 'cupx_switch.dart';
 import 'pg_text.dart';
@@ -88,6 +90,28 @@ class ListTilexChevronUpDown extends StatelessWidget {
       ),
       additionalInfo: additionalInfo,
       onTap: onTap,
+    );
+  }
+}
+
+class ListTilexTextButton extends StatelessWidget {
+  final String? icon;
+  final String? title;
+  final Future<void> Function()? onTap;
+  final String action;
+  const ListTilexTextButton({super.key, this.icon, this.title, this.onTap, required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget? child = icon == null ? null : SvgPicture.asset(icon!, width: 24, height: 24, fit: BoxFit.contain,
+      colorFilter: ColorFilter.mode(AppColors.black50, BlendMode.srcIn),
+    );
+    return ListTilex(
+      icon: child, title: title,
+      trailing: Buttonx(size: Sizex.custom, type: ElementType.primary, child: action,
+        state: ButtonState.enabled, onPressed: onTap,
+        buttonSize: smallCompact().copyWith(height: 30, padding: 8),
+      ),
     );
   }
 }

@@ -20,7 +20,13 @@ class SyncController extends GetxController {
     });
   }
 
-  void sync() async {
+  void sync({bool checkInterval = false}) async {
+    if (checkInterval) {
+      var lastSyncTime = await _syncService.getLastSyncTime();
+      if (lastSyncTime != null && DateTime.now().difference(lastSyncTime) < Duration(hours: 2)) {
+        return;
+      }
+    }
     await _syncService.sync();
     await homePage.loadHomeData(loadAll: true);
   }

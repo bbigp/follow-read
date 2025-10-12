@@ -7,6 +7,7 @@ import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
 import 'package:follow_read/data/services/user_service.dart';
+import 'package:follow_read/modules/count_badge/unread_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,7 @@ class HomeController extends GetxController {
   final _filterService = Get.find<FilterService>();
   final _userService = Get.find<UserService>();
   final profile = Get.find<ProfileController>();
+  final unread = Get.find<UnreadController>();
 
   @override
   void onInit() {
@@ -122,6 +124,13 @@ class HomeController extends GetxController {
     if (await _filterService.deleteById(id)) {
        await loadHomeData(loadFilters: true);
     }
+  }
+
+  Future<void> deleteAllRssData() async {
+    await _feedService.deleteAllRssData();
+    await loadHomeData(loadAll: true);
+    await unread.init();
+    await profile.loading();
   }
 
 }

@@ -35,6 +35,14 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     });
   }
 
+  Future<DateTime> getMaxTime() async {
+    final time = DateTime.now().add(Duration(days: -365));
+    var query = selectOnly(entriesTable)..addColumns([entriesTable.createdAt.max()]);
+    final row = await query.getSingleOrNull();
+    if (row == null) return time;
+    return row.read(entriesTable.createdAt.max()) ?? time;
+  }
+
   Future<Entry> getEntry(BigInt id) async {
     var query = select(entriesTable);
     query = query..where((t) => t.id.equals(id));

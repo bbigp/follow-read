@@ -45,54 +45,76 @@ class SyncService extends GetxService {
     return await _syncRecordDao.getSyncRecords(page, size: size);
   }
 
+  Future<DateTime?> getLastSyncTime() async {
+    return await _syncRecordDao.getLastSyncTime();
+  }
+
   Future<void> sync() async {
     await _box.write(PrefsKeys.isSyncing, true);
     int page = 1;
     int size = 25;
     final now = DateTime.now();
-    DateTime localMaxTime = now.add(Duration(days: -365));
+    DateTime localMaxTime = await _entryDao.getMaxTime();
     final record = SyncRecord(time: now, status: "run", startTime: localMaxTime, endTime: now);
     final id = await _syncRecordDao.save(record);
-    Map<BigInt, Feed> feedMap = {};
-    Map<BigInt, Folder> folderMap = {};
-    List<Media> medias = [];
-    int entry = 0;
-    while(true) {
-      var result = await MinifluxApi.entries(page: page, size: size);
-      if (!result.success) {
-        await _syncRecordDao.updateFinish(id, 'fail', errorMsg: result.message, entry: entry);
-        await _box.write(PrefsKeys.isSyncing, false);
-        return;
-      }
+    int entryCount = 0;
+    int mediaCount = 0;
+    int feedCount = 0;
+    int folderCount = 0;
+    try {
+      List<BigInt> savedFeedIds = [];
+      List<BigInt> savedFolderIds = [];
+      while (true) {
+        var result = await MinifluxApi.entries(page: page, size: size);
+        if (!result.success) {
+          throw Exception(result.message);
+        }
 
-      var entries = result.data?.list;
-      if (entries == null || entries.isEmpty) {
-        break;
-      }
+        var entries = result.data?.list;
+        if (entries == null || entries.isEmpty) {
+          break;
+        }
 
-      entry += entries.length;
-      for (var e in entries) {
-        feedMap[e.feedId] = e.feed;
-        folderMap[e.folder.id] = e.folder;
-        medias.addAll(e.medias);
+        List<Media> medias = [];
+        List<Feed> feeds = [];
+        List<Folder> folders = [];
+        for (var e in entries) {
+          if (!savedFeedIds.contains(e.feedId)) {
+            feeds.add(e.feed);
+          }
+          if (!savedFolderIds.contains(e.folder.id)) {
+            folders.add(e.folder);
+          }
+          medias.addAll(e.medias);
+        }
+        entryCount += entries.length;
+        mediaCount += medias.length;
+        feedCount += feeds.length;
+        folderCount += folders.length;
+        await _entryDao.bulkInsertWithTransaction(entries);
+        await _mediaDao.batchSave(medias);
+        await _feeDao.batchSave(feeds);
+        await _folderDao.batchSave(folders);
+        medias.clear();
+        feeds.clear();
+        folders.clear();
+        var minTime = entries.last.changedAt;
+        if (entries.length < size || minTime.isBefore(localMaxTime)) {
+          break;
+        }
+        page++;
       }
-      await _entryDao.bulkInsertWithTransaction(entries);
-      var minTime = entries.last.changedAt;
-      if (entries.length < size || minTime.isBefore(localMaxTime)) {
-        break;
-      }
-      page++;
+      await _syncRecordDao.updateFinish(id, 'ok',
+        entry: entryCount, feed: feedCount, folder: folderCount, media: mediaCount,
+      );
+    } catch(e) {
+      await _syncRecordDao.updateFinish(
+          id, 'fail', errorMsg: e.toString (),
+        entry: entryCount, media: mediaCount, feed: feedCount, folder: folderCount,
+      );
+    } finally {
+      await _box.write(PrefsKeys.isSyncing, false);
     }
-
-    final feeds = feedMap.values.toList();
-    await _feeDao.batchSave(feeds);
-    final folders = folderMap.values.toList();
-    await _folderDao.batchSave(folders);
-    await _mediaDao.batchSave(medias);
-    await _syncRecordDao.updateFinish(id, 'ok', entry: entry,
-        feed: feeds.length, folder: folders.length, media: medias.length,
-    );
-    await _box.write(PrefsKeys.isSyncing, false);
   }
 
 }
