@@ -51,10 +51,7 @@ class _SyncIconState extends State<SyncIcon> with SingleTickerProviderStateMixin
           );
         },
         child: Padding(padding: EdgeInsets.all(2),
-          child: SizedBox(
-            width: 24, height: 24,
-            child: SvgPicture.asset(SvgIcons.sync, width: 24, height: 24, fit: BoxFit.none,)
-          ),
+          child: SvgPicture.asset(SvgIcons.loading, width: 24, height: 24, fit: BoxFit.contain,),
         )
       ),
     );
