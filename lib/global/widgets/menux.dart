@@ -31,10 +31,7 @@ class RadioPopupMenu extends StatelessWidget {
       final icon = item.icon;
       return [
         RadioMenuItem(title: text, icon: icon, value: value, groupValue: groupValue, // 当前选中的 value
-          onTap: () {
-            item.onTap?.call();
-            PopupWrapper.hide();
-          },
+          onTap: item.onTap
         ),
         const MenuDivider(),
       ];
@@ -130,7 +127,10 @@ class MenuItem extends StatelessWidget {
         const SizedBox(width: 8,),
       ],),
     );
-    return onTap == null ? widget : InkWell(onTap: onTap, child: widget,);
+    return onTap == null ? widget : InkWell(onTap: () {
+      onTap?.call();
+      PopupWrapper.hide();
+    }, child: widget,);
   }
 
 }

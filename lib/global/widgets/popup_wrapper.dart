@@ -26,13 +26,17 @@ class PopupWrapper {
     final RenderBox? targetBox = targetKey.currentContext?.findRenderObject() as RenderBox?;
     if (targetBox == null) return; // 如果目标组件不存在或不可见，则直接返回
 
-    // 获取目标组件的尺寸和在屏幕中的位置
-    final Size targetSize = targetBox.size;
-    final Offset targetPosition = targetBox.localToGlobal(Offset.zero);
+    final Size targetSize = targetBox.size;//目标组件的尺寸
+    final Offset targetPosition = targetBox.localToGlobal(Offset.zero);//目标组件的左上角顶点在整个屏幕中的绝对坐标
 
-    // 获取Overlay状态和屏幕尺寸
-    final OverlayState overlayState = Overlay.of(context);
-    final Size screenSize = MediaQuery.of(context).size;
+    final OverlayState overlayState = Overlay.of(context);// 获取Overlay状态
+    final Size screenSize = MediaQuery.of(context).size;// 获取屏幕总高度
+
+    // 计算可用的屏幕空间
+    //目标组件的 下方空间
+    final double spaceBelow = screenSize.height - (targetPosition.dy + targetSize.height) - offset.top;//屏幕高度 - (目标Y坐标 + 目标高度) - 顶部偏移
+    //目标组件的 上方空间
+    final double spaceAbove = targetPosition.dy - offset.top; //目标Y坐标 - 顶部偏移
 
     // 创建用于测量的Key
     final GlobalKey measureKey = GlobalKey();
@@ -64,18 +68,16 @@ class PopupWrapper {
             }
             debugPrint('Final menu size: $menuWidth x $menuHeight');
 
-            // 计算可用的屏幕空间
-            final double spaceBelow = screenSize.height - (targetPosition.dy + targetSize.height) - offset.top;
-            final double spaceAbove = targetPosition.dy - offset.top;
-
             // 确定菜单位置：上方或下方
             double top;
             bool showBelow = spaceBelow > spaceAbove;
             if (showBelow) {
-              // 在目标下方显示：目标Y坐标 + 目标高度 + 顶部偏移 (y坐标，点击组件的作为上脚 + 点击组件高度 + 弹出菜单位于点击组件4px）
+              // 决定：在目标下方显示
+              // 在目标下方显示：目标Y坐标 + 目标高度 + 顶部偏移 (y坐标，点击组件的作为左上角 + 点击组件高度 + 弹出菜单位于点击组件4px）
               top = targetPosition.dy + targetSize.height + offset.top;
             } else {
-              // 在目标上方显示：目标Y坐标 - 菜单高度 - 顶部偏移
+              // 决定：在目标上方显示（下方空间不足）
+              // 计算 top 坐标：目标顶部Y坐标 - 菜单高度 - 顶部偏移
               top = targetPosition.dy - menuHeight - offset.top;
             }
 
@@ -88,13 +90,15 @@ class PopupWrapper {
 
             // 确保菜单在屏幕顶部边界内
             if (top < 0) {
-              top = 8.0;
-              // 限制菜单高度不要超出屏幕
+              top = 8.0; // 如果计算结果在屏幕上方（Y坐标为负），则将其强制固定在 8.0
+              // 重新限制菜单高度，防止它超出屏幕
               menuHeight = menuHeight.clamp(0, screenSize.height - 16);
             }
             // 确保菜单在屏幕底部边界内
-            final double maxBottom = top + menuHeight;
+            final double maxBottom = top + menuHeight; // 菜单的底部Y坐标
             if (maxBottom > screenSize.height - 8) {
+              // 如果菜单底部超出屏幕底部（减去 8 像素的边距）
+              // 则调整菜单高度，使其刚好贴着底部边距
               menuHeight = screenSize.height - top - 8;
             }
 

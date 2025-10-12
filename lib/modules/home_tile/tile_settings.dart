@@ -1,9 +1,9 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/themes/app_text_styles.dart';
+import 'package:follow_read/core/utils/copy.dart';
 import 'package:follow_read/data/model/constant.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/meta.dart';
@@ -95,10 +95,10 @@ class TileSettings extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                 borderRadius: 16,
                 child: Column(children: [
-                  ListTilexText(title: meta.siteUrl, onTap: () => copyToClipboard(meta.siteUrl)),
+                  ListTilexText(title: meta.siteUrl, onTap: () => Copy.clipboard(meta.siteUrl)),
                   if (meta.siteUrl != meta.url) ...[
                     SpacerDivider(thickness: 0.5, spacing: 1, indent: 0,),
-                    ListTilexText(title: meta.url, onTap: () => copyToClipboard(meta.url)),
+                    ListTilexText(title: meta.url, onTap: () => Copy.clipboard(meta.url)),
                   ]
                 ],)
             ),
@@ -109,15 +109,5 @@ class TileSettings extends StatelessWidget {
     return view;
   }
 
-
-
-  /// 将指定的文本内容复制到设备的剪贴板
-  void copyToClipboard(String textToCopy) async {
-    if (textToCopy.isEmpty) {
-      return;
-    }
-    await Clipboard.setData(ClipboardData(text: textToCopy));
-    Get.snackbar('成功', '内容已复制');
-  }
 }
 

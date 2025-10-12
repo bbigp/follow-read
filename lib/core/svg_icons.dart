@@ -83,6 +83,7 @@ class SvgIcons {
   static const String play = "assets/svg/play.svg";
   static const String file = "assets/svg/file.svg";
   static const String eyes = "assets/svg/eyes.svg";
+  static const String brush = "assets/svg/brush.svg";
 
   static const String check = "assets/svg/check.svg";
   static const String check_o = "assets/svg/check_o.svg";
