@@ -1,6 +1,7 @@
 import 'package:follow_read/core/prefs_keys.dart';
 import 'package:follow_read/data/model/sync_record.dart';
 import 'package:follow_read/data/services/sync_service.dart';
+import 'package:follow_read/modules/count_badge/unread_controller.dart';
 import 'package:follow_read/modules/home/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,6 +12,7 @@ class SyncController extends GetxController {
   final _syncService = Get.find<SyncService>();
   final homePage = Get.find<HomeController>();
   final syncService = Get.find<SyncService>();
+  final unread = Get.find<UnreadController>();
 
   @override
   void onInit() {
@@ -29,6 +31,7 @@ class SyncController extends GetxController {
     }
     await _syncService.sync();
     await homePage.loadHomeData(loadAll: true);
+    await unread.init();
   }
 
 

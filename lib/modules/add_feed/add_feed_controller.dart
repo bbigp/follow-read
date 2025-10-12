@@ -18,7 +18,7 @@ class AddFeedController extends GetxController {
   final state = AddFeedState();
   final _feedService = Get.find<FeedService>();
   final _folderService = Get.find<FolderService>();
-  final _syncService = Get.find<SyncController>();
+  final sync = Get.find<SyncController>();
   final profile = Get.find<ProfileController>();
   final homePage = Get.find<HomeController>();
   final unread = Get.find<UnreadController>();
@@ -61,7 +61,7 @@ class AddFeedController extends GetxController {
     await homePage.loadHomeData(loadAll: true);
     await unread.init();
     if (feed.id == BigInt.zero && success) {
-      // _syncService.sync();
+      sync.sync();
     }
     return success;
   }
