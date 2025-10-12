@@ -75,10 +75,8 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, W
         )),
       ),
       Obx((){
-        return SliverList(delegate: SliverChildBuilderDelegate(childCount: home.state.filterLen, (context, index) {
-          return GetBuilder<HomeController>(builder: (controller){
-            return FilterTile(filter: controller.state.filters[index], controller: controller,);
-          }, id: "filter_tile:$index",);
+        return SliverList(key: ValueKey("filters"), delegate: SliverChildBuilderDelegate(childCount: home.state.filters.length, (context, index) {
+          return FilterTile(filter: home.state.filters[index], controller: home,);
         }));
       }),
       SliverToBoxAdapter(child: Padding(
@@ -87,17 +85,13 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, W
       ),),
       SliverToBoxAdapter(child: GroupTile(title: '订阅源',)),
       Obx(() {
-        return SliverList(delegate: SliverChildBuilderDelegate(childCount: home.state.folderLen, (context, index) {
-          return GetBuilder<HomeController>(builder: (controller) {
-            return FolderTile(folder: controller.state.folders[index], controller: controller,);
-          }, id: 'folder_tile:$index',);
+        return SliverList(key: ValueKey("folders"), delegate: SliverChildBuilderDelegate(childCount: home.state.folders.length, (context, index) {
+          return FolderTile(folder: home.state.folders[index], controller: home,);
         }));
       }),
       Obx(() {
-        return SliverList(delegate: SliverChildBuilderDelegate(childCount: home.state.feedLen, (context, index) {
-          return GetBuilder<HomeController>(builder: (controller) {
-            return FeedTile(feed: controller.state.feeds[index]);
-          }, id: 'feed_tile:$index',);
+        return SliverList(key: ValueKey("feeds"), delegate: SliverChildBuilderDelegate(childCount: home.state.feeds.length, (context, index) {
+          return FeedTile(feed: home.state.feeds[index]);
         }));
       }),
     ];

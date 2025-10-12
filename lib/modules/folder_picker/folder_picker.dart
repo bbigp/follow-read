@@ -34,7 +34,7 @@ class FolderPicker extends StatelessWidget {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
-          itemCount: homePage.state.folderLen + 1,
+          itemCount: homePage.state.folders.length + 1,
           itemBuilder: (context, index) {
             final folder = index == 0
                 ? profilePage.state.rootFolder

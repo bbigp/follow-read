@@ -51,20 +51,17 @@ class HomeController extends GetxController {
 
     if (loadAll || loadFolders) {
       final List<Folder> folders = results.removeAt(0) as List<Folder>;
-      state.folders = _associateFeedsWithFolders(feeds, folders, rootFolderId);
-      state.stateFolderLen.value = state.folders.length;
+      state.folders.value = _associateFeedsWithFolders(feeds, folders, rootFolderId);
     }
     if (loadAll || loadFilters) {
       final List<Filter> filters = results.removeAt(0) as List<Filter>;
-      state.filters = _associateFeedsWithFilters(feeds, filters);
-      state.stateFilterLen.value = state.filters.length;
+      state.filters.value = _associateFeedsWithFilters(feeds, filters);
     }
     if (loadAll || loadFeeds) {
-      state.feeds = rootFolderId == BigInt.zero
+      state.feeds.value = rootFolderId == BigInt.zero
           ? []
           : feeds.where((i) => i.folderId == rootFolderId).toList();
-      state.stateFeedLen.value = state.feeds.length;
-      logger.i('${state.feedLen}');
+      logger.i('${state.feeds.length}');
     }
   }
 
@@ -139,16 +136,9 @@ class HomeController extends GetxController {
 class HomeDataState {
   HomeDataState();
 
-  List<Folder> folders = [];
-  List<Feed> feeds = [];
-  List<Filter> filters = [];
-
-  final stateFolderLen = 0.obs; //控制组件重建
-  final stateFeedLen = 0.obs;
-  final stateFilterLen = 0.obs;
-  int get folderLen => stateFolderLen.value;
-  int get feedLen => stateFeedLen.value;
-  int get filterLen => stateFilterLen.value;
+  RxList<Folder> folders = <Folder>[].obs;
+  RxList<Feed> feeds = <Feed>[].obs;
+  RxList<Filter> filters = <Filter>[].obs;
 
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
