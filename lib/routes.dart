@@ -9,6 +9,7 @@ import 'package:follow_read/modules/add_filter/add_filter_binding.dart';
 import 'package:follow_read/modules/add_filter/add_filter_view.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry/entry_page.dart';
+import 'package:follow_read/modules/pending_change/pending_change_page.dart';
 import 'package:follow_read/modules/profile/profile_binding.dart';
 import 'package:follow_read/modules/search_feed/search_feed_page.dart';
 import 'package:follow_read/modules/sync/sync_page.dart';
@@ -46,6 +47,7 @@ class RouteConfig {
   static const filter = '/filter';
   static const addFeed = '/addFeed';
   static const sync = "/sync";
+  static const pendingChange = "/pendingChange";
 
   static final List<GetPage> getPages = [
     GetPage(name: login, page: () => LoginView(), binding: LoginBinding()),
@@ -61,6 +63,7 @@ class RouteConfig {
     GetPage(name: search, page: () => SearchPage(), binding: SearchBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: searchFeed, page: () => SearchFeedPage(), binding: SearchFeedBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: sync, page: () => SyncPage(), middlewares: [AuthMiddleware()]),
+    GetPage(name: pendingChange, page: () => PendingChangePage(), middlewares: [AuthMiddleware()]),
   ];
 }
 

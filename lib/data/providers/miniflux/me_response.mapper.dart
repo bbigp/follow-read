@@ -20,8 +20,8 @@ class MeResponseMapper extends ClassMapperBase<MeResponse> {
   @override
   final String id = 'MeResponse';
 
-  static int _$id(MeResponse v) => v.id;
-  static const Field<MeResponse, int> _f$id = Field('id', _$id);
+  static BigInt _$id(MeResponse v) => v.id;
+  static const Field<MeResponse, BigInt> _f$id = Field('id', _$id);
   static String _$username(MeResponse v) => v.username;
   static const Field<MeResponse, String> _f$username =
       Field('username', _$username);
@@ -88,7 +88,7 @@ extension MeResponseValueCopy<$R, $Out>
 
 abstract class MeResponseCopyWith<$R, $In extends MeResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({int? id, String? username});
+  $R call({BigInt? id, String? username});
   MeResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -101,7 +101,7 @@ class _MeResponseCopyWithImpl<$R, $Out>
   late final ClassMapperBase<MeResponse> $mapper =
       MeResponseMapper.ensureInitialized();
   @override
-  $R call({int? id, String? username}) => $apply(FieldCopyWithData(
+  $R call({BigInt? id, String? username}) => $apply(FieldCopyWithData(
       {if (id != null) #id: id, if (username != null) #username: username}));
   @override
   MeResponse $make(CopyWithData data) => MeResponse(

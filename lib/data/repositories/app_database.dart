@@ -9,6 +9,7 @@ import 'package:follow_read/data/table/feed_table.dart';
 import 'package:follow_read/data/table/filter_table.dart';
 import 'package:follow_read/data/table/folder_table.dart';
 import 'package:follow_read/data/table/media_table.dart';
+import 'package:follow_read/data/table/pending_change_table.dart';
 import 'package:follow_read/data/table/search_history_table.dart';
 import 'package:follow_read/data/table/sync_record_table.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,13 +18,13 @@ import 'package:path/path.dart' as p;
 part 'app_database.g.dart';
 
 @DriftDatabase(tables: [FeedsTable, SyncRecordsTable, FoldersTable, FiltersTable,
-  EntriesTable, MediasTable, SearchHistoryTable,
+  EntriesTable, MediasTable, SearchHistoryTable, PendingChangeTable,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;  // 增加版本号
+  int get schemaVersion => 3;  // 增加版本号
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -33,6 +34,9 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (Migrator m, int from, int to) async {
       if (from < 2) {
         await m.createTable(searchHistoryTable);
+      }
+      if (from < 3) {
+        await m.createTable(pendingChangeTable);
       }
     },
   );

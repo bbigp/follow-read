@@ -40,7 +40,7 @@ class SearchHistoryController extends GetxController {
   Future<void> loadEntries(String word) async {
     state._word.value = word;
     state._loadingEntries.value = true;
-    await searchDao.save(word, entriesPage.metaId, BigInt.from(profilePage.state.user.id));
+    await searchDao.save(word, entriesPage.metaId, profilePage.state.user.id);
     final entries = await entryService.entries(entriesPage.state.meta,
         page: 1, size: state.size, search: state.word
     );

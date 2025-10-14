@@ -44,6 +44,7 @@ class SyncController extends GetxController {
     state.page = page ?? 1;
     final records = await _syncService.syncRecords(state.page, size: state.size);
     state.records.value = page == null ? records : [...state.records, ...records];
+    state.page = state.page + 1;
     state._hasMore.value = records.length >= state.size;
     state._isLoading.value = false;
     state.isLoadingMore = false;

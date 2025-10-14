@@ -6,7 +6,7 @@ part 'me_response.mapper.dart';
 
 @MappableClass()
 class MeResponse with MeResponseMappable {
-  final int id;
+  final BigInt id;
   final String username;
 
   MeResponse({

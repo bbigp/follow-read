@@ -49,7 +49,7 @@ class UserService extends GetxService {
     final rootFolderIdStr = _box.read<String>(PrefsKeys.rootFolderId);
     final rootFolderId = BigInt.parse(rootFolderIdStr ?? '0');
     return User(
-      id: _box.read<int>(PrefsKeys.userId) ?? 0,
+      id: _box.read<BigInt>(PrefsKeys.userId) ?? BigInt.zero,
       username: _box.read(PrefsKeys.username).toString(),
       baseUrl: _box.read(PrefsKeys.baseUrl).toString(),
       token: _box.read(PrefsKeys.token).toString(),

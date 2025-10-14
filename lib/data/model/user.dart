@@ -9,7 +9,7 @@ class User {
   static final String OPEN_CONTENT_WEBVIEW = "应用内浏览器";
   static final String OPEN_CONTENT_BROWSER = "系统浏览器";
 
-  final int id;
+  final BigInt id;
   final String username;
   final String token;
   final String baseUrl;
@@ -29,9 +29,9 @@ class User {
     BigInt? rootFolderId,
   }): rootFolderId = rootFolderId ?? BigInt.zero;
 
-  static User empty = User(id: 0, username: "", token: "", baseUrl: "");
+  static User empty = User(id: BigInt.zero, username: "", token: "", baseUrl: "");
 
-  bool get isNull => id == 0;
+  bool get isNull => id == BigInt.zero;
 }
 
 enum UnreadMark {
