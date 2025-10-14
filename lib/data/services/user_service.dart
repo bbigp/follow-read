@@ -20,7 +20,7 @@ class UserService extends GetxService {
       onError?.call(result.message);
       return false;
     }
-    await _box.write(PrefsKeys.userId, result.data!.id);
+    await _box.write(PrefsKeys.userId, result.data!.id.toString());
     await _box.write(PrefsKeys.username, result.data!.username);
     await _box.write(PrefsKeys.baseUrl, result.data!.baseUrl);
     await _box.write(PrefsKeys.token, result.data!.token);
@@ -49,7 +49,7 @@ class UserService extends GetxService {
     final rootFolderIdStr = _box.read<String>(PrefsKeys.rootFolderId);
     final rootFolderId = BigInt.parse(rootFolderIdStr ?? '0');
     return User(
-      id: _box.read<BigInt>(PrefsKeys.userId) ?? BigInt.zero,
+      id: BigInt.parse(_box.read<String>(PrefsKeys.userId) ?? "0"),
       username: _box.read(PrefsKeys.username).toString(),
       baseUrl: _box.read(PrefsKeys.baseUrl).toString(),
       token: _box.read(PrefsKeys.token).toString(),

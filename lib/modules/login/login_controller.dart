@@ -1,6 +1,7 @@
 
 
 import 'package:follow_read/data/services/user_service.dart';
+import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +9,7 @@ class LoginController extends GetxController {
 
   final state = LoginState();
   final userService = Get.find<UserService>();
+  final profile = Get.find<ProfileController>();
 
   void change({String? apiURL, String? apiToken}){
     if (apiURL != null) {
@@ -33,6 +35,7 @@ class LoginController extends GetxController {
     if (!success) {
       return;
     }
+    profile.onInit();
     Get.offAllNamed(RouteConfig.main);
   }
 

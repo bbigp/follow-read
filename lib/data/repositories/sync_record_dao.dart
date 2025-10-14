@@ -21,8 +21,8 @@ class SyncRecordDao extends DatabaseAccessor<AppDatabase> {
   }
 
   Future<DateTime?> getLastSyncTime() async {
-    var query = selectOnly(syncRecordsTable)..addColumns([syncRecordsTable.time.max()])
-        ..where(syncRecordsTable.status.equals("ok"));
+    var query = selectOnly(syncRecordsTable)..addColumns([syncRecordsTable.time.max()]);
+        // ..where(syncRecordsTable.status.equals("ok"));
     final row = await query.getSingleOrNull();
     if (row == null) return null;
     return row.read(syncRecordsTable.time.max());

@@ -30,6 +30,11 @@ class PendingChangeController extends PagedController<PendingChange> {
 
   }
 
+  Future<void> delete(int id) async {
+    await pendingChangeDao.deleteById(id);
+    await load();
+  }
+
 }
 
 

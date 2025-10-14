@@ -3342,6 +3342,466 @@ class SearchHistoryTableCompanion extends UpdateCompanion<SearchHistoryRow> {
   }
 }
 
+class $PendingChangeTableTable extends PendingChangeTable
+    with TableInfo<$PendingChangeTableTable, PendingChangeRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PendingChangeTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<BigInt> userId = GeneratedColumn<BigInt>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.bigInt, requiredDuringInsert: true);
+  static const VerificationMeta _contentIdMeta =
+      const VerificationMeta('contentId');
+  @override
+  late final GeneratedColumn<String> contentId = GeneratedColumn<String>(
+      'content_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  late final GeneratedColumnWithTypeConverter<PendingChangeAction, int> action =
+      GeneratedColumn<int>('action', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<PendingChangeAction>(
+              $PendingChangeTableTable.$converteraction);
+  @override
+  late final GeneratedColumnWithTypeConverter<PendingChangeStatus, int> status =
+      GeneratedColumn<int>('status', aliasedName, false,
+              type: DriftSqlType.int,
+              requiredDuringInsert: false,
+              defaultValue: const Constant(0))
+          .withConverter<PendingChangeStatus>(
+              $PendingChangeTableTable.$converterstatus);
+  static const VerificationMeta _extraMeta = const VerificationMeta('extra');
+  @override
+  late final GeneratedColumn<String> extra = GeneratedColumn<String>(
+      'extra', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _executeTimeMeta =
+      const VerificationMeta('executeTime');
+  @override
+  late final GeneratedColumn<DateTime> executeTime = GeneratedColumn<DateTime>(
+      'execute_time', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _msgMeta = const VerificationMeta('msg');
+  @override
+  late final GeneratedColumn<String> msg = GeneratedColumn<String>(
+      'msg', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        userId,
+        contentId,
+        action,
+        status,
+        extra,
+        createdAt,
+        executeTime,
+        msg
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pending_changes';
+  @override
+  VerificationContext validateIntegrity(Insertable<PendingChangeRow> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('content_id')) {
+      context.handle(_contentIdMeta,
+          contentId.isAcceptableOrUnknown(data['content_id']!, _contentIdMeta));
+    } else if (isInserting) {
+      context.missing(_contentIdMeta);
+    }
+    if (data.containsKey('extra')) {
+      context.handle(
+          _extraMeta, extra.isAcceptableOrUnknown(data['extra']!, _extraMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('execute_time')) {
+      context.handle(
+          _executeTimeMeta,
+          executeTime.isAcceptableOrUnknown(
+              data['execute_time']!, _executeTimeMeta));
+    }
+    if (data.containsKey('msg')) {
+      context.handle(
+          _msgMeta, msg.isAcceptableOrUnknown(data['msg']!, _msgMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PendingChangeRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PendingChangeRow(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.bigInt, data['${effectivePrefix}user_id'])!,
+      contentId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content_id'])!,
+      action: $PendingChangeTableTable.$converteraction.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}action'])!),
+      status: $PendingChangeTableTable.$converterstatus.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}status'])!),
+      extra: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}extra'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      executeTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}execute_time']),
+      msg: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}msg'])!,
+    );
+  }
+
+  @override
+  $PendingChangeTableTable createAlias(String alias) {
+    return $PendingChangeTableTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<PendingChangeAction, int> $converteraction =
+      const PendingChangeActionConverter();
+  static TypeConverter<PendingChangeStatus, int> $converterstatus =
+      const PendingChangeStatusConverter();
+}
+
+class PendingChangeRow extends DataClass
+    implements Insertable<PendingChangeRow> {
+  final int id;
+  final BigInt userId;
+  final String contentId;
+  final PendingChangeAction action;
+  final PendingChangeStatus status;
+  final String extra;
+  final DateTime createdAt;
+  final DateTime? executeTime;
+  final String msg;
+  const PendingChangeRow(
+      {required this.id,
+      required this.userId,
+      required this.contentId,
+      required this.action,
+      required this.status,
+      required this.extra,
+      required this.createdAt,
+      this.executeTime,
+      required this.msg});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<BigInt>(userId);
+    map['content_id'] = Variable<String>(contentId);
+    {
+      map['action'] = Variable<int>(
+          $PendingChangeTableTable.$converteraction.toSql(action));
+    }
+    {
+      map['status'] = Variable<int>(
+          $PendingChangeTableTable.$converterstatus.toSql(status));
+    }
+    map['extra'] = Variable<String>(extra);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || executeTime != null) {
+      map['execute_time'] = Variable<DateTime>(executeTime);
+    }
+    map['msg'] = Variable<String>(msg);
+    return map;
+  }
+
+  PendingChangeTableCompanion toCompanion(bool nullToAbsent) {
+    return PendingChangeTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      contentId: Value(contentId),
+      action: Value(action),
+      status: Value(status),
+      extra: Value(extra),
+      createdAt: Value(createdAt),
+      executeTime: executeTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(executeTime),
+      msg: Value(msg),
+    );
+  }
+
+  factory PendingChangeRow.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PendingChangeRow(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<BigInt>(json['userId']),
+      contentId: serializer.fromJson<String>(json['contentId']),
+      action: serializer.fromJson<PendingChangeAction>(json['action']),
+      status: serializer.fromJson<PendingChangeStatus>(json['status']),
+      extra: serializer.fromJson<String>(json['extra']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      executeTime: serializer.fromJson<DateTime?>(json['executeTime']),
+      msg: serializer.fromJson<String>(json['msg']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<BigInt>(userId),
+      'contentId': serializer.toJson<String>(contentId),
+      'action': serializer.toJson<PendingChangeAction>(action),
+      'status': serializer.toJson<PendingChangeStatus>(status),
+      'extra': serializer.toJson<String>(extra),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'executeTime': serializer.toJson<DateTime?>(executeTime),
+      'msg': serializer.toJson<String>(msg),
+    };
+  }
+
+  PendingChangeRow copyWith(
+          {int? id,
+          BigInt? userId,
+          String? contentId,
+          PendingChangeAction? action,
+          PendingChangeStatus? status,
+          String? extra,
+          DateTime? createdAt,
+          Value<DateTime?> executeTime = const Value.absent(),
+          String? msg}) =>
+      PendingChangeRow(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        contentId: contentId ?? this.contentId,
+        action: action ?? this.action,
+        status: status ?? this.status,
+        extra: extra ?? this.extra,
+        createdAt: createdAt ?? this.createdAt,
+        executeTime: executeTime.present ? executeTime.value : this.executeTime,
+        msg: msg ?? this.msg,
+      );
+  PendingChangeRow copyWithCompanion(PendingChangeTableCompanion data) {
+    return PendingChangeRow(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      contentId: data.contentId.present ? data.contentId.value : this.contentId,
+      action: data.action.present ? data.action.value : this.action,
+      status: data.status.present ? data.status.value : this.status,
+      extra: data.extra.present ? data.extra.value : this.extra,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      executeTime:
+          data.executeTime.present ? data.executeTime.value : this.executeTime,
+      msg: data.msg.present ? data.msg.value : this.msg,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PendingChangeRow(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('contentId: $contentId, ')
+          ..write('action: $action, ')
+          ..write('status: $status, ')
+          ..write('extra: $extra, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('executeTime: $executeTime, ')
+          ..write('msg: $msg')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, userId, contentId, action, status, extra,
+      createdAt, executeTime, msg);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PendingChangeRow &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.contentId == this.contentId &&
+          other.action == this.action &&
+          other.status == this.status &&
+          other.extra == this.extra &&
+          other.createdAt == this.createdAt &&
+          other.executeTime == this.executeTime &&
+          other.msg == this.msg);
+}
+
+class PendingChangeTableCompanion extends UpdateCompanion<PendingChangeRow> {
+  final Value<int> id;
+  final Value<BigInt> userId;
+  final Value<String> contentId;
+  final Value<PendingChangeAction> action;
+  final Value<PendingChangeStatus> status;
+  final Value<String> extra;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> executeTime;
+  final Value<String> msg;
+  const PendingChangeTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.contentId = const Value.absent(),
+    this.action = const Value.absent(),
+    this.status = const Value.absent(),
+    this.extra = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.executeTime = const Value.absent(),
+    this.msg = const Value.absent(),
+  });
+  PendingChangeTableCompanion.insert({
+    this.id = const Value.absent(),
+    required BigInt userId,
+    required String contentId,
+    required PendingChangeAction action,
+    this.status = const Value.absent(),
+    this.extra = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.executeTime = const Value.absent(),
+    this.msg = const Value.absent(),
+  })  : userId = Value(userId),
+        contentId = Value(contentId),
+        action = Value(action);
+  static Insertable<PendingChangeRow> custom({
+    Expression<int>? id,
+    Expression<BigInt>? userId,
+    Expression<String>? contentId,
+    Expression<int>? action,
+    Expression<int>? status,
+    Expression<String>? extra,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? executeTime,
+    Expression<String>? msg,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (contentId != null) 'content_id': contentId,
+      if (action != null) 'action': action,
+      if (status != null) 'status': status,
+      if (extra != null) 'extra': extra,
+      if (createdAt != null) 'created_at': createdAt,
+      if (executeTime != null) 'execute_time': executeTime,
+      if (msg != null) 'msg': msg,
+    });
+  }
+
+  PendingChangeTableCompanion copyWith(
+      {Value<int>? id,
+      Value<BigInt>? userId,
+      Value<String>? contentId,
+      Value<PendingChangeAction>? action,
+      Value<PendingChangeStatus>? status,
+      Value<String>? extra,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? executeTime,
+      Value<String>? msg}) {
+    return PendingChangeTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      contentId: contentId ?? this.contentId,
+      action: action ?? this.action,
+      status: status ?? this.status,
+      extra: extra ?? this.extra,
+      createdAt: createdAt ?? this.createdAt,
+      executeTime: executeTime ?? this.executeTime,
+      msg: msg ?? this.msg,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<BigInt>(userId.value);
+    }
+    if (contentId.present) {
+      map['content_id'] = Variable<String>(contentId.value);
+    }
+    if (action.present) {
+      map['action'] = Variable<int>(
+          $PendingChangeTableTable.$converteraction.toSql(action.value));
+    }
+    if (status.present) {
+      map['status'] = Variable<int>(
+          $PendingChangeTableTable.$converterstatus.toSql(status.value));
+    }
+    if (extra.present) {
+      map['extra'] = Variable<String>(extra.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (executeTime.present) {
+      map['execute_time'] = Variable<DateTime>(executeTime.value);
+    }
+    if (msg.present) {
+      map['msg'] = Variable<String>(msg.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PendingChangeTableCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('contentId: $contentId, ')
+          ..write('action: $action, ')
+          ..write('status: $status, ')
+          ..write('extra: $extra, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('executeTime: $executeTime, ')
+          ..write('msg: $msg')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3354,6 +3814,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $MediasTableTable mediasTable = $MediasTableTable(this);
   late final $SearchHistoryTableTable searchHistoryTable =
       $SearchHistoryTableTable(this);
+  late final $PendingChangeTableTable pendingChangeTable =
+      $PendingChangeTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3365,7 +3827,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         filtersTable,
         entriesTable,
         mediasTable,
-        searchHistoryTable
+        searchHistoryTable,
+        pendingChangeTable
       ];
 }
 
@@ -4997,6 +5460,239 @@ typedef $$SearchHistoryTableTableProcessedTableManager = ProcessedTableManager<
     ),
     SearchHistoryRow,
     PrefetchHooks Function()>;
+typedef $$PendingChangeTableTableCreateCompanionBuilder
+    = PendingChangeTableCompanion Function({
+  Value<int> id,
+  required BigInt userId,
+  required String contentId,
+  required PendingChangeAction action,
+  Value<PendingChangeStatus> status,
+  Value<String> extra,
+  Value<DateTime> createdAt,
+  Value<DateTime?> executeTime,
+  Value<String> msg,
+});
+typedef $$PendingChangeTableTableUpdateCompanionBuilder
+    = PendingChangeTableCompanion Function({
+  Value<int> id,
+  Value<BigInt> userId,
+  Value<String> contentId,
+  Value<PendingChangeAction> action,
+  Value<PendingChangeStatus> status,
+  Value<String> extra,
+  Value<DateTime> createdAt,
+  Value<DateTime?> executeTime,
+  Value<String> msg,
+});
+
+class $$PendingChangeTableTableFilterComposer
+    extends Composer<_$AppDatabase, $PendingChangeTableTable> {
+  $$PendingChangeTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get contentId => $composableBuilder(
+      column: $table.contentId, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<PendingChangeAction, PendingChangeAction, int>
+      get action => $composableBuilder(
+          column: $table.action,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnWithTypeConverterFilters<PendingChangeStatus, PendingChangeStatus, int>
+      get status => $composableBuilder(
+          column: $table.status,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnFilters<String> get extra => $composableBuilder(
+      column: $table.extra, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get executeTime => $composableBuilder(
+      column: $table.executeTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get msg => $composableBuilder(
+      column: $table.msg, builder: (column) => ColumnFilters(column));
+}
+
+class $$PendingChangeTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $PendingChangeTableTable> {
+  $$PendingChangeTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<BigInt> get userId => $composableBuilder(
+      column: $table.userId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get contentId => $composableBuilder(
+      column: $table.contentId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get action => $composableBuilder(
+      column: $table.action, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get extra => $composableBuilder(
+      column: $table.extra, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get executeTime => $composableBuilder(
+      column: $table.executeTime, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get msg => $composableBuilder(
+      column: $table.msg, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PendingChangeTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PendingChangeTableTable> {
+  $$PendingChangeTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<BigInt> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get contentId =>
+      $composableBuilder(column: $table.contentId, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<PendingChangeAction, int> get action =>
+      $composableBuilder(column: $table.action, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<PendingChangeStatus, int> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get extra =>
+      $composableBuilder(column: $table.extra, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get executeTime => $composableBuilder(
+      column: $table.executeTime, builder: (column) => column);
+
+  GeneratedColumn<String> get msg =>
+      $composableBuilder(column: $table.msg, builder: (column) => column);
+}
+
+class $$PendingChangeTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PendingChangeTableTable,
+    PendingChangeRow,
+    $$PendingChangeTableTableFilterComposer,
+    $$PendingChangeTableTableOrderingComposer,
+    $$PendingChangeTableTableAnnotationComposer,
+    $$PendingChangeTableTableCreateCompanionBuilder,
+    $$PendingChangeTableTableUpdateCompanionBuilder,
+    (
+      PendingChangeRow,
+      BaseReferences<_$AppDatabase, $PendingChangeTableTable, PendingChangeRow>
+    ),
+    PendingChangeRow,
+    PrefetchHooks Function()> {
+  $$PendingChangeTableTableTableManager(
+      _$AppDatabase db, $PendingChangeTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PendingChangeTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PendingChangeTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PendingChangeTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<BigInt> userId = const Value.absent(),
+            Value<String> contentId = const Value.absent(),
+            Value<PendingChangeAction> action = const Value.absent(),
+            Value<PendingChangeStatus> status = const Value.absent(),
+            Value<String> extra = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> executeTime = const Value.absent(),
+            Value<String> msg = const Value.absent(),
+          }) =>
+              PendingChangeTableCompanion(
+            id: id,
+            userId: userId,
+            contentId: contentId,
+            action: action,
+            status: status,
+            extra: extra,
+            createdAt: createdAt,
+            executeTime: executeTime,
+            msg: msg,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required BigInt userId,
+            required String contentId,
+            required PendingChangeAction action,
+            Value<PendingChangeStatus> status = const Value.absent(),
+            Value<String> extra = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> executeTime = const Value.absent(),
+            Value<String> msg = const Value.absent(),
+          }) =>
+              PendingChangeTableCompanion.insert(
+            id: id,
+            userId: userId,
+            contentId: contentId,
+            action: action,
+            status: status,
+            extra: extra,
+            createdAt: createdAt,
+            executeTime: executeTime,
+            msg: msg,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PendingChangeTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $PendingChangeTableTable,
+    PendingChangeRow,
+    $$PendingChangeTableTableFilterComposer,
+    $$PendingChangeTableTableOrderingComposer,
+    $$PendingChangeTableTableAnnotationComposer,
+    $$PendingChangeTableTableCreateCompanionBuilder,
+    $$PendingChangeTableTableUpdateCompanionBuilder,
+    (
+      PendingChangeRow,
+      BaseReferences<_$AppDatabase, $PendingChangeTableTable, PendingChangeRow>
+    ),
+    PendingChangeRow,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5015,4 +5711,6 @@ class $AppDatabaseManager {
       $$MediasTableTableTableManager(_db, _db.mediasTable);
   $$SearchHistoryTableTableTableManager get searchHistoryTable =>
       $$SearchHistoryTableTableTableManager(_db, _db.searchHistoryTable);
+  $$PendingChangeTableTableTableManager get pendingChangeTable =>
+      $$PendingChangeTableTableTableManager(_db, _db.pendingChangeTable);
 }

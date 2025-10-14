@@ -4,19 +4,20 @@ import 'package:follow_read/data/repositories/app_database.dart';
 import 'entry.dart';
 
 enum PendingChangeAction {
-  markAsRead, markAsUnread, markAsRemoved,
-  markAsStarred,
+  read, unread, removed,
+  starred,
+
 }
 
 extension EntryStatusToPendingAction on EntryStatus {
-  PendingChangeAction? toPendingAction() {
+  PendingChangeAction toPendingAction() {
     switch (this) {
       case EntryStatus.read:
-        return PendingChangeAction.markAsRead;
+        return PendingChangeAction.read;
       case EntryStatus.unread:
-        return PendingChangeAction.markAsUnread;
+        return PendingChangeAction.unread;
       case EntryStatus.removed:
-        return PendingChangeAction.markAsRemoved;
+        return PendingChangeAction.removed;
     }
   }
 }

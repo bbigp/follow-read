@@ -155,7 +155,7 @@ class EntryPage extends StatelessWidget{
       canPop: true,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) {
-          controller.autoRead(entryId);
+          // controller.autoRead(entryId);
         }
       },
       child: child,

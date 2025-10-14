@@ -9,6 +9,7 @@ import 'package:follow_read/modules/add_filter/add_filter_binding.dart';
 import 'package:follow_read/modules/add_filter/add_filter_view.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry/entry_page.dart';
+import 'package:follow_read/modules/pending_change/pending_change_binding.dart';
 import 'package:follow_read/modules/pending_change/pending_change_page.dart';
 import 'package:follow_read/modules/profile/profile_binding.dart';
 import 'package:follow_read/modules/search_feed/search_feed_page.dart';
@@ -63,8 +64,27 @@ class RouteConfig {
     GetPage(name: search, page: () => SearchPage(), binding: SearchBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: searchFeed, page: () => SearchFeedPage(), binding: SearchFeedBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: sync, page: () => SyncPage(), middlewares: [AuthMiddleware()]),
-    GetPage(name: pendingChange, page: () => PendingChangePage(), middlewares: [AuthMiddleware()]),
+    GetPage(name: pendingChange, page: () => PendingChangePage(), binding: PendingChangeBinding(), middlewares: [AuthMiddleware()]),
   ];
+}
+
+extension GetExtension on GetInterface {
+
+  Future<T?>? open<T>(String routeOrUrl, {
+    dynamic arguments,
+    int? id,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+  }) {
+    if (routeOrUrl.startsWith("http://") || routeOrUrl.startsWith("https://")) {
+      Open.browser(routeOrUrl);
+      return null;
+    }
+    return toNamed(routeOrUrl, arguments: arguments, id: id,
+      preventDuplicates: preventDuplicates, parameters: parameters,
+    );
+  }
+
 }
 
 class AuthMiddleware extends GetMiddleware {

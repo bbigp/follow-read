@@ -6,6 +6,7 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/meta.dart';
+import 'package:follow_read/data/model/pending_change.dart';
 import 'package:follow_read/data/providers/miniflux/api.dart';
 import 'package:follow_read/data/repositories/entry_dao.dart';
 import 'package:follow_read/data/repositories/media_dao.dart';
@@ -88,12 +89,15 @@ class EntryService extends ServiceBase {
   }
 
 
-  Future<bool> setEntryStatus(List<BigInt> entryIds, EntryStatus status) async {
-    final result = await MinifluxApi.setEntryStatus(entryIds, status);
-    if (result.success) {
+  Future<bool> setEntryStatus(List<BigInt> entryIds, BigInt userId, EntryStatus status) async {
+    await db.transaction(() async {
+      for (var entryId in entryIds) {
+        await _pendingChangeDao.save(entryId.toString(), userId: userId, action: status.toPendingAction());
+      }
       await _dao.updateStatus(entryIds, status);
-    }
-    return result.success;
+    });
+    // final result = await MinifluxApi.setEntryStatus(entryIds, status);
+    return true;
   }
 
 }

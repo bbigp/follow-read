@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:follow_read/core/utils/logger.dart';
+import 'package:follow_read/data/model/pending_change.dart';
 import 'package:follow_read/data/table/entry_table.dart';
 import 'package:follow_read/data/table/feed_table.dart';
 import 'package:follow_read/data/table/filter_table.dart';
@@ -24,7 +25,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;  // 增加版本号
+  int get schemaVersion => 2;  // 增加版本号
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -34,8 +35,6 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (Migrator m, int from, int to) async {
       if (from < 2) {
         await m.createTable(searchHistoryTable);
-      }
-      if (from < 3) {
         await m.createTable(pendingChangeTable);
       }
     },

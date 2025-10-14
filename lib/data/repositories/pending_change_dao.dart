@@ -12,7 +12,7 @@ class PendingChangeDao extends DatabaseAccessor<AppDatabase> {
   $PendingChangeTableTable get pendingChangeTable => attachedDatabase.pendingChangeTable;
 
 
-  Future<void> save(String contentId, {required userId, PendingChangeAction? action,
+  Future<void> save(String contentId, {required userId, required PendingChangeAction action,
     PendingChangeStatus status = PendingChangeStatus.pending,
     String extra  = "",
   }) async {
@@ -35,6 +35,11 @@ class PendingChangeDao extends DatabaseAccessor<AppDatabase> {
     ;
     final rows = await query.get();
     return rows.map((e) => e.to()).toList();
+  }
+
+  Future<void> deleteById(int id) async {
+    var query = delete(pendingChangeTable)..where((t) => t.id.equals(id));
+    await query.go();
   }
 
 }

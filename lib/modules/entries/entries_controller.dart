@@ -77,11 +77,9 @@ class EntriesController extends GetxController {
     };
     logger.i("$status   ${entry.status}");
     if (entry.status != status) {
+      //todo： search page 和 entries page 要共用一个entries.rx
       state.getObs(entryId).value = entry.copyWith(status: status);
-      await pendingChangeDao.save(entryId.toString(), userId: profile.state.user.id,
-        action: status.toPendingAction(),
-      );
-      await _entryService.setEntryStatus([entryId], status);
+      await _entryService.setEntryStatus([entryId], profile.state.user.id, status);
     }
   }
 

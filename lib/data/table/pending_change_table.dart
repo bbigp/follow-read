@@ -13,7 +13,7 @@ class PendingChangeTable extends Table {
   IntColumn get status => integer().map(const PendingChangeStatusConverter()).withDefault(const Constant(0))();
   TextColumn get extra => text().withDefault(const Constant(""))();
   DateTimeColumn get createdAt => dateTime().named('created_at').withDefault(Constant(DateTime.now()))();
-  DateTimeColumn get executeTime => dateTime().named("execute_time")();
+  DateTimeColumn get executeTime => dateTime().named("execute_time").nullable()();
   TextColumn get msg => text().withDefault(const Constant(""))();
 
   @override

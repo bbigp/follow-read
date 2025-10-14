@@ -4,6 +4,7 @@ import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/global/widgets/open.dart';
 import 'package:follow_read/global/widgets/spacer_divider.dart';
+import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ import 'entry_tile_header.dart';
 class EntryTile extends StatelessWidget {
   final Rx<Entry> entryObs;
   final profile = Get.find<ProfileController>();
+  final controller = Get.find<EntriesController>();
 
   EntryTile({super.key, required this.entryObs,});
 
@@ -31,11 +33,12 @@ class EntryTile extends StatelessWidget {
   Widget _buildContent() {
     return InkWell(
         onTap: () {
-          if (profile.state.user.openContent == User.OPEN_CONTENT_BROWSER) {
-            Open.browser(entryObs.value.url);
-            return;
-          }
-          Get.toNamed(RouteConfig.entry, parameters: {"id": entryObs.value.id.toString()});
+          final entry = entryObs.value;;
+          controller.autoRead(entry.id);
+          Get.open(profile.state.user.openContent == User.OPEN_CONTENT_BROWSER
+                ? entry.url :RouteConfig.entry,
+            parameters: {"id": entry.id.toString()},
+          );
         },
         child: Obx((){
           final entry = entryObs.value;

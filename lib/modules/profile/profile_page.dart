@@ -160,8 +160,9 @@ class ProfilePage extends StatelessWidget {
                 child: Column(children: [
                   ListTilexChevron(title: "订阅同步", onTap: () => Get.toNamed(RouteConfig.sync),),
                   SpacerDivider(thickness: 0.5, spacing: 1, indent: 16,),
+                  ListTilexChevron(title: "Pending记录", onTap: () => Get.toNamed(RouteConfig.pendingChange),),
+                  SpacerDivider(thickness: 0.5, spacing: 1, indent: 16,),
                   ListTilexTextButton(title: "清空数据", action: "一键清空", onTap: () async => await homePage.deleteAllRssData(),),
-
                 ],),
               ))),
 
