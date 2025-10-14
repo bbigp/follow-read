@@ -1,9 +1,24 @@
 
 import 'package:follow_read/data/repositories/app_database.dart';
 
+import 'entry.dart';
+
 enum PendingChangeAction {
-  read,       // 标记已读/未读
-  starred,    // 收藏/取消收藏
+  markAsRead, markAsUnread, markAsRemoved,
+  markAsStarred,
+}
+
+extension EntryStatusToPendingAction on EntryStatus {
+  PendingChangeAction? toPendingAction() {
+    switch (this) {
+      case EntryStatus.read:
+        return PendingChangeAction.markAsRead;
+      case EntryStatus.unread:
+        return PendingChangeAction.markAsUnread;
+      case EntryStatus.removed:
+        return PendingChangeAction.markAsRemoved;
+    }
+  }
 }
 
 // status 的可能值

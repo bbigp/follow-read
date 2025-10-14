@@ -9,6 +9,7 @@ import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/data/providers/miniflux/api.dart';
 import 'package:follow_read/data/repositories/entry_dao.dart';
 import 'package:follow_read/data/repositories/media_dao.dart';
+import 'package:follow_read/data/repositories/pending_change_dao.dart';
 
 import 'service_base.dart';
 
@@ -16,12 +17,14 @@ class EntryService extends ServiceBase {
 
   late final EntryDao _dao;
   late final MediaDao _mediaDao;
+  late final PendingChangeDao _pendingChangeDao;
 
   @override
   void onInit() {
     super.onInit();
     _dao = EntryDao(db);
     _mediaDao = MediaDao(db);
+    _pendingChangeDao = PendingChangeDao(db);
   }
 
 

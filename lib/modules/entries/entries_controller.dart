@@ -6,10 +6,13 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/meta.dart';
+import 'package:follow_read/data/model/pending_change.dart';
+import 'package:follow_read/data/repositories/pending_change_dao.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
+import 'package:follow_read/di.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:follow_read/modules/widgets/me/me.dart';
 import 'package:get/get.dart';
@@ -24,6 +27,7 @@ class EntriesController extends GetxController {
   final _folderService = Get.find<FolderService>();
   final _filterService = Get.find<FilterService>();
   final _entryService = Get.find<EntryService>();
+  final pendingChangeDao = PendingChangeDao(Get.find<DBService>().db);
 
   String get metaId => "$type$id";
 
@@ -74,6 +78,9 @@ class EntriesController extends GetxController {
     logger.i("$status   ${entry.status}");
     if (entry.status != status) {
       state.getObs(entryId).value = entry.copyWith(status: status);
+      await pendingChangeDao.save(entryId.toString(), userId: profile.state.user.id,
+        action: status.toPendingAction(),
+      );
       await _entryService.setEntryStatus([entryId], status);
     }
   }
