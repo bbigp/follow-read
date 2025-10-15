@@ -39,7 +39,7 @@ class EntryTile extends StatelessWidget {
             Open.browser(entry.url);
             return;
           }
-          Get.offNamed(RouteConfig.entry, parameters: {"id": entry.id.toString()},);
+          Get.toNamed(RouteConfig.entry, parameters: {"id": entry.id.toString()},);
         },
         child: Obx((){
           final entry = entryObs.value;
