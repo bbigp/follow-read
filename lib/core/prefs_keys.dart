@@ -14,4 +14,5 @@ class PrefsKeys {
   static const rootFolderId = "root_folder_id";
 
   static const isSyncing = "is_syncing";
+  static const lastSyncProgress = "last_sync_progress";
 }

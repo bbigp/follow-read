@@ -1,6 +1,7 @@
 
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:follow_read/core/prefs_keys.dart';
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
@@ -54,18 +55,22 @@ class SyncService extends GetxService {
     int page = 1;
     int size = 25;
     final now = DateTime.now();
-    DateTime localMaxTime = await _entryDao.getMaxTime();
-    final record = SyncRecord(time: now, status: "run", startTime: localMaxTime, endTime: now);
+    String? timeString = _box.read(PrefsKeys.lastSyncProgress);
+    DateTime lastSyncProgress = timeString != null ? DateTime.parse(timeString) :  now.add(Duration(days: -365));
+    debugPrint(lastSyncProgress.toString());
+    final record = SyncRecord(time: now, status: "run");
     final id = await _syncRecordDao.save(record);
     int entryCount = 0;
     int mediaCount = 0;
     int feedCount = 0;
     int folderCount = 0;
+    DateTime? serverMaxChangeAt;
+    DateTime? currentPageMinChangedAt;
     try {
       List<BigInt> savedFeedIds = [];
       List<BigInt> savedFolderIds = [];
       while (true) {
-        var result = await MinifluxApi.entries(page: page, size: size, direction: "asc");
+        var result = await MinifluxApi.entries(page: page, size: size);
         if (!result.success) {
           throw Exception(result.message);
         }
@@ -73,6 +78,9 @@ class SyncService extends GetxService {
         var entries = result.data?.list;
         if (entries == null || entries.isEmpty) {
           break;
+        }
+        if (page == 1) {
+          serverMaxChangeAt = entries.first.changedAt;
         }
 
         List<Media> medias = [];
@@ -98,18 +106,22 @@ class SyncService extends GetxService {
         medias.clear();
         feeds.clear();
         folders.clear();
-        if (entries.length < size) {
+        currentPageMinChangedAt = entries.last.changedAt;
+        if (entries.length < size || currentPageMinChangedAt.isBefore(lastSyncProgress)) {
           break;
         }
         page++;
       }
       await _syncRecordDao.updateFinish(id, 'ok',
         entry: entryCount, feed: feedCount, folder: folderCount, media: mediaCount,
+        startTime: currentPageMinChangedAt, endTime: serverMaxChangeAt,
       );
+      await _box.write(PrefsKeys.lastSyncProgress, serverMaxChangeAt.toString());
     } catch(e) {
       await _syncRecordDao.updateFinish(
-          id, 'fail', errorMsg: e.toString (),
+        id, 'fail', errorMsg: e.toString (),
         entry: entryCount, media: mediaCount, feed: feedCount, folder: folderCount,
+        startTime: currentPageMinChangedAt, endTime: serverMaxChangeAt,
       );
     } finally {
       await _box.write(PrefsKeys.isSyncing, false);

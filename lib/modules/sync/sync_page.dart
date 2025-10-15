@@ -68,8 +68,8 @@ class _SyncPageState extends State<SyncPage> {
                   return sync.state.hasMore ? const LoadingMore() : const NoMore();
                 }
                 final record = sync.state.records[index];
-                final start = record.startTime == null ? "" : DateFormat('yyyy-MM-dd HH:mm:ss').format(record.startTime!);
-                final end = record.endTime == null ? "" : DateFormat('yyyy-MM-dd HH:mm:ss').format(record.endTime!);
+                final start = record.startTime == null ? "" : DateFormat('yyyy-MM-dd HH:mm:ss').format(record.startTime!.toUtc());
+                final end = record.endTime == null ? "" : DateFormat('yyyy-MM-dd HH:mm:ss').format(record.endTime!.toUtc());
                 final executeTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(record.time);
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
