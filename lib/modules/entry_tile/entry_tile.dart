@@ -33,12 +33,13 @@ class EntryTile extends StatelessWidget {
   Widget _buildContent() {
     return InkWell(
         onTap: () {
-          final entry = entryObs.value;;
-          controller.autoRead(entry.id);
-          Get.open(profile.state.user.openContent == User.OPEN_CONTENT_BROWSER
-                ? entry.url :RouteConfig.entry,
-            parameters: {"id": entry.id.toString()},
-          );
+          final entry = entryObs.value;
+          if (profile.state.user.openContent == User.OPEN_CONTENT_BROWSER) {
+            controller.autoRead(entry.id);
+            Open.browser(entry.url);
+            return;
+          }
+          Get.offNamed(RouteConfig.entry, parameters: {"id": entry.id.toString()},);
         },
         child: Obx((){
           final entry = entryObs.value;
