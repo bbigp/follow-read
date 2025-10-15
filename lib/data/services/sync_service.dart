@@ -65,7 +65,7 @@ class SyncService extends GetxService {
       List<BigInt> savedFeedIds = [];
       List<BigInt> savedFolderIds = [];
       while (true) {
-        var result = await MinifluxApi.entries(page: page, size: size);
+        var result = await MinifluxApi.entries(page: page, size: size, direction: "asc");
         if (!result.success) {
           throw Exception(result.message);
         }
@@ -98,8 +98,7 @@ class SyncService extends GetxService {
         medias.clear();
         feeds.clear();
         folders.clear();
-        var minTime = entries.last.changedAt;
-        if (entries.length < size || minTime.isBefore(localMaxTime)) {
+        if (entries.length < size) {
           break;
         }
         page++;

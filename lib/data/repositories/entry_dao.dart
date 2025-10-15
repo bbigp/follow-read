@@ -37,10 +37,10 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
 
   Future<DateTime> getMaxTime() async {
     final time = DateTime.now().add(Duration(days: -365));
-    var query = selectOnly(entriesTable)..addColumns([entriesTable.createdAt.max()]);
+    var query = selectOnly(entriesTable)..addColumns([entriesTable.changedAt.max()]);
     final row = await query.getSingleOrNull();
     if (row == null) return time;
-    return row.read(entriesTable.createdAt.max()) ?? time;
+    return row.read(entriesTable.changedAt.max()) ?? time;
   }
 
   Future<Entry> getEntry(BigInt id) async {
