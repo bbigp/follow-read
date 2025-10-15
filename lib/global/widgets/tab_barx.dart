@@ -8,7 +8,7 @@ import 'spacer_divider.dart';
 ///
 class TabBarx extends StatelessWidget {
 
-  final List<BottomBarItem> tabs;
+  final List<Widget> tabs;
 
   const TabBarx({super.key, required this.tabs,});
 
@@ -48,13 +48,14 @@ class TabBarx extends StatelessWidget {
 class BottomBarItem extends StatelessWidget {
   final String icon;
   final Future<void> Function()? onPressed;
-  const BottomBarItem({super.key, required this.icon, this.onPressed});
+  final bool? enabled;
+  const BottomBarItem({super.key, required this.icon, this.onPressed, this.enabled});
 
   @override
   Widget build(BuildContext context) {
     return IconButtonx(icon: icon,
       size: Sizex.custom, buttonSize: smallCompact().copyWith(padding: 0, width: 36, iconSize: 24),
-      type: ElementType.ghost, enabled: onPressed != null,
+      type: ElementType.ghost, enabled: enabled ?? onPressed != null,
       onPressed: onPressed,
     );
   }

@@ -20,20 +20,23 @@ import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/entry/entry_file.dart';
 import 'package:follow_read/modules/entry/entry_video.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
+import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'entry_content.dart';
+import 'entry_controller.dart';
 import 'entry_image.dart';
 import 'entry_title.dart';
 
-class EntryPage extends StatelessWidget{
+class EntryPage extends StatelessWidget {
 
   EntryPage({super.key});
 
   final controller = Get.find<EntriesController>();
   final profile = Get.find<ProfileController>();
   final GlobalKey _moreKey = GlobalKey();
+  final ec = Get.find<EntryController>();
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +121,6 @@ class EntryPage extends StatelessWidget{
     ]);
 
     Widget child = Scaffold(
-      // appBar: CupxAppBar(
-      //   leading: PaddedSvgIcon(SvgIcons.arrow_left, onTap: () => Get.back()),
-      //   actions: [
-      //     PaddedSvgIcon(SvgIcons.more, onTap: () => Open.modal(context, DisplaySetting()),),
-      //   ],
-      // ),
       body: SafeArea(child: Stack(children: [
         view,
         Positioned(
@@ -140,10 +137,13 @@ class EntryPage extends StatelessWidget{
                 icon: entry.starred ? SvgIcons.star_fill : SvgIcons.star,
                 onPressed: () async => await controller.starred(entry),
             ),
-            BottomBarItem(icon: SvgIcons.book, onPressed: () async {
-              Share.share("${entry.title}\n${entry.url}");
-            },),
-            BottomBarItem(icon: SvgIcons.chevron_down,),
+            BottomBarItem(icon: SvgIcons.book),
+            Obx((){
+              return BottomBarItem(
+                  icon: SvgIcons.chevron_down, enabled: ec.nextId != null,
+                  onPressed: () async => Get.toNamed(RouteConfig.entry, parameters: {"id": ec.nextId.toString()})
+              );
+            }),
             BottomBarItem(key: _moreKey, icon: SvgIcons.more, onPressed: () async => Open.menu(context, _moreKey, moreMenus)),
           ],);
         }),),
