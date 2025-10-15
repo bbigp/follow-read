@@ -1,6 +1,7 @@
 
 
 
+import 'package:follow_read/data/event/event_bus.dart';
 import 'package:follow_read/data/repositories/app_database.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_parser_service.dart';
@@ -21,6 +22,7 @@ class DI {
 
   static Future<void> register() async {
     await GetStorage.init();
+    Get.put(EventBusService());
     Get.put(FeedParserService());
     Get.put(DBService());
     Get.put(UserService());
