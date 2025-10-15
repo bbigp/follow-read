@@ -5,8 +5,7 @@ import 'entry.dart';
 
 enum PendingChangeAction {
   read, unread, removed,
-  starred,
-
+  starred, unstarred,
 }
 
 extension EntryStatusToPendingAction on EntryStatus {

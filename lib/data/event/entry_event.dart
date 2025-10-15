@@ -14,3 +14,9 @@ class EntryStatusEvent extends AppEvent {
     required this.feedId, required this.folderId,
   });
 }
+
+class EntryChangedEvent extends AppEvent {
+  final BigInt entryId;
+  final bool? starred;
+  EntryChangedEvent({required this.entryId, required this.starred});
+}

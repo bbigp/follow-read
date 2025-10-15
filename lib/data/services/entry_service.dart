@@ -89,12 +89,21 @@ class EntryService extends ServiceBase {
   }
 
 
-  Future<bool> setEntryStatus(List<BigInt> entryIds, BigInt userId, EntryStatus status) async {
+  Future<bool> setEntryStatus(List<BigInt> entryIds, BigInt userId, {
+    EntryStatus? status, bool? starred,
+  }) async {
     await db.transaction(() async {
       for (var entryId in entryIds) {
-        await _pendingChangeDao.save(entryId.toString(), userId: userId, action: status.toPendingAction());
+        PendingChangeAction? action;
+        if (status != null) {
+          action = status.toPendingAction();
+        }
+        if (starred != null) {
+          action = starred ? PendingChangeAction.starred : PendingChangeAction.unstarred;
+        }
+        await _pendingChangeDao.save(entryId.toString(), userId: userId, action: action!);
       }
-      await _dao.updateStatus(entryIds, status);
+      await _dao.updateStatus(entryIds, status: status, starred: starred);
     });
     // final result = await MinifluxApi.setEntryStatus(entryIds, status);
     return true;

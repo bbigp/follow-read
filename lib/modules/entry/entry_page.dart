@@ -138,9 +138,7 @@ class EntryPage extends StatelessWidget{
             ),
             BottomBarItem(
                 icon: entry.starred ? SvgIcons.star_fill : SvgIcons.star,
-                onPressed: () async {
-                  // await ref.read(entryProvider(entryId).notifier).starred();
-                }
+                onPressed: () async => await controller.starred(entry),
             ),
             BottomBarItem(icon: SvgIcons.book, onPressed: () async {
               Share.share("${entry.title}\n${entry.url}");

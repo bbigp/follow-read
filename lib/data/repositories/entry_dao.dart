@@ -56,13 +56,15 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     return affectedRows > 0;
   }
 
-  Future<bool> updateStatus(List<BigInt> entryIds, EntryStatus state) async {
+  Future<bool> updateStatus(List<BigInt> entryIds, {EntryStatus? status,
+    bool? starred,
+  }) async {
     if (entryIds.isEmpty) return true;
-    var query = update(entriesTable)
-      ..where((r) => r.id.isIn(entryIds));
+    var query = update(entriesTable)..where((r) => r.id.isIn(entryIds));
 
     final affectedRows = await query.write(EntriesTableCompanion(
-      status: Value(state.name),
+      status: status == null ? const Value.absent() : Value(status.name),
+      starred: starred == null ? const Value.absent() : Value(starred),
     ));
     return affectedRows > 0;
   }

@@ -12,6 +12,7 @@ import 'package:follow_read/di.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class SearchHistoryController extends GetxController {
 
@@ -24,6 +25,7 @@ class SearchHistoryController extends GetxController {
   final profilePage = Get.find<ProfileController>();
   final eventBus = Get.find<EventBusService>().bus;
   StreamSubscription? _subscription;
+  StreamSubscription? _entrySub;
   SearchHistoryController();
 
 
@@ -31,12 +33,14 @@ class SearchHistoryController extends GetxController {
   void onInit() {
     super.onInit();
     _subscription = eventBus.on<EntryStatusEvent>().listen((event){
-      final entry = state.entries.firstWhere((e) => e.value.id == event.entryId,
-          orElse: () => Entry.empty.obs
-      );
-      if (!entry.value.isNull()){
-        entry.value = entry.value.copyWith(status: event.status);
-      }
+      final entry = state.getEntryById(event.entryId);
+      if (entry.value.isNull()) return;
+      entry.value = entry.value.copyWith(status: event.status);
+    });
+    _entrySub = eventBus.on<EntryChangedEvent>().listen((event){
+      final entry = state.getEntryById(event.entryId);
+      if (entry.value.isNull()) return;
+      if (event.starred != null) entry.value = entry.value.copyWith(starred: event.starred);
     });
   }
 
@@ -49,6 +53,7 @@ class SearchHistoryController extends GetxController {
   @override
   void onClose() {
     _subscription?.cancel();
+    _entrySub?.cancel();
     super.onClose();
   }
 
@@ -124,5 +129,9 @@ class SearchState {
   final histories = <String>[].obs;
   final _loadingHistories = false.obs;
   bool get loadingHistories => _loadingHistories.value;
+
+  Rx<Entry> getEntryById(BigInt id) => entries.firstWhere((e) => e.value.id == id,
+      orElse: () => Entry.empty.obs
+  );
 
 }

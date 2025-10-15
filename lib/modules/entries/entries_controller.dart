@@ -30,18 +30,23 @@ class EntriesController extends GetxController {
   final _entryService = Get.find<EntryService>();
   final pendingChangeDao = PendingChangeDao(Get.find<DBService>().db);
   final eventBus = Get.find<EventBusService>().bus;
-  StreamSubscription? _subscription;
+  StreamSubscription? _readStatusSub;
+  StreamSubscription? _entrySub;
 
   String get metaId => "$type$id";
 
   @override
   void onInit() {
     super.onInit();
-    _subscription = eventBus.on<EntryStatusEvent>().listen((event){
+    _readStatusSub = eventBus.on<EntryStatusEvent>().listen((event){
       final entry = state.getObs(event.entryId);
-      if (!entry.value.isNull()){
-        entry.value = entry.value.copyWith(status: event.status);
-      }
+      if (entry.value.isNull()) return;
+      entry.value = entry.value.copyWith(status: event.status);
+    });
+    _entrySub = eventBus.on<EntryChangedEvent>().listen((event){
+      final entry = state.getObs(event.entryId);
+      if (entry.value.isNull()) return;
+      if (event.starred != null) entry.value = entry.value.copyWith(starred: event.starred);
     });
   }
 
@@ -53,7 +58,8 @@ class EntriesController extends GetxController {
 
   @override
   void onClose() {
-    _subscription?.cancel();
+    _readStatusSub?.cancel();
+    _entrySub?.cancel();
     super.onClose();
   }
 
@@ -83,7 +89,7 @@ class EntriesController extends GetxController {
   }
 
   Future<void> autoRead(Entry entry) async {
-    if (profile.state.user.autoRead) {
+    if (profile.state.user.autoRead && entry.status != EntryStatus.read) {
       await read(entry, status: EntryStatus.read);
     }
   }
@@ -91,7 +97,7 @@ class EntriesController extends GetxController {
   Future<void> read(Entry entry, {EntryStatus? status}) async {
     final entryId = entry.id;
     status = status ?? (entry.isUnread ? EntryStatus.read : EntryStatus.unread);
-    await _entryService.setEntryStatus([entryId], profile.state.user.id, status);
+    await _entryService.setEntryStatus([entryId], profile.state.user.id, status: status);
     eventBus.fire(EntryStatusEvent(status: status, entryId: entryId,
       feedId: entry.feed.id,
       folderId: entry.feed.folderId,
@@ -105,14 +111,11 @@ class EntriesController extends GetxController {
     await init();
   }
 
-//   Future<void> starred() async {
-//     final entry = state.entry;
-//     final success = await entryRepository.starred(entryId, !entry.starred);
-//     if (success) {
-//       entry.copyWith(starred: !entry.starred);
-//       return;
-//     }
-//   }
+  Future<void> starred(Entry entry) async {
+    final entryId = entry.id;
+    await _entryService.setEntryStatus([entryId], profile.state.user.id, starred: !entry.starred);
+    eventBus.fire(EntryChangedEvent(entryId: entryId, starred: !entry.starred));
+  }
 
 }
 

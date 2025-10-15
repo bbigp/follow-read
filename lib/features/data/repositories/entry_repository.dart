@@ -120,72 +120,9 @@
 //     throw StateError('Unreachable code'); // 理论上不会执行
 //   }
 //
-//
-//   Future<int> getTotal({String direction = "desc"}) async {
-//     final result = await ApiClient.getEntries(page: 1, size: 1, order: "changed_at", direction: direction,
-//         status: ["unread", "read", "removed"]);
-//     return result.fold((failure) {
-//       throw Exception('达到最大重试次数: $failure'); // 触发外层catch
-//     }, (data) async {
-//       return data.total;
-//     });
-//   }
-//
+
 
 //
-
-//
-//   Future<List<Entry>> saveAndReturnData(List<EntryResponse> list, {bool needReturn = true}) async {
-//     if (list.isEmpty) {
-//       return [];
-//     }
-//     await _dao.bulkInsertWithTransaction(list.map((item) => item.toCompanion()).toList());
-//     if (!needReturn) {
-//       return [];
-//     }
-//     final entryIds = list.map((item) => item.id).toList();
-//     final entries = await _dao.getAllEntriesByIds(entryIds);
-//
-//     final feedIds = list.map((e) => e.feedId).toSet().toList();
-//     final feeds = await _feedDao.getFeedsByIds(feedIds);
-//     final feedMap = {for (var feed in feeds) feed.id: feed};
-//
-//     return entries.map((entry) {
-//       final feed = feedMap[entry.feedId];
-//       if (feed != null) {
-//         return entry.toModel().copyWith(feed: feed.toModel());
-//       }
-//       return entry.toModel();
-//     }).toList();
-//   }
-//
-//
-//   Future<bool> starred(int entryId, bool starred) async {
-//     final result = await ApiClient.starred(entryId);
-//     return result.fold((_){
-//       return false;
-//     }, (_) async {
-//       await _dao.updateStatus(entryId, starred: starred);
-//       return true;
-//     });
-//   }
-//
-//
-//   Future<Entry> getEntry(int entryId) async {
-//     final entry = await _dao.getEntry(entryId);
-//     if (entry != null) {
-//       final re = entry.toModel();
-//       final feed = await _feedDao.getFeed(re.feedId);
-//       return re.copyWith(feed: feed.toModel());
-//     }
-//     final result = await ApiClient.getEntry(entryId);
-//     return result.fold((failure) {
-//       return Entry(id: 0, title: '', hash: '');
-//     }, (data) async{
-//       final list = await saveAndReturnData([data]);
-//       return list[0];
-//     });
-//   }
 
 //
 // }
