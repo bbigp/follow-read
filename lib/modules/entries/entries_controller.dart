@@ -89,6 +89,7 @@ class EntriesController extends GetxController {
   }
 
   Future<void> autoRead(Entry entry) async {
+    //已读状态进入页面 设置未读 退出之后 自动已读没生效
     if (profile.state.user.autoRead && entry.status != EntryStatus.read) {
       await read(entry, status: EntryStatus.read);
     }

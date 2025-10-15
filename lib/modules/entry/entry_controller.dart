@@ -21,6 +21,7 @@ class EntryController extends GetxController {
   }
 
 
+  //搜索页面 下一个用的是文章列表也数据
   Future<void> nextEntryId() async {
     final state = esc.state;
     if (state.entries.isEmpty) return;
