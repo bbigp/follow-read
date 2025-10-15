@@ -1,6 +1,10 @@
 
 
 
+import 'dart:async';
+
+import 'package:follow_read/data/event/entry_event.dart';
+import 'package:follow_read/data/event/event_bus.dart';
 import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/repositories/search_history_dao.dart';
 import 'package:follow_read/data/services/entry_service.dart';
@@ -18,12 +22,34 @@ class SearchHistoryController extends GetxController {
   final entryService = Get.find<EntryService>();
   final entriesPage = Get.find<EntriesController>();
   final profilePage = Get.find<ProfileController>();
+  final eventBus = Get.find<EventBusService>().bus;
+  StreamSubscription? _subscription;
   SearchHistoryController();
+
+
+  @override
+  void onInit() {
+    super.onInit();
+    _subscription = eventBus.on<EntryStatusEvent>().listen((event){
+      final entry = state.entries.firstWhere((e) => e.value.id == event.entryId,
+          orElse: () => Entry.empty.obs
+      );
+      if (!entry.value.isNull()){
+        entry.value = entry.value.copyWith(status: event.status);
+      }
+    });
+  }
 
   @override
   void onReady() {
     super.onReady();
     load();
+  }
+
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    super.onClose();
   }
 
   Future<void> load() async {

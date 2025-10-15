@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:follow_read/core/svg_icons.dart';
 import 'package:follow_read/core/utils/copy.dart';
+import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/user.dart';
 import 'package:follow_read/global/widgets/buttonx.dart';
 import 'package:follow_read/global/widgets/cupx_app_bar.dart';
@@ -133,7 +134,9 @@ class EntryPage extends StatelessWidget{
             BottomBarItem(icon: SvgIcons.arrow_left, onPressed: () async =>  Get.back(),),
             BottomBarItem(
               icon: entry.isUnread ? SvgIcons.check_o : SvgIcons.check_fill,
-              onPressed: () async => await controller.read(entryId),
+              onPressed: () async => await controller.read(entryId, status: entry.isUnread
+                  ? EntryStatus.read : EntryStatus.unread
+              ),
             ),
             BottomBarItem(
                 icon: entry.starred ? SvgIcons.star_fill : SvgIcons.star,

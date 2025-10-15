@@ -1,12 +1,14 @@
 
 
-import 'package:follow_read/core/utils/logger.dart';
+import 'dart:async';
+
+import 'package:follow_read/data/event/entry_event.dart';
+import 'package:follow_read/data/event/event_bus.dart';
 import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/meta.dart';
-import 'package:follow_read/data/model/pending_change.dart';
 import 'package:follow_read/data/repositories/pending_change_dao.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
@@ -14,7 +16,6 @@ import 'package:follow_read/data/services/filter_service.dart';
 import 'package:follow_read/data/services/folder_service.dart';
 import 'package:follow_read/di.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
-import 'package:follow_read/modules/widgets/me/me.dart';
 import 'package:get/get.dart';
 
 class EntriesController extends GetxController {
@@ -28,13 +29,32 @@ class EntriesController extends GetxController {
   final _filterService = Get.find<FilterService>();
   final _entryService = Get.find<EntryService>();
   final pendingChangeDao = PendingChangeDao(Get.find<DBService>().db);
+  final eventBus = Get.find<EventBusService>().bus;
+  StreamSubscription? _subscription;
 
   String get metaId => "$type$id";
+
+  @override
+  void onInit() {
+    super.onInit();
+    _subscription = eventBus.on<EntryStatusEvent>().listen((event){
+      final entry = state.getObs(event.entryId);
+      if (!entry.value.isNull()){
+        entry.value = entry.value.copyWith(status: event.status);
+      }
+    });
+  }
 
   @override
   void onReady() {
     super.onReady();
     init();
+  }
+
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    super.onClose();
   }
 
   Future<void> init() async {
@@ -68,19 +88,9 @@ class EntriesController extends GetxController {
     }
   }
 
-  Future<void> read(BigInt entryId, {EntryStatus? status}) async {
-    final entry = state.get(entryId);
-    status = status ?? switch(entry.status) {
-      EntryStatus.read => EntryStatus.unread,
-      EntryStatus.unread => EntryStatus.read,
-      _ => EntryStatus.read,
-    };
-    logger.i("$status   ${entry.status}");
-    if (entry.status != status) {
-      //todo： search page 和 entries page 要共用一个entries.rx
-      state.getObs(entryId).value = entry.copyWith(status: status);
-      await _entryService.setEntryStatus([entryId], profile.state.user.id, status);
-    }
+  Future<void> read(BigInt entryId, {required EntryStatus status}) async {
+    await _entryService.setEntryStatus([entryId], profile.state.user.id, status);
+    eventBus.fire(EntryStatusEvent(status: status, entryId: entryId));
   }
 
   Future<void> changeMate({String? order, bool? unreadOnly}) async {
@@ -121,7 +131,9 @@ class EntriesState {
   int page = 0;
   int size = 20;
 
-  Rx<Entry> getObs(BigInt id) => entries.firstWhere((e) => e.value.id == id);
+  Rx<Entry> getObs(BigInt id) => entries.firstWhere((e) => e.value.id == id,
+      orElse: () => Entry.empty.obs
+  );
   Entry get(BigInt id) => getObs(id).value;
 
   void addEntries(List<Entry> addList, {bool reset = false}){

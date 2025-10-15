@@ -48,6 +48,10 @@ class Entry {
 
   static Entry empty = Entry();
 
+  bool isNull() {
+    return id == BigInt.zero;
+  }
+
   bool get isUnread => status == EntryStatus.unread;
 
   Entry({
