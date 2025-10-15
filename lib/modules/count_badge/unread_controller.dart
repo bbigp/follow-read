@@ -1,5 +1,10 @@
 
 
+import 'dart:async';
+
+import 'package:follow_read/data/event/entry_event.dart';
+import 'package:follow_read/data/event/event_bus.dart';
+import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
 import 'package:follow_read/data/services/filter_service.dart';
@@ -13,9 +18,39 @@ class UnreadController extends GetxService {
   final _feedService = Get.find<FeedService>();
   final _folderService = Get.find<FolderService>();
   final _filterService = Get.find<FilterService>();
+  final eventBus = Get.find<EventBusService>().bus;
+  StreamSubscription? _subscription;
 
   final zero = 0.obs;
   int unread(String id) => countMap[id] == null ? zero.value : countMap[id]!.value;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _subscription = eventBus.on<EntryStatusEvent>().listen((event) {
+      final status = event.status;
+      _adjustUnreadCount("e${event.feedId}", status);
+      _adjustUnreadCount("o${event.folderId}", status);
+      //todo: filter未读数
+    });
+  }
+
+  void _adjustUnreadCount(String key, EntryStatus status) {
+    final count = countMap[key];
+    if (count != null) {
+      count.value = (count.value + switch(status) {
+        EntryStatus.read => -1,
+        EntryStatus.unread => 1,
+        _ => 0
+      }).clamp(0, double.infinity).toInt();
+    }
+  }
+
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    super.onClose();
+  }
 
   @override
   void onReady() {

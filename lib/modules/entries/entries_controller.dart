@@ -82,15 +82,20 @@ class EntriesController extends GetxController {
     state.isLoadingMore = false;
   }
 
-  Future<void> autoRead(BigInt entryId) async {
+  Future<void> autoRead(Entry entry) async {
     if (profile.state.user.autoRead) {
-      await read(entryId, status: EntryStatus.read);
+      await read(entry, status: EntryStatus.read);
     }
   }
 
-  Future<void> read(BigInt entryId, {required EntryStatus status}) async {
+  Future<void> read(Entry entry, {EntryStatus? status}) async {
+    final entryId = entry.id;
+    status = status ?? (entry.isUnread ? EntryStatus.read : EntryStatus.unread);
     await _entryService.setEntryStatus([entryId], profile.state.user.id, status);
-    eventBus.fire(EntryStatusEvent(status: status, entryId: entryId));
+    eventBus.fire(EntryStatusEvent(status: status, entryId: entryId,
+      feedId: entry.feed.id,
+      folderId: entry.feed.folderId,
+    ));
   }
 
   Future<void> changeMate({String? order, bool? unreadOnly}) async {

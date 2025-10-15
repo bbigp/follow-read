@@ -134,9 +134,7 @@ class EntryPage extends StatelessWidget{
             BottomBarItem(icon: SvgIcons.arrow_left, onPressed: () async =>  Get.back(),),
             BottomBarItem(
               icon: entry.isUnread ? SvgIcons.check_o : SvgIcons.check_fill,
-              onPressed: () async => await controller.read(entryId, status: entry.isUnread
-                  ? EntryStatus.read : EntryStatus.unread
-              ),
+              onPressed: () async => await controller.read(entry),
             ),
             BottomBarItem(
                 icon: entry.starred ? SvgIcons.star_fill : SvgIcons.star,
@@ -158,7 +156,7 @@ class EntryPage extends StatelessWidget{
       canPop: true,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) {
-          controller.autoRead(entryId);
+          controller.autoRead(entry);
         }
       },
       child: child,

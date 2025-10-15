@@ -35,7 +35,7 @@ class EntryTile extends StatelessWidget {
         onTap: () {
           final entry = entryObs.value;
           if (profile.state.user.openContent == User.OPEN_CONTENT_BROWSER) {
-            controller.autoRead(entry.id);
+            controller.autoRead(entry);
             Open.browser(entry.url);
             return;
           }
