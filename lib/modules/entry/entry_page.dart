@@ -141,7 +141,10 @@ class EntryPage extends StatelessWidget {
             Obx((){
               return BottomBarItem(
                   icon: SvgIcons.chevron_down, enabled: ec.nextId != null,
-                  onPressed: () async => Get.offNamed(RouteConfig.entry, parameters: {"id": ec.nextId.toString()})
+                  onPressed: () async {
+                    await Get.offNamed(RouteConfig.entry, parameters: {"id": ec.nextId.toString()});
+                    Get.focusScope?.unfocus();
+                  }
               );
             }),
             BottomBarItem(key: _moreKey, icon: SvgIcons.more, onPressed: () async => Open.menu(context, _moreKey, moreMenus)),
