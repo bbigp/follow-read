@@ -1,14 +1,16 @@
 
 
+import 'package:follow_read/data/model/entry.dart';
+import 'package:follow_read/data/model/meta.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
+import 'package:follow_read/modules/search/search_controller.dart';
 import 'package:get/get.dart';
 
 class EntryController extends GetxController {
 
   final BigInt id;
   EntryController(this.id);
-  final esc = Get.find<EntriesController>();
   final _entryService = Get.find<EntryService>();
 
   final _nextId = Rx<BigInt?>(null);
@@ -23,7 +25,18 @@ class EntryController extends GetxController {
 
   //搜索页面 下一个用的是文章列表也数据
   Future<void> nextEntryId() async {
-    final state = esc.state;
+    dynamic state;
+    if (Get.isRegistered<SearchHistoryController>()) {
+      state = Get.find<SearchHistoryController>().state;
+    } else if (Get.isRegistered<EntriesController>()) {
+      state = Get.find<EntriesController>().state;
+    } else {
+      return;
+    }
+    await _calculateNextEntryId(state);
+  }
+
+  Future<void> _calculateNextEntryId(dynamic state) async {
     if (state.entries.isEmpty) return;
     final currentIndex = state.entries.indexWhere((e) => e.value.id == id);
     if (currentIndex == -1) return; //-1 表示未找到
@@ -38,4 +51,13 @@ class EntryController extends GetxController {
     _nextId.value = state.entries[currentIndex + 1].value.id;
   }
 
+}
+
+abstract class NextIdState<T> {
+  Meta get meta;
+  int get page;
+  int get size;
+  List<T> get entries;
+  bool get hasMore;
+  void addEntries(List<Entry> addList, {bool reset = false});
 }
