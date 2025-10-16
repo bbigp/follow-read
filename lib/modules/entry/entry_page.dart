@@ -31,7 +31,7 @@ class EntryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entryId = BigInt.parse(Get.parameters['id'] ?? "0");
-    final entry = controller.state.get(entryId);
+    final entry = ec.get(entryId);
 
     Widget view = profile.state.user.openContent == User.OPEN_CONTENT_WEBVIEW
         ? WebView(url: entry.url)
@@ -56,7 +56,7 @@ class EntryPage extends StatelessWidget {
         Positioned(
           left: 0, right: 0,
           bottom: 0, child: Obx((){
-          final entry = controller.state.get(entryId);
+          final entry = ec.get(entryId);
           return TabBarx(tabs: [
             BottomBarItem(icon: SvgIcons.arrow_left, onPressed: () async =>  Get.back(),),
             BottomBarItem(
@@ -74,6 +74,7 @@ class EntryPage extends StatelessWidget {
                   onPressed: () async {
                     await Get.offNamed(RouteConfig.entry, parameters: {"id": ec.nextId.toString()});
                     Get.focusScope?.unfocus();
+                    controller.autoRead(entry);
                   }
               );
             }),

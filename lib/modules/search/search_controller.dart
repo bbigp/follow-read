@@ -126,6 +126,10 @@ class SearchState {
     _hasMore.value = addList.length >= size;
   }
 
+  Entry get(BigInt id) => entries.firstWhere((e) => e.value.id == id,
+      orElse: () => Entry.empty.obs
+  ).value;
+
   final histories = <String>[].obs;
   final _loadingHistories = false.obs;
   bool get loadingHistories => _loadingHistories.value;

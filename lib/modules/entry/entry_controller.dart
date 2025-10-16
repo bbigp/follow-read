@@ -16,23 +16,28 @@ class EntryController extends GetxController {
   final _nextId = Rx<BigInt?>(null);
   BigInt? get nextId => _nextId.value;
 
+  dynamic state;
+
+  @override
+  void onInit() {
+    super.onInit();
+    if (Get.isRegistered<SearchHistoryController>()) {
+      state = Get.find<SearchHistoryController>().state;
+    } else {
+      state = Get.find<EntriesController>().state;
+    }
+  }
+
   @override
   void onReady() {
     super.onReady();
     nextEntryId();
   }
 
+  Entry get(BigInt entryId) => state.get(entryId);
 
   //搜索页面 下一个用的是文章列表也数据
   Future<void> nextEntryId() async {
-    dynamic state;
-    if (Get.isRegistered<SearchHistoryController>()) {
-      state = Get.find<SearchHistoryController>().state;
-    } else if (Get.isRegistered<EntriesController>()) {
-      state = Get.find<EntriesController>().state;
-    } else {
-      return;
-    }
     await _calculateNextEntryId(state);
   }
 
