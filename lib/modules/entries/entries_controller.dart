@@ -90,7 +90,10 @@ class EntriesController extends GetxController {
   }
 
   Future<void> autoRead(Entry entry) async {
-    //已读状态进入页面 设置未读 退出之后 自动已读没生效
+    //已读状态进入页面 设置未读 退出之后 自动已读没生效，因为这里传入的entry是组件build的时候的entry，之后手动设置未读，组件内部的entry是没有改变的
+    //修复需要把entryPage 改为状态组件，修改之后通过setState方法变更数据
+    // 后期listview左左滑设置已读未读，详情页手动设置已读未读按钮移走之后，就没有这个问题了
+    //也可能不设置自动已读的时候 详情页显示该按钮，也没有这个问题
     if (profile.state.user.autoRead && entry.status != EntryStatus.read) {
       await read(entry, status: EntryStatus.read);
     }

@@ -5,14 +5,12 @@ import 'dart:async';
 
 import 'package:follow_read/data/event/entry_event.dart';
 import 'package:follow_read/data/event/event_bus.dart';
-import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/data/repositories/search_history_dao.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/di.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class SearchHistoryController extends GetxController {
 
@@ -67,6 +65,7 @@ class SearchHistoryController extends GetxController {
 
   Future<void> loadEntries(String word) async {
     state._word.value = word;
+    if (state.isLoading) return;
     state.setIsLoading(true);
     await searchDao.save(word, state.meta.metaId, profilePage.state.user.id);
     final entries = await entryService.entries(state.meta, page: 1,
@@ -77,8 +76,10 @@ class SearchHistoryController extends GetxController {
   }
 
   Future<void> nextPage() async {
+    if (state.isLoadingMore) return;
     state.isLoadingMore = true;
     final page = state.page + 1;
+    await Future.delayed(Duration(milliseconds: 350));
     final entries = await entryService.entries(state.meta, page: page,
         size: state.size, search: state.word
     );
