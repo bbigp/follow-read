@@ -30,19 +30,19 @@ class _EntriesPageState extends State<EntriesPage> {
 
   final ScrollController _scrollController = ScrollController();
 
-  final controller = Get.find<EntriesController>();
+  final ec = Get.find<EntriesController>();
 
   void _scrollListener() {
-    if (controller.state.isLoading) return;
-    if (!controller.state.hasMore) return;
-    if (controller.state.isLoadingMore) return;
+    if (ec.state.isLoading) return;
+    if (!ec.state.hasMore) return;
+    if (ec.state.isLoadingMore) return;
 
     final position = _scrollController.position;
     // 空列表或未加载完成时直接返回
     if (position.maxScrollExtent <= 0) return;
 
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      controller.nextPage();
+      ec.nextPage();
     }
   }
 
@@ -80,42 +80,28 @@ class _EntriesPageState extends State<EntriesPage> {
   }
 
 
-  // OpenModal.open(context,
-  //     FeedSettingsSheet(id: widget.id, type: widget.type,),
-  //     scrollable: true
-  // );
-
-
   Widget _buildMain() {
-    final controller = Get.find<EntriesController>();
-    return Stack(children: [
-      RefreshIndicator(
-        onRefresh: () => controller.init(),
-        child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverToBoxAdapter(child: EntriesSummary(meta:  controller.state.meta)),//滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
-              Obx(() {
-                return SliverList(delegate: SliverChildBuilderDelegate(childCount: controller.state.entriesLen, (context, index) {
-                  return GetBuilder<EntriesController>(builder: (controller) {
-                    return EntryTile(entryObs: controller.state.entries[index]);
-                    }, id: "entry_tile:$index",);
-                }));
-              }),
-              Obx((){
-                return SliverToBoxAdapter(child: controller.state.hasMore
-                    ? const LoadingMore()
-                    : const NoMore()
-                );
-              }),
-
-            ]
+    return Stack(
+      children: [
+        RefreshIndicator(
+          onRefresh: () => ec.init(),
+          child: CustomScrollView(controller: _scrollController, slivers: [
+            SliverToBoxAdapter(child: EntriesSummary(meta: ec.state.meta)),
+            //滚动到appbar https://blog.csdn.net/yechaoa/article/details/90701321
+            SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    childCount: ec.state.items.length, (context, index) {
+              return EntryTile(entryObs: ec.state.items[index]);
+            })),
+            Obx(() {
+              return SliverToBoxAdapter(
+                  child: ec.state.hasMore ? const LoadingMore() : const NoMore());
+            }),
+          ]),
         ),
-      ),
-    ],);
-
+      ],
+    );
   }
-
 
   Widget _buildSmartSkeleton() {
     return Shimmer.fromColors(

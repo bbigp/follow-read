@@ -4,24 +4,42 @@ import 'package:get/get.dart';
 
 abstract class PageState<T> {
 
-  int page = 0;
+  final _page = 0.obs;
+  int get page => _page.value;
+  // void setPage(int value) => _page.value = value;
+
   int size = 20;
+  bool isLoadingMore = false;
+
   final _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
-  bool isLoadingMore = false;
+  void setIsLoading(bool value) => _isLoading.value = value;
+
+
   final _hasMore = false.obs;
   bool get hasMore => _hasMore.value;
+  // void setHasMore(bool value) => _hasMore.value = value;
+
   final items = <T>[].obs;
 
   void addItems(List<T> addList, {bool reset = false}){
     if (reset) {
       items.value = addList;
-      page = 1;
+      _page.value = 1;
     } else {
       items.addAll(addList);
-      page = page + 1;
+      _page.value = page + 1;
     }
     _hasMore.value = addList.length >= size;
+  }
+
+
+  void clear() {
+    _isLoading.value = false;
+    items.value = [];
+    _page.value = 0;
+    _hasMore.value = false;
+    isLoadingMore = false;
   }
 }
 

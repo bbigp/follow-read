@@ -9,6 +9,7 @@ import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
 import 'package:follow_read/data/model/folder.dart';
 import 'package:follow_read/data/model/meta.dart';
+import 'package:follow_read/data/model/page_state.dart';
 import 'package:follow_read/data/repositories/pending_change_dao.dart';
 import 'package:follow_read/data/services/entry_service.dart';
 import 'package:follow_read/data/services/feed_service.dart';
@@ -39,12 +40,12 @@ class EntriesController extends GetxController {
   void onInit() {
     super.onInit();
     _readStatusSub = eventBus.on<EntryStatusEvent>().listen((event){
-      final entry = state.getObs(event.entryId);
+      final entry = state.getRx(event.entryId);
       if (entry.value.isNull()) return;
       entry.value = entry.value.copyWith(status: event.status);
     });
     _entrySub = eventBus.on<EntryChangedEvent>().listen((event){
-      final entry = state.getObs(event.entryId);
+      final entry = state.getRx(event.entryId);
       if (entry.value.isNull()) return;
       if (event.starred != null) entry.value = entry.value.copyWith(starred: event.starred);
     });
@@ -65,7 +66,7 @@ class EntriesController extends GetxController {
 
   Future<void> init() async {
     if (state.isLoading) return;
-    state._isLoading.value = true;
+    state.setIsLoading(true);
 
     state._meta.value = switch(type) {
       "e" => await _feedService.getFeed(id: id) ?? Feed(),
@@ -75,16 +76,16 @@ class EntriesController extends GetxController {
     };
     await Future.delayed(Duration(milliseconds: 200));
     final entries = await _entryService.entries(state.meta, page: 1, size: state.size);
-    state.addEntries(entries, reset: true);
-    state._isLoading.value = false;
+    state.addItems(entries.map((e) => e.obs).toList(), reset: true);
+    state.setIsLoading(false);
   }
 
   Future<void> nextPage() async {
     if (state.isLoadingMore) return;
-    await Future.delayed(Duration(milliseconds: 500));
     state.isLoadingMore = true;
+    await Future.delayed(Duration(milliseconds: 500));
     final entries = await _entryService.entries(state.meta, page: state.page + 1, size: state.size);
-    state.addEntries(entries);
+    state.addItems(entries.map((e) => e.obs).toList());
     state.isLoadingMore = false;
   }
 
@@ -121,40 +122,14 @@ class EntriesController extends GetxController {
 }
 
 
-class EntriesState {
+class EntriesState extends PageState<Rx<Entry>> {
   final Rx<Meta?> _meta = Rx<Meta?>(null);
   Meta get meta => _meta.value ?? Feed();
+  void setMeta(Meta? value) => _meta.value = value;
 
-  final _isLoading = false.obs;
-  bool get isLoading => _isLoading.value;
-  bool isLoadingMore = false;
-
-  final _hasMore = false.obs;
-  bool get hasMore => _hasMore.value;
-
-  List<Rx<Entry>> entries = [];
-
-  final _entriesLen = 0.obs;
-  int get entriesLen => _entriesLen.value;
-
-  int page = 0;
-  int size = 20;
-
-  Rx<Entry> getObs(BigInt id) => entries.firstWhere((e) => e.value.id == id,
+  Rx<Entry> getRx(BigInt id) => items.firstWhere((e) => e.value.id == id,
       orElse: () => Entry.empty.obs
   );
-  Entry get(BigInt id) => getObs(id).value;
-
-  void addEntries(List<Entry> addList, {bool reset = false}){
-    if (reset) {
-      entries = addList.map((item) => item.obs).toList();
-      page = 1;
-    } else {
-      entries = [...entries, ...addList.map((item) => item.obs)];
-      page = page + 1;
-    }
-    _hasMore.value = addList.length >= size;
-    _entriesLen.value = entries.length; //这里是有bug的，如果开始是10条，刷新之后还是10条，是不会重建的，但是这10条可能数据是变了的
-  }
+  Entry get(BigInt id) => getRx(id).value;
 
 }

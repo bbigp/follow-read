@@ -32,7 +32,7 @@ class _SearchEntriesState extends State<SearchEntries> {
   }
 
   void _scrollListener() {
-    if (searchPage.state.loadingEntries) return;
+    if (searchPage.state.isLoading) return;
     if (searchPage.state.isLoadingMore) return;
     if (!searchPage.state.hasMore) return;
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
@@ -47,7 +47,7 @@ class _SearchEntriesState extends State<SearchEntries> {
   }
 
   Widget _buildResult() {
-    final entries = searchPage.state.entries;
+    final entries = searchPage.state.items;
     return entries.isEmpty
         ? EmptyStateView(value: "No result found")
         : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -78,7 +78,7 @@ class _SearchEntriesState extends State<SearchEntries> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return searchPage.state.loadingEntries
+      return searchPage.state.isLoading
           ? const SizedBox.shrink()
           : _buildResult();
     });
