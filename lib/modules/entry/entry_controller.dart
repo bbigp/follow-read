@@ -46,7 +46,6 @@ class EntryController extends GetxController {
     if (currentIndex == state.items.length - 1 ) {//length - 1 表示它是最后一个元素
       if (!state.hasMore) return;
       //todo 这里加载更多的方法不对，搜索页面和文章列表页面进入详情 加载更多用的不是同一个方法，搜索要带word的
-      //加载更多之后，需要重新计算nextID，不然nextID无法点击
       final entries = await _entryService.entries(state.meta, page: state.page + 1, size: state.size);
       state.addItems(entries.map((e) => e.obs).toList());
       if (currentIndex + 1 >= state.items.length) {
