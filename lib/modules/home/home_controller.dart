@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:follow_read/core/utils/logger.dart';
 import 'package:follow_read/data/model/feed.dart';
 import 'package:follow_read/data/model/filter.dart';
@@ -19,6 +20,7 @@ class HomeController extends GetxController {
   final _userService = Get.find<UserService>();
   final profile = Get.find<ProfileController>();
   final unread = Get.find<UnreadController>();
+  String jsCode = "";
 
   @override
   void onInit() {
@@ -34,6 +36,15 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     loadHomeData(loadAll: true);
+    loadParserJsCode();
+  }
+
+  Future<void> loadParserJsCode() async {
+    try {
+      jsCode = await rootBundle.loadString('assets/mercury.web.js');
+    } catch (e) {
+      debugPrint("Error loading JS asset: $e");
+    }
   }
 
 
