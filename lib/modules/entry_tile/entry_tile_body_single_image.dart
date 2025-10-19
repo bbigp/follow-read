@@ -17,7 +17,6 @@ class EntryTileBodySingleImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("${entry.description}");
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(child: Column(children: [
         PgText(entry.title, maxLines: 2, style: AppTextStyles.M15,),

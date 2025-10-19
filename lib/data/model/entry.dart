@@ -112,7 +112,7 @@ class Entry {
         final length = text.length.clamp(0, 200);
         if (text.isNotEmpty) return text.substring(0, length);
       }
-      final document = html.parse(summary);
+      final document = html.parse(content);
       final element = document.body ?? document.documentElement;
       String text = element?.text ?? '';
       text = text
