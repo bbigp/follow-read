@@ -40,10 +40,10 @@ class EntryContent extends StatelessWidget {
             margin: Margins.zero,
             padding: HtmlPaddings.zero,
             color: AppColors.black95,
-            fontSize: FontSize(16),
+            fontSize: FontSize(15),
             fontWeight: FontWeight.w400,
             fontFamily: "DMSans",
-            lineHeight: LineHeight(24 / 16),
+            lineHeight: LineHeight(20 / 15),
           ),
           "a": Style(textDecoration: TextDecoration.underline), // 添加下划线
           "p, div": Style(margin: Margins.only(bottom: 16)),

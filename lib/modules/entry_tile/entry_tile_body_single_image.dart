@@ -10,13 +10,14 @@ import 'package:follow_read/data/model/entry.dart';
 import 'package:follow_read/global/widgets/pg_text.dart';
 import 'package:follow_read/modules/widgets/lazy_image.dart';
 ///
-class EntryTileBodySingleImage extends ConsumerWidget {
+class EntryTileBodySingleImage extends StatelessWidget {
 
   final Entry entry;
   const EntryTileBodySingleImage({super.key, required this.entry});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    debugPrint("${entry.description}");
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(child: Column(children: [
         PgText(entry.title, maxLines: 2, style: AppTextStyles.M15,),
@@ -27,7 +28,7 @@ class EntryTileBodySingleImage extends ConsumerWidget {
               AppColors.black50, BlendMode.srcIn,
             ),),
             const SizedBox(width: 4,),
-            PgText('${entry.readingTime}', maxLines: 1, style: AppTextStyles.caption13500,),
+            Expanded(child: PgText('${entry.readingTime}', maxLines: 1, style: AppTextStyles.M13B50,)),
           ],),
         ],
         const SizedBox(height: 4,),

@@ -48,7 +48,9 @@ class EntryPage extends StatelessWidget {
                           targetUrl: entry.url,
                           onComplete: (extracted) {
                             //pic: extracted.leadImageUrl
-                            ec.saveReadableContent(extracted.content);
+                            ec.saveReadableContent(readableContent: extracted.content,
+                              summary: extracted.excerpt,
+                            );
                           },
                         )
                       : EntryView(entry: ec.get());

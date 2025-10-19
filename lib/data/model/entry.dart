@@ -106,7 +106,13 @@ class Entry {
   //描述
   String get description {
     try {
-      final document = html.parse(content);
+      final htmlTagRegex = RegExp(r'</?\w+\s*[^>]*?>');
+      if (!htmlTagRegex.hasMatch(summary)) {
+        String text = summary.trim();
+        final length = text.length.clamp(0, 200);
+        if (text.isNotEmpty) return text.substring(0, length);
+      }
+      final document = html.parse(summary);
       final element = document.body ?? document.documentElement;
       String text = element?.text ?? '';
       text = text
@@ -114,8 +120,7 @@ class Entry {
           .trim();
       return text.isEmpty
           ? ''
-          : text.substring(0, text.length.clamp(0, 200)) +
-          (text.length > 200 ? '...' : '');
+          : text.substring(0, text.length.clamp(0, 200));
     } catch (e) {
       return "";
     }
