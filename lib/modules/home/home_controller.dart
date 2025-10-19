@@ -36,17 +36,7 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     loadHomeData(loadAll: true);
-    loadParserJsCode();
   }
-
-  Future<void> loadParserJsCode() async {
-    try {
-      jsCode = await rootBundle.loadString('assets/mercury.web.js');
-    } catch (e) {
-      debugPrint("Error loading JS asset: $e");
-    }
-  }
-
 
   Future<void> loadHomeData({bool loadAll = false, bool loadFeeds = false, bool loadFolders = false, bool loadFilters = false}) async {
     logger.i('loadHomeData');

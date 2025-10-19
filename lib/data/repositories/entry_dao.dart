@@ -56,6 +56,14 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     return affectedRows > 0;
   }
 
+  Future<bool> updateById(BigInt entryId, {String? readableContent}) async {
+    var query = update(entriesTable)..where((r) => r.id.equals(entryId));
+    final rows = await query.write(EntriesTableCompanion(
+      readableContent: readableContent == null ? const Value.absent() : Value(readableContent),
+    ));
+    return rows > 0;
+  }
+
   Future<bool> updateStatus(List<BigInt> entryIds, {EntryStatus? status,
     bool? starred,
   }) async {

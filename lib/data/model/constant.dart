@@ -37,3 +37,14 @@ extension DateTimeConversion on DateTime{
     return "刚刚";
   }
 }
+
+extension DateTimeStringExtension on String {
+
+  DateTime? toDateTime() {
+    try {
+      return DateTime.parse(this);
+    } on FormatException {
+      return null;
+    }
+  }
+}

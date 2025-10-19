@@ -1,6 +1,5 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:follow_read/data/model/media.dart';
 import 'package:follow_read/data/model/page_info.dart';
 import 'package:follow_read/data/providers/miniflux/entry_page_response.dart';
@@ -45,6 +44,7 @@ class Entry {
   final DateTime createdAt;
   final DateTime changedAt;
   final List<Media> medias;
+  final String readableContent;
 
   static Entry empty = Entry();
 
@@ -73,6 +73,7 @@ class Entry {
     DateTime? createdAt,
     DateTime? changedAt,
     this.medias = const [],
+    this.readableContent = "",
   })  : id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero,
         feedId = feedId ?? BigInt.zero,
@@ -141,6 +142,7 @@ class Entry {
     DateTime? createdAt,
     DateTime? changedAt,
     List<Media>? medias,
+    String? readableContent,
   }) {
     return Entry(id: id ?? this.id, title: title ?? this.title,
       hash: hash ?? this.hash,
@@ -159,6 +161,7 @@ class Entry {
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
       medias: medias ?? this.medias,
+      readableContent: readableContent ?? this.readableContent,
     );
   }
 }
@@ -172,6 +175,7 @@ extension EntryRowExtension on EntryRow {
       url: url, author: author, readingTime: readingTime,
       starred: starred,
       publishedAt: publishedAt, createdAt: createdAt, changedAt: changedAt,
+      readableContent: readableContent,
     );
   }
 }

@@ -115,16 +115,47 @@ class EntryAuthor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      if (entry.author.isNotEmpty) ...[
-        Expanded(child: PgText(entry.author, maxLines: 2, style: AppTextStyles.M11B50)),
-        const SizedBox(width: 8,),
-        Container(width: 1, height: 6, color: AppColors.black08,),
-        const SizedBox(width: 8,),
-      ],
-      Expanded(child: PgText(entry.feed.title, maxLines: 2, style: AppTextStyles.M11B50,)),
-    ],);
+    return LayoutBuilder(builder: (context, constraints) {
+      final double totalRowWidth = constraints.maxWidth;
+      const double fixedWidth = 17.0;
+      double authorWidth = 0.0;
+      if (entry.author.isNotEmpty) {
+        // 使用一个辅助组件来测量 author 的最小宽度
+        // 注意：这种测量方式可能会稍微影响性能，但可以解决 PgText 的 maxWidth 依赖。
+        authorWidth = _calculatePgTextWidth(
+          entry.author,
+          AppTextStyles.M11B50,
+          maxLines: 2,
+          maxWidth: totalRowWidth / 2, // 限制它最多占 Row 总宽度的一半 (防止溢出)
+        );
 
+        // 加上分隔符的固定宽度
+        authorWidth += fixedWidth;
+      }
+      final double remainingWidth = totalRowWidth - authorWidth;
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (entry.author.isNotEmpty) ...[
+            PgText(entry.author, maxLines: 2, style: AppTextStyles.M11B50, maxWidth: authorWidth,),
+            const SizedBox(width: 8),
+            Container(width: 1, height: 6, color: AppColors.black08),
+            const SizedBox(width: 8),
+          ],
+          Expanded(child: PgText(entry.feed.title, maxLines: 2, style: AppTextStyles.M11B50,)),
+        ],
+      );
+    });
   }
 
+  double _calculatePgTextWidth(String text, TextStyle style, {int maxLines = 1, double maxWidth = double.infinity}) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr, // 假设从左到右
+    )..layout(minWidth: 0, maxWidth: maxWidth); // 限制最大宽度
+
+    // 返回理想的最小宽度（如果只有一行）或被 maxWidth 限制后的宽度
+    return textPainter.width;
+  }
 }

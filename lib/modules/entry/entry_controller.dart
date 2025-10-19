@@ -15,6 +15,11 @@ class EntryController extends GetxController {
   final _nextId = Rx<BigInt?>(null);
   BigInt? get nextId => _nextId.value;
 
+  final _isReaderMode = false.obs;
+  bool get isReaderMode => _isReaderMode.value;
+  final _hasReadableContent = false.obs;
+  bool get hasReadableContent => _hasReadableContent.value;
+
   EntriesState state = EntriesState();
 
   @override
@@ -25,6 +30,8 @@ class EntryController extends GetxController {
     } else if (Get.isRegistered<EntriesController>()){
       state = Get.find<EntriesController>().state;
     }
+    _hasReadableContent.value = get().readableContent.isNotEmpty;
+    _isReaderMode.value = hasReadableContent;
   }
 
   @override
@@ -33,7 +40,17 @@ class EntryController extends GetxController {
     nextEntryId();
   }
 
-  Entry get(BigInt entryId) => state.get(entryId);
+  void changeReaderMode() {
+    _isReaderMode.value = !_isReaderMode.value;
+  }
+
+  Entry get() => state.get(id);
+
+  Future<void> saveReadableContent(String readableContent) async {
+    state.getRx(id).value = state.get(id).copyWith(readableContent: readableContent);
+    _hasReadableContent.value = get().readableContent.isNotEmpty;
+    await _entryService.updateById(id, readableContent: readableContent);
+  }
 
   Future<void> nextEntryId() async {
     await _calculateNextEntryId(state);

@@ -69,6 +69,9 @@ class AppTextStyles {
   static const TextStyle M11B25 = TextStyle(
       fontSize: 11, fontWeight: FontWeight.w500, height: 1.18, color: AppColors.black25,
   );//13px
+  static const TextStyle M12B25 = TextStyle(
+    fontSize: 12, fontWeight: FontWeight.w500, height: 1.33, color: AppColors.black25,
+  );
   static const TextStyle R13B25 = TextStyle(
     fontSize: 13, fontWeight: FontWeight.w400, height: 1.38, color: AppColors.black25,
   );// 18

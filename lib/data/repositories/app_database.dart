@@ -25,7 +25,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;  // 增加版本号
+  int get schemaVersion => 3;  // 增加版本号
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -36,6 +36,9 @@ class AppDatabase extends _$AppDatabase {
       if (from < 2) {
         await m.createTable(searchHistoryTable);
         await m.createTable(pendingChangeTable);
+      }
+      if (from < 3) {
+        await m.addColumn(entriesTable, entriesTable.readableContent);
       }
     },
   );

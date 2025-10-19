@@ -1,10 +1,23 @@
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:follow_read/data/model/feed.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
 class FeedParserService extends GetxService{
+
+  var mercury = "";
+
+  @override
+  void onReady() {
+    super.onReady();
+    loadParserJsCode();
+  }
+
+  Future<void> loadParserJsCode() async {
+    mercury = await rootBundle.loadString('assets/mercury.web.js');
+  }
 
   // 核心方法：接收 URL，返回解析后的 FeedData
   Future<Feed?> parseFeedUrl(String feedUrl) async {

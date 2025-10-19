@@ -2141,6 +2141,14 @@ class $EntriesTableTable extends EntriesTable
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _readableContentMeta =
+      const VerificationMeta('readableContent');
+  @override
+  late final GeneratedColumn<String> readableContent = GeneratedColumn<String>(
+      'readable_content', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2157,7 +2165,8 @@ class $EntriesTableTable extends EntriesTable
         starred,
         publishedAt,
         createdAt,
-        changedAt
+        changedAt,
+        readableContent
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2242,6 +2251,12 @@ class $EntriesTableTable extends EntriesTable
       context.handle(_changedAtMeta,
           changedAt.isAcceptableOrUnknown(data['changed_at']!, _changedAtMeta));
     }
+    if (data.containsKey('readable_content')) {
+      context.handle(
+          _readableContentMeta,
+          readableContent.isAcceptableOrUnknown(
+              data['readable_content']!, _readableContentMeta));
+    }
     return context;
   }
 
@@ -2281,6 +2296,8 @@ class $EntriesTableTable extends EntriesTable
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       changedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}changed_at'])!,
+      readableContent: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}readable_content'])!,
     );
   }
 
@@ -2306,6 +2323,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
   final DateTime publishedAt;
   final DateTime createdAt;
   final DateTime changedAt;
+  final String readableContent;
   const EntryRow(
       {required this.id,
       required this.userId,
@@ -2321,7 +2339,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       required this.starred,
       required this.publishedAt,
       required this.createdAt,
-      required this.changedAt});
+      required this.changedAt,
+      required this.readableContent});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2340,6 +2359,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
     map['published_at'] = Variable<DateTime>(publishedAt);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['changed_at'] = Variable<DateTime>(changedAt);
+    map['readable_content'] = Variable<String>(readableContent);
     return map;
   }
 
@@ -2360,6 +2380,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       publishedAt: Value(publishedAt),
       createdAt: Value(createdAt),
       changedAt: Value(changedAt),
+      readableContent: Value(readableContent),
     );
   }
 
@@ -2382,6 +2403,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       publishedAt: serializer.fromJson<DateTime>(json['publishedAt']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       changedAt: serializer.fromJson<DateTime>(json['changedAt']),
+      readableContent: serializer.fromJson<String>(json['readableContent']),
     );
   }
   @override
@@ -2403,6 +2425,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       'publishedAt': serializer.toJson<DateTime>(publishedAt),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'changedAt': serializer.toJson<DateTime>(changedAt),
+      'readableContent': serializer.toJson<String>(readableContent),
     };
   }
 
@@ -2421,7 +2444,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
           bool? starred,
           DateTime? publishedAt,
           DateTime? createdAt,
-          DateTime? changedAt}) =>
+          DateTime? changedAt,
+          String? readableContent}) =>
       EntryRow(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -2438,6 +2462,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
         publishedAt: publishedAt ?? this.publishedAt,
         createdAt: createdAt ?? this.createdAt,
         changedAt: changedAt ?? this.changedAt,
+        readableContent: readableContent ?? this.readableContent,
       );
   EntryRow copyWithCompanion(EntriesTableCompanion data) {
     return EntryRow(
@@ -2458,6 +2483,9 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
           data.publishedAt.present ? data.publishedAt.value : this.publishedAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       changedAt: data.changedAt.present ? data.changedAt.value : this.changedAt,
+      readableContent: data.readableContent.present
+          ? data.readableContent.value
+          : this.readableContent,
     );
   }
 
@@ -2478,7 +2506,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
           ..write('starred: $starred, ')
           ..write('publishedAt: $publishedAt, ')
           ..write('createdAt: $createdAt, ')
-          ..write('changedAt: $changedAt')
+          ..write('changedAt: $changedAt, ')
+          ..write('readableContent: $readableContent')
           ..write(')'))
         .toString();
   }
@@ -2499,7 +2528,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       starred,
       publishedAt,
       createdAt,
-      changedAt);
+      changedAt,
+      readableContent);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2518,7 +2548,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
           other.starred == this.starred &&
           other.publishedAt == this.publishedAt &&
           other.createdAt == this.createdAt &&
-          other.changedAt == this.changedAt);
+          other.changedAt == this.changedAt &&
+          other.readableContent == this.readableContent);
 }
 
 class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
@@ -2537,6 +2568,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
   final Value<DateTime> publishedAt;
   final Value<DateTime> createdAt;
   final Value<DateTime> changedAt;
+  final Value<String> readableContent;
   const EntriesTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -2553,6 +2585,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     this.publishedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
+    this.readableContent = const Value.absent(),
   });
   EntriesTableCompanion.insert({
     this.id = const Value.absent(),
@@ -2570,6 +2603,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     this.publishedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
+    this.readableContent = const Value.absent(),
   })  : userId = Value(userId),
         feedId = Value(feedId),
         status = Value(status),
@@ -2591,6 +2625,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     Expression<DateTime>? publishedAt,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? changedAt,
+    Expression<String>? readableContent,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2608,6 +2643,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
       if (publishedAt != null) 'published_at': publishedAt,
       if (createdAt != null) 'created_at': createdAt,
       if (changedAt != null) 'changed_at': changedAt,
+      if (readableContent != null) 'readable_content': readableContent,
     });
   }
 
@@ -2626,7 +2662,8 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
       Value<bool>? starred,
       Value<DateTime>? publishedAt,
       Value<DateTime>? createdAt,
-      Value<DateTime>? changedAt}) {
+      Value<DateTime>? changedAt,
+      Value<String>? readableContent}) {
     return EntriesTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -2643,6 +2680,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
       publishedAt: publishedAt ?? this.publishedAt,
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
+      readableContent: readableContent ?? this.readableContent,
     );
   }
 
@@ -2694,6 +2732,9 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     if (changedAt.present) {
       map['changed_at'] = Variable<DateTime>(changedAt.value);
     }
+    if (readableContent.present) {
+      map['readable_content'] = Variable<String>(readableContent.value);
+    }
     return map;
   }
 
@@ -2714,7 +2755,8 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
           ..write('starred: $starred, ')
           ..write('publishedAt: $publishedAt, ')
           ..write('createdAt: $createdAt, ')
-          ..write('changedAt: $changedAt')
+          ..write('changedAt: $changedAt, ')
+          ..write('readableContent: $readableContent')
           ..write(')'))
         .toString();
   }
@@ -4821,6 +4863,7 @@ typedef $$EntriesTableTableCreateCompanionBuilder = EntriesTableCompanion
   Value<DateTime> publishedAt,
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
+  Value<String> readableContent,
 });
 typedef $$EntriesTableTableUpdateCompanionBuilder = EntriesTableCompanion
     Function({
@@ -4839,6 +4882,7 @@ typedef $$EntriesTableTableUpdateCompanionBuilder = EntriesTableCompanion
   Value<DateTime> publishedAt,
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
+  Value<String> readableContent,
 });
 
 class $$EntriesTableTableFilterComposer
@@ -4894,6 +4938,10 @@ class $$EntriesTableTableFilterComposer
 
   ColumnFilters<DateTime> get changedAt => $composableBuilder(
       column: $table.changedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get readableContent => $composableBuilder(
+      column: $table.readableContent,
+      builder: (column) => ColumnFilters(column));
 }
 
 class $$EntriesTableTableOrderingComposer
@@ -4949,6 +4997,10 @@ class $$EntriesTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get changedAt => $composableBuilder(
       column: $table.changedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get readableContent => $composableBuilder(
+      column: $table.readableContent,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$EntriesTableTableAnnotationComposer
@@ -5004,6 +5056,9 @@ class $$EntriesTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get changedAt =>
       $composableBuilder(column: $table.changedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get readableContent => $composableBuilder(
+      column: $table.readableContent, builder: (column) => column);
 }
 
 class $$EntriesTableTableTableManager extends RootTableManager<
@@ -5044,6 +5099,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             Value<DateTime> publishedAt = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
+            Value<String> readableContent = const Value.absent(),
           }) =>
               EntriesTableCompanion(
             id: id,
@@ -5061,6 +5117,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             publishedAt: publishedAt,
             createdAt: createdAt,
             changedAt: changedAt,
+            readableContent: readableContent,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -5078,6 +5135,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             Value<DateTime> publishedAt = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
+            Value<String> readableContent = const Value.absent(),
           }) =>
               EntriesTableCompanion.insert(
             id: id,
@@ -5095,6 +5153,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             publishedAt: publishedAt,
             createdAt: createdAt,
             changedAt: changedAt,
+            readableContent: readableContent,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
