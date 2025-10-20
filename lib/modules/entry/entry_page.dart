@@ -12,6 +12,7 @@ import 'package:follow_read/global/widgets/tab_barx.dart';
 import 'package:follow_read/global/widgets/web_view.dart';
 import 'package:follow_read/modules/display_setting/display_setting.dart';
 import 'package:follow_read/modules/entries/entries_controller.dart';
+import 'package:follow_read/modules/entry/entry_web.dart';
 import 'package:follow_read/modules/profile/profile_controller.dart';
 import 'package:follow_read/modules/readable_content/reader_view.dart';
 import 'package:follow_read/routes.dart';
@@ -36,28 +37,43 @@ class EntryPage extends StatelessWidget {
 
     Widget view = profile.state.user.openContent == User.OPEN_CONTENT_WEBVIEW
         ? WebView(url: entry.url)
-        : Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Obx(() {
-                  final isReaderContentMissing = ec.isReaderMode && !ec.hasReadableContent;
-                  return isReaderContentMissing
-                      ? ReaderLoader(
-                          targetUrl: entry.url,
-                          onComplete: (extracted) {
-                            //pic: extracted.leadImageUrl
-                            ec.saveReadableContent(readableContent: extracted.content,
-                              summary: extracted.excerpt, leadImageUrl: extracted.leadImageUrl,
-                            );
-                          },
-                        )
-                      : EntryView(entry: ec.get());
-                }),
-              )),
-            ],
+        : Obx(() {
+      final isReaderContentMissing = ec.isReaderMode && !ec.hasReadableContent;
+      return isReaderContentMissing
+          ? ReaderLoader(
+        targetUrl: entry.url,
+        onComplete: (extracted) {
+          //pic: extracted.leadImageUrl
+          ec.saveReadableContent(readableContent: extracted.content,
+            summary: extracted.excerpt, leadImageUrl: extracted.leadImageUrl,
           );
+        },
+      )
+          : Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: EntryRead(entry: ec.get()),);
+    });
+
+    // Column(
+    //         children: [
+    //           Expanded(
+    //             child: SingleChildScrollView(
+    //             physics: const BouncingScrollPhysics(),
+    //             child: Obx(() {
+    //               final isReaderContentMissing = ec.isReaderMode && !ec.hasReadableContent;
+    //               return isReaderContentMissing
+    //                   ? ReaderLoader(
+    //                       targetUrl: entry.url,
+    //                       onComplete: (extracted) {
+    //                         //pic: extracted.leadImageUrl
+    //                         ec.saveReadableContent(readableContent: extracted.content,
+    //                           summary: extracted.excerpt, leadImageUrl: extracted.leadImageUrl,
+    //                         );
+    //                       },
+    //                     )
+    //                   : EntryView(entry: ec.get());
+    //             }),
+    //           )),
+    //         ],
+    //       );
 
     final moreMenus = Menux(menus: [
       MenuItem(child: "使用浏览器打开", checkIcon: SvgIcons.explorer, onTap: () => Open.browser(entry.url),),

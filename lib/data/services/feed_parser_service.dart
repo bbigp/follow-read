@@ -1,5 +1,7 @@
 
-import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
+
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:follow_read/data/model/feed.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -8,15 +10,23 @@ import 'package:xml/xml.dart';
 class FeedParserService extends GetxService{
 
   var mercury = "";
+  var font = "";
 
   @override
   void onReady() {
     super.onReady();
     loadParserJsCode();
+    font111();
   }
 
   Future<void> loadParserJsCode() async {
     mercury = await rootBundle.loadString('assets/mercury.web.js');
+  }
+
+  Future<void> font111() async {
+    ByteData data = await rootBundle.load('assets/fonts/DMMono-Regular.ttf');
+    final String base64String = base64Encode(data.buffer.asUint8List());
+    font = 'data:font/ttf;charset=utf-8;base64,$base64String';
   }
 
   // 核心方法：接收 URL，返回解析后的 FeedData
