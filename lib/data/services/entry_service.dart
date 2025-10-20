@@ -88,9 +88,9 @@ class EntryService extends ServiceBase {
     return entries.map((e) => e.copyWith(feed: feedMap[e.feedId], medias: mediaMap[e.id])).toList();
   }
 
-  Future<bool> updateById(BigInt entryId, {String? readableContent, String? summary}) async {
+  Future<bool> updateById(BigInt entryId, {String? readableContent, String? summary, String? leadImageUrl}) async {
     return await _dao.updateById(entryId, readableContent: readableContent,
-        summary: summary,
+        summary: summary, leadImageUrl: leadImageUrl,
     );
   }
 

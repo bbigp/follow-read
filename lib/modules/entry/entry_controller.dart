@@ -46,10 +46,16 @@ class EntryController extends GetxController {
 
   Entry get() => state.get(id);
 
-  Future<void> saveReadableContent({String readableContent = '', String summary = ""}) async {
-    state.getRx(id).value = state.get(id).copyWith(readableContent: readableContent, summary: summary);
+  Future<void> saveReadableContent({String readableContent = '', String summary = "",
+    String leadImageUrl = "",
+  }) async {
+    state.getRx(id).value = state.get(id).copyWith(readableContent: readableContent,
+      summary: summary, leadImageUrl: leadImageUrl,
+    );
     _hasReadableContent.value = get().readableContent.isNotEmpty;
-    await _entryService.updateById(id, readableContent: readableContent, summary: summary);
+    await _entryService.updateById(id, readableContent: readableContent, summary: summary,
+      leadImageUrl: leadImageUrl,
+    );
   }
 
   Future<void> nextEntryId() async {

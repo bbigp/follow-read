@@ -2149,6 +2149,14 @@ class $EntriesTableTable extends EntriesTable
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: const Constant(""));
+  static const VerificationMeta _leadImageUrlMeta =
+      const VerificationMeta('leadImageUrl');
+  @override
+  late final GeneratedColumn<String> leadImageUrl = GeneratedColumn<String>(
+      'lead_image_url', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(""));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2166,7 +2174,8 @@ class $EntriesTableTable extends EntriesTable
         publishedAt,
         createdAt,
         changedAt,
-        readableContent
+        readableContent,
+        leadImageUrl
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2257,6 +2266,12 @@ class $EntriesTableTable extends EntriesTable
           readableContent.isAcceptableOrUnknown(
               data['readable_content']!, _readableContentMeta));
     }
+    if (data.containsKey('lead_image_url')) {
+      context.handle(
+          _leadImageUrlMeta,
+          leadImageUrl.isAcceptableOrUnknown(
+              data['lead_image_url']!, _leadImageUrlMeta));
+    }
     return context;
   }
 
@@ -2298,6 +2313,8 @@ class $EntriesTableTable extends EntriesTable
           .read(DriftSqlType.dateTime, data['${effectivePrefix}changed_at'])!,
       readableContent: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}readable_content'])!,
+      leadImageUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}lead_image_url'])!,
     );
   }
 
@@ -2324,6 +2341,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
   final DateTime createdAt;
   final DateTime changedAt;
   final String readableContent;
+  final String leadImageUrl;
   const EntryRow(
       {required this.id,
       required this.userId,
@@ -2340,7 +2358,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       required this.publishedAt,
       required this.createdAt,
       required this.changedAt,
-      required this.readableContent});
+      required this.readableContent,
+      required this.leadImageUrl});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2360,6 +2379,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
     map['created_at'] = Variable<DateTime>(createdAt);
     map['changed_at'] = Variable<DateTime>(changedAt);
     map['readable_content'] = Variable<String>(readableContent);
+    map['lead_image_url'] = Variable<String>(leadImageUrl);
     return map;
   }
 
@@ -2381,6 +2401,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       createdAt: Value(createdAt),
       changedAt: Value(changedAt),
       readableContent: Value(readableContent),
+      leadImageUrl: Value(leadImageUrl),
     );
   }
 
@@ -2404,6 +2425,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       changedAt: serializer.fromJson<DateTime>(json['changedAt']),
       readableContent: serializer.fromJson<String>(json['readableContent']),
+      leadImageUrl: serializer.fromJson<String>(json['leadImageUrl']),
     );
   }
   @override
@@ -2426,6 +2448,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'changedAt': serializer.toJson<DateTime>(changedAt),
       'readableContent': serializer.toJson<String>(readableContent),
+      'leadImageUrl': serializer.toJson<String>(leadImageUrl),
     };
   }
 
@@ -2445,7 +2468,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
           DateTime? publishedAt,
           DateTime? createdAt,
           DateTime? changedAt,
-          String? readableContent}) =>
+          String? readableContent,
+          String? leadImageUrl}) =>
       EntryRow(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -2463,6 +2487,7 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
         createdAt: createdAt ?? this.createdAt,
         changedAt: changedAt ?? this.changedAt,
         readableContent: readableContent ?? this.readableContent,
+        leadImageUrl: leadImageUrl ?? this.leadImageUrl,
       );
   EntryRow copyWithCompanion(EntriesTableCompanion data) {
     return EntryRow(
@@ -2486,6 +2511,9 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       readableContent: data.readableContent.present
           ? data.readableContent.value
           : this.readableContent,
+      leadImageUrl: data.leadImageUrl.present
+          ? data.leadImageUrl.value
+          : this.leadImageUrl,
     );
   }
 
@@ -2507,7 +2535,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
           ..write('publishedAt: $publishedAt, ')
           ..write('createdAt: $createdAt, ')
           ..write('changedAt: $changedAt, ')
-          ..write('readableContent: $readableContent')
+          ..write('readableContent: $readableContent, ')
+          ..write('leadImageUrl: $leadImageUrl')
           ..write(')'))
         .toString();
   }
@@ -2529,7 +2558,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
       publishedAt,
       createdAt,
       changedAt,
-      readableContent);
+      readableContent,
+      leadImageUrl);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2549,7 +2579,8 @@ class EntryRow extends DataClass implements Insertable<EntryRow> {
           other.publishedAt == this.publishedAt &&
           other.createdAt == this.createdAt &&
           other.changedAt == this.changedAt &&
-          other.readableContent == this.readableContent);
+          other.readableContent == this.readableContent &&
+          other.leadImageUrl == this.leadImageUrl);
 }
 
 class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
@@ -2569,6 +2600,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
   final Value<DateTime> createdAt;
   final Value<DateTime> changedAt;
   final Value<String> readableContent;
+  final Value<String> leadImageUrl;
   const EntriesTableCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -2586,6 +2618,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
     this.readableContent = const Value.absent(),
+    this.leadImageUrl = const Value.absent(),
   });
   EntriesTableCompanion.insert({
     this.id = const Value.absent(),
@@ -2604,6 +2637,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     this.createdAt = const Value.absent(),
     this.changedAt = const Value.absent(),
     this.readableContent = const Value.absent(),
+    this.leadImageUrl = const Value.absent(),
   })  : userId = Value(userId),
         feedId = Value(feedId),
         status = Value(status),
@@ -2626,6 +2660,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     Expression<DateTime>? createdAt,
     Expression<DateTime>? changedAt,
     Expression<String>? readableContent,
+    Expression<String>? leadImageUrl,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2644,6 +2679,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
       if (createdAt != null) 'created_at': createdAt,
       if (changedAt != null) 'changed_at': changedAt,
       if (readableContent != null) 'readable_content': readableContent,
+      if (leadImageUrl != null) 'lead_image_url': leadImageUrl,
     });
   }
 
@@ -2663,7 +2699,8 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
       Value<DateTime>? publishedAt,
       Value<DateTime>? createdAt,
       Value<DateTime>? changedAt,
-      Value<String>? readableContent}) {
+      Value<String>? readableContent,
+      Value<String>? leadImageUrl}) {
     return EntriesTableCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -2681,6 +2718,7 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
       createdAt: createdAt ?? this.createdAt,
       changedAt: changedAt ?? this.changedAt,
       readableContent: readableContent ?? this.readableContent,
+      leadImageUrl: leadImageUrl ?? this.leadImageUrl,
     );
   }
 
@@ -2735,6 +2773,9 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
     if (readableContent.present) {
       map['readable_content'] = Variable<String>(readableContent.value);
     }
+    if (leadImageUrl.present) {
+      map['lead_image_url'] = Variable<String>(leadImageUrl.value);
+    }
     return map;
   }
 
@@ -2756,7 +2797,8 @@ class EntriesTableCompanion extends UpdateCompanion<EntryRow> {
           ..write('publishedAt: $publishedAt, ')
           ..write('createdAt: $createdAt, ')
           ..write('changedAt: $changedAt, ')
-          ..write('readableContent: $readableContent')
+          ..write('readableContent: $readableContent, ')
+          ..write('leadImageUrl: $leadImageUrl')
           ..write(')'))
         .toString();
   }
@@ -4864,6 +4906,7 @@ typedef $$EntriesTableTableCreateCompanionBuilder = EntriesTableCompanion
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
   Value<String> readableContent,
+  Value<String> leadImageUrl,
 });
 typedef $$EntriesTableTableUpdateCompanionBuilder = EntriesTableCompanion
     Function({
@@ -4883,6 +4926,7 @@ typedef $$EntriesTableTableUpdateCompanionBuilder = EntriesTableCompanion
   Value<DateTime> createdAt,
   Value<DateTime> changedAt,
   Value<String> readableContent,
+  Value<String> leadImageUrl,
 });
 
 class $$EntriesTableTableFilterComposer
@@ -4942,6 +4986,9 @@ class $$EntriesTableTableFilterComposer
   ColumnFilters<String> get readableContent => $composableBuilder(
       column: $table.readableContent,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get leadImageUrl => $composableBuilder(
+      column: $table.leadImageUrl, builder: (column) => ColumnFilters(column));
 }
 
 class $$EntriesTableTableOrderingComposer
@@ -5001,6 +5048,10 @@ class $$EntriesTableTableOrderingComposer
   ColumnOrderings<String> get readableContent => $composableBuilder(
       column: $table.readableContent,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get leadImageUrl => $composableBuilder(
+      column: $table.leadImageUrl,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$EntriesTableTableAnnotationComposer
@@ -5059,6 +5110,9 @@ class $$EntriesTableTableAnnotationComposer
 
   GeneratedColumn<String> get readableContent => $composableBuilder(
       column: $table.readableContent, builder: (column) => column);
+
+  GeneratedColumn<String> get leadImageUrl => $composableBuilder(
+      column: $table.leadImageUrl, builder: (column) => column);
 }
 
 class $$EntriesTableTableTableManager extends RootTableManager<
@@ -5100,6 +5154,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
             Value<String> readableContent = const Value.absent(),
+            Value<String> leadImageUrl = const Value.absent(),
           }) =>
               EntriesTableCompanion(
             id: id,
@@ -5118,6 +5173,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             createdAt: createdAt,
             changedAt: changedAt,
             readableContent: readableContent,
+            leadImageUrl: leadImageUrl,
           ),
           createCompanionCallback: ({
             Value<BigInt> id = const Value.absent(),
@@ -5136,6 +5192,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> changedAt = const Value.absent(),
             Value<String> readableContent = const Value.absent(),
+            Value<String> leadImageUrl = const Value.absent(),
           }) =>
               EntriesTableCompanion.insert(
             id: id,
@@ -5154,6 +5211,7 @@ class $$EntriesTableTableTableManager extends RootTableManager<
             createdAt: createdAt,
             changedAt: changedAt,
             readableContent: readableContent,
+            leadImageUrl: leadImageUrl,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

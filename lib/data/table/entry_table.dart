@@ -25,6 +25,7 @@ class EntriesTable extends Table {
   DateTimeColumn get createdAt => dateTime().named("created_at").withDefault(Constant(DateTime.now()))();
   DateTimeColumn get changedAt => dateTime().named("changed_at").withDefault(Constant(DateTime.now()))();
   TextColumn get readableContent => text().named("readable_content").withDefault(const Constant(""))();
+  TextColumn get leadImageUrl => text().named("lead_image_url").withDefault(const Constant(""))();
 
   @override
   Set<Column> get primaryKey => {id};

@@ -45,6 +45,7 @@ class Entry {
   final DateTime changedAt;
   final List<Media> medias;
   final String readableContent;
+  final String leadImageUrl;
 
   static Entry empty = Entry();
 
@@ -74,6 +75,7 @@ class Entry {
     DateTime? changedAt,
     this.medias = const [],
     this.readableContent = "",
+    this.leadImageUrl = "",
   })  : id = id ?? BigInt.zero,
         userId = userId ?? BigInt.zero,
         feedId = feedId ?? BigInt.zero,
@@ -92,6 +94,7 @@ class Entry {
 
   //封面图
   String get pic {
+    if (leadImageUrl != "") return leadImageUrl;
     return medias.firstWhere((e) => e.isImage, orElse: () => Media.empty).url;
   }
 
@@ -140,7 +143,6 @@ class Entry {
     String? author,
     bool? starred,
     int? readingTime,
-    String? pic,
     Feed? feed,
     Folder? folder,
     String? summary,
@@ -148,6 +150,7 @@ class Entry {
     DateTime? changedAt,
     List<Media>? medias,
     String? readableContent,
+    String? leadImageUrl,
   }) {
     return Entry(id: id ?? this.id, title: title ?? this.title,
       hash: hash ?? this.hash,
@@ -167,6 +170,7 @@ class Entry {
       changedAt: changedAt ?? this.changedAt,
       medias: medias ?? this.medias,
       readableContent: readableContent ?? this.readableContent,
+      leadImageUrl: leadImageUrl ?? this.leadImageUrl,
     );
   }
 }
@@ -180,7 +184,7 @@ extension EntryRowExtension on EntryRow {
       url: url, author: author, readingTime: readingTime,
       starred: starred,
       publishedAt: publishedAt, createdAt: createdAt, changedAt: changedAt,
-      readableContent: readableContent,
+      readableContent: readableContent, leadImageUrl: leadImageUrl,
     );
   }
 }

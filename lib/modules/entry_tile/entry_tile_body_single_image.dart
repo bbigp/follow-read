@@ -32,7 +32,7 @@ class EntryTileBodySingleImage extends StatelessWidget {
         ],
         const SizedBox(height: 4,),
         Visibility(visible: entry.description.isNotEmpty,
-            child: PgText(entry.description, maxLines: 2, style: AppTextStyles.R13B50,)
+            child: PgText(entry.description, maxLines: 2, style: AppTextStyles.R15B50,)
         ),
       ],)),
       const SizedBox(width: 12,),

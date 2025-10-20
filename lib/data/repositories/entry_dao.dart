@@ -56,11 +56,14 @@ class EntryDao extends DatabaseAccessor<AppDatabase> {
     return affectedRows > 0;
   }
 
-  Future<bool> updateById(BigInt entryId, {String? readableContent, String? summary}) async {
+  Future<bool> updateById(BigInt entryId, {String? readableContent, String? summary,
+    String? leadImageUrl,
+  }) async {
     var query = update(entriesTable)..where((r) => r.id.equals(entryId));
     final rows = await query.write(EntriesTableCompanion(
       readableContent: readableContent == null ? const Value.absent() : Value(readableContent),
       summary: summary == null || summary == "" ? const Value.absent() : Value(summary),
+      leadImageUrl: leadImageUrl == null || leadImageUrl == "" ? const Value.absent() : Value(leadImageUrl),
     ));
     return rows > 0;
   }
