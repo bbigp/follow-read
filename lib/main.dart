@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:follow_read/routes.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,8 @@ import 'core/utils/bigint_mapper.dart';
 import 'di.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   MapperContainer.globals.use(const BigIntMapper());
   // final sharedPreferences = await SharedPreferences.getInstance();
   // final container = ProviderContainer(

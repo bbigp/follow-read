@@ -11,16 +11,21 @@ class FeedParserService extends GetxService{
 
   var mercury = "";
   var font = "";
+  String cssContent = "";
 
   @override
   void onReady() {
     super.onReady();
     loadParserJsCode();
-    font111();
+    loadParserJsCode11();
   }
 
   Future<void> loadParserJsCode() async {
     mercury = await rootBundle.loadString('assets/mercury.web.js');
+  }
+
+  Future<void> loadParserJsCode11() async {
+    cssContent = await rootBundle.loadString('assets/html/style.css');
   }
 
   Future<void> font111() async {

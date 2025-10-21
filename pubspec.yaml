@@ -51,6 +51,7 @@ dependencies:
   video_player: ^2.10.0
   chewie: ^1.11.3
   xml: ^6.5.0
+  flutter_inappwebview: ^6.1.5
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,8 @@ flutter:
     - assets/svg/
     - assets/png/
     - assets/icons/
+    - assets/html/
+    - assets/fonts/
     - assets/mercury.web.js
   fonts:
     - family: DMSans
