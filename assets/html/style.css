@@ -1,23 +1,18 @@
 /* Base Styles are Mobile-first */
+
+@font-face {
+  font-family: 'DM Mono';
+  src: url('fonts/DMMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --font-size-base: 16px;
   font-size: var(--font-size-base);
 
   --line-height-multiplier: 1.5;
   line-height: var(--line-height-multiplier);
-
-
-  @font-face {
-      font-family: 'DM Mono';
-      src: url('../fonts/DMMono-Regular.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-  }
-
-  --font-family-base: 'DM Mono', sans-serif;
-  --font-family-code: 'DM Mono', SF Mono, Menlo, Consolas, 'Liberation Mono',
-    monospace, Apple Color Emoji;
-  font-family: var(--font-family-base);
 
   /* Weights & Letter Spacing */
   --font-weight-extralight: 200;
@@ -68,6 +63,7 @@ body {
   text-autospace: normal;
   padding: 0 20px 12px 20px;
   margin: 0;
+  font-family: 'DM Mono', sans-serif;
 }
 
 /* === Headings === */

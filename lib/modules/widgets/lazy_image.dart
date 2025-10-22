@@ -61,6 +61,9 @@ class LazyImageState extends State<LazyImage> {
     return CachedNetworkImage(
       cacheManager: CustomCacheManager(),
       imageUrl: widget.url,
+      httpHeaders: {
+        "Referer": getRootDomain(widget.url) ?? "",
+      },
       width: 80, height: 80,
       placeholder: (_, __) => _buildPlaceholder(),
       errorWidget: (_, __, ___) => _buildPlaceholder(),
@@ -71,6 +74,10 @@ class LazyImageState extends State<LazyImage> {
 
   Widget _buildPlaceholder() {
     return NoMedia(width: 80, height: 80,);
+  }
+
+  String? getRootDomain(String urlString) {
+    return "https://sspai.com";
   }
 }
 
@@ -91,6 +98,8 @@ class CustomHttpFileService extends HttpFileService {
   @override
   Future<FileServiceResponse> get(String url, {Map<String, String>? headers}) async {
     logger.i('dio request $url');
-    return super.get(url);
+    return super.get(url, headers: {
+      "Referer": "https://sspai.com",
+    });
   }
 }

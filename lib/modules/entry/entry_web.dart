@@ -19,12 +19,13 @@ class EntryRead extends StatefulWidget {
 
 class _LocalWebViewState extends State<EntryRead> {
 
-  InAppWebViewController? _controller;
+  late InAppWebViewController _controller;
+
   final cssContent = Get.find<FeedParserService>().cssContent;
   final String _localBaseUrl =
   Platform.isAndroid
-      ? 'file:///android_asset/flutter_assets/assets/html/'
-      : 'file://${Directory.current.path}/assets/html/';
+      ? 'file:///android_asset/flutter_assets/assets/'
+      : 'file://${Directory.current.path}/assets/';
 
   Future<void> _loadContent(InAppWebViewController controller) async {
     String finalHtml = '''
@@ -34,9 +35,6 @@ class _LocalWebViewState extends State<EntryRead> {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"">
         <title>${widget.entry.title}</title>
-        <style>
-          $cssContent
-        </style>
       </head>
       <body>
         <div id="br-article" class="active">
@@ -54,14 +52,19 @@ class _LocalWebViewState extends State<EntryRead> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return InAppWebView(
-      initialUrlRequest: URLRequest(url: WebUri('about:blank')),
+      initialUrlRequest: URLRequest(url: WebUri(_localBaseUrl)),
       onWebViewCreated: (controller) {
+        _controller = controller;
         _loadContent(controller);
+      },
+      onLoadStop: (controller, url) async {
+        // controller.injectCSSCode(source: source)
+        await controller.injectCSSFileFromAsset(
+            assetFilePath: 'assets/html/style.css'
+        );
       },
       initialSettings: InAppWebViewSettings(
         allowFileAccessFromFileURLs: true,
@@ -72,6 +75,13 @@ class _LocalWebViewState extends State<EntryRead> {
       },
     );
     //return WebViewWidget(controller: _controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.stopLoading();
+    _controller.dispose();
+    super.dispose();
   }
 
 }
