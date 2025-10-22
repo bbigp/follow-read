@@ -49,7 +49,7 @@ class EntryPage extends StatelessWidget {
           );
         },
       )
-          : Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: EntryRead(entry: ec.get()),);
+          : EntryRead(entry: ec.get());
     });
 
     // Column(

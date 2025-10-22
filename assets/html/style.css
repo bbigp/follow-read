@@ -66,6 +66,8 @@ body {
   color: var(--textPrimary);
   word-break: break-word;
   text-autospace: normal;
+  padding: 0 20px 12px 20px;
+  margin: 0;
 }
 
 /* === Headings === */
@@ -313,4 +315,17 @@ td {
 
 th {
   background-color: var(--bgSecondary);
+}
+
+
+
+#br-skeleton, #br-article {
+    display: none;
+}
+#br-skeleton.active, #br-article.active {
+    display: block;
+}
+
+.br-content {
+    overflow: hidden;
 }

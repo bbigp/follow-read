@@ -29,14 +29,20 @@ class _LocalWebViewState extends State<EntryRead> {
   Future<void> _loadContent(InAppWebViewController controller) async {
     String finalHtml = '''
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"">
+        <title>${widget.entry.title}</title>
         <style>
           $cssContent
         </style>
       </head>
-      ${widget.entry.readableContent}
+      <body>
+        <div id="br-article" class="active">
+          <div class="br-content">${widget.entry.readableContent}</div>
+        </div>
+      </body>    
     </html>
     ''';
 
