@@ -35,6 +35,9 @@ class _LocalWebViewState extends State<EntryRead> {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"">
         <title>${widget.entry.title}</title>
+        <style>
+        $cssContent
+        </style>
       </head>
       <body>
         <div id="br-article" class="active">
@@ -53,6 +56,12 @@ class _LocalWebViewState extends State<EntryRead> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    debugPrint(widget.entry.title);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InAppWebView(
       initialUrlRequest: URLRequest(url: WebUri(_localBaseUrl)),
@@ -62,9 +71,9 @@ class _LocalWebViewState extends State<EntryRead> {
       },
       onLoadStop: (controller, url) async {
         // controller.injectCSSCode(source: source)
-        await controller.injectCSSFileFromAsset(
-            assetFilePath: 'assets/html/style.css'
-        );
+        // await controller.injectCSSFileFromAsset(
+        //     assetFilePath: 'assets/html/style.css'
+        // );
       },
       initialSettings: InAppWebViewSettings(
         allowFileAccessFromFileURLs: true,
@@ -79,8 +88,6 @@ class _LocalWebViewState extends State<EntryRead> {
 
   @override
   void dispose() {
-    _controller.stopLoading();
-    _controller.dispose();
     super.dispose();
   }
 
