@@ -9,13 +9,15 @@ import 'package:follow_read/data/services/feed_parser_service.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'entry_controller.dart';
+
 class ReaderTheme {
   final String fontSize;
   final String fontFamily;
   final String backgroundColor;
 
   const ReaderTheme({
-    this.fontSize = "16px", this.fontFamily = "'DM Sans'",  //DM Mono
+    this.fontSize = "16px", this.fontFamily = "'DM Mono'",  //DM Mono
     this.backgroundColor = "#fff",
   });
 
@@ -32,6 +34,8 @@ class EntryRead extends StatefulWidget {
 class _LocalWebViewState extends State<EntryRead> {
 
   InAppWebViewController? _controller;
+  double _webViewHeight = 200;
+  final ec = Get.find<EntryController>();
 
   final mainCss = Get.find<FeedParserService>().mainCss;
   final String _localBaseUrl = Platform.isAndroid
@@ -57,7 +61,7 @@ class _LocalWebViewState extends State<EntryRead> {
       </head>
       <body>
         <div id="br-article" class="active">
-          <div class="br-content">${widget.entry.readableContent}</div>
+          <div class="br-content">${ec.isReaderMode ? widget.entry.readableContent : widget.entry.content}</div>
         </div>
       </body>    
     </html>
@@ -71,33 +75,56 @@ class _LocalWebViewState extends State<EntryRead> {
   @override
   void initState() {
     super.initState();
-    debugPrint(widget.entry.title);
   }
 
   @override
   Widget build(BuildContext context) {
-    return InAppWebView(
-      initialUrlRequest: URLRequest(url: WebUri(_localBaseUrl)),
-      onWebViewCreated: (controller) {
-        _controller = controller;
-        _loadContent();
-      },
-      onLoadStart: (controller, url) {
+    return SizedBox(
+      height: _webViewHeight,
+      child: InAppWebView(
+        // initialUrlRequest: URLRequest(url: WebUri(_localBaseUrl)),
+        onWebViewCreated: (controller) {
+          _controller = controller;
+          _loadContent();
+          controller.addJavaScriptHandler(handlerName: 'SetHeight', callback: (args) {
+            double newHeight = args.first.toDouble();
+            if (newHeight != _webViewHeight) {
+              setState(() {
+                _webViewHeight = newHeight;
+              });
+            }
+          });
+        },
+        onLoadStart: (controller, url) {
 
-      },
-      onLoadStop: (controller, url) async {
-        // controller.injectCSSCode(source: source)
-        // await controller.injectCSSFileFromAsset(
-        //     assetFilePath: 'assets/html/main.css'
-        // );
-      },
-      initialSettings: InAppWebViewSettings(
-        allowFileAccessFromFileURLs: true,
-        allowUniversalAccessFromFileURLs: true,
+        },
+        onLoadStop: (controller, url) async {
+          await controller.callAsyncJavaScript(functionBody: '''
+          let height = document.body.scrollHeight;
+          if (height < 10) { 
+            height = document.documentElement.scrollHeight;
+          }
+          window.flutter_inappwebview.callHandler('SetHeight', height);
+          return height;
+          ''');
+          // controller.injectCSSCode(source: source)
+          // await controller.injectCSSFileFromAsset(
+          //     assetFilePath: 'assets/html/main.css'
+          // );
+        },
+        initialSettings: InAppWebViewSettings(
+          transparentBackground: true,
+          allowFileAccessFromFileURLs: true,
+          allowUniversalAccessFromFileURLs: true,
+          verticalScrollBarEnabled: false,
+          horizontalScrollBarEnabled: false,
+          scrollBarStyle: ScrollBarStyle.SCROLLBARS_INSIDE_OVERLAY,
+
+        ),
+        onLoadError: (controller, url, code, message) {
+          print('WebView 加载错误: $message');
+        },
       ),
-      onLoadError: (controller, url, code, message) {
-        print('WebView 加载错误: $message');
-      },
     );
     //return WebViewWidget(controller: _controller);
   }

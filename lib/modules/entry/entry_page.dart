@@ -49,7 +49,13 @@ class EntryPage extends StatelessWidget {
           );
         },
       )
-          : EntryRead(entry: ec.get());
+          : SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: EntryView(entry: ec.get()),
+      );
+
+
+
     });
 
     // Column(

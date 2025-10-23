@@ -84,7 +84,7 @@
 }
 
 body {
-  background: FF_BACKGROUND_COLOR;
+  background-color: transparent;
   color: var(--textPrimary);
   word-break: break-word;
   text-autospace: normal;

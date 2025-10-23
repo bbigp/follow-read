@@ -15,6 +15,7 @@ import 'entry_content.dart';
 import 'entry_file.dart';
 import 'entry_image.dart';
 import 'entry_video.dart';
+import 'entry_web.dart';
 
 class EntryView extends StatelessWidget {
 
@@ -23,67 +24,71 @@ class EntryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 48),
-      child: Column(children: [
-        const SizedBox(height: 30,),
+    return Column(children: [
+      const SizedBox(height: 20,),
 
-        if (entry.pic.isNotEmpty) ...[
-          EntryImage(url: entry.pic, height: 241, width: double.infinity, onTap: (){
+      if (entry.pic.isNotEmpty) ...[
+        Padding(padding: EdgeInsets.symmetric(horizontal: 16),
+          child: EntryImage(url: entry.pic, height: 241, width: double.infinity, onTap: (){
             // ref.read(routerProvider).pushNamed(RouteNames.imageGallery, extra: {
             //   "imageUrls": entry.allImageUrls, "index": entry.allImageUrls.indexOf(entry.pic),
             // });
           },),
-          const SizedBox(height: 12,),
-        ],
-
-        EntryTitle(entry: entry),
-        const SizedBox(height: 12,),
-
-        if (entry.medias.isNotEmpty) ...[
-          Wrap(
-            children: entry.medias.map((media) {
-              if (entry.pic == media.url) {
-                return const SizedBox.shrink();
-              }
-              if (media.isVideo) {
-                return EntryVideo(url: media.url);
-              }
-
-              if (media.isImage) {
-                return Align(
-                  alignment: Alignment.topLeft,
-                  child: EntryImage(url: media.url, boxFit: BoxFit.scaleDown, alignment: Alignment.topLeft,),
-                );
-              }
-              return EntryFile(url: media.url);
-            }).toList(),
-          ),
-          const SizedBox(height: 12,),
-        ],
-
-        EntryContent(entry: entry),
-        const SizedBox(height: 12,),
-
-        const NoMore(),
-        const SizedBox(height: 12,),
-
-        const SizedBox(height: 8,),
-        IconButtonx(
-          child: "View Website", icon: SvgIcons.out_o,
-          isLeftIcon: false,
-          size: Sizex.custom,
-          buttonSize: mediumCompact().copyWith(padding: 32,),
-          type: ElementType.secondary,
-          enabled: true,
-          onPressed: () => Open.browser(entry.url),
         ),
-        const SizedBox(height: 8,),
-        const SizedBox(height: 48,),
+        const SizedBox(height: 12,),
+      ],
 
-        const SizedBox(height: 36,)//底部导航
-      ],),
-    );
+      Padding(padding: EdgeInsets.symmetric(horizontal: 16),
+        child: EntryTitle(entry: entry),
+      ),
+      const SizedBox(height: 12,),
+
+      // if (entry.medias.isNotEmpty) ...[
+      //   Wrap(
+      //     children: entry.medias.map((media) {
+      //       if (entry.pic == media.url) {
+      //         return const SizedBox.shrink();
+      //       }
+      //       if (media.isVideo) {
+      //         return EntryVideo(url: media.url);
+      //       }
+      //
+      //       if (media.isImage) {
+      //         return Align(
+      //           alignment: Alignment.topLeft,
+      //           child: EntryImage(url: media.url, boxFit: BoxFit.scaleDown, alignment: Alignment.topLeft,),
+      //         );
+      //       }
+      //       return EntryFile(url: media.url);
+      //     }).toList(),
+      //   ),
+      //   const SizedBox(height: 12,),
+      // ],
+
+      EntryRead(entry: entry),
+      // EntryContent(entry: entry),
+      const SizedBox(height: 12,),
+
+      const NoMore(),
+      const SizedBox(height: 12,),
+
+      const SizedBox(height: 8,),
+      IconButtonx(
+        child: "View Website", icon: SvgIcons.out_o,
+        isLeftIcon: false,
+        size: Sizex.custom,
+        buttonSize: mediumCompact().copyWith(padding: 32,),
+        type: ElementType.secondary,
+        enabled: true,
+        onPressed: () => Open.browser(entry.url),
+      ),
+      const SizedBox(height: 8,),
+      const SizedBox(height: 48,),
+
+      const SizedBox(height: 48,),
+
+      const SizedBox(height: 36,)//底部导航
+    ],);
   }
 
 }

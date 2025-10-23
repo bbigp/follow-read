@@ -36,23 +36,18 @@ class EntryContent extends StatelessWidget {
           )
         ],
         style: {
-          "*": Style(
+          "body": Style(
+            fontSize: FontSize(16.0),
             margin: Margins.zero,
-            padding: HtmlPaddings.zero,
+            padding: HtmlPaddings.only(left: 20, right: 20, bottom: 12),
             color: AppColors.black95,
-            fontSize: FontSize(15),
-            fontWeight: FontWeight.w400,
-            fontFamily: "DMSans",
-            lineHeight: LineHeight(20 / 15),
+            backgroundColor: Colors.white,
+            lineHeight: LineHeight.rem(1.5),
+            fontFamily: 'DMMono',
           ),
-          "a": Style(textDecoration: TextDecoration.underline), // 添加下划线
-          "p, div": Style(margin: Margins.only(bottom: 16)),
-          "br": Style(display: Display.block, margin: Margins.only(bottom: 16)),
-          "ol, ul": Style(padding: HtmlPaddings.symmetric(horizontal: 16), margin: Margins.only(bottom: 16)),
-          "li": Style(fontWeight: FontWeight.w500, margin: Margins.only(bottom: 7)),
-          "h1": Style(fontSize: FontSize(20), lineHeight: LineHeight(26/20), fontWeight: FontWeight.w500, margin: Margins.only(top: 32, bottom: 16)),
-          "h2, h3, h4, h5, h6": Style(fontSize: FontSize(18), lineHeight: LineHeight(24/18), fontWeight: FontWeight.w500, margin: Margins.only(top: 24, bottom: 16)),
-          "strong": Style(fontWeight: FontWeight.w500),
+          "p, div": Style(fontWeight: FontWeight.w400,
+              letterSpacing: 0,
+              margin: Margins.only(top: 16, bottom: 16)),
         },
         onLinkTap: (url, attributes, element) {
           final hasOnlyImageChild = element?.children.length == 1 && element?.children.first.localName == 'img';
