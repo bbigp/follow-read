@@ -15,7 +15,7 @@ class ReaderTheme {
   final String backgroundColor;
 
   const ReaderTheme({
-    this.fontSize = '16px', this.fontFamily = "'DM Sans'",  //DM Mono
+    this.fontSize = "16px", this.fontFamily = "'DM Sans'",  //DM Mono
     this.backgroundColor = "#fff",
   });
 
@@ -31,15 +31,14 @@ class EntryRead extends StatefulWidget {
 
 class _LocalWebViewState extends State<EntryRead> {
 
-  late InAppWebViewController _controller;
+  InAppWebViewController? _controller;
 
   final mainCss = Get.find<FeedParserService>().mainCss;
-  final String _localBaseUrl =
-  Platform.isAndroid
+  final String _localBaseUrl = Platform.isAndroid
       ? 'file:///android_asset/flutter_assets/assets/'
       : 'file://${Directory.current.path}/assets/';
 
-  Future<void> _loadContent(InAppWebViewController controller) async {
+  Future<void> _loadContent() async {
     var theme = ReaderTheme();
     var css = mainCss.replaceAll("FF_FONT_FAMILY", theme.fontFamily)
       .replaceAll("FF_FONT_SIZE", theme.fontSize)
@@ -64,11 +63,8 @@ class _LocalWebViewState extends State<EntryRead> {
     </html>
     ''';
 
-    controller.loadData(
-      baseUrl: WebUri(_localBaseUrl),
-      data: finalHtml,
-      mimeType: 'text/html',
-      encoding: 'utf-8',
+    await _controller?.loadData(baseUrl: WebUri(_localBaseUrl), data: finalHtml,
+      mimeType: 'text/html', encoding: 'utf-8',
     );
   }
 
@@ -84,7 +80,10 @@ class _LocalWebViewState extends State<EntryRead> {
       initialUrlRequest: URLRequest(url: WebUri(_localBaseUrl)),
       onWebViewCreated: (controller) {
         _controller = controller;
-        _loadContent(controller);
+        _loadContent();
+      },
+      onLoadStart: (controller, url) {
+
       },
       onLoadStop: (controller, url) async {
         // controller.injectCSSCode(source: source)
