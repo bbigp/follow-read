@@ -1,14 +1,57 @@
 /* Base Styles are Mobile-first */
-
+/* 有问题的2个属性 --text-primary  --text-secondary
+不考虑做深色模式
+@media (prefers-color-scheme: dark) {
+  :root {
+    --textPrimary: #fff;
+    --textTertiary: rgba(255, 255, 255, 0.3);
+    --textBlue: rgba(10, 132, 255, 1);
+    --bgSecondary: rgba(255, 255, 255, 0.06);
+    --bgTertiary: rgba(255, 255, 255, 0.1);
+    --borderThin: rgba(255, 255, 255, 0.16);
+    --borderStong: rgba(255, 255, 255, 0.2);
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+  }
+}
+*/
+@font-face {
+  font-family: 'DM Sans';
+  src: url("fonts/DMSans-Regular.ttf") format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url("fonts/DMSans-Medium.ttf") format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url("fonts/DMSans-Bold.ttf") format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
 @font-face {
   font-family: 'DM Mono';
-  src: url('fonts/DMMono-Regular.ttf') format('truetype');
-  font-weight: normal;
+  src: url("fonts/DMMono-Regular.ttf") format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'DM Mono';
+  src: url("fonts/DMMono-Medium.ttf") format('truetype');
+  font-weight: 500;
   font-style: normal;
 }
 
 :root {
-  --font-size-base: 16px;
+  font-family: FF_FONT_FAMILY, sans-serif;
+
+  --font-size-base: FF_FONT_SIZE;
   font-size: var(--font-size-base);
 
   --line-height-multiplier: 1.5;
@@ -30,40 +73,23 @@
   --tracking-wide: 0.025em;
   --tracking-wider: 0.05em;
   --tracking-widest: 0.1em;
+
+  --textPrimary: rgba(0, 0, 0, 0.95);
+  --textTertiary: rgba(0, 0, 0, 0.25);
+  --textBlue: rgba(0, 122, 255, 1);
+  --bgSecondary: rgba(0, 0, 0, 0.04);
+  --bgTertiary: rgba(0, 0, 0, 0.08);
+  --borderThin: rgba(0, 0, 0, 0.12);
+  --borderStong: rgba(0, 0, 0, 0.16);
 }
 
-/* theme */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --textPrimary: #fff;
-    --textTertiary: rgba(255, 255, 255, 0.3);
-    --textBlue: rgba(10, 132, 255, 1);
-    --bgSecondary: rgba(255, 255, 255, 0.06);
-    --bgTertiary: rgba(255, 255, 255, 0.1);
-    --borderThin: rgba(255, 255, 255, 0.16);
-    --borderStong: rgba(255, 255, 255, 0.2);
-  }
-}
-@media (prefers-color-scheme: light) {
-  :root {
-    --textPrimary: rgba(0, 0, 0, 0.95);
-    --textTertiary: rgba(0, 0, 0, 0.25);
-    --textBlue: rgba(0, 122, 255, 1);
-    --bgSecondary: rgba(0, 0, 0, 0.04);
-    --bgTertiary: rgba(0, 0, 0, 0.08);
-    --borderThin: rgba(0, 0, 0, 0.12);
-    --borderStong: rgba(0, 0, 0, 0.16);
-  }
-}
-
-/* 无需设置 background-color，WKWebview 已设置透明背景 */
 body {
+  background: FF_BACKGROUND_COLOR;
   color: var(--textPrimary);
   word-break: break-word;
   text-autospace: normal;
   padding: 0 20px 12px 20px;
   margin: 0;
-  font-family: 'DM Mono', sans-serif;
 }
 
 /* === Headings === */
@@ -205,48 +231,10 @@ blockquote p::after {
   content: close-quote;
 }
 
-/* === Code Blocks === */
-code {
-  font-family: var(--font-family-code);
-  font-size: 0.875rem;
-  background-color: var(--bgTertiary);
-  padding: 0.15rem 0.3rem;
-  border-radius: 0.25rem;
-  line-height: calc(var(--font-size-base) * var(--line-height-multiplier));
-}
-
-/* === Math Formula === */
-.math-inline,
-span.MathJax {
-  /* Inline Formula */
-  font-style: italic;
-  font-size: 1rem;
-  background-color: var(--bgTertiary);
-  padding: 0.15rem 0.3rem;
-  border-radius: 0.25rem;
-  line-height: calc(var(--font-size-base) * var(--line-height-multiplier));
-}
-
-.math-block,
-mjx-container {
-  /* Block-level Formula */
-  display: block;
-  overflow-x: auto;
-  border-radius: 12px;
-  font-stlye: italic;
-  font-size: 1rem;
-  line-height: 1.5;
-  padding: 1.25rem 1rem;
-  border: 0.5px solid var(--borderThin);
-  margin: 1.5rem 0;
-  text-align: center;
-  white-space: nowrap;
-}
-
 /* media */
 img,
 video {
-  width: 100%;
+  max-width: 100%;
   height: auto;
   display: block;
   border-radius: 12px;
@@ -321,7 +309,6 @@ th {
 #br-skeleton.active, #br-article.active {
     display: block;
 }
-
 .br-content {
     overflow: hidden;
 }

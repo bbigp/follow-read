@@ -9,6 +9,18 @@ import 'package:follow_read/data/services/feed_parser_service.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+class ReaderTheme {
+  final String fontSize;
+  final String fontFamily;
+  final String backgroundColor;
+
+  const ReaderTheme({
+    this.fontSize = '16px', this.fontFamily = "'DM Sans'",  //DM Mono
+    this.backgroundColor = "#fff",
+  });
+
+}
+
 class EntryRead extends StatefulWidget {
   final Entry entry;
   const EntryRead({super.key, required this.entry});
@@ -21,13 +33,18 @@ class _LocalWebViewState extends State<EntryRead> {
 
   late InAppWebViewController _controller;
 
-  final cssContent = Get.find<FeedParserService>().cssContent;
+  final mainCss = Get.find<FeedParserService>().mainCss;
   final String _localBaseUrl =
   Platform.isAndroid
       ? 'file:///android_asset/flutter_assets/assets/'
       : 'file://${Directory.current.path}/assets/';
 
   Future<void> _loadContent(InAppWebViewController controller) async {
+    var theme = ReaderTheme();
+    var css = mainCss.replaceAll("FF_FONT_FAMILY", theme.fontFamily)
+      .replaceAll("FF_FONT_SIZE", theme.fontSize)
+      .replaceAll("FF_BACKGROUND_COLOR", theme.backgroundColor);
+
     String finalHtml = '''
     <!DOCTYPE html>
     <html lang="en">
@@ -36,7 +53,7 @@ class _LocalWebViewState extends State<EntryRead> {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"">
         <title>${widget.entry.title}</title>
         <style>
-        $cssContent
+        $css
         </style>
       </head>
       <body>
@@ -72,7 +89,7 @@ class _LocalWebViewState extends State<EntryRead> {
       onLoadStop: (controller, url) async {
         // controller.injectCSSCode(source: source)
         // await controller.injectCSSFileFromAsset(
-        //     assetFilePath: 'assets/html/style.css'
+        //     assetFilePath: 'assets/html/main.css'
         // );
       },
       initialSettings: InAppWebViewSettings(
